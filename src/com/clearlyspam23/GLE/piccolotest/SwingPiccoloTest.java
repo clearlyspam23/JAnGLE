@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolo;
+package com.clearlyspam23.GLE.piccolotest;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,13 +1,13 @@
-package com.clearlyspam23.GLE.piccolo;
+package com.clearlyspam23.GLE.piccolotest;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.InputEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PCanvas;
@@ -16,6 +16,8 @@ import org.piccolo2d.PNode;
 import org.piccolo2d.PRoot;
 import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
+import org.piccolo2d.event.PInputEventFilter;
+import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.PFrame;
 import org.piccolo2d.util.PPaintContext;
 
@@ -80,9 +82,29 @@ public class GridExample extends PFrame {
         PNode n = new PNode();
         n.setPaint(Color.BLUE);
         n.setBounds(0, 0, 100, 80);
-
-        getCanvas().getLayer().addChild(n);
-        //getCanvas().removeInputEventListener(getCanvas().getPanEventHandler());
+        
+        PNode n2 = new PNode();
+        n2.setPaint(Color.red);
+        n2.setBounds(100, 0, 100, 80);
+        
+        PNode base = new PNode();
+        base.addChild(n);
+        base.addChild(n2);
+        getCanvas().getLayer().addChild(base);
+//        getCanvas().getLayer().addChild(n);
+//        getCanvas().getLayer().addChild(n2);
+//        for(Object o : base.getAllNodes())
+//        {
+//        	PNode p = (PNode) o;
+//        	Color c = (Color) p.getPaint();
+//        	p.setPaint(new Color(c.getRed()/4, c.getGreen()/4, c.getBlue()/4, 255/4));
+//        }
+        
+        getCanvas().getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
+        getCanvas().removeInputEventListener(getCanvas().getZoomEventHandler());
+        PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
+        eh.zoomAboutMouse();
+        getCanvas().addInputEventListener(eh);
 
         // add a drag event handler that supports snap to grid.
         getCanvas().addInputEventListener(new PDragSequenceEventHandler() {

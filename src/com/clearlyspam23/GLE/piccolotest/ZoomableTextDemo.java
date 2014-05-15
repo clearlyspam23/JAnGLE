@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolo;
+package com.clearlyspam23.GLE.piccolotest;
 
 import javax.swing.SwingUtilities;
 
