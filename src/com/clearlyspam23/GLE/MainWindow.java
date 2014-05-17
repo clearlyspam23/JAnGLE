@@ -97,7 +97,7 @@ public class MainWindow extends JFrame {
 		contentPane.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(15, 16, 754, 519);
+		tabbedPane.setBounds(10, 11, 764, 524);
 		contentPane.add(tabbedPane);
 		
 		TileLayer t = new TileLayer();
