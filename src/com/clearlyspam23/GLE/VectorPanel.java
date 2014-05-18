@@ -1,12 +1,13 @@
 package com.clearlyspam23.GLE;
 
+import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
-public class VectorPanel extends JPanel {
+public class VectorPanel extends Container {
 	private JTextField textField1;
 	private JTextField textField2;
 
