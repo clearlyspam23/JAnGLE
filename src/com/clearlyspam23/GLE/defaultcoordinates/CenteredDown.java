@@ -1,22 +1,23 @@
 package com.clearlyspam23.GLE.defaultcoordinates;
 
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import com.clearlyspam23.GLE.CoordinateSystem;
 
 public class CenteredDown extends CoordinateSystem {
 
-	private Image img;
+	private Icon img;
 	
 	public CenteredDown()
 	{
 		img = null;
 		try {
-		    img = ImageIO.read(new File("images/CenteredDown.png"));
+		    img = new ImageIcon(ImageIO.read(new File("images/CenteredDown.png")));
 		} catch (IOException e) {
 		}
 	}
@@ -27,7 +28,7 @@ public class CenteredDown extends CoordinateSystem {
 	}
 
 	@Override
-	public Image getHelperImage() {
+	public Icon getHelperIcon() {
 		return img;
 	}
 

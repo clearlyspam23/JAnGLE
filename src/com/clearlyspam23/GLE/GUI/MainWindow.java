@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,16 +10,22 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+
 import javax.swing.JTabbedPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
+
+import com.clearlyspam23.GLE.TileLayer;
 
 public class MainWindow extends JFrame {
 

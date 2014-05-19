@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.GUI;
 
 import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;

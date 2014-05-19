@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.GUI.util;
 
 import java.awt.Container;
 import java.awt.Dimension;
