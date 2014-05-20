@@ -43,6 +43,7 @@ public class ParameterDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public ParameterDialog() {
+		setTitle("Add Parameters");
 		final ParameterMacro[] macros = new ParameterMacro[]{
 				new CurrentLevelMacro()
 		};

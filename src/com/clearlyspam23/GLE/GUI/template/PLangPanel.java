@@ -82,8 +82,6 @@ public class PLangPanel extends JPanel {
 		
 		final JList list_1 = new JList();
 		final DefaultListModel<String> model = new DefaultListModel<String>();
-		model.addElement("test1");
-		model.addElement("test2");
 		list_1.setModel(model);
 		
 		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
