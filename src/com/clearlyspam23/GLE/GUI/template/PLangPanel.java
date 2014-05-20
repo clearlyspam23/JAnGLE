@@ -4,15 +4,16 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 
 public class PLangPanel extends JPanel {
 	private JTextField textField;
@@ -24,29 +25,37 @@ public class PLangPanel extends JPanel {
 	public PLangPanel() {
 		
 		JLabel label = new JLabel("Run Options");
+		label.setBounds(10, 11, 128, 20);
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		JLabel label_1 = new JLabel("Language");
+		label_1.setBounds(10, 102, 69, 14);
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(104, 99, 142, 20);
 		
 		JLabel label_2 = new JLabel("Parameters");
+		label_2.setBounds(10, 252, 69, 14);
 		
 		JLabel label_3 = new JLabel("Full Input");
+		label_3.setBounds(10, 461, 69, 14);
 		
 		textField = new JTextField();
+		textField.setBounds(89, 458, 368, 20);
 		textField.setEditable(false);
 		textField.setColumns(10);
 		
 		JLabel lblExecutableLocation = new JLabel("Game Executable");
+		lblExecutableLocation.setBounds(10, 62, 83, 14);
 		
 		exeFileLoc = new JTextField();
+		exeFileLoc.setBounds(104, 59, 283, 20);
 		exeFileLoc.setColumns(10);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setAcceptAllFileFilterUsed(true);
-		fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		JButton btnNewButton = new JButton("Browse");
+		btnNewButton.setBounds(405, 58, 67, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ret = fc.showOpenDialog(PLangPanel.this);
@@ -56,56 +65,51 @@ public class PLangPanel extends JPanel {
 				}
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(label, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-							.addGap(10)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 368, GroupLayout.PREFERRED_SIZE))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblExecutableLocation)
-								.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)
-								.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-									.addComponent(exeFileLoc, GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-									.addGap(18)
-									.addComponent(btnNewButton)))))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(label, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblExecutableLocation)
-						.addComponent(exeFileLoc, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton))
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(label_1)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(133)
-					.addComponent(label_2)
-					.addGap(192)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(3)
-							.addComponent(label_3))
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(70))
-		);
-		setLayout(groupLayout);
+		
+		JList list = new JList();
+		list.setBounds(104, 265, 1, 1);
+		setLayout(null);
+		add(label);
+		add(label_3);
+		add(textField);
+		add(lblExecutableLocation);
+		add(label_1);
+		add(label_2);
+		add(list);
+		add(comboBox);
+		add(exeFileLoc);
+		add(btnNewButton);
+		
+		final JList list_1 = new JList();
+		final DefaultListModel<String> model = new DefaultListModel<String>();
+		model.addElement("test1");
+		model.addElement("test2");
+		list_1.setModel(model);
+		
+		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list_1.setBounds(104, 251, 283, 148);
+		add(list_1);
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//open the other dialogue here
+			}
+		});
+		btnAdd.setBounds(219, 410, 79, 23);
+		add(btnAdd);
+		
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(list_1.getSelectedIndex()>=0&&list_1.getSelectedIndex()<list_1.getModel().getSize()){
+					model.remove(list_1.getSelectedIndex());
+				}
+					
+			}
+		});
+		btnDelete.setBounds(308, 410, 79, 23);
+		add(btnDelete);
 
 	}
 }
