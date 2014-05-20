@@ -4,7 +4,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractListModel;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,14 +16,23 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import com.clearlyspam23.GLE.PLanguageOptions;
+import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
+
 public class PLangPanel extends JPanel {
 	private JTextField textField;
 	private JTextField exeFileLoc;
+	
+	private PLanguageOptions[] recognizedLanguages;
 
 	/**
 	 * Create the panel.
 	 */
 	public PLangPanel() {
+		
+		recognizedLanguages = new PLanguageOptions[]{
+				new JavaLanguageOptions()
+		};
 		
 		JLabel label = new JLabel("Run Options");
 		label.setBounds(10, 11, 128, 20);
@@ -32,7 +42,11 @@ public class PLangPanel extends JPanel {
 		label_1.setBounds(10, 102, 69, 14);
 		
 		JComboBox comboBox = new JComboBox();
+		DefaultComboBoxModel cm = new DefaultComboBoxModel();
+		for(int i = 0; i < recognizedLanguages.length; i++)
+			cm.addElement(recognizedLanguages[i].getName());
 		comboBox.setBounds(104, 99, 142, 20);
+		comboBox.setModel(cm);
 		
 		JLabel label_2 = new JLabel("Parameters");
 		label_2.setBounds(10, 252, 69, 14);
@@ -66,7 +80,7 @@ public class PLangPanel extends JPanel {
 			}
 		});
 		
-		JList list = new JList();
+		JList<String> list = new JList<String>();
 		list.setBounds(104, 265, 1, 1);
 		setLayout(null);
 		add(label);
