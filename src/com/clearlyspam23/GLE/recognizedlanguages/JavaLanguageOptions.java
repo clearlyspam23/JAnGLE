@@ -12,7 +12,7 @@ public class JavaLanguageOptions extends PLanguageOptions {
 	@Override
 	public String getRuntimeCall()
 	{
-		return System.getProperty("java.home");
+		return System.getProperty("java.home")+System.getProperty("file.separator") + "java";
 	}
 
 }

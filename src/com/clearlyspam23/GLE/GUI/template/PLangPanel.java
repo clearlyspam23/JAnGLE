@@ -20,8 +20,12 @@ import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
 
 public class PLangPanel extends JPanel {
-	private JTextField textField;
+	private JTextField displayInputField;
 	private JTextField exeFileLoc;
+	
+	private JComboBox<String> comboBox;
+	
+	private JList<String> list_1;
 	
 	private PLanguageOptions[] recognizedLanguages;
 
@@ -34,6 +38,11 @@ public class PLangPanel extends JPanel {
 				new JavaLanguageOptions()
 		};
 		
+		displayInputField = new JTextField();
+		displayInputField.setBounds(89, 458, 368, 20);
+		displayInputField.setEditable(false);
+		displayInputField.setColumns(10);
+		
 		JLabel label = new JLabel("Run Options");
 		label.setBounds(10, 11, 128, 20);
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -41,8 +50,13 @@ public class PLangPanel extends JPanel {
 		JLabel label_1 = new JLabel("Language");
 		label_1.setBounds(10, 102, 69, 14);
 		
-		JComboBox comboBox = new JComboBox();
-		DefaultComboBoxModel cm = new DefaultComboBoxModel();
+		comboBox = new JComboBox<String>();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				calculateText();
+			}
+		});
+		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
 		for(int i = 0; i < recognizedLanguages.length; i++)
 			cm.addElement(recognizedLanguages[i].getName());
 		comboBox.setBounds(104, 99, 142, 20);
@@ -53,11 +67,6 @@ public class PLangPanel extends JPanel {
 		
 		JLabel label_3 = new JLabel("Full Input");
 		label_3.setBounds(10, 461, 69, 14);
-		
-		textField = new JTextField();
-		textField.setBounds(89, 458, 368, 20);
-		textField.setEditable(false);
-		textField.setColumns(10);
 		
 		JLabel lblExecutableLocation = new JLabel("Game Executable");
 		lblExecutableLocation.setBounds(10, 62, 83, 14);
@@ -76,6 +85,7 @@ public class PLangPanel extends JPanel {
 				if(ret==JFileChooser.APPROVE_OPTION)
 				{
 					exeFileLoc.setText(fc.getSelectedFile().getPath());
+					calculateText();
 				}
 			}
 		});
@@ -85,7 +95,7 @@ public class PLangPanel extends JPanel {
 		setLayout(null);
 		add(label);
 		add(label_3);
-		add(textField);
+		add(displayInputField);
 		add(lblExecutableLocation);
 		add(label_1);
 		add(label_2);
@@ -94,7 +104,7 @@ public class PLangPanel extends JPanel {
 		add(exeFileLoc);
 		add(btnNewButton);
 		
-		final JList list_1 = new JList();
+		list_1 = new JList<String>();
 		final DefaultListModel<String> model = new DefaultListModel<String>();
 		list_1.setModel(model);
 		
@@ -122,6 +132,26 @@ public class PLangPanel extends JPanel {
 		});
 		btnDelete.setBounds(308, 410, 79, 23);
 		add(btnDelete);
+		
+		calculateText();
 
+	}
+	
+	private void calculateText()
+	{
+		String ans = "";
+		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.length)
+		{
+			PLanguageOptions lang = recognizedLanguages[comboBox.getSelectedIndex()];
+			if(lang.getRuntimeCall()!=null&&lang.getRuntimeCall().length()>0)
+				ans += recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + " ";
+		}
+		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
+			ans+=exeFileLoc.getText();
+		for(int i = 0; i < list_1.getModel().getSize(); i++)
+		{
+			ans+=" " + list_1.getModel().getElementAt(i);
+		}
+		displayInputField.setText(ans);
 	}
 }
