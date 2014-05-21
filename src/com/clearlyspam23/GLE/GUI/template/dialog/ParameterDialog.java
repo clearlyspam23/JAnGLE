@@ -154,7 +154,19 @@ public class ParameterDialog extends JDialog implements ActionListener{
 		setVisible(false);
 	}
 	
+	public void showDialog(){
+		textField.setText("");
+		accepted = false;
+		table.clearSelection();
+		setVisible(true);
+	}
+	
 	public boolean isAccepted(){
 		return accepted;
+	}
+	
+	public String getParameterText()
+	{
+		return textField.getText();
 	}
 }

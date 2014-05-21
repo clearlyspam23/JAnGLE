@@ -3,8 +3,11 @@ package com.clearlyspam23.GLE.GUI.template;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -27,6 +30,7 @@ public class PLangPanel extends JPanel {
 	private JComboBox<String> comboBox;
 	
 	private JList<String> list_1;
+	private DefaultListModel<String> list_1_model;
 	
 	private PLanguageOptions[] recognizedLanguages;
 
@@ -106,8 +110,8 @@ public class PLangPanel extends JPanel {
 		add(btnNewButton);
 		
 		list_1 = new JList<String>();
-		final DefaultListModel<String> model = new DefaultListModel<String>();
-		list_1.setModel(model);
+		list_1_model = new DefaultListModel<String>();
+		list_1.setModel(list_1_model);
 		
 		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list_1.setBounds(104, 251, 283, 148);
@@ -117,8 +121,19 @@ public class PLangPanel extends JPanel {
 		final ParameterDialog pdialog = new ParameterDialog();
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				pdialog.setVisible(true);
-				System.out.println("here");
+				pdialog.showDialog();
+				if(pdialog.isAccepted())
+				{
+					ArrayList<String> tokens = tokenizeBySpaceAndQuote(pdialog.getParameterText());
+					int index = list_1.getSelectedIndex()+1;
+					if(index<0||index>list_1_model.getSize())
+						index = list_1_model.getSize();
+					for(int i = 0; i < tokens.size(); i++)
+					{
+						list_1_model.add(index+i, tokens.get(i));
+					}
+					calculateText();
+				}
 			}
 		});
 		btnAdd.setBounds(219, 410, 79, 23);
@@ -127,10 +142,12 @@ public class PLangPanel extends JPanel {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(list_1.getSelectedIndex()>=0&&list_1.getSelectedIndex()<list_1.getModel().getSize()){
-					model.remove(list_1.getSelectedIndex());
+				int index = list_1.getSelectedIndex();
+				if(index>=0&&index<list_1.getModel().getSize()){
+					list_1_model.remove(index);
+					list_1.setSelectedIndex(index-1);
+					calculateText();
 				}
-					
 			}
 		});
 		btnDelete.setBounds(308, 410, 79, 23);
@@ -147,14 +164,53 @@ public class PLangPanel extends JPanel {
 		{
 			PLanguageOptions lang = recognizedLanguages[comboBox.getSelectedIndex()];
 			if(lang.getRuntimeCall()!=null&&lang.getRuntimeCall().length()>0)
-				ans += recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + " ";
+				ans += '"' + recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + '"' +" ";
 		}
 		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
-			ans+=exeFileLoc.getText();
+			ans+= '"' + exeFileLoc.getText() + '"';
 		for(int i = 0; i < list_1.getModel().getSize(); i++)
 		{
-			ans+=" " + list_1.getModel().getElementAt(i);
+			String s = list_1.getModel().getElementAt(i);
+			if(s.indexOf(' ')>=0)
+				s = '"' + s + '"';
+			ans+=" " + s;
 		}
 		displayInputField.setText(ans);
+	}
+	
+	private ArrayList<String> tokenizeBySpaceAndQuote(String s)
+	{
+		//i dont know how to regex
+		ArrayList<String> ans = new ArrayList<String>();
+		StringBuffer buf = new StringBuffer();
+		for(int i = 0; i < s.length(); i++)
+		{
+			if(Character.isWhitespace(s.charAt(i)))
+			{
+				if(buf.length()>0)
+				{
+					ans.add(buf.toString());
+					buf = new StringBuffer();
+				}
+			}
+			else if(s.charAt(i)=='"')
+			{
+				for(i++; i < s.length(); i++)
+				{
+					if(s.charAt(i)=='"')
+					{
+						ans.add(buf.toString());
+						buf = new StringBuffer();
+						break;
+					}
+					else
+						buf.append(s.charAt(i));
+				}
+			}
+			else
+				buf.append(s.charAt(i));
+		}
+		ans.add(buf.toString());
+		return ans;
 	}
 }
