@@ -17,14 +17,18 @@ import javax.swing.table.DefaultTableModel;
 import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.defaultparameters.CurrentLevelMacro;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ParameterDialog extends JDialog {
+public class ParameterDialog extends JDialog implements ActionListener{
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	private JTable table;
+	
+	private boolean accepted = false;
 
 	/**
 	 * Launch the application.
@@ -129,15 +133,28 @@ public class ParameterDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(this);
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(this);
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		accepted = "OK".equals(arg0.getActionCommand());
+		System.out.println(accepted);
+		setVisible(false);
+	}
+	
+	public boolean isAccepted(){
+		return accepted;
 	}
 }

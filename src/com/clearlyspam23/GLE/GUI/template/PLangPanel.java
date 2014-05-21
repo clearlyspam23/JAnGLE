@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
+import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
 
 public class PLangPanel extends JPanel {
@@ -113,9 +114,11 @@ public class PLangPanel extends JPanel {
 		add(list_1);
 		
 		JButton btnAdd = new JButton("Add");
+		final ParameterDialog pdialog = new ParameterDialog();
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//open the other dialogue here
+				pdialog.setVisible(true);
+				System.out.println("here");
 			}
 		});
 		btnAdd.setBounds(219, 410, 79, 23);
