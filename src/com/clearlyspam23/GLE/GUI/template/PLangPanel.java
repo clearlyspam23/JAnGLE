@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel;
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
+import javax.swing.JScrollPane;
 
 public class PLangPanel extends JPanel {
 	private JTextField displayInputField;
@@ -44,7 +45,7 @@ public class PLangPanel extends JPanel {
 		};
 		
 		displayInputField = new JTextField();
-		displayInputField.setBounds(89, 458, 368, 20);
+		displayInputField.setBounds(67, 458, 405, 20);
 		displayInputField.setEditable(false);
 		displayInputField.setColumns(10);
 		
@@ -152,6 +153,10 @@ public class PLangPanel extends JPanel {
 		});
 		btnDelete.setBounds(308, 410, 79, 23);
 		add(btnDelete);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 127, 462, 114);
+		add(scrollPane);
 		
 		calculateText();
 
