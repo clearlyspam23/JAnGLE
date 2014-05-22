@@ -164,7 +164,7 @@ public class PLangPanel extends JPanel {
 		{
 			PLanguageOptions lang = recognizedLanguages[comboBox.getSelectedIndex()];
 			if(lang.getRuntimeCall()!=null&&lang.getRuntimeCall().length()>0)
-				ans += '"' + recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + '"' +" ";
+				ans += '"' + recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + '"' + " ";
 		}
 		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
 			ans+= '"' + exeFileLoc.getText() + '"';
