@@ -66,6 +66,9 @@ public class TemplateDialog extends JDialog {
 		
 		PLangPanel langPanel = new PLangPanel();
 		tabbedPane.addTab("Run   ", null, langPanel, null);
+		
+		LayerPanel layerPanel = new LayerPanel();
+		tabbedPane.addTab("Layers", null, layerPanel, null);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

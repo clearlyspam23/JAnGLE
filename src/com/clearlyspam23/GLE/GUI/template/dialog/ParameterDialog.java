@@ -150,7 +150,6 @@ public class ParameterDialog extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		accepted = "OK".equals(arg0.getActionCommand());
-		System.out.println(accepted);
 		setVisible(false);
 	}
 	

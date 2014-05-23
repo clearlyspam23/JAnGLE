@@ -24,7 +24,7 @@ public class LayerPanel extends JPanel {
 		add(lblNewLabel);
 		
 		JList list = new JList();
-		list.setBounds(20, 39, 156, 388);
+		list.setBounds(20, 39, 156, 370);
 		add(list);
 		
 		JLabel lblName = new JLabel("Name");
@@ -45,23 +45,23 @@ public class LayerPanel extends JPanel {
 		add(comboBox);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(186, 90, 289, 405);
+		scrollPane.setBounds(186, 90, 289, 385);
 		add(scrollPane);
 		
 		JButton btnCreate = new JButton("Create");
-		btnCreate.setBounds(20, 438, 72, 23);
+		btnCreate.setBounds(20, 420, 72, 23);
 		add(btnCreate);
 		
 		JButton btnNewButton = new JButton("Delete");
-		btnNewButton.setBounds(104, 438, 72, 23);
+		btnNewButton.setBounds(102, 420, 72, 23);
 		add(btnNewButton);
 		
 		JButton btnUp = new JButton("Up");
-		btnUp.setBounds(20, 472, 72, 23);
+		btnUp.setBounds(20, 452, 72, 23);
 		add(btnUp);
 		
 		JButton btnDown = new JButton("Down");
-		btnDown.setBounds(104, 472, 72, 23);
+		btnDown.setBounds(104, 454, 72, 23);
 		add(btnDown);
 
 	}
