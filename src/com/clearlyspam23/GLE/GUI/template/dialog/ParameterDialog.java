@@ -3,6 +3,12 @@ package com.clearlyspam23.GLE.GUI.template.dialog;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,13 +23,12 @@ import javax.swing.table.DefaultTableModel;
 import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.defaultparameters.CurrentLevelMacro;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 public class ParameterDialog extends JDialog implements ActionListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
 	private JTable table;
@@ -35,7 +40,9 @@ public class ParameterDialog extends JDialog implements ActionListener{
 	 */
 	public static void main(String[] args) {
 		try {
-			ParameterDialog dialog = new ParameterDialog();
+			final List<ParameterMacro> macros = new ArrayList<ParameterMacro>();
+			macros.add(new CurrentLevelMacro());
+			ParameterDialog dialog = new ParameterDialog(macros);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -46,11 +53,8 @@ public class ParameterDialog extends JDialog implements ActionListener{
 	/**
 	 * Create the dialog.
 	 */
-	public ParameterDialog() {
+	public ParameterDialog(List<ParameterMacro> macros) {
 		setTitle("Add Parameters");
-		final ParameterMacro[] macros = new ParameterMacro[]{
-				new CurrentLevelMacro()
-		};
 		setModal(true);
 		setBounds(100, 100, 452, 340);
 		getContentPane().setLayout(new BorderLayout());
@@ -75,6 +79,11 @@ public class ParameterDialog extends JDialog implements ActionListener{
 		contentPanel.add(scrollPane);
 		
 		table = new JTable(){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			public boolean isCellEditable(int row, int column) {                
                 return false;               
 			};
@@ -95,11 +104,11 @@ public class ParameterDialog extends JDialog implements ActionListener{
 				}
 			}
 		});
-		Object[][] model = new Object[macros.length][2];
-		for(int i = 0; i < macros.length; i++)
+		Object[][] model = new Object[macros.size()][2];
+		for(int i = 0; i < macros.size(); i++)
 		{
-			model[i][0] = macros[i].getMacro();
-			model[i][1] = macros[i].getDescription();
+			model[i][0] = macros.get(i).getMacro();
+			model[i][1] = macros.get(i).getDescription();
 		}
 		table.setModel(new DefaultTableModel(
 			model,
@@ -107,6 +116,10 @@ public class ParameterDialog extends JDialog implements ActionListener{
 				"Macro", "Value"
 			}
 		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] {
 				false, false
 			};

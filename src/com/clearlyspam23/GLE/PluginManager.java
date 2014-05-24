@@ -8,5 +8,6 @@ public class PluginManager {
 	private List<CoordinateSystem> recognizedCoordinateSystems = new ArrayList<CoordinateSystem>();
 	private List<PLanguageOptions> recognizedProgrammingLanguages = new ArrayList<PLanguageOptions>();
 	private List<ParameterMacro> recognizedMacros = new ArrayList<ParameterMacro>();
+	private List<LayerDefinition<?>> recognizedLayerDefs = new ArrayList<LayerDefinition<?>>();
 
 }

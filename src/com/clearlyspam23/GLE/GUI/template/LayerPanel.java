@@ -1,29 +1,45 @@
 package com.clearlyspam23.GLE.GUI.template;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JList;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JScrollPane;
+import java.util.List;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import com.clearlyspam23.GLE.LayerDefinition;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class LayerPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textField;
+	private JScrollPane scrollPane;
+	private JComboBox<String> comboBox;
+	
+	private List<LayerDefinition<?>> knownLayerDefs;
 
 	/**
 	 * Create the panel.
 	 */
-	public LayerPanel() {
+	public LayerPanel(List<LayerDefinition<?>> layerDefs) {
 		setLayout(null);
 		
+		this.knownLayerDefs = layerDefs;
+		
 		JLabel lblNewLabel = new JLabel("Layers");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setBounds(20, 11, 65, 17);
 		add(lblNewLabel);
 		
-		JList list = new JList();
+		JList<String> list = new JList<String>();
 		list.setBounds(20, 39, 156, 370);
 		add(list);
 		
@@ -40,13 +56,19 @@ public class LayerPanel extends JPanel {
 		add(textField);
 		textField.setColumns(10);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(247, 62, 156, 20);
-		add(comboBox);
-		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(186, 90, 289, 385);
 		add(scrollPane);
+		
+		comboBox = new JComboBox<String>();
+		comboBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetLayerArea();
+			}
+		});
+		comboBox.setBounds(247, 62, 156, 20);
+		comboBox.setSelectedIndex(knownLayerDefs.size()>0 ? 0 : -1);
+		add(comboBox);
 		
 		JButton btnCreate = new JButton("Create");
 		btnCreate.setBounds(20, 420, 72, 23);
@@ -64,6 +86,16 @@ public class LayerPanel extends JPanel {
 		btnDown.setBounds(104, 454, 72, 23);
 		add(btnDown);
 
+	}
+	
+	private void resetLayerArea()
+	{
+		scrollPane.removeAll();
+		int i = comboBox.getSelectedIndex();
+		if(i>=0&&i<knownLayerDefs.size())
+		{
+			scrollPane.add(knownLayerDefs.get(i).getLayerComponent());
+		}
 	}
 
 }

@@ -3,11 +3,14 @@ package com.clearlyspam23.GLE.GUI.util;
 import java.awt.Container;
 import java.awt.Dimension;
 
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class VectorPanel extends Container {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField textField1;
 	private JTextField textField2;
 

@@ -2,6 +2,8 @@ package com.clearlyspam23.GLE.GUI.template;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,13 +14,22 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import com.clearlyspam23.GLE.CoordinateSystem;
+import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.PLanguageOptions;
+import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.defaultcoordinates.BottomLeft;
 import com.clearlyspam23.GLE.defaultcoordinates.CenteredDown;
 import com.clearlyspam23.GLE.defaultcoordinates.CenteredUp;
 import com.clearlyspam23.GLE.defaultcoordinates.TopLeft;
+import com.clearlyspam23.GLE.defaultparameters.CurrentLevelMacro;
+import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
 
 public class TemplateDialog extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
 	/**
@@ -44,12 +55,19 @@ public class TemplateDialog extends JDialog {
 	 * Create the dialog.
 	 */
 	public TemplateDialog() {
-		CoordinateSystem[] possibleCoordinates = new CoordinateSystem[]{
-				new TopLeft(),
-				new BottomLeft(),
-				new CenteredDown(),
-				new CenteredUp()
-		};
+		List<CoordinateSystem> possibleCoordinates = new ArrayList<CoordinateSystem>();
+		possibleCoordinates.add(new TopLeft());
+		possibleCoordinates.add(new BottomLeft());
+		possibleCoordinates.add(new CenteredDown());
+		possibleCoordinates.add(new CenteredUp());
+		
+		List<PLanguageOptions> recognizedLanguages = new ArrayList<PLanguageOptions>();
+		recognizedLanguages.add(new JavaLanguageOptions());
+		
+		List<ParameterMacro> macros = new ArrayList<ParameterMacro>();
+		macros.add(new CurrentLevelMacro());
+		
+		List<LayerDefinition<?>> knownLayerDefs = new ArrayList<LayerDefinition<?>>();
 		
 		setBounds(100, 100, 540, 620);
 		getContentPane().setLayout(new BorderLayout());
@@ -64,10 +82,10 @@ public class TemplateDialog extends JDialog {
 		GeneralPanel generalPanel = new GeneralPanel(possibleCoordinates);
 		tabbedPane.addTab("General", null, generalPanel, null);
 		
-		PLangPanel langPanel = new PLangPanel();
+		PLangPanel langPanel = new PLangPanel(recognizedLanguages, macros);
 		tabbedPane.addTab("Run   ", null, langPanel, null);
 		
-		LayerPanel layerPanel = new LayerPanel();
+		LayerPanel layerPanel = new LayerPanel(knownLayerDefs);
 		tabbedPane.addTab("Layers", null, layerPanel, null);
 		{
 			JPanel buttonPane = new JPanel();

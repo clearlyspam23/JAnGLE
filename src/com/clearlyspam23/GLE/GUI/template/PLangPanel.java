@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -16,15 +14,19 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
+import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
-import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
-import javax.swing.JScrollPane;
 
 public class PLangPanel extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField displayInputField;
 	private JTextField exeFileLoc;
 	
@@ -33,16 +35,14 @@ public class PLangPanel extends JPanel {
 	private JList<String> list_1;
 	private DefaultListModel<String> list_1_model;
 	
-	private PLanguageOptions[] recognizedLanguages;
+	private List<PLanguageOptions> recognizedLanguages;
 
 	/**
 	 * Create the panel.
 	 */
-	public PLangPanel() {
+	public PLangPanel(List<PLanguageOptions> rLangs, List<ParameterMacro> macros) {
 		
-		recognizedLanguages = new PLanguageOptions[]{
-				new JavaLanguageOptions()
-		};
+		recognizedLanguages = rLangs;
 		
 		displayInputField = new JTextField();
 		displayInputField.setBounds(67, 458, 405, 20);
@@ -63,8 +63,8 @@ public class PLangPanel extends JPanel {
 			}
 		});
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
-		for(int i = 0; i < recognizedLanguages.length; i++)
-			cm.addElement(recognizedLanguages[i].getName());
+		for(int i = 0; i < recognizedLanguages.size(); i++)
+			cm.addElement(recognizedLanguages.get(i).getName());
 		comboBox.setBounds(104, 99, 142, 20);
 		comboBox.setModel(cm);
 		
@@ -119,7 +119,7 @@ public class PLangPanel extends JPanel {
 		add(list_1);
 		
 		JButton btnAdd = new JButton("Add");
-		final ParameterDialog pdialog = new ParameterDialog();
+		final ParameterDialog pdialog = new ParameterDialog(macros);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				pdialog.showDialog();
@@ -165,11 +165,11 @@ public class PLangPanel extends JPanel {
 	private void calculateText()
 	{
 		String ans = "";
-		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.length)
+		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.size())
 		{
-			PLanguageOptions lang = recognizedLanguages[comboBox.getSelectedIndex()];
+			PLanguageOptions lang = recognizedLanguages.get(comboBox.getSelectedIndex());
 			if(lang.getRuntimeCall()!=null&&lang.getRuntimeCall().length()>0)
-				ans += '"' + recognizedLanguages[comboBox.getSelectedIndex()].getRuntimeCall() + '"' + " ";
+				ans += '"' + recognizedLanguages.get(comboBox.getSelectedIndex()).getRuntimeCall() + '"' + " ";
 		}
 		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
 			ans+= '"' + exeFileLoc.getText() + '"';
