@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI.template;
 
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,9 @@ import javax.swing.ListSelectionModel;
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.BoxLayout;
 
 public class PLangPanel extends JPanel {
 	/**
@@ -41,6 +45,8 @@ public class PLangPanel extends JPanel {
 	private Component currentPLangComp;
 	
 	private JScrollPane scrollPane;
+	
+	private JPanel scrollPanel;
 
 	/**
 	 * Create the panel.
@@ -61,8 +67,12 @@ public class PLangPanel extends JPanel {
 		JLabel label_1 = new JLabel("Language");
 		label_1.setBounds(10, 102, 69, 14);
 		
+		scrollPanel = new JPanel();
+		scrollPane.setViewportView(scrollPanel);
+		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.X_AXIS));
 		
-		scrollPane = new JScrollPane();
+		
+		scrollPane = new JScrollPane(scrollPanel);
 		scrollPane.setLayout(null);
 		scrollPane.setBounds(10, 127, 462, 114);
 		add(scrollPane);
@@ -169,23 +179,31 @@ public class PLangPanel extends JPanel {
 
 	}
 	
+	private int counter = 0;
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void onSelectionChange()
 	{
 		String ans = "";
-		scrollPane.getViewport().removeAll();
 		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.size())
 		{
 			PLanguageOptions lang = recognizedLanguages.get(comboBox.getSelectedIndex());
 			currentPLangComp = lang.getPanel();
 			if(currentPLangComp!=null)
 			{
-				scrollPane.setViewportView(currentPLangComp);
+				System.out.println("here");
+				scrollPanel.add(new JButton("Button" + (++counter)));
+				scrollPanel.revalidate();
+				scrollPanel.repaint();
+				scrollPane.revalidate();
+				scrollPane.repaint();
 				revalidate();
 				repaint();
-//				currentPLangComp.setVisible(true);
-				validate();
-				System.out.println(currentPLangComp);
+//				scrollPanel.add(currentPLangComp);
+//				scrollPanel.revalidate();
+//				scrollPanel.repaint();
+//				scrollPanel.setVisible(true);
+//				System.out.println(currentPLangComp);
 			}
 			String text = lang.buildRuntimeCall(currentPLangComp);
 			if(text!=null&&text.length()>0)
