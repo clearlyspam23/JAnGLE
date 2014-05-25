@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers;
 
 import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.basic.layers.gui.TileLayerGUIOptions;
+import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.templates.Layer;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions> {

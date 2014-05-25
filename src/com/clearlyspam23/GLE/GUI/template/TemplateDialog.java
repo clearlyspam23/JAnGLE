@@ -61,7 +61,7 @@ public class TemplateDialog extends JDialog {
 		possibleCoordinates.add(new CenteredDown());
 		possibleCoordinates.add(new CenteredUp());
 		
-		List<PLanguageOptions> recognizedLanguages = new ArrayList<PLanguageOptions>();
+		List<PLanguageOptions<?>> recognizedLanguages = new ArrayList<PLanguageOptions<?>>();
 		recognizedLanguages.add(new JavaLanguageOptions());
 		
 		List<ParameterMacro> macros = new ArrayList<ParameterMacro>();

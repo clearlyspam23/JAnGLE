@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE.GUI.template;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,12 +36,16 @@ public class PLangPanel extends JPanel {
 	private JList<String> list_1;
 	private DefaultListModel<String> list_1_model;
 	
-	private List<PLanguageOptions> recognizedLanguages;
+	private List<PLanguageOptions<?>> recognizedLanguages;
+	
+	private Component currentPLangComp;
+	
+	private JScrollPane scrollPane;
 
 	/**
 	 * Create the panel.
 	 */
-	public PLangPanel(List<PLanguageOptions> rLangs, List<ParameterMacro> macros) {
+	public PLangPanel(List<PLanguageOptions<?>> rLangs, List<ParameterMacro> macros) {
 		
 		recognizedLanguages = rLangs;
 		
@@ -56,10 +61,16 @@ public class PLangPanel extends JPanel {
 		JLabel label_1 = new JLabel("Language");
 		label_1.setBounds(10, 102, 69, 14);
 		
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setLayout(null);
+		scrollPane.setBounds(10, 127, 462, 114);
+		add(scrollPane);
+		
 		comboBox = new JComboBox<String>();
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				calculateText();
+				onSelectionChange();
 			}
 		});
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
@@ -91,7 +102,7 @@ public class PLangPanel extends JPanel {
 				if(ret==JFileChooser.APPROVE_OPTION)
 				{
 					exeFileLoc.setText(fc.getSelectedFile().getPath());
-					calculateText();
+					onSelectionChange();
 				}
 			}
 		});
@@ -133,7 +144,7 @@ public class PLangPanel extends JPanel {
 					{
 						list_1_model.add(index+i, tokens.get(i));
 					}
-					calculateText();
+					onSelectionChange();
 				}
 			}
 		});
@@ -147,29 +158,38 @@ public class PLangPanel extends JPanel {
 				if(index>=0&&index<list_1.getModel().getSize()){
 					list_1_model.remove(index);
 					list_1.setSelectedIndex(index-1);
-					calculateText();
+					onSelectionChange();
 				}
 			}
 		});
 		btnDelete.setBounds(308, 410, 79, 23);
 		add(btnDelete);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 127, 462, 114);
-		add(scrollPane);
-		
-		calculateText();
+		onSelectionChange();
 
 	}
 	
-	private void calculateText()
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void onSelectionChange()
 	{
 		String ans = "";
+		scrollPane.getViewport().removeAll();
 		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.size())
 		{
 			PLanguageOptions lang = recognizedLanguages.get(comboBox.getSelectedIndex());
-			if(lang.getRuntimeCall()!=null&&lang.getRuntimeCall().length()>0)
-				ans += '"' + recognizedLanguages.get(comboBox.getSelectedIndex()).getRuntimeCall() + '"' + " ";
+			currentPLangComp = lang.getPanel();
+			if(currentPLangComp!=null)
+			{
+				scrollPane.setViewportView(currentPLangComp);
+				revalidate();
+				repaint();
+//				currentPLangComp.setVisible(true);
+				validate();
+				System.out.println(currentPLangComp);
+			}
+			String text = lang.buildRuntimeCall(currentPLangComp);
+			if(text!=null&&text.length()>0)
+				ans += '"' + text + '"' + " ";
 		}
 		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
 			ans+= '"' + exeFileLoc.getText() + '"';
