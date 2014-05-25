@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.recognizedlanguages;
+package com.clearlyspam23.GLE.basic.languages;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
 

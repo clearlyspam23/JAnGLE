@@ -17,12 +17,12 @@ import com.clearlyspam23.GLE.CoordinateSystem;
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.ParameterMacro;
-import com.clearlyspam23.GLE.defaultcoordinates.BottomLeft;
-import com.clearlyspam23.GLE.defaultcoordinates.CenteredDown;
-import com.clearlyspam23.GLE.defaultcoordinates.CenteredUp;
-import com.clearlyspam23.GLE.defaultcoordinates.TopLeft;
-import com.clearlyspam23.GLE.defaultparameters.CurrentLevelMacro;
-import com.clearlyspam23.GLE.recognizedlanguages.JavaLanguageOptions;
+import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
+import com.clearlyspam23.GLE.basic.coordinates.CenteredDown;
+import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
+import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
+import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
+import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
 
 public class TemplateDialog extends JDialog {
 

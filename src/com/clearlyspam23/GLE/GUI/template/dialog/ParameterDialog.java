@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.clearlyspam23.GLE.ParameterMacro;
-import com.clearlyspam23.GLE.defaultparameters.CurrentLevelMacro;
+import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
 
 public class ParameterDialog extends JDialog implements ActionListener{
 

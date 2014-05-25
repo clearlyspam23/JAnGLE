@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.defaultcoordinates;
+package com.clearlyspam23.GLE.basic.coordinates;
 
 import java.io.File;
 import java.io.IOException;

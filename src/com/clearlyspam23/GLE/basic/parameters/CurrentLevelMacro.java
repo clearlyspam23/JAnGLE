@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.defaultparameters;
+package com.clearlyspam23.GLE.basic.parameters;
 
 import com.clearlyspam23.GLE.ParameterMacro;
 
