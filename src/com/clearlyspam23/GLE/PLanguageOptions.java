@@ -1,8 +1,8 @@
 package com.clearlyspam23.GLE;
 
-import java.awt.Component;
+import com.clearlyspam23.GLE.GUI.SubPanel;
 
-public abstract class PLanguageOptions<T extends Component> {
+public abstract class PLanguageOptions<T extends SubPanel> {
 	
 	public abstract String getName();
 	

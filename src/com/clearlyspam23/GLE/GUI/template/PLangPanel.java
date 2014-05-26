@@ -1,7 +1,5 @@
 package com.clearlyspam23.GLE.GUI.template;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,10 +20,8 @@ import javax.swing.ListSelectionModel;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.ParameterMacro;
+import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.BoxLayout;
 
 public class PLangPanel extends JPanel {
 	/**
@@ -42,11 +38,11 @@ public class PLangPanel extends JPanel {
 	
 	private List<PLanguageOptions<?>> recognizedLanguages;
 	
-	private Component currentPLangComp;
+	private SubPanel[] panels;
+	
+	private SubPanel currentPanel;
 	
 	private JScrollPane scrollPane;
-	
-	private JPanel scrollPanel;
 
 	/**
 	 * Create the panel.
@@ -54,9 +50,14 @@ public class PLangPanel extends JPanel {
 	public PLangPanel(List<PLanguageOptions<?>> rLangs, List<ParameterMacro> macros) {
 		
 		recognizedLanguages = rLangs;
+		panels = new SubPanel[recognizedLanguages.size()];
+		for(int i = 0; i < recognizedLanguages.size(); i++)
+		{
+			panels[i] = recognizedLanguages.get(i).getPanel();
+		}
 		
 		displayInputField = new JTextField();
-		displayInputField.setBounds(67, 458, 405, 20);
+		displayInputField.setBounds(67, 471, 405, 20);
 		displayInputField.setEditable(false);
 		displayInputField.setColumns(10);
 		
@@ -65,17 +66,7 @@ public class PLangPanel extends JPanel {
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		JLabel label_1 = new JLabel("Language");
-		label_1.setBounds(10, 102, 69, 14);
-		
-		scrollPanel = new JPanel();
-		scrollPane.setViewportView(scrollPanel);
-		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.X_AXIS));
-		
-		
-		scrollPane = new JScrollPane(scrollPanel);
-		scrollPane.setLayout(null);
-		scrollPane.setBounds(10, 127, 462, 114);
-		add(scrollPane);
+		label_1.setBounds(10, 76, 69, 14);
 		
 		comboBox = new JComboBox<String>();
 		comboBox.addActionListener(new ActionListener() {
@@ -86,26 +77,26 @@ public class PLangPanel extends JPanel {
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 			cm.addElement(recognizedLanguages.get(i).getName());
-		comboBox.setBounds(104, 99, 142, 20);
+		comboBox.setBounds(104, 73, 142, 20);
 		comboBox.setModel(cm);
 		
 		JLabel label_2 = new JLabel("Parameters");
-		label_2.setBounds(10, 252, 69, 14);
+		label_2.setBounds(10, 313, 69, 14);
 		
 		JLabel label_3 = new JLabel("Full Input");
-		label_3.setBounds(10, 461, 69, 14);
+		label_3.setBounds(10, 474, 69, 14);
 		
 		JLabel lblExecutableLocation = new JLabel("Game Executable");
-		lblExecutableLocation.setBounds(10, 62, 83, 14);
+		lblExecutableLocation.setBounds(10, 42, 83, 14);
 		
 		exeFileLoc = new JTextField();
-		exeFileLoc.setBounds(104, 59, 283, 20);
+		exeFileLoc.setBounds(103, 42, 283, 20);
 		exeFileLoc.setColumns(10);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setAcceptAllFileFilterUsed(true);
 		JButton btnNewButton = new JButton("Browse");
-		btnNewButton.setBounds(405, 58, 67, 23);
+		btnNewButton.setBounds(405, 38, 67, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ret = fc.showOpenDialog(PLangPanel.this);
@@ -130,14 +121,7 @@ public class PLangPanel extends JPanel {
 		add(comboBox);
 		add(exeFileLoc);
 		add(btnNewButton);
-		
-		list_1 = new JList<String>();
 		list_1_model = new DefaultListModel<String>();
-		list_1.setModel(list_1_model);
-		
-		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list_1.setBounds(104, 251, 283, 148);
-		add(list_1);
 		
 		JButton btnAdd = new JButton("Add");
 		final ParameterDialog pdialog = new ParameterDialog(macros);
@@ -158,7 +142,7 @@ public class PLangPanel extends JPanel {
 				}
 			}
 		});
-		btnAdd.setBounds(219, 410, 79, 23);
+		btnAdd.setBounds(218, 437, 79, 23);
 		add(btnAdd);
 		
 		JButton btnDelete = new JButton("Delete");
@@ -172,40 +156,57 @@ public class PLangPanel extends JPanel {
 				}
 			}
 		});
-		btnDelete.setBounds(308, 410, 79, 23);
+		btnDelete.setBounds(307, 437, 79, 23);
 		add(btnDelete);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 101, 462, 201);
+		add(scrollPane);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(104, 313, 282, 113);
+		add(scrollPane_1);
+		
+		list_1 = new JList<String>();
+		scrollPane_1.setViewportView(list_1);
+		list_1.setModel(list_1_model);
+		
+		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+//		scrollPanel = new JPanel();
+//		scrollPane.setViewportView(scrollPanel);
 		
 		onSelectionChange();
 
 	}
 	
-	private int counter = 0;
+	//private int counter = 0;
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	private void onSelectionChange()
 	{
 		String ans = "";
+//		scrollPanel.removeAll();
 		if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<recognizedLanguages.size())
 		{
+			@SuppressWarnings("rawtypes")
 			PLanguageOptions lang = recognizedLanguages.get(comboBox.getSelectedIndex());
-			currentPLangComp = lang.getPanel();
-			if(currentPLangComp!=null)
+			currentPanel = panels[comboBox.getSelectedIndex()];
+			scrollPane.setViewportView(currentPanel);
+			if(currentPanel!=null)
 			{
-				System.out.println("here");
-				scrollPanel.add(new JButton("Button" + (++counter)));
-				scrollPanel.revalidate();
-				scrollPanel.repaint();
-				scrollPane.revalidate();
-				scrollPane.repaint();
-				revalidate();
-				repaint();
+				currentPanel.reset();
+//				scrollPane.setViewportView(currentPanel);
+//				scrollPanel.add(new JButton("Button" + (++counter)));
 //				scrollPanel.add(currentPLangComp);
 //				scrollPanel.revalidate();
 //				scrollPanel.repaint();
 //				scrollPanel.setVisible(true);
 //				System.out.println(currentPLangComp);
 			}
-			String text = lang.buildRuntimeCall(currentPLangComp);
+			revalidate();
+			repaint();
+			String text = lang.buildRuntimeCall(currentPanel);
 			if(text!=null&&text.length()>0)
 				ans += '"' + text + '"' + " ";
 		}

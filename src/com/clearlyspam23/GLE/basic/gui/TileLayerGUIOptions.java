@@ -1,12 +1,13 @@
 package com.clearlyspam23.GLE.basic.gui;
 
-import java.awt.Container;
-import javax.swing.JLabel;
-import com.clearlyspam23.GLE.GUI.util.VectorPanel;
-import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
 
-public class TileLayerGUIOptions extends Container {
+import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.GUI.util.VectorPanel;
+
+public class TileLayerGUIOptions extends SubPanel {
 	public TileLayerGUIOptions() {
 		
 		JLabel lblGridWidth = new JLabel("Grid Dimensions");
@@ -39,4 +40,10 @@ public class TileLayerGUIOptions extends Container {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 }

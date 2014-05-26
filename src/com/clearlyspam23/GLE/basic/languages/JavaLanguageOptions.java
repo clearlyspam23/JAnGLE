@@ -1,9 +1,9 @@
 package com.clearlyspam23.GLE.basic.languages;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
-import com.clearlyspam23.GLE.basic.gui.JavaLanguageContainer;
+import com.clearlyspam23.GLE.basic.gui.JavaLanguagePanel;
 
-public class JavaLanguageOptions extends PLanguageOptions<JavaLanguageContainer> {
+public class JavaLanguageOptions extends PLanguageOptions<JavaLanguagePanel> {
 
 	@Override
 	public String getName() {
@@ -11,14 +11,14 @@ public class JavaLanguageOptions extends PLanguageOptions<JavaLanguageContainer>
 	}
 	
 	@Override
-	public String buildRuntimeCall(JavaLanguageContainer panel)
+	public String buildRuntimeCall(JavaLanguagePanel panel)
 	{
-		return System.getProperty("java.home")+System.getProperty("file.separator") + "java";
+		return panel.getJavaTextField().getText();
 	}
 	
-	public JavaLanguageContainer getPanel()
+	public JavaLanguagePanel getPanel()
 	{
-		return new JavaLanguageContainer();
+		return new JavaLanguagePanel(System.getProperty("java.home")+System.getProperty("file.separator") + "java");
 	}
 
 }
