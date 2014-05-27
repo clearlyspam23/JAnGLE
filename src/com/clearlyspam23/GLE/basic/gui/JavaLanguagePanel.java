@@ -2,9 +2,11 @@ package com.clearlyspam23.GLE.basic.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -13,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.util.Utility;
 
 public class JavaLanguagePanel extends SubPanel {
 	/**
@@ -22,6 +25,7 @@ public class JavaLanguagePanel extends SubPanel {
 	private JTextField javaTextField;
 	private JTextField textField_1;
 	private JList<String> list;
+	private DefaultListModel<String> list_model;
 
 	public JavaLanguagePanel(String javaLocation) {
 
@@ -43,7 +47,7 @@ public class JavaLanguagePanel extends SubPanel {
 				if(ret==JFileChooser.APPROVE_OPTION)
 				{
 					javaTextField.setText(fc.getSelectedFile().getPath());
-					//onSelectionChange();
+					registerChange();
 				}
 			}
 		});
@@ -51,11 +55,28 @@ public class JavaLanguagePanel extends SubPanel {
 		JLabel lblJvmArguments = new JLabel("JVM Arguments");
 
 		list = new JList<String>();
-
-		JButton btnAdd = new JButton("Add");
-
+		
+		list_model = new DefaultListModel<String>();
+		list.setModel(list_model);
+		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
+
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				ArrayList<String> tokens = Utility.tokenizeBySpaceAndQuote(textField_1.getText());
+				int index = list.getSelectedIndex()+1;
+				if(index<0||index>list_model.getSize())
+					index = list_model.getSize();
+				for(int i = 0; i < tokens.size(); i++)
+				{
+					list_model.add(index+i, tokens.get(i));
+				}
+				textField_1.setText("");
+				registerChange();
+			}
+		});
 
 		JButton btnRemove = new JButton("Remove");
 		GroupLayout groupLayout = new GroupLayout(this);

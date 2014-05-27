@@ -13,7 +13,20 @@ public class JavaLanguageOptions extends PLanguageOptions<JavaLanguagePanel> {
 	@Override
 	public String buildRuntimeCall(JavaLanguagePanel panel)
 	{
-		return panel.getJavaTextField().getText();
+		String output = panel.getJavaTextField().getText();
+		if(output==null) 
+			output = "";
+		else if(output.length()>0)
+			output = '"' + output + '"';
+		for(int i = 0; i < panel.getList().getModel().getSize(); i++)
+		{
+			String s = panel.getList().getModel().getElementAt(i);
+			if(s.indexOf(' ')>=0)
+				s = '"' + s + '"';
+			output = output + " " + s;
+			
+		}
+		return output;
 	}
 	
 	public JavaLanguagePanel getPanel()

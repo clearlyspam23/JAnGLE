@@ -17,13 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
+import com.clearlyspam23.GLE.util.Utility;
 
-public class PLangPanel extends JPanel {
+public class PLangPanel extends JPanel implements ChangeListener{
 	/**
 	 * 
 	 */
@@ -54,6 +57,7 @@ public class PLangPanel extends JPanel {
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 		{
 			panels[i] = recognizedLanguages.get(i).getPanel();
+			panels[i].addChangeListener(this);
 		}
 		
 		displayInputField = new JTextField();
@@ -71,7 +75,7 @@ public class PLangPanel extends JPanel {
 		comboBox = new JComboBox<String>();
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				onSelectionChange();
+				stateChanged();
 			}
 		});
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
@@ -103,7 +107,7 @@ public class PLangPanel extends JPanel {
 				if(ret==JFileChooser.APPROVE_OPTION)
 				{
 					exeFileLoc.setText(fc.getSelectedFile().getPath());
-					onSelectionChange();
+					stateChanged();
 				}
 			}
 		});
@@ -130,7 +134,7 @@ public class PLangPanel extends JPanel {
 				pdialog.showDialog();
 				if(pdialog.isAccepted())
 				{
-					ArrayList<String> tokens = tokenizeBySpaceAndQuote(pdialog.getParameterText());
+					ArrayList<String> tokens = Utility.tokenizeBySpaceAndQuote(pdialog.getParameterText());
 					int index = list_1.getSelectedIndex()+1;
 					if(index<0||index>list_1_model.getSize())
 						index = list_1_model.getSize();
@@ -138,7 +142,7 @@ public class PLangPanel extends JPanel {
 					{
 						list_1_model.add(index+i, tokens.get(i));
 					}
-					onSelectionChange();
+					stateChanged();
 				}
 			}
 		});
@@ -152,7 +156,7 @@ public class PLangPanel extends JPanel {
 				if(index>=0&&index<list_1.getModel().getSize()){
 					list_1_model.remove(index);
 					list_1.setSelectedIndex(index-1);
-					onSelectionChange();
+					stateChanged();
 				}
 			}
 		});
@@ -176,14 +180,19 @@ public class PLangPanel extends JPanel {
 //		scrollPanel = new JPanel();
 //		scrollPane.setViewportView(scrollPanel);
 		
-		onSelectionChange();
+		stateChanged();
 
 	}
 	
 	//private int counter = 0;
 	
+	public void stateChanged()
+	{
+		stateChanged(null);
+	}
+	
 	@SuppressWarnings("unchecked")
-	private void onSelectionChange()
+	public void stateChanged(ChangeEvent e)
 	{
 		String ans = "";
 //		scrollPanel.removeAll();
@@ -208,7 +217,7 @@ public class PLangPanel extends JPanel {
 			repaint();
 			String text = lang.buildRuntimeCall(currentPanel);
 			if(text!=null&&text.length()>0)
-				ans += '"' + text + '"' + " ";
+				ans += text + " ";
 		}
 		if(exeFileLoc.getText()!=null&&exeFileLoc.getText().trim().length()>0)
 			ans+= '"' + exeFileLoc.getText() + '"';
@@ -222,39 +231,4 @@ public class PLangPanel extends JPanel {
 		displayInputField.setText(ans);
 	}
 	
-	private ArrayList<String> tokenizeBySpaceAndQuote(String s)
-	{
-		//i dont know how to regex
-		ArrayList<String> ans = new ArrayList<String>();
-		StringBuffer buf = new StringBuffer();
-		for(int i = 0; i < s.length(); i++)
-		{
-			if(Character.isWhitespace(s.charAt(i)))
-			{
-				if(buf.length()>0)
-				{
-					ans.add(buf.toString());
-					buf = new StringBuffer();
-				}
-			}
-			else if(s.charAt(i)=='"')
-			{
-				for(i++; i < s.length(); i++)
-				{
-					if(s.charAt(i)=='"')
-					{
-						ans.add(buf.toString());
-						buf = new StringBuffer();
-						break;
-					}
-					else
-						buf.append(s.charAt(i));
-				}
-			}
-			else
-				buf.append(s.charAt(i));
-		}
-		ans.add(buf.toString());
-		return ans;
-	}
 }
