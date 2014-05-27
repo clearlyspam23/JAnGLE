@@ -2,7 +2,7 @@ package com.clearlyspam23.GLE.basic.layers;
 
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
-import com.clearlyspam23.GLE.templates.Layer;
+import com.clearlyspam23.GLE.level.LayerTemplate;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions> {
 
@@ -13,7 +13,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions> {
 	}
 
 	@Override
-	public Layer buildFromGUI(TileLayerGUIOptions gui) {
+	public LayerTemplate buildFromGUI(TileLayerGUIOptions gui) {
 		// TODO Auto-generated method stub
 		return null;
 	}
