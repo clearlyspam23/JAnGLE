@@ -78,7 +78,17 @@ public class JavaLanguagePanel extends SubPanel {
 			}
 		});
 
-		JButton btnRemove = new JButton("Remove");
+		JButton btnRemove = new JButton("Delete");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int index = list.getSelectedIndex();
+				if(index>=0&&index<list.getModel().getSize()){
+					list_model.remove(index);
+					list.setSelectedIndex(index-1);
+					registerChange();
+				}
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)

@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
-import com.clearlyspam23.GLE.level.LayerTemplate;
+import com.clearlyspam23.GLE.LayerTemplate;
 
 public abstract class LayerDefinition<T extends SubPanel> {
 	
