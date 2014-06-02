@@ -8,6 +8,7 @@ import java.awt.Stroke;
 import java.awt.event.InputEvent;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PCanvas;
@@ -27,6 +28,7 @@ import org.piccolo2d.util.PPaintContext;
 public class GridExample extends PFrame {
 
     static protected Line2D gridLine = new Line2D.Double();
+    static protected Rectangle2D rect = new Rectangle2D.Double();
     static protected Color gridPaint = Color.BLACK;
     static protected double gridSpacing = 20;
     static protected float lineSpacing = (float) (gridSpacing/4);
@@ -44,6 +46,36 @@ public class GridExample extends PFrame {
     public void initialize() {
         PRoot root = getCanvas().getRoot();
         final PCamera camera = getCanvas().getCamera();
+        final PNode gridNode = new PNode() {
+        	 protected void paint(PPaintContext paintContext) {
+                 // make sure grid gets drawn on snap to grid boundaries. And
+                 // expand a little to make sure that entire view is filled.
+                 double bx = (getX());
+                 double by = (getY());
+                 double rightBorder = getX() + getWidth();
+                 double bottomBorder = getY() + getHeight();
+
+                 Graphics2D g2 = paintContext.getGraphics();
+                 g2.setBackground(new Color(0, 0, 0, 0));
+//                 g2.setPaint(new Color(0, 0, 0, 0));
+//                 rect.setRect(bx, by, getWidth(), getHeight());
+                 g2.draw(rect);
+                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                 g2.setStroke(gridStroke);
+                 g2.setPaint(gridPaint);
+
+                 for (double x = bx; x < rightBorder; x += gridSpacing) {
+                     gridLine.setLine(x, by, x, bottomBorder);
+                         g2.draw(gridLine);
+                 }
+
+                 for (double y = by; y < bottomBorder; y += gridSpacing) {
+                     gridLine.setLine(bx, y, rightBorder, y);
+                         g2.draw(gridLine);
+                 }
+             }
+        };
         final PLayer gridLayer = new PLayer() {
             protected void paint(PPaintContext paintContext) {
                 // make sure grid gets drawn on snap to grid boundaries. And
@@ -54,6 +86,10 @@ public class GridExample extends PFrame {
                 double bottomBorder = getY() + getHeight();
 
                 Graphics2D g2 = paintContext.getGraphics();
+                g2.setBackground(new Color(0, 0, 0, 0));
+//                g2.setPaint(new Color(0, 0, 0, 0));
+//                rect.setRect(bx, by, getWidth(), getHeight());
+                g2.draw(rect);
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 g2.setStroke(gridStroke);
@@ -70,14 +106,23 @@ public class GridExample extends PFrame {
                 }
             }
         };
+        
+        gridNode.setBounds(camera.getViewBounds());
+        gridNode.setPickable(false);
+        //gridLayer.setTransparency(0);
 
         // replace standard layer with grid layer.
-        root.removeChild(camera.getLayer(0));
-        camera.removeLayer(0);
-        root.addChild(gridLayer);
-        camera.addLayer(gridLayer);
+//        root.removeChild(camera.getLayer(0));
+//        camera.removeLayer(0);
+        
+        PNode base = new PNode();
+        
+        getCanvas().getLayer().addChild(base);
+        getCanvas().getLayer().addChild(gridNode);
+//        camera.addLayer(gridLayer);
 
-        gridLayer.setBounds(camera.getViewBounds());
+//        gridLayer.setBounds(camera.getViewBounds());
+//        gridLayer.setChildrenPickable(true);
 
         PNode n = new PNode();
         n.setPaint(Color.BLUE);
@@ -87,10 +132,10 @@ public class GridExample extends PFrame {
         n2.setPaint(Color.red);
         n2.setBounds(100, 0, 100, 80);
         
-        PNode base = new PNode();
+        gridLayer.setPickable(false);
         base.addChild(n);
         base.addChild(n2);
-        getCanvas().getLayer().addChild(base);
+        //getCanvas().getLayer().addChild(base);
 //        getCanvas().getLayer().addChild(n);
 //        getCanvas().getLayer().addChild(n2);
 //        for(Object o : base.getAllNodes())
@@ -104,6 +149,7 @@ public class GridExample extends PFrame {
         getCanvas().removeInputEventListener(getCanvas().getZoomEventHandler());
         PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
         eh.zoomAboutMouse();
+        eh.setScaleFactor(-0.1);
         getCanvas().addInputEventListener(eh);
 
         // add a drag event handler that supports snap to grid.
@@ -114,7 +160,7 @@ public class GridExample extends PFrame {
 
             protected boolean shouldStartDragInteraction(PInputEvent event) {
                 if (super.shouldStartDragInteraction(event)) {
-                    return event.getPickedNode() != event.getTopCamera() && !(event.getPickedNode() instanceof PLayer);
+                    return event.getPickedNode() != event.getTopCamera() && !(event.getPickedNode() instanceof PLayer) && event.isLeftMouseButton();
                 }
                 return false;
             }
