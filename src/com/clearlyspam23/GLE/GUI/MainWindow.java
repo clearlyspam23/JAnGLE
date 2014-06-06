@@ -26,6 +26,9 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 
 import com.clearlyspam23.GLE.TileLayer;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.SwingConstants;
 
 public class MainWindow extends JFrame {
 
@@ -100,13 +103,23 @@ public class MainWindow extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 764, 524);
 		contentPane.add(tabbedPane);
 		
-		TileLayer t = new TileLayer();
-		tabbedPane.add(t);
+		LevelPanel levelPanel = new LevelPanel();
+		tabbedPane.addTab("New tab", null, levelPanel, null);
+		
+		JPanel InfoPanel = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) InfoPanel.getLayout();
+		flowLayout.setAlignment(FlowLayout.LEFT);
+		contentPane.add(InfoPanel, BorderLayout.SOUTH);
+		
+		JLabel mouseLabel = new JLabel("Mouse");
+		InfoPanel.add(mouseLabel);
+		
+		JLabel mouseLoc = new JLabel("");
+		InfoPanel.add(mouseLoc);
 	}
 }

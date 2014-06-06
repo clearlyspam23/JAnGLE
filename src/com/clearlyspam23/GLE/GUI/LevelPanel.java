@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -11,8 +11,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
 
 import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
@@ -23,8 +22,8 @@ import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PPaintContext;
 
-public class CombinedTest extends JFrame{
-	
+public class LevelPanel extends JPanel {
+
 	static protected Line2D gridLine = new Line2D.Double();
     static protected Rectangle2D rect = new Rectangle2D.Double();
     static protected Color gridPaint = Color.BLACK;
@@ -33,9 +32,9 @@ public class CombinedTest extends JFrame{
     static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
     static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
 	
-	public CombinedTest()
+	public LevelPanel()
 	{
-		setSize(800, 600);
+		setLayout(new BorderLayout());
 		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
         final PNode gridNode = new PNode() {
@@ -89,8 +88,7 @@ public class CombinedTest extends JFrame{
         PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
         eh.zoomAboutMouse();
         eh.setScaleFactor(-0.1);
-        canvas.addInputEventListener(eh);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+        canvas.addInputEventListener(eh); 
 
         // add a drag event handler that supports snap to grid.
         canvas.addInputEventListener(new PDragSequenceEventHandler() {
@@ -127,19 +125,8 @@ public class CombinedTest extends JFrame{
                 draggedNode.setOffset(dest.getX(), dest.getY());
             }
         });
+        this.setVisible(true);
+        this.validate();
 	}
-	
-	 public static void main(String[] args) {
-	        SwingUtilities.invokeLater(new Runnable() {
-	 
-	            @Override
-	            public void run() {
-	                JFrame frame = new JFrame();
-	                frame.add(new CombinedPanel());
-	                frame.revalidate();
-	                frame.setVisible(true);
-	            }
-	        });
-	    }
 
 }
