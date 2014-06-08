@@ -7,7 +7,7 @@ public class TileLayerTemplate extends LayerTemplate{
 
 	@Override
 	public Layer createLayer() {
-		return null;
+		return new TileLayer(this);
 	}
 
 }

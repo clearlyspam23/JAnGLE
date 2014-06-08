@@ -111,6 +111,9 @@ public class MainWindow extends JFrame {
 		LevelPanel levelPanel = new LevelPanel();
 		tabbedPane.addTab("New tab", null, levelPanel, null);
 		
+//		TestInternal testInternal = new TestInternal();
+//		contentPane.add(testInternal);
+		
 		JPanel InfoPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) InfoPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);

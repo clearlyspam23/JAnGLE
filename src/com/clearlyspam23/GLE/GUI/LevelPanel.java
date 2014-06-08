@@ -1,15 +1,9 @@
 package com.clearlyspam23.GLE.GUI;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
 import java.awt.event.InputEvent;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -20,51 +14,27 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
-import org.piccolo2d.util.PPaintContext;
+
+import com.clearlyspam23.GLE.GUI.util.GridNode;
 
 public class LevelPanel extends JPanel {
 
-	static protected Line2D gridLine = new Line2D.Double();
-    static protected Rectangle2D rect = new Rectangle2D.Double();
-    static protected Color gridPaint = Color.BLACK;
-    static protected double gridSpacing = 20;
-    static protected float lineSpacing = (float) (gridSpacing/4);
-    static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
-    static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
+//	static protected Line2D gridLine = new Line2D.Double();
+//    static protected Rectangle2D rect = new Rectangle2D.Double();
+//    static protected Color gridPaint = Color.BLACK;
+//    static protected double gridSpacing = 20;
+//    static protected float lineSpacing = (float) (gridSpacing/4);
+//    static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
+//    static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
 	
 	public LevelPanel()
 	{
+		final double gridSpacing = 10;
 		setLayout(new BorderLayout());
 		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
-        final PNode gridNode = new PNode() {
-        	 protected void paint(PPaintContext paintContext) {
-                 double bx = (getX());
-                 double by = (getY());
-                 double rightBorder = getX() + getWidth();
-                 double bottomBorder = getY() + getHeight();
-
-                 Graphics2D g2 = paintContext.getGraphics();
-                 g2.setBackground(new Color(0, 0, 0, 0));
-                 g2.draw(rect);
-                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                 g2.setStroke(gridStroke);
-                 g2.setPaint(gridPaint);
-
-                 for (double x = bx; x < rightBorder; x += gridSpacing) {
-                     gridLine.setLine(x, by, x, bottomBorder);
-                         g2.draw(gridLine);
-                 }
-
-                 for (double y = by; y < bottomBorder; y += gridSpacing) {
-                     gridLine.setLine(bx, y, rightBorder, y);
-                         g2.draw(gridLine);
-                 }
-             }
-        };
+        final PNode gridNode = new GridNode(gridSpacing, gridSpacing, 800, 600);
         
-        gridNode.setBounds(new Rectangle2D.Double(0, 0, 800, 600));
         gridNode.setPickable(false);
         
         PNode base = new PNode();
