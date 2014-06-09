@@ -10,5 +10,7 @@ public abstract class ParameterMacro {
 	protected abstract String getMacroText();
 	
 	public abstract String getDescription();
+	
+	public abstract String getRuntimeText(JAnGLEData info);
 
 }

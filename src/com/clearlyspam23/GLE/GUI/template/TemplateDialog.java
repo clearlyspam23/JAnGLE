@@ -23,6 +23,8 @@ import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
 import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TemplateDialog extends JDialog {
 
@@ -93,6 +95,10 @@ public class TemplateDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
