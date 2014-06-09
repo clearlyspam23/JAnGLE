@@ -11,9 +11,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.clearlyspam23.GLE.CoordinateSystem;
+import com.clearlyspam23.GLE.Template;
+
 import javax.swing.JTextField;
 
-public class GeneralPanel extends JPanel {
+public class GeneralPanel extends JPanel implements TemplateSubPanel{
 
 	/**
 	 * 
@@ -73,6 +75,15 @@ public class GeneralPanel extends JPanel {
 		textField.setBounds(114, 42, 312, 20);
 		add(textField);
 		textField.setColumns(10);
+	}
+	
+	public void setToTemplate(Template template)
+	{
+		
+	}
 
+	@Override
+	public String getPanelName() {
+		return "General";
 	}
 }

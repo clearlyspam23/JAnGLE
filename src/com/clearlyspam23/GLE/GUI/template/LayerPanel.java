@@ -1,6 +1,8 @@
 package com.clearlyspam23.GLE.GUI.template;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -12,10 +14,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.clearlyspam23.GLE.LayerDefinition;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import com.clearlyspam23.GLE.Template;
 
-public class LayerPanel extends JPanel {
+public class LayerPanel extends JPanel implements TemplateSubPanel{
 	/**
 	 * 
 	 */
@@ -96,6 +97,16 @@ public class LayerPanel extends JPanel {
 		{
 			scrollPane.add(knownLayerDefs.get(i).getLayerComponent());
 		}
+	}
+	
+	public void setToTemplate(Template template)
+	{
+		
+	}
+
+	@Override
+	public String getPanelName() {
+		return "Layers";
 	}
 
 }

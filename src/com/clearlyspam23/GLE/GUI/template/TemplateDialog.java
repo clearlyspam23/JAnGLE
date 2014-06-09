@@ -26,13 +26,19 @@ import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class TemplateDialog extends JDialog {
+public class TemplateDialog extends JDialog implements ActionListener{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
+	
+	private final GeneralPanel generalPanel;
+	private final PLangPanel langPanel;
+	private final LayerPanel layerPanel;
+	
+	private boolean accepted = false;
 
 	/**
 	 * Launch the application.
@@ -81,13 +87,13 @@ public class TemplateDialog extends JDialog {
 		tabbedPane.setBounds(10, 11, 504, 526);
 		contentPanel.add(tabbedPane);
 		
-		GeneralPanel generalPanel = new GeneralPanel(possibleCoordinates);
+		generalPanel = new GeneralPanel(possibleCoordinates);
 		tabbedPane.addTab("General", null, generalPanel, null);
 		
-		PLangPanel langPanel = new PLangPanel(recognizedLanguages, macros);
+		langPanel = new PLangPanel(recognizedLanguages, macros);
 		tabbedPane.addTab("Run   ", null, langPanel, null);
 		
-		LayerPanel layerPanel = new LayerPanel(knownLayerDefs);
+		layerPanel = new LayerPanel(knownLayerDefs);
 		tabbedPane.addTab("Layers", null, layerPanel, null);
 		{
 			JPanel buttonPane = new JPanel();
@@ -95,19 +101,32 @@ public class TemplateDialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-					}
-				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				okButton.addActionListener(this);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
+				getRootPane().setDefaultButton(cancelButton);
+				cancelButton.addActionListener(this);
 			}
 		}
+	}
+	
+	public boolean isAccepted(){
+		return accepted;
+	}
+	
+	public void showDialog(){
+		accepted = false;
+		setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		accepted = "OK".equals(e.getActionCommand());
+		setVisible(false);
 	}
 }

@@ -48,6 +48,10 @@ public class Template {
 		runtimeCommand.add(new StringMacro(text));
 	}
 	
+	public void clearParameters(){
+		
+	}
+	
 	public void addLayerTemplate(LayerTemplate temp)
 	{
 		layerTemplates.add(temp);

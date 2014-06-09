@@ -22,11 +22,12 @@ import javax.swing.event.ChangeListener;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.ParameterMacro;
+import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.util.Utility;
 
-public class PLangPanel extends JPanel implements ChangeListener{
+public class PLangPanel extends JPanel implements ChangeListener, TemplateSubPanel{
 	/**
 	 * 
 	 */
@@ -229,6 +230,16 @@ public class PLangPanel extends JPanel implements ChangeListener{
 			ans+=" " + s;
 		}
 		displayInputField.setText(ans);
+	}
+	
+	public void setToTemplate(Template template)
+	{
+		
+	}
+
+	@Override
+	public String getPanelName() {
+		return "run";
 	}
 	
 }
