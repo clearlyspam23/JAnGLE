@@ -1,4 +1,4 @@
-GenericGameEditor
+JAnGLE
 =================
 
 The Generic Game Editor here (JAnGLE) is an attempt at making a truly "generic" 2D game editor.
