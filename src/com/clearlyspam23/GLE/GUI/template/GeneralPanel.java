@@ -8,14 +8,13 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import com.clearlyspam23.GLE.CoordinateSystem;
-import com.clearlyspam23.GLE.Template;
-
 import javax.swing.JTextField;
 
-public class GeneralPanel extends JPanel implements TemplateSubPanel{
+import com.clearlyspam23.GLE.CoordinateSystem;
+import com.clearlyspam23.GLE.PluginManager;
+import com.clearlyspam23.GLE.Template;
+
+public class GeneralPanel extends TemplateSubPanel{
 
 	/**
 	 * 
@@ -28,10 +27,11 @@ public class GeneralPanel extends JPanel implements TemplateSubPanel{
 	private List<CoordinateSystem> possibleCoordinates;
 	private JTextField textField;
 	
-	public GeneralPanel(List<CoordinateSystem> possibleCoords) {
+	public GeneralPanel(PluginManager pluginManager) {
+		super(pluginManager);
 		setLayout(null);
 		
-		this.possibleCoordinates = possibleCoords;
+		this.possibleCoordinates = pluginManager.getRecognizedCoordinateSystems();
 		
 		String[] model = new String[possibleCoordinates.size()];
 		for(int i = 0; i < possibleCoordinates.size(); i++)
@@ -85,5 +85,11 @@ public class GeneralPanel extends JPanel implements TemplateSubPanel{
 	@Override
 	public String getPanelName() {
 		return "General";
+	}
+
+	@Override
+	public void generateTemplate(Template template) {
+		// TODO Auto-generated method stub
+		
 	}
 }

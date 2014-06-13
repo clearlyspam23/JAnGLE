@@ -9,14 +9,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 
-public class LayerPanel extends JPanel implements TemplateSubPanel{
+public class LayerPanel extends TemplateSubPanel{
 	/**
 	 * 
 	 */
@@ -30,10 +30,11 @@ public class LayerPanel extends JPanel implements TemplateSubPanel{
 	/**
 	 * Create the panel.
 	 */
-	public LayerPanel(List<LayerDefinition<?>> layerDefs) {
+	public LayerPanel(PluginManager pluginManager) {
+		super(pluginManager);
 		setLayout(null);
 		
-		this.knownLayerDefs = layerDefs;
+		this.knownLayerDefs = pluginManager.getRecognizedLayerDefs();
 		
 		JLabel lblNewLabel = new JLabel("Layers");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -107,6 +108,12 @@ public class LayerPanel extends JPanel implements TemplateSubPanel{
 	@Override
 	public String getPanelName() {
 		return "Layers";
+	}
+
+	@Override
+	public void generateTemplate(Template template) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

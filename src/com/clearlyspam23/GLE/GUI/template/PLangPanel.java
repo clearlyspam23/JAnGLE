@@ -13,7 +13,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -21,13 +20,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.clearlyspam23.GLE.PLanguageOptions;
-import com.clearlyspam23.GLE.ParameterMacro;
+import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.util.Utility;
 
-public class PLangPanel extends JPanel implements ChangeListener, TemplateSubPanel{
+public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	/**
 	 * 
 	 */
@@ -51,9 +50,9 @@ public class PLangPanel extends JPanel implements ChangeListener, TemplateSubPan
 	/**
 	 * Create the panel.
 	 */
-	public PLangPanel(List<PLanguageOptions<?>> rLangs, List<ParameterMacro> macros) {
-		
-		recognizedLanguages = rLangs;
+	public PLangPanel(PluginManager pluginManager) {
+		super(pluginManager);
+		recognizedLanguages = pluginManager.getRecognizedProgrammingLanguages();
 		panels = new SubPanel[recognizedLanguages.size()];
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 		{
@@ -129,7 +128,7 @@ public class PLangPanel extends JPanel implements ChangeListener, TemplateSubPan
 		list_1_model = new DefaultListModel<String>();
 		
 		JButton btnAdd = new JButton("Add");
-		final ParameterDialog pdialog = new ParameterDialog(macros);
+		final ParameterDialog pdialog = new ParameterDialog(pluginManager.getRecognizedMacros());
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				pdialog.showDialog();
@@ -239,7 +238,13 @@ public class PLangPanel extends JPanel implements ChangeListener, TemplateSubPan
 
 	@Override
 	public String getPanelName() {
-		return "run";
+		return "Run";
+	}
+
+	@Override
+	public void generateTemplate(Template template) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

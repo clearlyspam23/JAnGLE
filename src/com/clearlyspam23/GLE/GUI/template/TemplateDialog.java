@@ -2,6 +2,8 @@ package com.clearlyspam23.GLE.GUI.template;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,18 +15,14 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-import com.clearlyspam23.GLE.CoordinateSystem;
-import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.PLanguageOptions;
-import com.clearlyspam23.GLE.ParameterMacro;
+import com.clearlyspam23.GLE.PluginManager;
+import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredDown;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
 import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class TemplateDialog extends JDialog implements ActionListener{
 
@@ -34,11 +32,15 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private final GeneralPanel generalPanel;
-	private final PLangPanel langPanel;
-	private final LayerPanel layerPanel;
+//	private final GeneralPanel generalPanel;
+//	private final PLangPanel langPanel;
+//	private final LayerPanel layerPanel;
+	
+	private final List<TemplateSubPanel> subPanels = new ArrayList<TemplateSubPanel>();
 	
 	private boolean accepted = false;
+	
+	private Template template;
 
 	/**
 	 * Launch the application.
@@ -51,7 +53,17 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
 		}
 		try {
-			TemplateDialog dialog = new TemplateDialog();
+			PluginManager manager = new PluginManager();
+			manager.addCoordinateSystems(new TopLeft());
+			manager.addCoordinateSystems(new BottomLeft());
+			manager.addCoordinateSystems(new CenteredDown());
+			manager.addCoordinateSystems(new CenteredUp());
+			
+			manager.addProgrammingLanguage(new JavaLanguageOptions());
+			
+			manager.addMacro(new CurrentLevelMacro());
+			
+			TemplateDialog dialog = new TemplateDialog(manager);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -62,20 +74,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	/**
 	 * Create the dialog.
 	 */
-	public TemplateDialog() {
-		List<CoordinateSystem> possibleCoordinates = new ArrayList<CoordinateSystem>();
-		possibleCoordinates.add(new TopLeft());
-		possibleCoordinates.add(new BottomLeft());
-		possibleCoordinates.add(new CenteredDown());
-		possibleCoordinates.add(new CenteredUp());
-		
-		List<PLanguageOptions<?>> recognizedLanguages = new ArrayList<PLanguageOptions<?>>();
-		recognizedLanguages.add(new JavaLanguageOptions());
-		
-		List<ParameterMacro> macros = new ArrayList<ParameterMacro>();
-		macros.add(new CurrentLevelMacro());
-		
-		List<LayerDefinition<?>> knownLayerDefs = new ArrayList<LayerDefinition<?>>();
+	public TemplateDialog(PluginManager manager) {
 		
 		setBounds(100, 100, 540, 620);
 		getContentPane().setLayout(new BorderLayout());
@@ -87,14 +86,17 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		tabbedPane.setBounds(10, 11, 504, 526);
 		contentPanel.add(tabbedPane);
 		
-		generalPanel = new GeneralPanel(possibleCoordinates);
-		tabbedPane.addTab("General", null, generalPanel, null);
+		TemplateSubPanel panel = new GeneralPanel(manager);
+		subPanels.add(panel);
+		tabbedPane.addTab(panel.getName(), null, panel, null);
 		
-		langPanel = new PLangPanel(recognizedLanguages, macros);
-		tabbedPane.addTab("Run   ", null, langPanel, null);
+		panel = new PLangPanel(manager);
+		subPanels.add(panel);
+		tabbedPane.addTab(panel.getName(), null, panel, null);
 		
-		layerPanel = new LayerPanel(knownLayerDefs);
-		tabbedPane.addTab("Layers", null, layerPanel, null);
+		panel = new LayerPanel(manager);
+		subPanels.add(panel);
+		tabbedPane.addTab(panel.getName(), null, panel, null);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -127,6 +129,12 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		accepted = "OK".equals(e.getActionCommand());
+		if(accepted)
+		{
+			Template template = new Template();
+			for(TemplateSubPanel p : subPanels)
+				p.generateTemplate(template);
+		}
 		setVisible(false);
 	}
 }
