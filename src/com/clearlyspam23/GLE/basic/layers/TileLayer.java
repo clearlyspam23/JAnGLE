@@ -2,12 +2,19 @@ package com.clearlyspam23.GLE.basic.layers;
 
 import java.util.List;
 
+import org.piccolo2d.PNode;
+
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
+import com.clearlyspam23.GLE.GUI.util.GridNode;
 
-public class TileLayer extends Layer {
+public class TileLayer extends Layer<TileLayerData> {
 	
 	private TileLayerTemplate template;
+	
+	private PNode base;
+	private TileLayerPNode tiles;
+	private GridNode grid;
 	
 	public TileLayer(TileLayerTemplate template)
 	{
@@ -15,15 +22,23 @@ public class TileLayer extends Layer {
 	}
 
 	@Override
-	public Object getExportData() {
-		// TODO Auto-generated method stub
+	public TileLayerData getExportData() {
 		return null;
 	}
 
 	@Override
-	public List<LayerDialog> getLayerDialogs() {
-		// TODO Auto-generated method stub
+	public List<LayerDialog> getLayerDialogs() { 
 		return null;
+	}
+
+	@Override
+	public PNode getLayerGUI() {
+		return null;
+	}
+
+	@Override
+	public void buildFromData(TileLayerData data) {
+		
 	}
 
 }

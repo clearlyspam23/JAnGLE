@@ -76,6 +76,11 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	 */
 	public TemplateDialog(PluginManager manager) {
 		
+		//this code should be moved somewhere else eventually
+		subPanels.add(new GeneralPanel(manager));
+		subPanels.add(new PLangPanel(manager));
+		subPanels.add(new LayerPanel(manager));
+		
 		setBounds(100, 100, 540, 620);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -86,17 +91,8 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		tabbedPane.setBounds(10, 11, 504, 526);
 		contentPanel.add(tabbedPane);
 		
-		TemplateSubPanel panel = new GeneralPanel(manager);
-		subPanels.add(panel);
-		tabbedPane.addTab(panel.getName(), null, panel, null);
-		
-		panel = new PLangPanel(manager);
-		subPanels.add(panel);
-		tabbedPane.addTab(panel.getName(), null, panel, null);
-		
-		panel = new LayerPanel(manager);
-		subPanels.add(panel);
-		tabbedPane.addTab(panel.getName(), null, panel, null);
+		for(TemplateSubPanel panel : subPanels)
+			tabbedPane.addTab(panel.getPanelName(), null, panel, null);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -121,9 +117,16 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		return accepted;
 	}
 	
-	public void showDialog(){
+	public void showDialog(Template template){
 		accepted = false;
+		this.template = template;
+		for(TemplateSubPanel p : subPanels)
+			p.setToTemplate(template);
 		setVisible(true);
+	}
+	
+	public void showDialog(){
+		showDialog(new Template());
 	}
 
 	@Override
@@ -134,7 +137,12 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			Template template = new Template();
 			for(TemplateSubPanel p : subPanels)
 				p.generateTemplate(template);
+			this.template = template;
 		}
 		setVisible(false);
+	}
+
+	public Template getTemplate() {
+		return template;
 	}
 }

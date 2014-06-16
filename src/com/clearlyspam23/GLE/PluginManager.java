@@ -8,7 +8,7 @@ public class PluginManager {
 	private List<CoordinateSystem> recognizedCoordinateSystems = new ArrayList<CoordinateSystem>();
 	private List<PLanguageOptions<?>> recognizedProgrammingLanguages = new ArrayList<PLanguageOptions<?>>();
 	private List<ParameterMacro> recognizedMacros = new ArrayList<ParameterMacro>();
-	private List<LayerDefinition<?>> recognizedLayerDefs = new ArrayList<LayerDefinition<?>>();
+	private List<LayerDefinition<?, ?>> recognizedLayerDefs = new ArrayList<LayerDefinition<?, ?>>();
 	public List<CoordinateSystem> getRecognizedCoordinateSystems() {
 		return recognizedCoordinateSystems;
 	}
@@ -27,10 +27,10 @@ public class PluginManager {
 	public void addMacro(ParameterMacro macro) {
 		recognizedMacros.add(macro);
 	}
-	public List<LayerDefinition<?>> getRecognizedLayerDefs() {
+	public List<LayerDefinition<?, ?>> getRecognizedLayerDefs() {
 		return recognizedLayerDefs;
 	}
-	public void setRecognizedLayerDefs(LayerDefinition<?> layerDef) {
+	public void setRecognizedLayerDefs(LayerDefinition<?, ?> layerDef) {
 		recognizedLayerDefs.add(layerDef);
 	}
 

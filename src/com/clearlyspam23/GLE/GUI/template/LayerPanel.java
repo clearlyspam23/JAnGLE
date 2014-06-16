@@ -25,7 +25,7 @@ public class LayerPanel extends TemplateSubPanel{
 	private JScrollPane scrollPane;
 	private JComboBox<String> comboBox;
 	
-	private List<LayerDefinition<?>> knownLayerDefs;
+	private List<LayerDefinition<?, ?>> knownLayerDefs;
 
 	/**
 	 * Create the panel.

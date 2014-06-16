@@ -7,7 +7,7 @@ import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.util.Vector2f;
 
-public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions> {
+public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
 	private Vector2f gridDimensions;
 	private List<TileConstraint> constraints;
@@ -18,13 +18,18 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions> {
 	}
 
 	@Override
-	public LayerTemplate buildFromGUI(TileLayerGUIOptions gui) {
+	public TileLayerTemplate buildFromGUI(TileLayerGUIOptions gui) {
 		return null;
 	}
 
 	@Override
 	public TileLayerGUIOptions getLayerComponent() {
 		return new TileLayerGUIOptions();
+	}
+
+	@Override
+	public void setGUITo(TileLayerGUIOptions gui, TileLayerTemplate template) {
+		
 	}
 
 }
