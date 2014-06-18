@@ -8,7 +8,7 @@ import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 
-public class TileLayer extends Layer<TileLayerData> {
+public class TileLayer extends Layer<TileExportData> {
 	
 	private TileLayerTemplate template;
 	
@@ -22,7 +22,7 @@ public class TileLayer extends Layer<TileLayerData> {
 	}
 
 	@Override
-	public TileLayerData getExportData() {
+	public TileExportData getExportData() {
 		return null;
 	}
 
@@ -37,7 +37,7 @@ public class TileLayer extends Layer<TileLayerData> {
 	}
 
 	@Override
-	public void buildFromData(TileLayerData data) {
+	public void buildFromData(TileExportData data) {
 		
 	}
 

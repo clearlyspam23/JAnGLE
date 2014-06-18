@@ -1,5 +1,5 @@
 package com.clearlyspam23.GLE.basic.layers;
 
-public class TileLayerData {
+public class TileExportData {
 
 }
