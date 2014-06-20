@@ -5,7 +5,7 @@ public abstract class LayerTemplate {
 	
 	private String name;
 	
-	public abstract Layer createLayer();
+	public abstract Layer createLayer(Level level);
 	
 	public String getName()
 	{

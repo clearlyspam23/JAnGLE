@@ -82,7 +82,7 @@ public class Template {
 		Level l = new Level(this);
 		for(LayerTemplate t : layerTemplates)
 		{
-			l.addLayer(t.createLayer());
+			l.addLayer(t.createLayer(l));
 		}
 		return l;
 	}

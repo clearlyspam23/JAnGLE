@@ -17,7 +17,7 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 
-public class LevelPanel extends JPanel {
+public class TestLevelPanel extends JPanel {
 
 //	static protected Line2D gridLine = new Line2D.Double();
 //    static protected Rectangle2D rect = new Rectangle2D.Double();
@@ -27,18 +27,17 @@ public class LevelPanel extends JPanel {
 //    static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
 //    static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
 	
-	public LevelPanel()
+	public TestLevelPanel()
 	{
 		final double gridSpacing = 10;
 		setLayout(new BorderLayout());
 		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
-        final PNode gridNode = new GridNode(gridSpacing, gridSpacing, 800, 600);
         
         PNode base = new PNode();
         
         canvas.getLayer().addChild(base);
-        canvas.getLayer().addChild(gridNode);
+//        canvas.getLayer().addChild(gridNode);
 
         PNode n = new PNode();
         n.setPaint(Color.BLUE);

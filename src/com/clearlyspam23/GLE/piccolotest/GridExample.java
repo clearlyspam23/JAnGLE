@@ -12,6 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PCanvas;
+import org.piccolo2d.PInputManager;
 import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
 import org.piccolo2d.PRoot;
@@ -21,6 +22,7 @@ import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.PFrame;
 import org.piccolo2d.util.PPaintContext;
+import org.piccolo2d.util.PPickPath;
 
 /**
  * Example of drawing an infinite grid, and providing support for snap to grid.
@@ -158,12 +160,12 @@ public class GridExample extends PFrame {
             protected PNode draggedNode;
             protected Point2D nodeStartPosition;
 
-            protected boolean shouldStartDragInteraction(PInputEvent event) {
-                if (super.shouldStartDragInteraction(event)) {
-                    return event.getPickedNode() != event.getTopCamera() && !(event.getPickedNode() instanceof PLayer) && event.isLeftMouseButton();
-                }
-                return false;
-            }
+//            protected boolean shouldStartDragInteraction(PInputEvent event) {
+//                if (super.shouldStartDragInteraction(event)) {
+//                    return event.getPickedNode() != event.getTopCamera() && !(event.getPickedNode() instanceof PLayer) && event.isLeftMouseButton();
+//                }
+//                return false;
+//            }
 
             protected void startDrag(PInputEvent event) {
                 super.startDrag(event);
@@ -174,19 +176,42 @@ public class GridExample extends PFrame {
 
             protected void drag(PInputEvent event) {
                 super.drag(event);
-
-                Point2D start = getCanvas().getCamera().localToView((Point2D) getMousePressedCanvasPoint().clone());
-                Point2D current = event.getPositionRelativeTo(getCanvas().getLayer());
-                Point2D dest = new Point2D.Double();
-
-                dest.setLocation(nodeStartPosition.getX() + (current.getX() - start.getX()), nodeStartPosition.getY()
-                        + (current.getY() - start.getY()));
-
-                dest.setLocation(dest.getX() - (dest.getX() % gridSpacing), dest.getY() - (dest.getY() % gridSpacing));
-
-                draggedNode.setOffset(dest.getX(), dest.getY());
+//                System.out.println(event);
+//                System.out.println(event.getPosition());
+                final PPickPath p = getCanvas().getCamera().pick(event.getCanvasPosition().getX(),
+                		event.getCanvasPosition().getY(), 1);
+                if(p==null){
+        			System.out.println("nothing");
+        		}
+        		else{
+        			System.out.println(p.getPickedNode());
+        		}
+//                Point2D start = getCanvas().getCamera().localToView((Point2D) getMousePressedCanvasPoint().clone());
+//                Point2D current = event.getPositionRelativeTo(getCanvas().getLayer());
+//                Point2D dest = new Point2D.Double();
+//
+//                dest.setLocation(nodeStartPosition.getX() + (current.getX() - start.getX()), nodeStartPosition.getY()
+//                        + (current.getY() - start.getY()));
+//
+//                dest.setLocation(dest.getX() - (dest.getX() % gridSpacing), dest.getY() - (dest.getY() % gridSpacing));
+//
+//                draggedNode.setOffset(dest.getX(), dest.getY());
             }
         });
+//        getCanvas().addInputEventListener(new PInputManager(){
+//        	
+//        	public void mouseDragged(PInputEvent event)
+//        	{
+//        		PPickPath p = this.getMouseOver();
+//        		if(p==null){
+//        			System.out.println("nothing");
+//        		}
+//        		else{
+//        			System.out.println(p.getPickedNode());
+//        		}
+//        	}
+//        	
+//        });
     }
 
     public static void main(String[] args) {

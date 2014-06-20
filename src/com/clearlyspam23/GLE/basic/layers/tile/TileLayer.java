@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers;
+package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.util.List;
 
@@ -19,6 +19,8 @@ public class TileLayer extends Layer<TileExportData> {
 	public TileLayer(TileLayerTemplate template)
 	{
 		this.template = template;
+		base = new PNode();
+//		tiles = new TileLayerPNode();
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class TileLayer extends Layer<TileExportData> {
 
 	@Override
 	public PNode getLayerGUI() {
-		return null;
+		return base;
 	}
 
 	@Override

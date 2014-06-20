@@ -34,6 +34,7 @@ public class GridNode extends PNode {
 		float heightLineSpacing = (float) (gridHeight/4);
 		widthGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{widthLineSpacing, widthLineSpacing}, widthLineSpacing/2);
 		heightGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{heightLineSpacing, heightLineSpacing}, heightLineSpacing/2);
+		setPickable(false);
 	}
 	
 	protected void paint(PPaintContext paintContext) {

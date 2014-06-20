@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers;
+package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.util.List;
 
