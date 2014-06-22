@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,38 +18,44 @@ public class TileLayerPNode extends PNode{
 	
 	private TilePNode[][] nodeGrid;
 	
-	public TileLayerPNode(int width, int height, int gridWidth, int gridHeight)
+	private static final double epsilon = 1e-4;
+	
+	public TileLayerPNode(double width, double height, double gridWidth, double gridHeight)
 	{
-		int rows = width/gridWidth;
-		int columns = height/gridHeight;
-		nodeGrid = new TilePNode[rows + (width%gridWidth == 0 ? 0 : 1)][columns + (height%gridHeight == 0 ? 0 : 1)];
+		setBounds(0, 0, width, height);
+		double rowsd = width/gridWidth;
+		double columnsd = height/gridHeight;
+		int rows = (int) rowsd;
+		int columns = (int) columnsd;
+		nodeGrid = new TilePNode[rows + (rowsd-epsilon > rows ? 0 : 1)][columns + (columnsd-epsilon > rows ? 0 : 1)];
 		for(int i = 0; i < rows; i++){
 			for(int j = 0; j < columns; j++){
 				addNewPNode(i, j, gridWidth, gridHeight);
 			}
 		}
 		if(rows<nodeGrid.length){
-			int remainder = width%gridWidth;
+			double remainder = (rowsd-rows)*gridWidth;
 			for(int j = 0; j < nodeGrid[rows].length; j++){
 				addNewPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight);
 			}
 		}
 		if(nodeGrid.length>0&&columns<nodeGrid[0].length){
-			int remainder = height%gridHeight;
+			double remainder = (columnsd-columns)*gridHeight;
 			for(int i = 0; i < nodeGrid.length; i++){
 				addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
 			}
 		}
 	}
 	
-	private void addNewPNode(int i, int j, int width, int height){
+	private void addNewPNode(int i, int j, double width, double height){
 		addNewPNode(i, j, width, height, width, height);
 	}
 	
-	private void addNewPNode(int i, int j, int width, int height, int gridWidth, int gridHeight){
+	private void addNewPNode(int i, int j, double width, double height, double gridWidth, double gridHeight){
 		nodeGrid[i][j] = new TilePNode();
-		nodeGrid[i][j].setBounds(new Rectangle2D.Double(gridWidth*i, gridHeight*j, width, height));
 		addChild(nodeGrid[i][j]);
+		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
+		System.out.println(nodeGrid[i][j].getX() + ", " + nodeGrid[i][j].getY());
 	}
 	
 	public TilePNode[][] getNodeGrid(){

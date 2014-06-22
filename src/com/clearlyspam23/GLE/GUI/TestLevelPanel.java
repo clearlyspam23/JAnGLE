@@ -1,21 +1,29 @@
 package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.InputEvent;
-import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
-import org.piccolo2d.event.PDragSequenceEventHandler;
-import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 
-import com.clearlyspam23.GLE.GUI.util.GridNode;
+import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.Level;
+import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayerPNode;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
+import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 
 public class TestLevelPanel extends JPanel {
 
@@ -29,69 +37,80 @@ public class TestLevelPanel extends JPanel {
 	
 	public TestLevelPanel()
 	{
-		final double gridSpacing = 10;
+//		final double gridSpacing = 10;
+        
+        
+        
+		
+		BufferedImage tile = null;
+		BufferedImage[] tiles = null;
+		try {
+			File f = new File("images/testboxes.png");
+			BufferedImage temp  = ImageIO.read(f);
+			tile = temp.getSubimage(0, 0, 64, 64);
+			tiles = new BufferedImage[4];
+			for(int i = 0; i < tiles.length; i++)
+			{
+				tiles[i] = temp.getSubimage(64*i, 0, 64, 64);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if(tile==null)
+		{
+			System.err.println("unable to load the image");
+			return;
+		}
+		
+		
+		
+		
 		setLayout(new BorderLayout());
+		
+		Template t = new Template();
+		
+		TileLayerTemplate template = new TileLayerTemplate();
+		template.setGridWidth(32);
+		template.setGridHeight(32);
+		
+		Level level = new Level(t);
+		level.setDimensions(320, 320);
+		level.addLayer(template.createLayer(level));
+		
 		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
-        
-        PNode base = new PNode();
-        
-        canvas.getLayer().addChild(base);
-//        canvas.getLayer().addChild(gridNode);
-
-        PNode n = new PNode();
-        n.setPaint(Color.BLUE);
-        n.setBounds(0, 0, 100, 80);
-        
-        PNode n2 = new PNode();
-        n2.setPaint(Color.red);
-        n2.setBounds(100, 0, 100, 80);
-        
-        base.addChild(n);
-        base.addChild(n2);
-        
-        canvas.getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
+		
+		PNode base = new PNode();
+		canvas.getLayer().addChild(base);
+		
+		for(Layer l : level.getLayers())
+		{
+			System.out.println("here");
+			base.addChild(l.getLayerGUI());
+			if(l instanceof TileLayer)
+			{
+				TileLayer tl = (TileLayer) l;
+				TileLayerPNode n = (TileLayerPNode) tl.getLayerGUI().getChild(0);
+				for(int i = 0; i < n.getNodeGrid().length; i++)
+					for(int j = 0; j < n.getNodeGrid()[i].length; j++)
+						n.getNodeGrid()[i][j].setImage(tiles[(int) (Math.random()*tiles.length)]);
+			}
+		}
+		
+		TilesetEditorData data = new TilesetEditorData();
+		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
+		data.setSelectedIndex(0, 0);
+		
+		canvas.addInputEventListener(new PlaceTileCommand(canvas, data));
+		
+		canvas.getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
         canvas.removeInputEventListener(canvas.getZoomEventHandler());
         PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
         eh.zoomAboutMouse();
         eh.setScaleFactor(-0.1);
         canvas.addInputEventListener(eh); 
+		
 
-        // add a drag event handler that supports snap to grid.
-        canvas.addInputEventListener(new PDragSequenceEventHandler() {
-
-            protected PNode draggedNode;
-            protected Point2D nodeStartPosition;
-
-            protected boolean shouldStartDragInteraction(PInputEvent event) {
-                if (super.shouldStartDragInteraction(event)) {
-                    return event.getPickedNode() != event.getTopCamera() && !(event.getPickedNode() instanceof PLayer) && event.isLeftMouseButton();
-                }
-                return false;
-            }
-
-            protected void startDrag(PInputEvent event) {
-                super.startDrag(event);
-                draggedNode = event.getPickedNode();
-                //draggedNode.moveToFront();
-                nodeStartPosition = draggedNode.getOffset();
-            }
-
-            protected void drag(PInputEvent event) {
-                super.drag(event);
-
-                Point2D start = canvas.getCamera().localToView((Point2D) getMousePressedCanvasPoint().clone());
-                Point2D current = event.getPositionRelativeTo(canvas.getLayer());
-                Point2D dest = new Point2D.Double();
-
-                dest.setLocation(nodeStartPosition.getX() + (current.getX() - start.getX()), nodeStartPosition.getY()
-                        + (current.getY() - start.getY()));
-
-                dest.setLocation(dest.getX() - (dest.getX() % gridSpacing), dest.getY() - (dest.getY() % gridSpacing));
-
-                draggedNode.setOffset(dest.getX(), dest.getY());
-            }
-        });
         this.setVisible(true);
         this.validate();
 	}

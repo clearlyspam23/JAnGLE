@@ -1,5 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.awt.Image;
+
 import org.piccolo2d.nodes.PImage;
 
 public class TilePNode extends PImage {
@@ -36,6 +38,17 @@ public class TilePNode extends PImage {
 
 	public int getTilesetY() {
 		return tilesetY;
+	}
+	
+	@Override
+	public void setImage(final Image newImage)
+	{
+		double x = getX();
+		double y = getY();
+		double width = getWidth();
+		double height = getHeight();
+		super.setImage(newImage);
+		setBounds(x, y, width, height);
 	}
 
 }

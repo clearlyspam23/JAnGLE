@@ -26,6 +26,33 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
 		
 	}
 	
+	@Override
+	protected boolean shouldStartDragInteraction(PInputEvent event) {
+        if (super.shouldStartDragInteraction(event)) {
+            return event.isLeftMouseButton();
+        }
+        return false;
+    }
+	
+	public void mousePressed(PInputEvent event)
+	{
+		super.mousePressed(event);
+		System.out.println("here");
+		tryPlaceImage(event.getCanvasPosition());
+	}
+	
+	protected void tryPlaceImage(Point2D pos)
+	{
+		PNode p = getPickedNode(pos);
+        if(p instanceof TilePNode){
+        	TilePNode tile = (TilePNode)p;
+        	if(data.getSelectedTile()!=null){
+        		tile.setImage(data.getSelectedTile());
+        		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
+        	}
+        }
+	}
+	
 	protected void drag(PInputEvent event) {
         super.drag(event);
         

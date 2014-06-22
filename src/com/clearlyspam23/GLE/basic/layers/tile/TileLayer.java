@@ -5,6 +5,7 @@ import java.util.List;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 
@@ -15,12 +16,17 @@ public class TileLayer extends Layer<TileExportData> {
 	private PNode base;
 	private TileLayerPNode tiles;
 	private GridNode grid;
+	private double width;
+	private double height;
 	
-	public TileLayer(TileLayerTemplate template)
+	public TileLayer(TileLayerTemplate template, Level level)
 	{
 		this.template = template;
 		base = new PNode();
-//		tiles = new TileLayerPNode();
+		tiles = new TileLayerPNode(width = level.getWidth(), height = level.getHeight(), template.getGridWidth(), template.getGridHeight());
+		base.addChild(tiles);
+		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
+		base.addChild(grid);
 	}
 
 	@Override

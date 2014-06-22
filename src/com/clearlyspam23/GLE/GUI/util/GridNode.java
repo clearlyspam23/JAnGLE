@@ -25,7 +25,7 @@ public class GridNode extends PNode {
 	private Stroke widthGridStroke;
 	private Stroke heightGridStroke;
 	
-	public GridNode(double gridWidth, double gridHeight, double levelWidth, double levelHeight)
+	public GridNode(double levelWidth, double levelHeight, double gridWidth, double gridHeight)
 	{
 		this.gridWidth = gridWidth;
 		this.gridHeight = gridHeight;

@@ -21,13 +21,11 @@ public class TilesetEditorData {
 	public int getSelectedX() {
 		return selectedX;
 	}
-	public void setSelectedX(int selectedX) {
-		this.selectedX = selectedX;
-	}
-	public int getSelectedY() {
+	public int getSelectedY(){
 		return selectedY;
 	}
-	public void setSelectedY(int selectedY) {
+	public void setSelectedIndex(int selectedX, int selectedY){
+		this.selectedX = selectedX;
 		this.selectedY = selectedY;
 	}
 	
