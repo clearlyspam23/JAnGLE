@@ -55,7 +55,6 @@ public class TileLayerPNode extends PNode{
 		nodeGrid[i][j] = new TilePNode();
 		addChild(nodeGrid[i][j]);
 		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
-		System.out.println(nodeGrid[i][j].getX() + ", " + nodeGrid[i][j].getY());
 	}
 	
 	public TilePNode[][] getNodeGrid(){

@@ -37,8 +37,8 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
 	public void mousePressed(PInputEvent event)
 	{
 		super.mousePressed(event);
-		System.out.println("here");
-		tryPlaceImage(event.getCanvasPosition());
+		if(event.isLeftMouseButton())
+			tryPlaceImage(event.getCanvasPosition());
 	}
 	
 	protected void tryPlaceImage(Point2D pos)

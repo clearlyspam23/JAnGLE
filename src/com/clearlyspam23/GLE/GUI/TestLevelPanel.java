@@ -2,7 +2,10 @@ package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,22 +13,22 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
+import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
-import com.clearlyspam23.GLE.basic.layers.tile.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
 import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 
-public class TestLevelPanel extends JPanel {
+public class TestLevelPanel extends JPanel implements ComponentListener{
 
 //	static protected Line2D gridLine = new Line2D.Double();
 //    static protected Rectangle2D rect = new Rectangle2D.Double();
@@ -35,12 +38,18 @@ public class TestLevelPanel extends JPanel {
 //    static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
 //    static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
 	
+	private final PSwingCanvas canvas;
+	private Level level;
+	
+	private double currWidth;
+	private double currHeight;
+	
 	public TestLevelPanel()
 	{
 //		final double gridSpacing = 10;
         
         
-        
+		canvas = new PSwingCanvas();
 		
 		BufferedImage tile = null;
 		BufferedImage[] tiles = null;
@@ -73,11 +82,10 @@ public class TestLevelPanel extends JPanel {
 		template.setGridWidth(32);
 		template.setGridHeight(32);
 		
-		Level level = new Level(t);
+		level = new Level(t);
 		level.setDimensions(320, 320);
 		level.addLayer(template.createLayer(level));
 		
-		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
 		
 		PNode base = new PNode();
@@ -85,16 +93,7 @@ public class TestLevelPanel extends JPanel {
 		
 		for(Layer l : level.getLayers())
 		{
-			System.out.println("here");
 			base.addChild(l.getLayerGUI());
-			if(l instanceof TileLayer)
-			{
-				TileLayer tl = (TileLayer) l;
-				TileLayerPNode n = (TileLayerPNode) tl.getLayerGUI().getChild(0);
-				for(int i = 0; i < n.getNodeGrid().length; i++)
-					for(int j = 0; j < n.getNodeGrid()[i].length; j++)
-						n.getNodeGrid()[i][j].setImage(tiles[(int) (Math.random()*tiles.length)]);
-			}
 		}
 		
 		TilesetEditorData data = new TilesetEditorData();
@@ -103,16 +102,58 @@ public class TestLevelPanel extends JPanel {
 		
 		canvas.addInputEventListener(new PlaceTileCommand(canvas, data));
 		
+		PLayer layer = canvas.getLayer();
+		
 		canvas.getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
         canvas.removeInputEventListener(canvas.getZoomEventHandler());
         PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
         eh.zoomAboutMouse();
         eh.setScaleFactor(-0.1);
         canvas.addInputEventListener(eh); 
+        addComponentListener(this);
+        
+//        System.out.println("initial: " + canvas.getWidth() + ", " + canvas.getHeight());
 		
 
         this.setVisible(true);
         this.validate();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+//		System.out.println("current: " + canvas.getWidth() + ", " + canvas.getHeight());
+		PBounds bounds = canvas.getCamera().getViewBounds();
+		double x;
+		double y;
+		if(currWidth<=0)
+			x = level.getWidth()/2-canvas.getWidth()/2;
+		else
+			x = bounds.x - (canvas.getWidth()-currWidth)/2;
+		if(currHeight<=0)
+			y = level.getHeight()/2 - canvas.getHeight()/2;
+		else
+			y = bounds.y - (canvas.getHeight()-currHeight)/2;
+		canvas.getCamera().setViewBounds(new Rectangle2D.Double(x, y, canvas.getWidth(), canvas.getHeight()));
+		currWidth = canvas.getWidth();
+		currHeight = canvas.getHeight();
+//		canvas.getCamera().setViewBounds(new Rectangle2D.Double(level.getWidth()/2-canvas.getWidth()/2, level.getHeight()/2-canvas.getHeight()/2, canvas.getWidth(), canvas.getHeight()));
+//		System.out.println("location :" + canvas.getCamera().getViewBounds().x + ", " + canvas.getCamera().getViewBounds().y);
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
