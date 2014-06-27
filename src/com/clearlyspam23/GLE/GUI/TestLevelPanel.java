@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventFilter;
+import org.piccolo2d.event.PInputEventListener;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
@@ -51,25 +53,25 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
         
 		canvas = new PSwingCanvas();
 		
-		BufferedImage tile = null;
-		BufferedImage[] tiles = null;
-		try {
-			File f = new File("images/testboxes.png");
-			BufferedImage temp  = ImageIO.read(f);
-			tile = temp.getSubimage(0, 0, 64, 64);
-			tiles = new BufferedImage[4];
-			for(int i = 0; i < tiles.length; i++)
-			{
-				tiles[i] = temp.getSubimage(64*i, 0, 64, 64);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(tile==null)
-		{
-			System.err.println("unable to load the image");
-			return;
-		}
+//		BufferedImage tile = null;
+//		BufferedImage[] tiles = null;
+//		try {
+//			File f = new File("images/testboxes.png");
+//			BufferedImage temp  = ImageIO.read(f);
+//			tile = temp.getSubimage(0, 0, 64, 64);
+//			tiles = new BufferedImage[4];
+//			for(int i = 0; i < tiles.length; i++)
+//			{
+//				tiles[i] = temp.getSubimage(64*i, 0, 64, 64);
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		if(tile==null)
+//		{
+//			System.err.println("unable to load the image");
+//			return;
+//		}
 		
 		
 		
@@ -95,12 +97,20 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 		{
 			base.addChild(l.getLayerGUI());
 		}
+		//need some way to determine currentLayer, for now this will have to do
+		
+		Layer<?> currentLayer = level.getLayers().get(level.getLayers().size()-1);
 		
 		TilesetEditorData data = new TilesetEditorData();
-		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
-		data.setSelectedIndex(0, 0);
+//		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
+//		data.setSelectedIndex(0, 0);
+		for(PInputEventListener l : currentLayer.getListeners())
+			canvas.addInputEventListener(l);
 		
-		canvas.addInputEventListener(new PlaceTileCommand(canvas, data));
+		for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
+			System.out.println(d);
+			d.setVisible(true);
+		}
 		
 		PLayer layer = canvas.getLayer();
 		
