@@ -16,9 +16,9 @@ import javax.swing.event.ChangeListener;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
-import com.clearlyspam23.GLE.GUI.BasicEditorButton;
-import com.clearlyspam23.GLE.GUI.BasicEditorDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
+import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
+import com.clearlyspam23.GLE.GUI.util.BasicEditorDialog;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 

@@ -20,7 +20,7 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
 		this.data = data;
 	}
 	
-	protected void setTile(TilePNode tile){
+	protected void setTile(TilePNode tile, PCamera cam){
 		tile.setImage(data.getSelectedTile());
 		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 	}
@@ -46,7 +46,7 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
         if(p instanceof TilePNode){
         	TilePNode tile = (TilePNode)p;
         	if(data.getSelectedTile()!=null){
-        		setTile(tile);
+        		setTile(tile, cam);
         	}
         }
 	}

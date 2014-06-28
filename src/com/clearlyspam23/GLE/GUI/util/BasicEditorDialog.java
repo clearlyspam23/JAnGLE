@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.GUI.util;
 
 import java.awt.Frame;
 import java.awt.Insets;
@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
 public class BasicEditorDialog extends LayerEditorDialog {
 	
