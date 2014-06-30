@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -89,13 +90,15 @@ public class TilesetSelectionPanel extends DockablePanel {
 		selectedY = -1;
 		panel.removeAll();
 		buttons.clear();
-		System.out.println(tileset.getWidth() + ", " +  tileset.getHeight());
 		panel.setLayout(new GridLayout(tileset.getWidth(), tileset.getHeight()));
+		int width = 0;
+		int height = 0;
 		for(int i = 0; i < tileset.getWidth(); i++){
 			for(int j = 0; j < tileset.getHeight(); j++){
 				final int x = i;
 				final int y = j;
-				JButton button = new JButton(new ImageIcon(tileset.getTileAt(i, j))){
+				ImageIcon ico = new ImageIcon(tileset.getTileAt(i, j));
+				JButton button = new JButton(ico){
 					private static final long serialVersionUID = 1L;
 					public void setSelected(boolean flag){
 						super.setSelected(flag);
@@ -125,8 +128,11 @@ public class TilesetSelectionPanel extends DockablePanel {
 				button.setContentAreaFilled(false);
 				panel.add(button);
 				buttons.add(button);
+				width+=ico.getIconWidth();
+				height+=ico.getIconHeight();
 			}
 		}
+		panel.setPreferredSize(new Dimension(width, height));
 		if(tileset.getWidth()>0)
 		{
 			((JButton)panel.getComponent(0)).doClick();
