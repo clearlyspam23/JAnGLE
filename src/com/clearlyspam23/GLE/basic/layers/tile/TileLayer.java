@@ -19,6 +19,7 @@ import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 
 public class TileLayer extends Layer<TileExportData> {
 	
@@ -61,8 +62,9 @@ public class TileLayer extends Layer<TileExportData> {
 			System.err.println("unable to load the image");
 			return;
 		}
-		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
-		data.setSelectedIndex(0, 0);
+		data.addTileset(new Tileset("test1", new Image[][]{{tiles[0], tiles[1], tiles[2], tiles[3]}}));
+//		data.setCurrentTileset(new Tileset("test1", new Image[][]{{tile}}));
+//		data.setSelectedIndex(0, 0);
 	}
 
 	@Override

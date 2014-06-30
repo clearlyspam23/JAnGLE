@@ -2,14 +2,9 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.awt.Frame;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -19,21 +14,27 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorDialog;
+import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileEditorDialog;
 
 public class TilesetEditorData implements ChangeListener, PInputEventListener{
 	
-	private Tileset currentTileset;
-	
-	private int selectedX = -1;
-	private int selectedY = -1;
+//	private Tileset currentTileset;
+//	
+//	private int selectedX = -1;
+//	private int selectedY = -1;
 	
 	private PInputEventListener currentEvent;
+	
+	private TileEditorDialog dialog;
 	
 	private List<PInputEventListener> allEvents = new ArrayList<PInputEventListener>();
 	
 	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
+	
+	private List<Tileset> tempTilesetStorage = new ArrayList<Tileset>();
 	
 	public TilesetEditorData()
 	{
@@ -42,27 +43,12 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 	}
 	
 	private void buildDialogs(Frame frame){
-		BufferedImage pencilIcon = null;
-		BufferedImage eraserIcon = null;
-		try {
-			File f = new File("images/Pencil.png");
-			pencilIcon  = ImageIO.read(f);
-			f = new File("images/Eraser.png");
-			eraserIcon  = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(pencilIcon==null||eraserIcon==null)
-		{
-			System.err.println("unable to load the image");
-			return;
-		}
 		dialogs.clear();
-		BasicEditorDialog d = new BasicEditorDialog(frame, "Tiles", 
-				new BasicEditorButton(new ImageIcon(pencilIcon), "Pencil", "Places Tiles"), 
-				new BasicEditorButton(new ImageIcon(eraserIcon), "Eraser", "Removes Tiles"));
-		d.addChangeListener(this);
-		dialogs.add(d);
+		dialog = new TileEditorDialog(frame);
+		dialog.getPanel().addChangeListener(this);
+		dialog.getTilesetSelectionPanel().addAllTilesets(tempTilesetStorage);
+		dialogs.add(dialog);
+		tempTilesetStorage.clear();
 	}
 	
 	public List<LayerEditorDialog> getEditorDialogs(Frame f){
@@ -72,30 +58,35 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 	}
 	
 	public Tileset getCurrentTileset() {
-		return currentTileset;
+		return dialog.getTilesetSelectionPanel().getCurrentTileset();
 	}
-	public void setCurrentTileset(Tileset currentTileset) {
-		this.currentTileset = currentTileset;
-	}
+//	public void setCurrentTileset(Tileset currentTileset) {
+//		dialog.getTilesetSelectionPanel().set
+//	}
 	public int getSelectedX() {
-		return selectedX;
+		return dialog.getTilesetSelectionPanel().getSelectedX();
 	}
 	public int getSelectedY(){
-		return selectedY;
+		return dialog.getTilesetSelectionPanel().getSelectedY();
 	}
-	public void setSelectedIndex(int selectedX, int selectedY){
-		this.selectedX = selectedX;
-		this.selectedY = selectedY;
+//	public void setSelectedIndex(int selectedX, int selectedY){
+//		this.selectedX = selectedX;
+//		this.selectedY = selectedY;
+//	}
+	
+	public void addTileset(Tileset t){
+		if(dialog==null)
+			tempTilesetStorage.add(t);
+		else
+			dialog.getTilesetSelectionPanel().addTileset(t);
 	}
 	
 	public Image getSelectedTile(){
-		if(currentTileset==null||!currentTileset.isValidLocation(selectedX, selectedY))
-			return null;
-		return currentTileset.getTileAt(selectedX, selectedY);
+		return dialog.getTilesetSelectionPanel().getSelectedTile();
 	}
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		int index = ((BasicEditorDialog)e.getSource()).getSelectedButtonIndex();
+		int index = ((BasicEditorPanel)e.getSource()).getSelectedButtonIndex();
 		if(index>=0&&index<allEvents.size())
 			currentEvent = allEvents.get(index);
 		else

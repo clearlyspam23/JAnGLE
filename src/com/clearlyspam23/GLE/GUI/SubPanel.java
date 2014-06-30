@@ -11,12 +11,10 @@ import javax.swing.event.ChangeListener;
 public abstract class SubPanel extends JPanel {
 	
 	private List<ChangeListener> listeners = new ArrayList<ChangeListener>();
-	
-	public SubPanel()
-	{
-		
+
+	public SubPanel() {
 	}
-	
+
 	public void addChangeListener(ChangeListener l)
 	{
 		listeners.add(l);

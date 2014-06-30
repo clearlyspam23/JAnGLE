@@ -5,12 +5,15 @@ import java.awt.Image;
 public class Tileset {
 	
 	private Image[][] tileset;
+	private int width;
+	private int height;
+	private String name;
 	
-	public Tileset(int width, int height){
+	public Tileset(String name, int width, int height){
 		setTileset(new Image[width][height]);
 	}
 	
-	public Tileset(Image[][] tileset){
+	public Tileset(String name, Image[][] tileset){
 		this.setTileset(tileset);
 	}
 
@@ -20,6 +23,9 @@ public class Tileset {
 
 	public void setTileset(Image[][] tileset) {
 		this.tileset = tileset;
+		width = tileset.length;
+		if(width>0)
+			height = tileset[0].length;
 	}
 	
 	public Image getTileAt(int x, int y){
@@ -32,6 +38,22 @@ public class Tileset {
 	
 	public int getIndex(int x, int y){
 		return y*tileset.length+x;
+	}
+	
+	public int getWidth(){
+		return width;
+	}
+	
+	public int getHeight(){
+		return height;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

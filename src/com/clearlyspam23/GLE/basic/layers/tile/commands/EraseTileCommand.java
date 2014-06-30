@@ -4,8 +4,8 @@ import java.awt.Image;
 
 import org.piccolo2d.PCamera;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 
 public class EraseTileCommand extends PlaceTileCommand {
 

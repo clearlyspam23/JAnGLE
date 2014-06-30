@@ -8,8 +8,8 @@ import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 
 public class PlaceTileCommand extends PDragSequenceEventHandler {
 	

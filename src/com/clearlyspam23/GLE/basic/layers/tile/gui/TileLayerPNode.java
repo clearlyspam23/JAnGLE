@@ -1,11 +1,11 @@
-package com.clearlyspam23.GLE.basic.layers.tile;
+package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
-import java.awt.Color;
-import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.piccolo2d.PNode;
+
+import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 
 public class TileLayerPNode extends PNode{
 

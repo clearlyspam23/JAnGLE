@@ -1,8 +1,10 @@
-package com.clearlyspam23.GLE.basic.layers.tile;
+package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.Image;
 
 import org.piccolo2d.nodes.PImage;
+
+import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 
 public class TilePNode extends PImage {
 
