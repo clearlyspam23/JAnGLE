@@ -127,6 +127,10 @@ public class TilesetSelectionPanel extends DockablePanel {
 				buttons.add(button);
 			}
 		}
+		if(tileset.getWidth()>0)
+		{
+			((JButton)panel.getComponent(0)).doClick();
+		}
 	}
 	
 	public Tileset getCurrentTileset(){
@@ -162,12 +166,12 @@ public class TilesetSelectionPanel extends DockablePanel {
 	}
 	
 	private void updateComboBox(){
-		System.out.println("here");
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 		int foundIndex = -1;
 		for(int i = 0; i < tilesets.size(); i++){
 			Tileset t = tilesets.get(i);
 			model.addElement(t.getName());
+			System.out.println(t.getName());
 			if(t.equals(currentTileset))
 				foundIndex = i;
 		}
@@ -176,11 +180,9 @@ public class TilesetSelectionPanel extends DockablePanel {
 			comboBox.setSelectedIndex(foundIndex);
 		}
 		else if(model.getSize()>0){
-			System.out.println("probably here");
 			setToTileset(0);
 		}
 		else{
-			System.out.println("shouldnt be here");
 			currentTileset = null;
 			selectedX = -1;
 			selectedY = -1;

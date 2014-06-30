@@ -46,6 +46,7 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 		dialogs.clear();
 		dialog = new TileEditorDialog(frame);
 		dialog.getPanel().addChangeListener(this);
+		dialog.getPanel().selectButton(0);
 		dialog.getTilesetSelectionPanel().addAllTilesets(tempTilesetStorage);
 		dialogs.add(dialog);
 		tempTilesetStorage.clear();

@@ -78,7 +78,7 @@ public class BasicEditorPanel extends JPanel{
 	public void selectButton(int index)
 	{
 		if(index>=0&&index<buttons.size())
-			helperSelectButton(buttons.get(index));
+			buttons.get(index).doClick();
 		else
 			clearSelection();
 	}

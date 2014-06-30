@@ -11,10 +11,12 @@ public class Tileset {
 	
 	public Tileset(String name, int width, int height){
 		setTileset(new Image[width][height]);
+		this.name = name;
 	}
 	
 	public Tileset(String name, Image[][] tileset){
 		this.setTileset(tileset);
+		this.name = name;
 	}
 
 	public Image[][] getTileset() {
