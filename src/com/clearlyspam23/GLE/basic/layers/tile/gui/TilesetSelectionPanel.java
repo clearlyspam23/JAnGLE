@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.clearlyspam23.GLE.GUI.util.DockablePanel;
+import com.clearlyspam23.GLE.GUI.util.StretchIcon;
 import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 
-public class TilesetSelectionPanel extends DockablePanel {
+public class TilesetSelectionPanel extends DockablePanel implements ComponentListener{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -41,7 +44,7 @@ public class TilesetSelectionPanel extends DockablePanel {
 	 * Create the panel.
 	 */
 	public TilesetSelectionPanel() {
-		setLayout(new BorderLayout(0, 0));
+		setLayout(new BorderLayout(5, 5));
 		
 		scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.CENTER);
@@ -52,7 +55,7 @@ public class TilesetSelectionPanel extends DockablePanel {
 		
 		panel_1 = new JPanel();
 		add(panel_1, BorderLayout.NORTH);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		panel_1.setLayout(new BorderLayout(5, 5));
 		
 		lblTileset = new JLabel("Tileset");
 		panel_1.add(lblTileset, BorderLayout.WEST);
@@ -65,6 +68,8 @@ public class TilesetSelectionPanel extends DockablePanel {
 			}
 		});
 		panel_1.add(comboBox, BorderLayout.CENTER);
+		panel.addComponentListener(this);
+		this.setPreferredSize(new Dimension(160, 200));
 
 	}
 	
@@ -99,7 +104,7 @@ public class TilesetSelectionPanel extends DockablePanel {
 			for(int j = 0; j < tileset.getHeight(); j++){
 				final int x = i;
 				final int y = j;
-				ImageIcon ico = new ImageIcon(tileset.getTileAt(i, j));
+				ImageIcon ico = new StretchIcon(tileset.getTileAt(i, j), true);
 				JButton button = new JButton(ico){
 					private static final long serialVersionUID = 1L;
 					public void setSelected(boolean flag){
@@ -130,8 +135,8 @@ public class TilesetSelectionPanel extends DockablePanel {
 				button.setContentAreaFilled(false);
 				panel.add(button);
 				buttons.add(button);
-				tempWidth+=ico.getIconWidth();
-				tempHeight = Math.max(tempHeight, ico.getIconHeight());
+				tempWidth+=tileset.getTileAt(i, j).getWidth(null);
+				tempHeight = Math.max(tempHeight, tileset.getTileAt(i, j).getHeight(null));
 			}
 			width = Math.max(tempWidth, width);
 			height+=tempHeight;
@@ -211,6 +216,34 @@ public class TilesetSelectionPanel extends DockablePanel {
 		if(currentTileset!=null&&selectedX>=0&&selectedX<currentTileset.getWidth()&&selectedY>=0&&selectedY<currentTileset.getHeight())
 			return currentTileset.getTileAt(selectedX, selectedY);
 		return null;
+	}
+	
+	public JPanel getPanel(){
+		return panel;
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		System.out.println(panel.getSize());
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

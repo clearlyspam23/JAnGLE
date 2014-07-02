@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Frame;
 
 import javax.swing.JDialog;
+import javax.swing.JTabbedPane;
 
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
@@ -31,6 +32,7 @@ public class TileEditorDialog extends LayerEditorDialog {
 	
 	private TilesetSelectionPanel selectionPanel;
 	private BasicEditorPanel panel;
+	private JTabbedPane panelTabs;
 
 	/**
 	 * Create the dialog.
@@ -41,10 +43,14 @@ public class TileEditorDialog extends LayerEditorDialog {
 		panel = new BasicEditorPanel
 				(new BasicEditorButton("images/Pencil.png", "Pencil", "Places Tiles"), 
 				new BasicEditorButton("images/Eraser.png", "Eraser", "Removes Tiles"));
-		this.getContentPane().add(panel, BorderLayout.NORTH);
+		getContentPane().add(panel, BorderLayout.NORTH);
+		panelTabs = new JTabbedPane(JTabbedPane.TOP);
+		getContentPane().add(panelTabs, BorderLayout.CENTER);
 		selectionPanel = new TilesetSelectionPanel();
-		getContentPane().add(selectionPanel, BorderLayout.CENTER);
+		panelTabs.addTab(selectionPanel.getName(), selectionPanel);
 		setBounds(100, 100, panel.getPreferredSize().width, panel.getPreferredSize().height+selectionPanel.getPreferredSize().height);
+		System.out.println(selectionPanel.getPanel().getPreferredSize());
+		System.out.println("here");
 
 	}
 	
