@@ -94,6 +94,8 @@ public class TilesetSelectionPanel extends DockablePanel {
 		int width = 0;
 		int height = 0;
 		for(int i = 0; i < tileset.getWidth(); i++){
+			int tempWidth = 0;
+			int tempHeight = 0;
 			for(int j = 0; j < tileset.getHeight(); j++){
 				final int x = i;
 				final int y = j;
@@ -128,10 +130,13 @@ public class TilesetSelectionPanel extends DockablePanel {
 				button.setContentAreaFilled(false);
 				panel.add(button);
 				buttons.add(button);
-				width+=ico.getIconWidth();
-				height+=ico.getIconHeight();
+				tempWidth+=ico.getIconWidth();
+				tempHeight = Math.max(tempHeight, ico.getIconHeight());
 			}
+			width = Math.max(tempWidth, width);
+			height+=tempHeight;
 		}
+		System.out.println(width + ", " + height);
 		panel.setPreferredSize(new Dimension(width, height));
 		if(tileset.getWidth()>0)
 		{

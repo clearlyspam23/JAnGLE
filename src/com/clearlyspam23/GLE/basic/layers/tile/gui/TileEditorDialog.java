@@ -44,7 +44,7 @@ public class TileEditorDialog extends LayerEditorDialog {
 		this.getContentPane().add(panel, BorderLayout.NORTH);
 		selectionPanel = new TilesetSelectionPanel();
 		getContentPane().add(selectionPanel, BorderLayout.CENTER);
-		setBounds(100, 100, panel.getWidth(), 600);
+		setBounds(100, 100, panel.getPreferredSize().width, panel.getPreferredSize().height+selectionPanel.getPreferredSize().height);
 
 	}
 	
