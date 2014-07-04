@@ -293,8 +293,8 @@ public class StretchIcon extends ImageIcon {
     x = insets.left;
     y = insets.top;
 
-    int w = c.getWidth() - x - insets.right;
-    int h = c.getHeight() - y - insets.bottom;
+    int w = c.getWidth();
+    int h = c.getHeight();
 
     if (proportionate) {
       int iw = image.getWidth(c);
@@ -312,7 +312,7 @@ public class StretchIcon extends ImageIcon {
     }
 
     ImageObserver io = getImageObserver();
-    g.drawImage(image, x, y, w, h, io == null ? c : io);
+    g.drawImage(image, 0, 0, w, h, io == null ? c : io);
   }
 
   /**

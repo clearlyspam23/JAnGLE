@@ -44,15 +44,18 @@ public class TileLayer extends Layer<TileExportData> {
 		
 		//the below code should be removed as soon as a better solution is found
 		BufferedImage tile = null;
-		BufferedImage[] tiles = null;
+		Image[][] tiles = null;
 		try {
-			File f = new File("images/testboxes.png");
+			File f = new File("images/Pipes.png");
 			BufferedImage temp  = ImageIO.read(f);
 			tile = temp.getSubimage(0, 0, 64, 64);
-			tiles = new BufferedImage[4];
+			tiles = new Image[8][8];
 			for(int i = 0; i < tiles.length; i++)
 			{
-				tiles[i] = temp.getSubimage(64*i, 0, 64, 64);
+				for(int j = 0; j < tiles[i].length; j++)
+				{
+					tiles[i][j] = temp.getSubimage(64*j, 64*i, 64, 64);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,7 +65,7 @@ public class TileLayer extends Layer<TileExportData> {
 			System.err.println("unable to load the image");
 			return;
 		}
-		data.addTileset(new Tileset("test1", new Image[][]{{tiles[0], tiles[1], tiles[2], tiles[3]}}));
+		data.addTileset(new Tileset("test1", tiles));
 //		data.setCurrentTileset(new Tileset("test1", new Image[][]{{tile}}));
 //		data.setSelectedIndex(0, 0);
 	}

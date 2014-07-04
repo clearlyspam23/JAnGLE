@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.clearlyspam23.GLE.GUI.util.AspectRatioLayout;
 import com.clearlyspam23.GLE.GUI.util.DockablePanel;
 import com.clearlyspam23.GLE.GUI.util.StretchIcon;
 import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
@@ -50,7 +51,9 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		add(scrollPane, BorderLayout.CENTER);
 		
 		panel = new JPanel();
-		scrollPane.setViewportView(panel);
+		JPanel parentPanel = new JPanel(new AspectRatioLayout());
+		parentPanel.add(panel);
+		scrollPane.setViewportView(parentPanel);
 //		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		panel_1 = new JPanel();
