@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI.util;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -37,23 +38,15 @@ public class BasicEditorPanel extends JPanel{
 	}
 	
 	public BasicEditorPanel(int columns, int prefWidth, int prefHeight, int spacing, List<BasicEditorButton> editorButtons){
-		setLayout(null);
+		setLayout(new FlowLayout(FlowLayout.LEADING, spacing, spacing));
 		buttons = editorButtons;
 		int width = prefWidth*columns + spacing*(columns+1);
 		int height = prefHeight*((buttons.size()+columns-1)/columns)+spacing*((buttons.size()+columns-1)/columns+1);
-		int x = spacing;
-		int count = 0;
-		int y = spacing;
 		for(BasicEditorButton b : buttons){
 			add(b);
-			b.setLocation(x, y);
-			b.setSize(prefHeight, prefHeight);
-			x+=prefWidth+spacing;
-			if(++count>=columns)
-			{
-				y+=prefHeight+spacing;
-				x = spacing;
-			}
+//			b.setLocation(x, y);
+//			b.setSize(prefHeight, prefHeight);
+			b.setPreferredSize(new Dimension(prefHeight, prefHeight));
 			b.addActionListener(new ActionListener(){
 
 				@Override

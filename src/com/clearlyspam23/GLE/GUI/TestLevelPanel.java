@@ -23,6 +23,8 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.LayerNode;
+import com.clearlyspam23.GLE.LayerNodeListener;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
@@ -30,7 +32,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 
-public class TestLevelPanel extends JPanel implements ComponentListener{
+public class TestLevelPanel extends JPanel implements ComponentListener, LayerNodeListener{
 
 //	static protected Line2D gridLine = new Line2D.Double();
 //    static protected Rectangle2D rect = new Rectangle2D.Double();
@@ -162,6 +164,12 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onChange(LayerNode<?> node) {
 		// TODO Auto-generated method stub
 		
 	}

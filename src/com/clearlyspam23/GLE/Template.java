@@ -13,6 +13,8 @@ public class Template {
 	
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
 	
+	private Serializer serializer;
+	
 	private static class StringMacro extends ParameterMacro
 	{
 		

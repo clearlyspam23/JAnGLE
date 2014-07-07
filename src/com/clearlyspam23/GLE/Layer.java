@@ -3,13 +3,12 @@ package com.clearlyspam23.GLE;
 import java.awt.Frame;
 import java.util.List;
 
-import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
-public abstract class Layer<T> {
+public abstract class Layer<T extends ExportData> {
 	
 	/**
 	 * get an object representing the data necessary to recreate this layer in game. This data should not include anything necessary
@@ -30,7 +29,7 @@ public abstract class Layer<T> {
 	 * get the actual main UI part of this Layer. This should be the display for whatever would be seen "in game" on this layer
 	 * @return the Piccolo2D Node representing this layer
 	 */
-	public abstract PNode getLayerGUI();
+	public abstract LayerNode<?> getLayerGUI();
 	
 	/**
 	 * the inverse operation of getExportData. Should set this grid to represent the given data.

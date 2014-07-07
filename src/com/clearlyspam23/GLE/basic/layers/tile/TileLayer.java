@@ -5,27 +5,27 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventListener;
 
+import com.clearlyspam23.GLE.ExportData;
 import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.LayerNode;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 
-public class TileLayer extends Layer<TileExportData> {
+public class TileLayer extends Layer<ExportData> {
 	
 	private TileLayerTemplate template;
 	
-	private PNode base;
+	private LayerNode<TileLayerPNode> base;
 	private TileLayerPNode tiles;
 	private GridNode grid;
 	private double width;
@@ -35,7 +35,20 @@ public class TileLayer extends Layer<TileExportData> {
 	public TileLayer(TileLayerTemplate template, Level level)
 	{
 		this.template = template;
-		base = new PNode();
+		base = new LayerNode<TileLayerPNode>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public TileLayerPNode getCopy() {
+				return tiles.getCopy();
+			}
+
+			@Override
+			public void setToCopy(TileLayerPNode copy) {
+				tiles.setToCopy(copy);
+			}
+			
+		};
 		tiles = new TileLayerPNode(width = level.getWidth(), height = level.getHeight(), template.getGridWidth(), template.getGridHeight());
 		base.addChild(tiles);
 		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
@@ -71,7 +84,7 @@ public class TileLayer extends Layer<TileExportData> {
 	}
 
 	@Override
-	public TileExportData getExportData() {
+	public ExportData getExportData() {
 		return null;
 	}
 
@@ -81,12 +94,12 @@ public class TileLayer extends Layer<TileExportData> {
 	}
 
 	@Override
-	public PNode getLayerGUI() {
+	public LayerNode<?> getLayerGUI() {
 		return base;
 	}
 
 	@Override
-	public void buildFromData(TileExportData data) {
+	public void buildFromData(ExportData data) {
 		
 	}
 

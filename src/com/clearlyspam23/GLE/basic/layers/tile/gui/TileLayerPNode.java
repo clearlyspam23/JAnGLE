@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.EditAction;
+import com.clearlyspam23.GLE.LayerNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 
-public class TileLayerPNode extends PNode{
+public class TileLayerPNode extends LayerNode<TileLayerPNode> implements EditAction{
 
 	/**
 	 * 
@@ -47,6 +49,17 @@ public class TileLayerPNode extends PNode{
 		}
 	}
 	
+	private TileLayerPNode(TileLayerPNode base){
+		
+		nodeGrid = new TilePNode[base.nodeGrid.length][base.nodeGrid.length>0 ? base.nodeGrid[0].length : 0];
+		for(int i = 0; i < base.nodeGrid.length; i++){
+			for(int j = 0; j < base.nodeGrid.length; j++){
+				nodeGrid[i][j] = base.nodeGrid[i][j].getCopy();
+				addChild(nodeGrid[i][j]);
+			}
+		}
+	}
+	
 	private void addNewPNode(int i, int j, double width, double height){
 		addNewPNode(i, j, width, height, width, height);
 	}
@@ -81,6 +94,21 @@ public class TileLayerPNode extends PNode{
 			}
 		}
 		return ans;
+	}
+
+	@Override
+	public TileLayerPNode getCopy() {
+		return new TileLayerPNode(this);
+	}
+
+	@Override
+	public void setToCopy(TileLayerPNode copy) {
+		nodeGrid = copy.nodeGrid;
+	}
+
+	@Override
+	public String getDescription() {
+		return "Tile Layer";
 	}
 
 }
