@@ -23,6 +23,7 @@ import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
 import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
+import java.awt.GridLayout;
 
 public class TemplateDialog extends JDialog implements ActionListener{
 
@@ -81,14 +82,13 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		subPanels.add(new PLangPanel(manager));
 		subPanels.add(new LayerPanel(manager));
 		
-		setBounds(100, 100, 540, 620);
+		setBounds(100, 100, 580, 680);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 11, 504, 526);
 		contentPanel.add(tabbedPane);
 		
 		for(TemplateSubPanel panel : subPanels)

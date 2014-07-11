@@ -42,7 +42,7 @@ public class LayerPanel extends TemplateSubPanel{
 		add(lblNewLabel);
 		
 		JList<String> list = new JList<String>();
-		list.setBounds(20, 39, 156, 370);
+		list.setBounds(20, 39, 156, 434);
 		add(list);
 		
 		JLabel lblName = new JLabel("Name");
@@ -54,12 +54,12 @@ public class LayerPanel extends TemplateSubPanel{
 		add(lblType);
 		
 		textField = new JTextField();
-		textField.setBounds(247, 37, 156, 20);
+		textField.setBounds(247, 37, 215, 20);
 		add(textField);
 		textField.setColumns(10);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(186, 90, 289, 385);
+		scrollPane.setBounds(186, 90, 354, 451);
 		add(scrollPane);
 		
 		comboBox = new JComboBox<String>();
@@ -68,24 +68,24 @@ public class LayerPanel extends TemplateSubPanel{
 				resetLayerArea();
 			}
 		});
-		comboBox.setBounds(247, 62, 156, 20);
+		comboBox.setBounds(247, 62, 215, 20);
 		comboBox.setSelectedIndex(knownLayerDefs.size()>0 ? 0 : -1);
 		add(comboBox);
 		
 		JButton btnCreate = new JButton("Create");
-		btnCreate.setBounds(20, 420, 72, 23);
+		btnCreate.setBounds(20, 484, 72, 23);
 		add(btnCreate);
 		
 		JButton btnNewButton = new JButton("Delete");
-		btnNewButton.setBounds(102, 420, 72, 23);
+		btnNewButton.setBounds(102, 484, 72, 23);
 		add(btnNewButton);
 		
 		JButton btnUp = new JButton("Up");
-		btnUp.setBounds(20, 452, 72, 23);
+		btnUp.setBounds(20, 518, 72, 23);
 		add(btnUp);
 		
 		JButton btnDown = new JButton("Down");
-		btnDown.setBounds(104, 454, 72, 23);
+		btnDown.setBounds(102, 518, 72, 23);
 		add(btnDown);
 
 	}

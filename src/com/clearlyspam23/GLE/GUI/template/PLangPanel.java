@@ -61,7 +61,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		}
 		
 		displayInputField = new JTextField();
-		displayInputField.setBounds(67, 471, 405, 20);
+		displayInputField.setBounds(67, 519, 473, 20);
 		displayInputField.setEditable(false);
 		displayInputField.setColumns(10);
 		
@@ -81,26 +81,26 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 			cm.addElement(recognizedLanguages.get(i).getName());
-		comboBox.setBounds(104, 73, 142, 20);
+		comboBox.setBounds(104, 73, 179, 20);
 		comboBox.setModel(cm);
 		
 		JLabel label_2 = new JLabel("Parameters");
-		label_2.setBounds(10, 313, 69, 14);
+		label_2.setBounds(10, 363, 69, 14);
 		
 		JLabel label_3 = new JLabel("Full Input");
-		label_3.setBounds(10, 474, 69, 14);
+		label_3.setBounds(10, 522, 69, 14);
 		
 		JLabel lblExecutableLocation = new JLabel("Game Executable");
 		lblExecutableLocation.setBounds(10, 42, 83, 14);
 		
 		exeFileLoc = new JTextField();
-		exeFileLoc.setBounds(103, 42, 283, 20);
+		exeFileLoc.setBounds(103, 42, 358, 20);
 		exeFileLoc.setColumns(10);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setAcceptAllFileFilterUsed(true);
 		JButton btnNewButton = new JButton("Browse");
-		btnNewButton.setBounds(405, 38, 67, 23);
+		btnNewButton.setBounds(471, 38, 69, 23);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ret = fc.showOpenDialog(PLangPanel.this);
@@ -146,7 +146,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 				}
 			}
 		});
-		btnAdd.setBounds(218, 437, 79, 23);
+		btnAdd.setBounds(217, 485, 79, 23);
 		add(btnAdd);
 		
 		JButton btnDelete = new JButton("Delete");
@@ -160,15 +160,15 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 				}
 			}
 		});
-		btnDelete.setBounds(307, 437, 79, 23);
+		btnDelete.setBounds(307, 485, 79, 23);
 		add(btnDelete);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 462, 201);
+		scrollPane.setBounds(10, 101, 530, 249);
 		add(scrollPane);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(104, 313, 282, 113);
+		scrollPane_1.setBounds(104, 361, 282, 113);
 		add(scrollPane_1);
 		
 		list_1 = new JList<String>();
