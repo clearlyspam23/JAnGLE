@@ -3,10 +3,11 @@ package com.clearlyspam23.GLE.basic.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -14,10 +15,10 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.GUI.PLangSubPanel;
 import com.clearlyspam23.GLE.util.Utility;
 
-public class JavaLanguagePanel extends SubPanel {
+public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLanguageData> {
 	/**
 	 * 
 	 */
@@ -26,6 +27,11 @@ public class JavaLanguagePanel extends SubPanel {
 	private JTextField textField_1;
 	private JList<String> list;
 	private DefaultListModel<String> list_model;
+	
+	public static class JavaLanguageData{
+		public String javaLocation;
+		public List<String> parameters;
+	}
 
 	public JavaLanguagePanel(String javaLocation) {
 
@@ -159,5 +165,17 @@ public class JavaLanguagePanel extends SubPanel {
 	public void reset() {
 		//txtWhatever.setText("");
 		textField_1.setText("");
+	}
+
+	@Override
+	public JavaLanguageData getData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setToData(JavaLanguageData data) {
+		// TODO Auto-generated method stub
+		
 	}
 }

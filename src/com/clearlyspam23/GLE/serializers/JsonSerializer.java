@@ -41,7 +41,7 @@ public class JsonSerializer extends Serializer {
 	}
 
 	@Override
-	public Level deserialize() {
+	public Level deserialize(String data) {
 		return null;
 	}
 

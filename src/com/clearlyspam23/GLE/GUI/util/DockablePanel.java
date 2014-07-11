@@ -4,7 +4,9 @@ import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 
-public abstract class DockablePanel extends JPanel {
+import com.clearlyspam23.GLE.GUI.NamedPanel;
+
+public abstract class DockablePanel extends NamedPanel {
 	public DockablePanel() {
 		super();
 	}
@@ -22,7 +24,5 @@ public abstract class DockablePanel extends JPanel {
 	}
 
 	private static final long serialVersionUID = 1L;
-
-	public abstract String getName();
 
 }

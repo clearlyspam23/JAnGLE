@@ -1,11 +1,10 @@
 package com.clearlyspam23.GLE.GUI.template;
 
-import javax.swing.JPanel;
-
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.NamedPanel;
 
-public abstract class TemplateSubPanel extends JPanel{
+public abstract class TemplateSubPanel extends NamedPanel{
 	
 	/**
 	 * 
@@ -21,7 +20,5 @@ public abstract class TemplateSubPanel extends JPanel{
 	public abstract void setToTemplate(Template template);
 	
 	public abstract void generateTemplate(Template template);
-	
-	public abstract String getPanelName();
 
 }

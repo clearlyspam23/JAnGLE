@@ -211,7 +211,7 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 	}
 
 	@Override
-	public String getName() {
+	public String getPanelName() {
 		return "Tileset";
 	}
 	

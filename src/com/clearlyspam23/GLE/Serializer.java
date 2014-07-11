@@ -3,7 +3,7 @@ package com.clearlyspam23.GLE;
 public abstract class Serializer {
 	
 	public abstract String serialize(Level data);
-	public abstract Level deserialize();
+	public abstract Level deserialize(String data);
 	
 	public abstract boolean canSerialize(ExportData data);
 	

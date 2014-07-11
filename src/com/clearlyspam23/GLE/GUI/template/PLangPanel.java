@@ -22,7 +22,7 @@ import javax.swing.event.ChangeListener;
 import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.GUI.PLangSubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.util.Utility;
 
@@ -41,9 +41,9 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	
 	private List<PLanguageOptions<?>> recognizedLanguages;
 	
-	private SubPanel[] panels;
+	private PLangSubPanel[] panels;
 	
-	private SubPanel currentPanel;
+	private PLangSubPanel currentPanel;
 	
 	private JScrollPane scrollPane;
 
@@ -53,7 +53,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	public PLangPanel(PluginManager pluginManager) {
 		super(pluginManager);
 		recognizedLanguages = pluginManager.getRecognizedProgrammingLanguages();
-		panels = new SubPanel[recognizedLanguages.size()];
+		panels = new PLangSubPanel[recognizedLanguages.size()];
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 		{
 			panels[i] = recognizedLanguages.get(i).getPanel();
@@ -205,13 +205,6 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 			if(currentPanel!=null)
 			{
 				currentPanel.reset();
-//				scrollPane.setViewportView(currentPanel);
-//				scrollPanel.add(new JButton("Button" + (++counter)));
-//				scrollPanel.add(currentPLangComp);
-//				scrollPanel.revalidate();
-//				scrollPanel.repaint();
-//				scrollPanel.setVisible(true);
-//				System.out.println(currentPLangComp);
 			}
 			revalidate();
 			repaint();
@@ -233,7 +226,12 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	
 	public void setToTemplate(Template template)
 	{
-		
+		list_1_model.clear();
+		for(String s : template.getParameterMacros())
+		{
+			list_1_model.addElement(s);
+		}
+		stateChanged();
 	}
 
 	@Override
@@ -243,7 +241,6 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 
 	@Override
 	public void generateTemplate(Template template) {
-		// TODO Auto-generated method stub
 		
 	}
 	

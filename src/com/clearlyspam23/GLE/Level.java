@@ -2,7 +2,9 @@ package com.clearlyspam23.GLE;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Level {
 	
@@ -10,6 +12,7 @@ public class Level {
 	private List<Layer> layers = new ArrayList<Layer>();
 	private double width;
 	private double height;
+	private Map<String, Object> properties = new HashMap<String, Object>();
 	
 	public Level(Template template)
 	{
