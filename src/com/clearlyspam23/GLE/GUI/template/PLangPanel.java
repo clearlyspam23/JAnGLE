@@ -146,7 +146,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 				}
 			}
 		});
-		btnAdd.setBounds(217, 485, 79, 23);
+		btnAdd.setBounds(293, 485, 79, 23);
 		add(btnAdd);
 		
 		JButton btnDelete = new JButton("Delete");
@@ -160,7 +160,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 				}
 			}
 		});
-		btnDelete.setBounds(307, 485, 79, 23);
+		btnDelete.setBounds(382, 485, 79, 23);
 		add(btnDelete);
 		
 		scrollPane = new JScrollPane();
@@ -168,7 +168,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		add(scrollPane);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(104, 361, 282, 113);
+		scrollPane_1.setBounds(104, 361, 358, 113);
 		add(scrollPane_1);
 		
 		list_1 = new JList<String>();

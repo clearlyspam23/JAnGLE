@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -98,10 +99,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		lblProperties.setBounds(20, 297, 67, 14);
 		add(lblProperties);
 		
-		JList list = new JList();
-		list.setBounds(86, 296, 190, 209);
-		add(list);
-		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.setBounds(114, 516, 76, 23);
 		add(btnAdd);
@@ -126,6 +123,21 @@ public class GeneralPanel extends TemplateSubPanel{
 		JComboBox comboBox_1 = new JComboBox();
 		comboBox_1.setBounds(325, 319, 172, 20);
 		add(comboBox_1);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(85, 295, 191, 209);
+		add(scrollPane);
+		
+		JList list = new JList();
+		scrollPane.setViewportView(list);
+		
+		JLabel lblOutputFormat = new JLabel("Output Format");
+		lblOutputFormat.setBounds(20, 189, 84, 14);
+		add(lblOutputFormat);
+		
+		JComboBox comboBox_2 = new JComboBox();
+		comboBox_2.setBounds(114, 186, 238, 20);
+		add(comboBox_2);
 	}
 	
 	public void setToTemplate(Template template)

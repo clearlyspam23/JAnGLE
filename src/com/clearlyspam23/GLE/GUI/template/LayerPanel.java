@@ -41,10 +41,6 @@ public class LayerPanel extends TemplateSubPanel{
 		lblNewLabel.setBounds(20, 11, 65, 17);
 		add(lblNewLabel);
 		
-		JList<String> list = new JList<String>();
-		list.setBounds(20, 39, 156, 434);
-		add(list);
-		
 		JLabel lblName = new JLabel("Name");
 		lblName.setBounds(200, 40, 37, 14);
 		add(lblName);
@@ -87,6 +83,13 @@ public class LayerPanel extends TemplateSubPanel{
 		JButton btnDown = new JButton("Down");
 		btnDown.setBounds(102, 518, 72, 23);
 		add(btnDown);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(20, 40, 156, 433);
+		add(scrollPane_1);
+		
+		JList<String> list = new JList<String>();
+		scrollPane_1.setViewportView(list);
 
 	}
 	

@@ -17,6 +17,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.clearlyspam23.GLE.GUI.PLangSubPanel;
 import com.clearlyspam23.GLE.util.Utility;
+import javax.swing.JScrollPane;
 
 public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLanguageData> {
 	/**
@@ -36,8 +37,10 @@ public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLangu
 	public JavaLanguagePanel(String javaLocation) {
 
 		JLabel lblJavaLocation = new JLabel("Java Location");
+		lblJavaLocation.setBounds(7, 12, 66, 14);
 
 		javaTextField = new JTextField();
+		javaTextField.setBounds(91, 10, 259, 20);
 		javaTextField.setColumns(10);
 		javaTextField.setText(javaLocation);
 
@@ -46,6 +49,7 @@ public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLangu
 		//fc.setAcceptAllFileFilterUsed(true);
 		
 		JButton btnBrowse = new JButton("Browse");
+		btnBrowse.setBounds(360, 8, 89, 23);
 		btnBrowse.setToolTipText("The directory of your java executable");
 		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -59,16 +63,16 @@ public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLangu
 		});
 
 		JLabel lblJvmArguments = new JLabel("JVM Arguments");
-
-		list = new JList<String>();
+		lblJvmArguments.setBounds(7, 52, 74, 14);
 		
 		list_model = new DefaultListModel<String>();
-		list.setModel(list_model);
 		
 		textField_1 = new JTextField();
+		textField_1.setBounds(91, 152, 212, 20);
 		textField_1.setColumns(10);
 
 		JButton btnAdd = new JButton("Add");
+		btnAdd.setBounds(313, 151, 63, 23);
 		btnAdd.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
 				ArrayList<String> tokens = Utility.tokenizeBySpaceAndQuote(textField_1.getText());
@@ -85,6 +89,7 @@ public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLangu
 		});
 
 		JButton btnRemove = new JButton("Delete");
+		btnRemove.setBounds(386, 151, 63, 23);
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index = list.getSelectedIndex();
@@ -95,58 +100,22 @@ public class JavaLanguagePanel extends PLangSubPanel<JavaLanguagePanel.JavaLangu
 				}
 			}
 		});
-		GroupLayout groupLayout = new GroupLayout(this);
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblJavaLocation)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblJvmArguments)))
-					.addGap(10)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnAdd, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnRemove))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(javaTextField, GroupLayout.PREFERRED_SIZE, 194, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnBrowse, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
-								.addComponent(list, GroupLayout.PREFERRED_SIZE, 289, GroupLayout.PREFERRED_SIZE))
-							.addGap(10))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(5)
-							.addComponent(lblJavaLocation))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(2)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(javaTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnBrowse))))
-					.addGap(19)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblJvmArguments)
-						.addComponent(list, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnAdd)
-						.addComponent(btnRemove))
-					.addContainerGap(14, Short.MAX_VALUE))
-		);
-		setLayout(groupLayout);
+		setLayout(null);
+		add(lblJavaLocation);
+		add(lblJvmArguments);
+		add(textField_1);
+		add(btnAdd);
+		add(btnRemove);
+		add(javaTextField);
+		add(btnBrowse);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(91, 50, 358, 93);
+		add(scrollPane);
+				
+						list = new JList<String>();
+						scrollPane.setViewportView(list);
+						list.setModel(list_model);
 	}
 
 	public JTextField getJavaTextField() {
