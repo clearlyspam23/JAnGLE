@@ -3,21 +3,24 @@ package com.clearlyspam23.GLE.GUI.template;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.CoordinateSystem;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -30,9 +33,11 @@ public class GeneralPanel extends TemplateSubPanel{
 	 */
 	
 	private List<CoordinateSystem> possibleCoordinates;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField nameField;
+	private JTextField locationField;
+	private JTextField propsNameField;
+	private JButton browseButton;
+	private JTextField extensionField;
 	
 	public GeneralPanel(PluginManager pluginManager) {
 		super(pluginManager);
@@ -52,17 +57,17 @@ public class GeneralPanel extends TemplateSubPanel{
 		imgLabel.setBounds(369, 140, 128, 128);
 		add(imgLabel);
 		
-		final JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.addActionListener(new ActionListener() {
+		final JComboBox<String> coordBox = new JComboBox<String>();
+		coordBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<possibleCoordinates.size())
-					imgLabel.setIcon(possibleCoordinates.get(comboBox.getSelectedIndex()).getHelperIcon());
+				if(coordBox.getSelectedIndex()>=0&&coordBox.getSelectedIndex()<possibleCoordinates.size())
+					imgLabel.setIcon(possibleCoordinates.get(coordBox.getSelectedIndex()).getHelperIcon());
 			}
 		});
-		comboBox.setModel(new DefaultComboBoxModel<String>(model));
-		comboBox.setSelectedIndex(model.length>0 ? 0 : -1);
-		comboBox.setBounds(114, 140, 238, 20);
-		add(comboBox);
+		coordBox.setModel(new DefaultComboBoxModel<String>(model));
+		coordBox.setSelectedIndex(model.length>0 ? 0 : -1);
+		coordBox.setBounds(114, 140, 238, 20);
+		add(coordBox);
 		
 		JLabel lblTemplateProperties = new JLabel("Template Properties");
 		lblTemplateProperties.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -73,27 +78,48 @@ public class GeneralPanel extends TemplateSubPanel{
 		lblTemplateName.setBounds(20, 42, 84, 14);
 		add(lblTemplateName);
 		
-		textField = new JTextField();
-		textField.setBounds(114, 42, 383, 20);
-		add(textField);
-		textField.setColumns(10);
+		nameField = new JTextField();
+		nameField.setBounds(114, 42, 383, 20);
+		add(nameField);
+		nameField.setColumns(10);
 		
 		JLabel lblFileLocation = new JLabel("File Location");
 		lblFileLocation.setBounds(20, 77, 84, 14);
 		add(lblFileLocation);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(114, 74, 305, 20);
-		add(textField_1);
-		textField_1.setColumns(10);
+		locationField = new JTextField();
+		locationField.setBounds(114, 74, 305, 20);
+		add(locationField);
+		locationField.setColumns(10);
 		
-		JButton btnBrowse = new JButton("Browse");
-		btnBrowse.setBounds(430, 73, 67, 23);
-		add(btnBrowse);
+		final JFileChooser fc = new JFileChooser();
+		fc.setDialogType(JFileChooser.SAVE_DIALOG);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (*.jant)", "jant");
+		fc.setFileFilter(filter);
+		browseButton = new JButton("Browse");
+		browseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				fc.setSelectedFile(new File(nameField.getText()));
+				int ret = fc.showSaveDialog(GeneralPanel.this);
+				if(ret==JFileChooser.APPROVE_OPTION){
+					File f = fc.getSelectedFile();
+					System.out.println(f);
+				}
+			}
+		});
+		browseButton.setBounds(430, 73, 67, 23);
+		add(browseButton);
 		
-		JCheckBox chckbxUseDefaultLocation = new JCheckBox("Use Default Location");
-		chckbxUseDefaultLocation.setBounds(114, 101, 128, 23);
-		add(chckbxUseDefaultLocation);
+		final JCheckBox defaultLocCB = new JCheckBox("Use Default Location");
+		defaultLocCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				checkUseDefault((defaultLocCB.isSelected()));
+			}
+		});
+		defaultLocCB.setBounds(114, 101, 128, 23);
+		defaultLocCB.setSelected(true);
+		add(defaultLocCB);
+		checkUseDefault(defaultLocCB.isSelected());
 		
 		JLabel lblProperties = new JLabel("Properties");
 		lblProperties.setBounds(20, 297, 67, 14);
@@ -111,33 +137,69 @@ public class GeneralPanel extends TemplateSubPanel{
 		lblName.setBounds(286, 297, 46, 14);
 		add(lblName);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(325, 294, 172, 20);
-		add(textField_2);
-		textField_2.setColumns(10);
+		propsNameField = new JTextField();
+		propsNameField.setBounds(325, 294, 172, 20);
+		add(propsNameField);
+		propsNameField.setColumns(10);
 		
 		JLabel lblType = new JLabel("Type");
 		lblType.setBounds(286, 322, 46, 14);
 		add(lblType);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(325, 319, 172, 20);
-		add(comboBox_1);
+		JComboBox propsTypeField = new JComboBox();
+		propsTypeField.setBounds(325, 319, 172, 20);
+		add(propsTypeField);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(85, 295, 191, 209);
 		add(scrollPane);
 		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
+		JList propsList = new JList();
+		scrollPane.setViewportView(propsList);
 		
-		JLabel lblOutputFormat = new JLabel("Output Format");
+		JLabel lblOutputFormat = new JLabel("Level Format");
 		lblOutputFormat.setBounds(20, 189, 84, 14);
 		add(lblOutputFormat);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(114, 186, 238, 20);
-		add(comboBox_2);
+		JComboBox serializerBox = new JComboBox();
+		serializerBox.setBounds(114, 186, 238, 20);
+		add(serializerBox);
+		
+		JPanel propsPanel = new JPanel();
+		propsPanel.setBounds(286, 347, 211, 157);
+		add(propsPanel);
+		
+		JLabel lblExtension = new JLabel("File Extension");
+		lblExtension.setBounds(20, 220, 76, 14);
+		add(lblExtension);
+		
+		extensionField = new JTextField();
+		extensionField.setBounds(114, 217, 86, 20);
+		add(extensionField);
+		extensionField.setColumns(10);
+		
+		final JCheckBox chckbxUseCustomExtension = new JCheckBox("Use Custom Extension");
+		chckbxUseCustomExtension.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				checkCustomExtension((chckbxUseCustomExtension.isSelected()));
+			}
+		});
+		chckbxUseCustomExtension.setBounds(206, 216, 146, 23);
+		add(chckbxUseCustomExtension);
+		checkCustomExtension(chckbxUseCustomExtension.isSelected());
+	}
+	
+	private void checkUseDefault(boolean flag)
+	{
+		if(flag){
+			// set output location to current directory or whatever the default is
+		}
+		locationField.setEditable(!flag);
+		browseButton.setEnabled(!flag);
+	}
+	
+	private void checkCustomExtension(boolean flag){
+		extensionField.setEditable(flag);
 	}
 	
 	public void setToTemplate(Template template)

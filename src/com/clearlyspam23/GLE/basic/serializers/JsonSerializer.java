@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.serializers;
+package com.clearlyspam23.GLE.basic.serializers;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class JsonSerializer extends Serializer {
 
 	@Override
 	public String getName() {
-		return "JSON";
+		return "json";
 	}
 
 	@Override
@@ -43,6 +43,11 @@ public class JsonSerializer extends Serializer {
 	@Override
 	public Level deserialize(String data) {
 		return null;
+	}
+
+	@Override
+	public String getDefaultExtension() {
+		return "json";
 	}
 
 }

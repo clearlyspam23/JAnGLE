@@ -10,5 +10,7 @@ public abstract class Serializer {
 	public abstract boolean registerDataType(ExportData data);
 	
 	public abstract String getName();
+	
+	public abstract String getDefaultExtension();
 
 }
