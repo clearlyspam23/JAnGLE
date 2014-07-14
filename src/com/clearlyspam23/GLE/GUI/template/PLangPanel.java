@@ -243,5 +243,11 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	public void generateTemplate(Template template) {
 		
 	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

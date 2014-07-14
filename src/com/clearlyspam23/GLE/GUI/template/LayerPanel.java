@@ -119,4 +119,10 @@ public class LayerPanel extends TemplateSubPanel{
 		
 	}
 
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

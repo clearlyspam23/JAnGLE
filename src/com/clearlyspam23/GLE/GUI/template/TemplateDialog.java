@@ -81,6 +81,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		subPanels.add(new GeneralPanel(manager));
 		subPanels.add(new PLangPanel(manager));
 		subPanels.add(new LayerPanel(manager));
+		setResizable(false);
 		
 		setBounds(100, 100, 580, 680);
 		getContentPane().setLayout(new BorderLayout());

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -18,9 +19,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.clearlyspam23.GLE.CompressionFormat;
 import com.clearlyspam23.GLE.CoordinateSystem;
 import com.clearlyspam23.GLE.PluginManager;
+import com.clearlyspam23.GLE.Serializer;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.template.properties.IntegerPanel;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -33,11 +37,19 @@ public class GeneralPanel extends TemplateSubPanel{
 	 */
 	
 	private List<CoordinateSystem> possibleCoordinates;
+	private List<CompressionFormat> possibleCompressions;
+	private List<Serializer> possibleSerializers;
 	private JTextField nameField;
 	private JTextField locationField;
 	private JTextField propsNameField;
 	private JButton browseButton;
 	private JTextField extensionField;
+	private JPanel propsPanel;
+	
+	private final JComboBox<String> coordBox;
+	private final JComboBox<String> propsTypeField;
+	private final JComboBox<String> serializerBox;
+	private final JComboBox<String> compressionBox;
 	
 	public GeneralPanel(PluginManager pluginManager) {
 		super(pluginManager);
@@ -57,11 +69,13 @@ public class GeneralPanel extends TemplateSubPanel{
 		imgLabel.setBounds(369, 140, 128, 128);
 		add(imgLabel);
 		
-		final JComboBox<String> coordBox = new JComboBox<String>();
+		coordBox = new JComboBox<String>();
 		coordBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(coordBox.getSelectedIndex()>=0&&coordBox.getSelectedIndex()<possibleCoordinates.size())
-					imgLabel.setIcon(possibleCoordinates.get(coordBox.getSelectedIndex()).getHelperIcon());
+				if(isValidIndex(coordBox, possibleCoordinates)){
+					CoordinateSystem currentCoord = possibleCoordinates.get(coordBox.getSelectedIndex());
+					imgLabel.setIcon(currentCoord.getHelperIcon());
+				}
 			}
 		});
 		coordBox.setModel(new DefaultComboBoxModel<String>(model));
@@ -69,7 +83,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		coordBox.setBounds(114, 140, 238, 20);
 		add(coordBox);
 		
-		JLabel lblTemplateProperties = new JLabel("Template Properties");
+		JLabel lblTemplateProperties = new JLabel("General Properties");
 		lblTemplateProperties.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblTemplateProperties.setBounds(10, 11, 190, 20);
 		add(lblTemplateProperties);
@@ -83,8 +97,8 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(nameField);
 		nameField.setColumns(10);
 		
-		JLabel lblFileLocation = new JLabel("File Location");
-		lblFileLocation.setBounds(20, 77, 84, 14);
+		JLabel lblFileLocation = new JLabel("Template Location");
+		lblFileLocation.setBounds(20, 77, 99, 14);
 		add(lblFileLocation);
 		
 		locationField = new JTextField();
@@ -103,7 +117,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				int ret = fc.showSaveDialog(GeneralPanel.this);
 				if(ret==JFileChooser.APPROVE_OPTION){
 					File f = fc.getSelectedFile();
-					System.out.println(f);
+					locationField.setText(f.getAbsolutePath()+".jant");
 				}
 			}
 		});
@@ -146,7 +160,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		lblType.setBounds(286, 322, 46, 14);
 		add(lblType);
 		
-		JComboBox propsTypeField = new JComboBox();
+		propsTypeField = new JComboBox<String>();
 		propsTypeField.setBounds(325, 319, 172, 20);
 		add(propsTypeField);
 		
@@ -158,23 +172,25 @@ public class GeneralPanel extends TemplateSubPanel{
 		scrollPane.setViewportView(propsList);
 		
 		JLabel lblOutputFormat = new JLabel("Level Format");
-		lblOutputFormat.setBounds(20, 189, 84, 14);
+		lblOutputFormat.setBounds(20, 174, 84, 14);
 		add(lblOutputFormat);
 		
-		JComboBox serializerBox = new JComboBox();
-		serializerBox.setBounds(114, 186, 238, 20);
+		serializerBox = new JComboBox<String>();
+		serializerBox.setBounds(114, 171, 238, 20);
 		add(serializerBox);
 		
-		JPanel propsPanel = new JPanel();
+		propsPanel = new JPanel();
 		propsPanel.setBounds(286, 347, 211, 157);
 		add(propsPanel);
+		propsPanel.setLayout(new BoxLayout(propsPanel, BoxLayout.X_AXIS));
+		propsPanel.add(new IntegerPanel());
 		
-		JLabel lblExtension = new JLabel("File Extension");
-		lblExtension.setBounds(20, 220, 76, 14);
+		JLabel lblExtension = new JLabel("Level Extension");
+		lblExtension.setBounds(20, 205, 84, 14);
 		add(lblExtension);
 		
 		extensionField = new JTextField();
-		extensionField.setBounds(114, 217, 86, 20);
+		extensionField.setBounds(114, 202, 86, 20);
 		add(extensionField);
 		extensionField.setColumns(10);
 		
@@ -184,9 +200,25 @@ public class GeneralPanel extends TemplateSubPanel{
 				checkCustomExtension((chckbxUseCustomExtension.isSelected()));
 			}
 		});
-		chckbxUseCustomExtension.setBounds(206, 216, 146, 23);
+		chckbxUseCustomExtension.setBounds(206, 198, 146, 23);
 		add(chckbxUseCustomExtension);
+		
+		JLabel lblLevelCompression = new JLabel("Level Compression");
+		lblLevelCompression.setBounds(20, 236, 99, 14);
+		add(lblLevelCompression);
+		
+		compressionBox = new JComboBox<String>();
+		compressionBox.setBounds(114, 233, 128, 20);
+		add(compressionBox);
 		checkCustomExtension(chckbxUseCustomExtension.isSelected());
+	}
+	
+	private boolean isValidIndex(JComboBox<?> box, List<?> list){
+		return isValidIndex(box.getSelectedIndex(), list);
+	}
+	
+	private boolean isValidIndex(int index, List<?> list){
+		return index>=0&&index<list.size();
 	}
 	
 	private void checkUseDefault(boolean flag)
@@ -202,9 +234,32 @@ public class GeneralPanel extends TemplateSubPanel{
 		extensionField.setEditable(flag);
 	}
 	
+	private <T> T getValue(JComboBox<?> box, List<T> list){
+		return list.get(box.getSelectedIndex());
+	}
+	
+	private <T> T tryGetValue(JComboBox<?> box, List<T> list){
+		if(isValidIndex(box, list))
+			return getValue(box, list);
+		return null;
+	}
+	
+	private <T> void trySetIndex(T t, List<T> list, JComboBox<?> box){
+		int index = list.indexOf(t);
+		if(index>=0)
+			box.setSelectedIndex(index);
+	}
+	
 	public void setToTemplate(Template template)
 	{
-		
+		if(template!=null){
+			nameField.setText(template.getTemplateName());
+			locationField.setText(locationField.getText());
+			extensionField.setText(template.getExtension());
+			trySetIndex(template.getCompression(), possibleCompressions, compressionBox);
+			trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
+			trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
+		}
 	}
 
 	@Override
@@ -214,6 +269,16 @@ public class GeneralPanel extends TemplateSubPanel{
 
 	@Override
 	public void generateTemplate(Template template) {
+		template.setTemplateName(nameField.getText());
+		template.setTemplateFile(new File(locationField.getText()));
+		template.setExtension(extensionField.getText());
+		template.setCompression(tryGetValue(compressionBox, possibleCompressions));
+		template.setCoordinateSystem(tryGetValue(coordBox, possibleCoordinates));
+		template.setSerializer(tryGetValue(serializerBox, possibleSerializers));
+	}
+
+	@Override
+	public void reset() {
 		// TODO Auto-generated method stub
 		
 	}

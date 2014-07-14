@@ -20,5 +20,7 @@ public abstract class TemplateSubPanel extends NamedPanel{
 	public abstract void setToTemplate(Template template);
 	
 	public abstract void generateTemplate(Template template);
+	
+	public abstract void reset();
 
 }

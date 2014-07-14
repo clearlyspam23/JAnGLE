@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,16 +10,24 @@ import java.util.Set;
 
 public class Template {
 	
+	//meta data
+	private String templateName;
+	private File templateFile;
+	
 	//Runtime data
 	private List<ParameterMacro> runtimeCommand = new ArrayList<ParameterMacro>();
 	@SuppressWarnings("rawtypes")
 	private PLanguageOptions usedPLanguage;
 	private Object pLanguageData;
 	
-	//Layer data
+	//Level Data
 	private CoordinateSystem coordinateSystem;
-	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
 	private Serializer serializer;
+	private String extension;
+	private CompressionFormat compression;
+	
+	//Layer data
+	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
 	private Map<String, Class<?>> recognizedProperties = new HashMap<String, Class<?>>();
 	private boolean allowArbitraryProperties = false;
 	
@@ -98,6 +107,54 @@ public class Template {
 	
 	public boolean isValidProperty(String name, Class<?> cls){
 		return allowArbitraryProperties||(cls!=null&&cls.equals(recognizedProperties.get(name)));
+	}
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
+	}
+
+	public File getTemplateFile() {
+		return templateFile;
+	}
+
+	public void setTemplateFile(File templateFile) {
+		this.templateFile = templateFile;
+	}
+
+	public PLanguageOptions<?> getUsedPLanguage() {
+		return usedPLanguage;
+	}
+
+	public void setUsedPLanguage(PLanguageOptions<?> usedPLanguage) {
+		this.usedPLanguage = usedPLanguage;
+	}
+
+	public Object getpLanguageData() {
+		return pLanguageData;
+	}
+
+	public void setpLanguageData(Object pLanguageData) {
+		this.pLanguageData = pLanguageData;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public CompressionFormat getCompression() {
+		return compression;
+	}
+
+	public void setCompression(CompressionFormat compression) {
+		this.compression = compression;
 	}
 
 }
