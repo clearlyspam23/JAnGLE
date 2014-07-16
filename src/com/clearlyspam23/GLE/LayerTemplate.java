@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE;
 
 
-public abstract class LayerTemplate {
+public abstract class LayerTemplate implements Nameable{
 	
 	private String name;
 	

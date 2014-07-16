@@ -4,9 +4,8 @@ import java.awt.Image;
 
 import javax.swing.Icon;
 
-public abstract class CoordinateSystem {
+public abstract class CoordinateSystem implements Nameable{
 	
-	public abstract String getName();
 	public abstract Icon getHelperIcon();
 
 }

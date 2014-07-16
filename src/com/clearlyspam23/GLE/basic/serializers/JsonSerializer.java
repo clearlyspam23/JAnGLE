@@ -31,7 +31,7 @@ public class JsonSerializer extends Serializer {
 
 	@Override
 	public String getName() {
-		return "json";
+		return "JSON";
 	}
 
 	@Override

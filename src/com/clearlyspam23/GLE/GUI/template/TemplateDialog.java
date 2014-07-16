@@ -17,12 +17,16 @@ import javax.swing.border.EmptyBorder;
 
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.basic.compression.NoCompression;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredDown;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
 import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
+import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
+import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
+
 import java.awt.GridLayout;
 
 public class TemplateDialog extends JDialog implements ActionListener{
@@ -63,6 +67,12 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			manager.addProgrammingLanguage(new JavaLanguageOptions());
 			
 			manager.addMacro(new CurrentLevelMacro());
+			
+			manager.addProperty(new IntPropertyDefinition());
+			
+			manager.addCompression(new NoCompression());
+			
+			manager.addSerializer(new JsonSerializer());
 			
 			TemplateDialog dialog = new TemplateDialog(manager);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

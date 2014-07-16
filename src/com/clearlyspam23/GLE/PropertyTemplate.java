@@ -2,9 +2,7 @@ package com.clearlyspam23.GLE;
 
 import java.awt.Component;
 
-public abstract class PropertyTemplate<T extends Component, E> {
-	
-	public abstract String getName();
+public abstract class PropertyTemplate<T extends Component, E> implements Nameable{
 	
 	public abstract T getEditorComponent();
 	

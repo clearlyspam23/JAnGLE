@@ -1,13 +1,17 @@
-package com.clearlyspam23.GLE.GUI.template.properties;
+package com.clearlyspam23.GLE.basic.gui.properties;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JTextField;
 
-public class IntegerPanel extends JPanel{
+import com.clearlyspam23.GLE.GUI.SubPanel;
+
+public class IntegerPanel extends SubPanel{
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
@@ -68,6 +72,10 @@ public class IntegerPanel extends JPanel{
 		gbc_textField_2.gridy = 2;
 		add(textField_2, gbc_textField_2);
 		textField_2.setColumns(10);
+	}
+	@Override
+	public void reset() {
+		
 	}
 
 }

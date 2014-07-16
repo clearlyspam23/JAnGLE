@@ -21,10 +21,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.CompressionFormat;
 import com.clearlyspam23.GLE.CoordinateSystem;
+import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PluginManager;
+import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.Serializer;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.GUI.template.properties.IntegerPanel;
+import com.clearlyspam23.GLE.basic.gui.properties.IntegerPanel;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -39,6 +41,7 @@ public class GeneralPanel extends TemplateSubPanel{
 	private List<CoordinateSystem> possibleCoordinates;
 	private List<CompressionFormat> possibleCompressions;
 	private List<Serializer> possibleSerializers;
+	private List<PropertyDefinition<?, ?>> possibleProperties;
 	private JTextField nameField;
 	private JTextField locationField;
 	private JTextField propsNameField;
@@ -55,12 +58,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		super(pluginManager);
 		setLayout(null);
 		
-		this.possibleCoordinates = pluginManager.getRecognizedCoordinateSystems();
-		
-		String[] model = new String[possibleCoordinates.size()];
-		for(int i = 0; i < possibleCoordinates.size(); i++)
-			model[i] = possibleCoordinates.get(i).getName();
-		
 		JLabel label_2 = new JLabel("Coordinate System");
 		label_2.setBounds(20, 140, 117, 14);
 		add(label_2);
@@ -68,6 +65,13 @@ public class GeneralPanel extends TemplateSubPanel{
 		final JLabel imgLabel = new JLabel("");
 		imgLabel.setBounds(369, 140, 128, 128);
 		add(imgLabel);
+		
+		//get list of possible components
+		this.possibleCoordinates = pluginManager.getRecognizedCoordinateSystems();
+		this.possibleCompressions = pluginManager.getRecognizedCompressions();
+		this.possibleSerializers = pluginManager.getRecognizedSerializers();
+		this.possibleProperties = pluginManager.getRecognizedProperties();
+		
 		
 		coordBox = new JComboBox<String>();
 		coordBox.addActionListener(new ActionListener() {
@@ -78,8 +82,6 @@ public class GeneralPanel extends TemplateSubPanel{
 				}
 			}
 		});
-		coordBox.setModel(new DefaultComboBoxModel<String>(model));
-		coordBox.setSelectedIndex(model.length>0 ? 0 : -1);
 		coordBox.setBounds(114, 140, 238, 20);
 		add(coordBox);
 		
@@ -210,7 +212,23 @@ public class GeneralPanel extends TemplateSubPanel{
 		compressionBox = new JComboBox<String>();
 		compressionBox.setBounds(114, 233, 128, 20);
 		add(compressionBox);
+		
+		//set up the models for the comboBoxes
+		setModelTo(coordBox, possibleCoordinates);
+		setModelTo(compressionBox, possibleCompressions);
+		setModelTo(serializerBox, possibleSerializers);
+		setModelTo(propsTypeField, possibleProperties);
+		
 		checkCustomExtension(chckbxUseCustomExtension.isSelected());
+	}
+	
+	private void setModelTo(JComboBox<String> box, List<? extends Nameable> namedList){
+		String[] model = new String[namedList.size()];
+		for(int i = 0; i < namedList.size(); i++)
+			model[i] = namedList.get(i).getName();
+		
+		box.setModel(new DefaultComboBoxModel<String>(model));
+		coordBox.setSelectedIndex(model.length>0 ? 0 : -1);
 	}
 	
 	private boolean isValidIndex(JComboBox<?> box, List<?> list){
@@ -231,6 +249,9 @@ public class GeneralPanel extends TemplateSubPanel{
 	}
 	
 	private void checkCustomExtension(boolean flag){
+		if(!flag){
+			extensionField.setText('.'+getValue(serializerBox, possibleSerializers).getDefaultExtension());
+		}
 		extensionField.setEditable(flag);
 	}
 	

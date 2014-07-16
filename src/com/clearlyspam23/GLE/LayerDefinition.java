@@ -3,7 +3,7 @@ package com.clearlyspam23.GLE;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.LayerTemplate;
 
-public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplate> {
+public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplate> implements Nameable{
 	
 	public abstract T getLayerComponent();
 	
@@ -21,7 +21,5 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 	 * @param template
 	 */
 	public abstract void setGUITo(T gui, E template);
-	
-	public abstract String getTypeName();
 
 }

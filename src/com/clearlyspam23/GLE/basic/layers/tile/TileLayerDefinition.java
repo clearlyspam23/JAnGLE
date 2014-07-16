@@ -13,7 +13,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	private List<TileConstraint> constraints;
 
 	@Override
-	public String getTypeName() {
+	public String getName() {
 		return "Tile";
 	}
 
