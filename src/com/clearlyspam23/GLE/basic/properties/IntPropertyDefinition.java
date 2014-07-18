@@ -17,7 +17,7 @@ public class IntPropertyDefinition extends PropertyDefinition<IntegerPanel, IntP
 
 	@Override
 	public IntPropertyTemplate buildFromGUI(IntegerPanel gui, String name) {
-		return null;
+		return new IntPropertyTemplate(name, 0, 50, 50);
 	}
 
 	@Override

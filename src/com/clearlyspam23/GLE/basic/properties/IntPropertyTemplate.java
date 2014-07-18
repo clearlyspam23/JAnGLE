@@ -5,7 +5,6 @@ import com.clearlyspam23.GLE.basic.gui.properties.IntegerComponent;
 
 public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Integer> {
 	
-	private String name;
 	private int def;
 	private int min;
 	private int max;
@@ -15,15 +14,10 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	}
 	
 	public IntPropertyTemplate(String name, int def, int min, int max){
-		this.name = name;
+		setName(name);
 		this.def = def;
 		this.min = min;
 		this.max = max;
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override

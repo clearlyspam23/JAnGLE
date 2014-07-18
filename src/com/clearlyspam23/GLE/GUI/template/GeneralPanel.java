@@ -4,10 +4,12 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -17,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.CompressionFormat;
@@ -24,9 +27,14 @@ import com.clearlyspam23.GLE.CoordinateSystem;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.PropertyDefinition;
+import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Serializer;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.basic.gui.properties.IntegerPanel;
+import com.clearlyspam23.GLE.GUI.SubPanel;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.ListSelectionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -48,11 +56,27 @@ public class GeneralPanel extends TemplateSubPanel{
 	private JButton browseButton;
 	private JTextField extensionField;
 	private JPanel propsPanel;
+	private JList<String> propsList;
+	
+	private List<SubPanel> propertiesPanels = new ArrayList<SubPanel>();
+	private List<PropPair> activeProperties = new ArrayList<PropPair>();
 	
 	private final JComboBox<String> coordBox;
 	private final JComboBox<String> propsTypeField;
 	private final JComboBox<String> serializerBox;
 	private final JComboBox<String> compressionBox;
+	
+	private PropPair currentProp;
+	private SubPanel currentPanel;
+	
+	private DefaultListModel<String> propsListModel;
+	
+	private class PropPair{
+		@SuppressWarnings("rawtypes")
+		public PropertyTemplate prop;
+		@SuppressWarnings("rawtypes")
+		public PropertyDefinition def;
+	}
 	
 	public GeneralPanel(PluginManager pluginManager) {
 		super(pluginManager);
@@ -71,6 +95,10 @@ public class GeneralPanel extends TemplateSubPanel{
 		this.possibleCompressions = pluginManager.getRecognizedCompressions();
 		this.possibleSerializers = pluginManager.getRecognizedSerializers();
 		this.possibleProperties = pluginManager.getRecognizedProperties();
+		
+		for(PropertyDefinition<?, ?> p : possibleProperties){
+			propertiesPanels.add(p.getLayerComponent());
+		}
 		
 		
 		coordBox = new JComboBox<String>();
@@ -142,6 +170,20 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(lblProperties);
 		
 		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int i = activeProperties.size();
+				String defName = "Prop"+i;
+				while(!isNameUnique(defName)){
+					i++;
+					defName = "Prop"+i;
+				}
+				activeProperties.add(new PropPair());
+				propsListModel.addElement(defName);
+				propsList.setSelectedIndex(propsListModel.getSize()-1);
+				propsNameField.setText(defName);
+			}
+		});
 		btnAdd.setBounds(114, 516, 76, 23);
 		add(btnAdd);
 		
@@ -154,6 +196,13 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(lblName);
 		
 		propsNameField = new JTextField();
+		propsNameField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(propsList.getSelectedIndex()>=0)
+					propsListModel.set(propsList.getSelectedIndex(), propsNameField.getText());
+			}
+		});
 		propsNameField.setBounds(325, 294, 172, 20);
 		add(propsNameField);
 		propsNameField.setColumns(10);
@@ -170,7 +219,16 @@ public class GeneralPanel extends TemplateSubPanel{
 		scrollPane.setBounds(85, 295, 191, 209);
 		add(scrollPane);
 		
-		JList propsList = new JList();
+		propsList = new JList<String>();
+		propsList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				System.out.println("call");
+				checkPropsList();
+			}
+		});
+		propsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		propsListModel = new DefaultListModel<String>();
+		propsList.setModel(propsListModel);
 		scrollPane.setViewportView(propsList);
 		
 		JLabel lblOutputFormat = new JLabel("Level Format");
@@ -185,7 +243,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsPanel.setBounds(286, 347, 211, 157);
 		add(propsPanel);
 		propsPanel.setLayout(new BoxLayout(propsPanel, BoxLayout.X_AXIS));
-		propsPanel.add(new IntegerPanel());
 		
 		JLabel lblExtension = new JLabel("Level Extension");
 		lblExtension.setBounds(20, 205, 84, 14);
@@ -220,6 +277,15 @@ public class GeneralPanel extends TemplateSubPanel{
 		setModelTo(propsTypeField, possibleProperties);
 		
 		checkCustomExtension(chckbxUseCustomExtension.isSelected());
+		checkPropsList();
+	}
+	
+	private boolean isNameUnique(String name){
+		for(PropPair p : activeProperties){
+			if(p.prop!=null&&name.equals(p.prop.getName()))
+				return false;
+		}
+		return true;
 	}
 	
 	private void setModelTo(JComboBox<String> box, List<? extends Nameable> namedList){
@@ -281,6 +347,33 @@ public class GeneralPanel extends TemplateSubPanel{
 			trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
 			trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
 		}
+	}
+	
+	private void checkPropsList(){
+		System.out.println(propsList.getSelectedIndex());
+		boolean shouldBeEnabled = propsList.getSelectedIndex()>=0;
+		if(currentProp!=null){
+			buildCurrentProp();
+		}
+		propsPanel.removeAll();
+		propsTypeField.setEnabled(shouldBeEnabled);
+		propsNameField.setEnabled(shouldBeEnabled);
+		if(shouldBeEnabled){
+			currentProp = activeProperties.get(propsList.getSelectedIndex());
+			if(currentProp.def!=null){
+				propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.def));
+				propsNameField.setText(currentProp.prop.getName());
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void buildCurrentProp(){
+		currentProp.def = possibleProperties.get(propsTypeField.getSelectedIndex());
+		String text = propsNameField.getText();
+		currentProp.prop = currentProp.def.buildFromGUI(currentPanel, text);
+		propsListModel.set(activeProperties.indexOf(currentProp), currentProp.prop.getName());
+		System.out.println("building a property with type: " + currentProp.def.getName() + " and name: " + currentProp.prop.getName());
 	}
 
 	@Override
