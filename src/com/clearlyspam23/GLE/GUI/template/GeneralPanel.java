@@ -3,6 +3,8 @@ package com.clearlyspam23.GLE.GUI.template;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.CompressionFormat;
@@ -31,10 +35,6 @@ import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Serializer;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -49,7 +49,8 @@ public class GeneralPanel extends TemplateSubPanel{
 	private List<CoordinateSystem> possibleCoordinates;
 	private List<CompressionFormat> possibleCompressions;
 	private List<Serializer> possibleSerializers;
-	private List<PropertyDefinition<?, ?>> possibleProperties;
+	@SuppressWarnings("rawtypes")
+	private List<PropertyDefinition> possibleProperties;
 	private JTextField nameField;
 	private JTextField locationField;
 	private JTextField propsNameField;
@@ -59,24 +60,36 @@ public class GeneralPanel extends TemplateSubPanel{
 	private JList<String> propsList;
 	
 	private List<SubPanel> propertiesPanels = new ArrayList<SubPanel>();
-	private List<PropPair> activeProperties = new ArrayList<PropPair>();
+	private List<PropWrapper> activeProperties = new ArrayList<PropWrapper>();
 	
 	private final JComboBox<String> coordBox;
 	private final JComboBox<String> propsTypeField;
 	private final JComboBox<String> serializerBox;
 	private final JComboBox<String> compressionBox;
 	
-	private PropPair currentProp;
-	private SubPanel currentPanel;
+	private PropWrapper currentProp;
 	
 	private DefaultListModel<String> propsListModel;
 	
-	private class PropPair{
+	private class PropWrapper{
 		@SuppressWarnings("rawtypes")
 		public PropertyTemplate prop;
+		
 		@SuppressWarnings("rawtypes")
-		public PropertyDefinition def;
+		public PropWrapper(PropertyTemplate prop){
+			this.prop = prop;
+		}
 	}
+	
+//	private class PropPair{
+//		@SuppressWarnings("rawtypes")
+//		public PropertyTemplate prop;
+//		@SuppressWarnings("rawtypes")
+//		public PropertyDefinition def;
+//		
+//		public PropPair(){
+//		}
+//	}
 	
 	public GeneralPanel(PluginManager pluginManager) {
 		super(pluginManager);
@@ -171,23 +184,42 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent arg0) {
 				int i = activeProperties.size();
 				String defName = "Prop"+i;
-				while(!isNameUnique(defName)){
-					i++;
-					defName = "Prop"+i;
-				}
-				activeProperties.add(new PropPair());
+				PropertyDefinition def = possibleProperties.get(propsTypeField.getSelectedIndex());
+				activeProperties.add(new PropWrapper(def.buildFromGUI(propertiesPanels.get(propsTypeField.getSelectedIndex()), defName)));
 				propsListModel.addElement(defName);
 				propsList.setSelectedIndex(propsListModel.getSize()-1);
 				propsNameField.setText(defName);
+				propsTypeField.setSelectedIndex(propsTypeField.getSelectedIndex());
 			}
 		});
 		btnAdd.setBounds(114, 516, 76, 23);
 		add(btnAdd);
 		
 		JButton btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int i = propsList.getSelectedIndex();
+				currentProp = null;
+				activeProperties.remove(propsList.getSelectedIndex());
+				propsListModel.remove(propsList.getSelectedIndex());
+				if(propsListModel.isEmpty()){
+					propsPanel.removeAll();
+					validate();
+					repaint();
+					propsList.setSelectedIndex(-1);
+				}
+				else{
+					if(i<propsListModel.getSize())
+						propsList.setSelectedIndex(i);
+					else
+						propsList.setSelectedIndex(i-1);
+				}
+			}
+		});
 		btnRemove.setBounds(200, 516, 76, 23);
 		add(btnRemove);
 		
@@ -199,8 +231,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsNameField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(propsList.getSelectedIndex()>=0)
-					propsListModel.set(propsList.getSelectedIndex(), propsNameField.getText());
+				propsListModel.setElementAt(propsNameField.getText(), propsList.getSelectedIndex());
 			}
 		});
 		propsNameField.setBounds(325, 294, 172, 20);
@@ -212,6 +243,15 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(lblType);
 		
 		propsTypeField = new JComboBox<String>();
+		propsTypeField.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent arg0) {
+				propsPanel.removeAll();
+				SubPanel p = propertiesPanels.get(propsTypeField.getSelectedIndex());
+				possibleProperties.get(propsTypeField.getSelectedIndex()).setGUITo(p, currentProp.prop);
+				propsPanel.add(p);
+			}
+		});
 		propsTypeField.setBounds(325, 319, 172, 20);
 		add(propsTypeField);
 		
@@ -222,7 +262,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsList = new JList<String>();
 		propsList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				System.out.println("call");
 				checkPropsList();
 			}
 		});
@@ -278,14 +317,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		checkCustomExtension(chckbxUseCustomExtension.isSelected());
 		checkPropsList();
-	}
-	
-	private boolean isNameUnique(String name){
-		for(PropPair p : activeProperties){
-			if(p.prop!=null&&name.equals(p.prop.getName()))
-				return false;
-		}
-		return true;
 	}
 	
 	private void setModelTo(JComboBox<String> box, List<? extends Nameable> namedList){
@@ -350,30 +381,28 @@ public class GeneralPanel extends TemplateSubPanel{
 	}
 	
 	private void checkPropsList(){
-		System.out.println(propsList.getSelectedIndex());
 		boolean shouldBeEnabled = propsList.getSelectedIndex()>=0;
 		if(currentProp!=null){
 			buildCurrentProp();
+			propsListModel.setElementAt(propsNameField.getText(), activeProperties.indexOf(currentProp));
 		}
 		propsPanel.removeAll();
 		propsTypeField.setEnabled(shouldBeEnabled);
 		propsNameField.setEnabled(shouldBeEnabled);
 		if(shouldBeEnabled){
 			currentProp = activeProperties.get(propsList.getSelectedIndex());
-			if(currentProp.def!=null){
-				propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.def));
-				propsNameField.setText(currentProp.prop.getName());
-			}
+			propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.prop.getDefinition()));
+			propsNameField.setText(currentProp.prop.getName());
 		}
+		else
+			propsNameField.setText("");
+		validate();
 	}
 	
 	@SuppressWarnings("unchecked")
 	private void buildCurrentProp(){
-		currentProp.def = possibleProperties.get(propsTypeField.getSelectedIndex());
 		String text = propsNameField.getText();
-		currentProp.prop = currentProp.def.buildFromGUI(currentPanel, text);
-		propsListModel.set(activeProperties.indexOf(currentProp), currentProp.prop.getName());
-		System.out.println("building a property with type: " + currentProp.def.getName() + " and name: " + currentProp.prop.getName());
+		currentProp.prop = possibleProperties.get(propsTypeField.getSelectedIndex()).buildFromGUI((SubPanel) propsPanel.getComponent(0), text);
 	}
 
 	@Override
@@ -395,5 +424,11 @@ public class GeneralPanel extends TemplateSubPanel{
 	public void reset() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<String> verify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

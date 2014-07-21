@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
-import com.clearlyspam23.GLE.GUI.util.VectorPanel;
+import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -47,7 +47,7 @@ public class TileLayerGUIOptions extends SubPanel {
 		add(scrollPane);
 		add(btnRemove);
 		
-		VectorPanel vectorPanel = new VectorPanel();
+		VectorComponent vectorPanel = new VectorComponent();
 		vectorPanel.setBounds(106, 15, 198, 20);
 		add(vectorPanel);
 	}

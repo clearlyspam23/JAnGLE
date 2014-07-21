@@ -9,15 +9,15 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	private int min;
 	private int max;
 	
-	public IntPropertyTemplate(){
-		
+	public IntPropertyTemplate(String name, IntPropertyDefinition def){
+		super(name, def);
 	}
 	
-	public IntPropertyTemplate(String name, int def, int min, int max){
-		setName(name);
-		this.def = def;
-		this.min = min;
-		this.max = max;
+	public IntPropertyTemplate(String name, IntPropertyDefinition def, int defa, int min, int max){
+		super(name, def);
+		this.setDefault(defa);
+		this.setMin(min);
+		this.setMax(max);
 	}
 
 	@Override
@@ -33,6 +33,30 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	@Override
 	public Integer getValueFrom(IntegerComponent component) {
 		return null;
+	}
+
+	public int getDefault() {
+		return def;
+	}
+
+	public void setDefault(int def) {
+		this.def = def;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 }

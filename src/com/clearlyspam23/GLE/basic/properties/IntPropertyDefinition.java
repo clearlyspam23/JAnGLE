@@ -17,12 +17,14 @@ public class IntPropertyDefinition extends PropertyDefinition<IntegerPanel, IntP
 
 	@Override
 	public IntPropertyTemplate buildFromGUI(IntegerPanel gui, String name) {
-		return new IntPropertyTemplate(name, 0, 50, 50);
+		return new IntPropertyTemplate(name, this, gui.getDefault(), gui.getMin(), gui.getMax());
 	}
 
 	@Override
-	public String setGUITo(IntegerPanel gui, IntPropertyTemplate template) {
-		return null;
+	public void setGUITo(IntegerPanel gui, IntPropertyTemplate template) {
+		gui.setDefault(template.getDefault());
+		gui.setMin(template.getMin());
+		gui.setMax(template.getMax());
 	}
 
 }

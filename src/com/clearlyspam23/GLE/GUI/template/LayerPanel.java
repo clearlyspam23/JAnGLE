@@ -25,7 +25,8 @@ public class LayerPanel extends TemplateSubPanel{
 	private JScrollPane scrollPane;
 	private JComboBox<String> comboBox;
 	
-	private List<LayerDefinition<?, ?>> knownLayerDefs;
+	@SuppressWarnings("rawtypes")
+	private List<LayerDefinition> knownLayerDefs;
 
 	/**
 	 * Create the panel.
@@ -123,6 +124,12 @@ public class LayerPanel extends TemplateSubPanel{
 	public void reset() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<String> verify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

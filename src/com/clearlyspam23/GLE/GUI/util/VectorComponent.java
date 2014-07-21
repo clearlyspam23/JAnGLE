@@ -6,7 +6,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class VectorPanel extends Container {
+public class VectorComponent extends Container {
 	/**
 	 * 
 	 */
@@ -17,7 +17,7 @@ public class VectorPanel extends Container {
 	/**
 	 * Create the panel.
 	 */
-	public VectorPanel() {
+	public VectorComponent() {
 		setLayout(null);
 		setPreferredSize(new Dimension(198, 20));
 		

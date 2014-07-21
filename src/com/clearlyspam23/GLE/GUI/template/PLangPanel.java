@@ -39,7 +39,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	private JList<String> list_1;
 	private DefaultListModel<String> list_1_model;
 	
-	private List<PLanguageOptions<?>> recognizedLanguages;
+	private List<PLanguageOptions> recognizedLanguages;
 	
 	private PLangSubPanel[] panels;
 	
@@ -248,6 +248,12 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	public void reset() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<String> verify() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

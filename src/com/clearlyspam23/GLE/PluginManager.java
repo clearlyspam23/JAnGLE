@@ -6,19 +6,23 @@ import java.util.List;
 public class PluginManager {
 	
 	private List<CoordinateSystem> recognizedCoordinateSystems = new ArrayList<CoordinateSystem>();
-	private List<PLanguageOptions<?>> recognizedProgrammingLanguages = new ArrayList<PLanguageOptions<?>>();
+	@SuppressWarnings("rawtypes")
+	private List<PLanguageOptions> recognizedProgrammingLanguages = new ArrayList<PLanguageOptions>();
 	private List<ParameterMacro> recognizedMacros = new ArrayList<ParameterMacro>();
-	private List<LayerDefinition<?, ?>> recognizedLayerDefs = new ArrayList<LayerDefinition<?, ?>>();
+	@SuppressWarnings("rawtypes")
+	private List<LayerDefinition> recognizedLayerDefs = new ArrayList<LayerDefinition>();
 	private List<CompressionFormat> recognizedCompressions = new ArrayList<CompressionFormat>();
 	private List<Serializer> recognizedSerializers = new ArrayList<Serializer>();
-	private List<PropertyDefinition<?, ?>> recognizedProperties = new ArrayList<PropertyDefinition<?, ?>>();
+	@SuppressWarnings("rawtypes")
+	private List<PropertyDefinition> recognizedProperties = new ArrayList<PropertyDefinition>();
 	public List<CoordinateSystem> getRecognizedCoordinateSystems() {
 		return recognizedCoordinateSystems;
 	}
 	public void addCoordinateSystems(CoordinateSystem s) {
 		recognizedCoordinateSystems.add(s);
 	}
-	public List<PLanguageOptions<?>> getRecognizedProgrammingLanguages() {
+	@SuppressWarnings("rawtypes")
+	public List<PLanguageOptions> getRecognizedProgrammingLanguages() {
 		return recognizedProgrammingLanguages;
 	}
 	public void addProgrammingLanguage(PLanguageOptions<?> pLang) {
@@ -30,7 +34,8 @@ public class PluginManager {
 	public void addMacro(ParameterMacro macro) {
 		recognizedMacros.add(macro);
 	}
-	public List<LayerDefinition<?, ?>> getRecognizedLayerDefs() {
+	@SuppressWarnings("rawtypes")
+	public List<LayerDefinition> getRecognizedLayerDefs() {
 		return recognizedLayerDefs;
 	}
 	public void setRecognizedLayerDefs(LayerDefinition<?, ?> layerDef) {
@@ -48,7 +53,8 @@ public class PluginManager {
 	public void addSerializer(Serializer serializer) {
 		recognizedSerializers.add(serializer);
 	}
-	public List<PropertyDefinition<?, ?>> getRecognizedProperties() {
+	@SuppressWarnings("rawtypes")
+	public List<PropertyDefinition> getRecognizedProperties() {
 		return recognizedProperties;
 	}
 	public void addProperty(PropertyDefinition<?, ?> property) {

@@ -1,21 +1,48 @@
 package com.clearlyspam23.GLE.basic.gui.properties;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
 
 public class IntegerPanel extends SubPanel{
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField minField;
+	private JTextField maxField;
+	private JTextField defaultField;
 	public IntegerPanel() {
+		
+		DocumentFilter filter = new DocumentFilter() {
+		    @Override
+		    public void insertString(FilterBypass fb, int off, String str, AttributeSet attr) 
+		        throws BadLocationException 
+		    {
+		    	String current = fb.getDocument().getText(0, 1);
+		    	if(off==0&&str.length()>0&&str.charAt(0)=='-'&&(current.length()<=0||current.charAt(0)!='-')){
+		    		fb.insertString(off++, str.substring(0, 1), attr);
+		    		str = str.substring(1);
+		    	}
+		        fb.insertString(off, str.replaceAll("\\D++", ""), attr);  // remove non-digits
+		    } 
+		    @Override
+		    public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) 
+		        throws BadLocationException 
+		    {
+		    	String current = fb.getDocument().getText(0, 1);
+		    	if(off==0&&str.length()>0&&str.charAt(0)=='-'&&(current.length()<=0||current.charAt(0)!='-')){
+		    		fb.insertString(off++, str.substring(0, 1), attr);
+		    		str = str.substring(1);
+		    	}
+		        fb.replace(off, len, str.replaceAll("\\D++", ""), attr);  // remove non-digits
+		    }
+		};
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{80, 60, 0};
 		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0};
@@ -31,14 +58,17 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblValue.gridy = 0;
 		add(lblValue, gbc_lblValue);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.insets = new Insets(0, 0, 5, 0);
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridx = 1;
-		gbc_textField.gridy = 0;
-		add(textField, gbc_textField);
-		textField.setColumns(10);
+		minField = new JTextField();
+		PlainDocument doc = new PlainDocument();
+		doc.setDocumentFilter(filter);
+		minField.setDocument(doc);
+		GridBagConstraints gbc_minField = new GridBagConstraints();
+		gbc_minField.insets = new Insets(0, 0, 5, 0);
+		gbc_minField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_minField.gridx = 1;
+		gbc_minField.gridy = 0;
+		add(minField, gbc_minField);
+		minField.setColumns(10);
 		
 		JLabel lblMaxValue = new JLabel("Max Value");
 		GridBagConstraints gbc_lblMaxValue = new GridBagConstraints();
@@ -48,14 +78,17 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblMaxValue.gridy = 1;
 		add(lblMaxValue, gbc_lblMaxValue);
 		
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 1;
-		gbc_textField_1.gridy = 1;
-		add(textField_1, gbc_textField_1);
-		textField_1.setColumns(10);
+		maxField = new JTextField();
+		doc = new PlainDocument();
+		doc.setDocumentFilter(filter);
+		maxField.setDocument(doc);
+		GridBagConstraints gbc_maxField = new GridBagConstraints();
+		gbc_maxField.insets = new Insets(0, 0, 5, 0);
+		gbc_maxField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_maxField.gridx = 1;
+		gbc_maxField.gridy = 1;
+		add(maxField, gbc_maxField);
+		maxField.setColumns(10);
 		
 		JLabel lblDefaultValue = new JLabel("Default Value");
 		GridBagConstraints gbc_lblDefaultValue = new GridBagConstraints();
@@ -65,13 +98,48 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblDefaultValue.gridy = 2;
 		add(lblDefaultValue, gbc_lblDefaultValue);
 		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.gridx = 1;
-		gbc_textField_2.gridy = 2;
-		add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		defaultField = new JTextField();
+		doc = new PlainDocument();
+		doc.setDocumentFilter(filter);
+		defaultField.setDocument(doc);
+		GridBagConstraints gbc_defaultField = new GridBagConstraints();
+		gbc_defaultField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_defaultField.gridx = 1;
+		gbc_defaultField.gridy = 2;
+		add(defaultField, gbc_defaultField);
+		defaultField.setColumns(10);
+		
+		setMin(0);
+		setMax(255);
+		setDefault(0);
+	}
+	
+	public int getMin(){
+		if(minField.getText().length()<=0)
+			return 0;
+		return Integer.parseInt(minField.getText());
+	}
+	
+	public int getMax(){
+		if(maxField.getText().length()<=0)
+			return 0;
+		return Integer.parseInt(maxField.getText());
+	}
+	
+	public int getDefault(){
+		if(defaultField.getText().length()<=0)
+			return 0;
+		return Integer.parseInt(defaultField.getText());
+	}
+	
+	public void setMin(int min){
+		minField.setText(Integer.toString(min));
+	}
+	public void setMax(int max){
+		maxField.setText(Integer.toString(max));
+	}
+	public void setDefault(int def){
+		defaultField.setText(Integer.toString(def));
 	}
 	@Override
 	public void reset() {
