@@ -25,6 +25,12 @@ public class FloatDocumentFilter extends DocumentFilter {
     	}
     	else if(i>=0&&current.indexOf('.')>=0)
     		str = str.replaceAll("\\.", "");
+    	if("0".equals(current)||"-0".equals(current)){
+    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
+    			str = str.substring(1);
+    		fb.remove(current.length()-1, 1);
+    		off-=1;
+    	}
         fb.insertString(off, str.replaceAll("\\D++", ""), attr);  // remove non-digits
     } 
     @Override
@@ -46,6 +52,12 @@ public class FloatDocumentFilter extends DocumentFilter {
     	}
     	else if(i>=0&&current.indexOf('.')>=0)
     		str = str.replaceAll("\\.", "");
+    	if("0".equals(current)||"-0".equals(current)){
+    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
+    			str = str.substring(1);
+    		fb.remove(current.length()-1, 1);
+    		off-=1;
+    	}
         fb.replace(off, len, str.replaceAll("\\D++", ""), attr);  // remove non-digits
     }
 

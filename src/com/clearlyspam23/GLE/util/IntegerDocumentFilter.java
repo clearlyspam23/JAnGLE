@@ -15,11 +15,12 @@ public class IntegerDocumentFilter extends DocumentFilter {
     		fb.insertString(off++, str.substring(0, 1), attr);
     		str = str.substring(1);
     	}
-//    	if("0".equals(current)||"-0".equals(current)){
-//    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
-//    			str = str.substring(1);
-//    		fb.replace(fb.getDocument().getLength()-1, 1, "", attr);
-//    	}
+    	if("0".equals(current)||"-0".equals(current)){
+    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
+    			str = str.substring(1);
+    		fb.remove(current.length()-1, 1);
+    		off-=1;
+    	}
         fb.insertString(off, str.replaceAll("\\D++", ""), attr);  // remove non-digits
     } 
     @Override
@@ -31,11 +32,12 @@ public class IntegerDocumentFilter extends DocumentFilter {
     		fb.insertString(off++, str.substring(0, 1), attr);
     		str = str.substring(1);
     	}
-//    	if("0".equals(current)||"-0".equals(current)){
-//    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
-//    			str = str.substring(1);
-//    		fb.replace(fb.getDocument().getLength()-1, 1, "", attr);
-//    	}
+    	if("0".equals(current)||"-0".equals(current)){
+    		while(str.length()>1&&"00".equals(str.substring(0, 2)))
+    			str = str.substring(1);
+    		fb.remove(current.length()-1, 1);
+    		off-=1;
+    	}
         fb.replace(off, len, str.replaceAll("\\D++", ""), attr);  // remove non-digits
     }
 
