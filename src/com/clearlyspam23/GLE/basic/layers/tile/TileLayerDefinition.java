@@ -5,11 +5,11 @@ import java.util.List;
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
-import com.clearlyspam23.GLE.util.Vector2f;
+import com.clearlyspam23.GLE.util.Vector2;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
-	private Vector2f gridDimensions;
+	private Vector2 gridDimensions;
 	private List<TileConstraint> constraints;
 
 	@Override

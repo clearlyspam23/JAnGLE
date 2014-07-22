@@ -111,6 +111,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		for(PropertyDefinition<?, ?> p : possibleProperties){
 			propertiesPanels.add(p.getLayerComponent());
+			System.out.println(p.getLayerComponent());
 		}
 		
 		
@@ -203,20 +204,22 @@ public class GeneralPanel extends TemplateSubPanel{
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int i = propsList.getSelectedIndex();
-				currentProp = null;
-				activeProperties.remove(propsList.getSelectedIndex());
-				propsListModel.remove(propsList.getSelectedIndex());
-				if(propsListModel.isEmpty()){
-					propsPanel.removeAll();
-					validate();
-					repaint();
-					propsList.setSelectedIndex(-1);
-				}
-				else{
-					if(i<propsListModel.getSize())
-						propsList.setSelectedIndex(i);
-					else
-						propsList.setSelectedIndex(i-1);
+				if(i>=0){
+					currentProp = null;
+					activeProperties.remove(propsList.getSelectedIndex());
+					propsListModel.remove(propsList.getSelectedIndex());
+					if(propsListModel.isEmpty()){
+						propsPanel.removeAll();
+						validate();
+						repaint();
+						propsList.setSelectedIndex(-1);
+					}
+					else{
+						if(i<propsListModel.getSize())
+							propsList.setSelectedIndex(i);
+						else
+							propsList.setSelectedIndex(i-1);
+					}
 				}
 			}
 		});
@@ -248,8 +251,9 @@ public class GeneralPanel extends TemplateSubPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				propsPanel.removeAll();
 				SubPanel p = propertiesPanels.get(propsTypeField.getSelectedIndex());
-				possibleProperties.get(propsTypeField.getSelectedIndex()).setGUITo(p, currentProp.prop);
 				propsPanel.add(p);
+				validate();
+				repaint();
 			}
 		});
 		propsTypeField.setBounds(325, 319, 172, 20);

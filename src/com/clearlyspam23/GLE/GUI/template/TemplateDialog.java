@@ -25,6 +25,7 @@ import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
+import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
 
 import java.awt.GridLayout;
@@ -69,6 +70,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			manager.addMacro(new CurrentLevelMacro());
 			
 			manager.addProperty(new IntPropertyDefinition());
+			manager.addProperty(new VectorPropertyDefinition());
 			
 			manager.addCompression(new NoCompression());
 			

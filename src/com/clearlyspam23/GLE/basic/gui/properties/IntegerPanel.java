@@ -6,12 +6,11 @@ import java.awt.Insets;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.util.IntegerDocumentFilter;
 
 public class IntegerPanel extends SubPanel{
 	private JTextField minField;
@@ -19,30 +18,7 @@ public class IntegerPanel extends SubPanel{
 	private JTextField defaultField;
 	public IntegerPanel() {
 		
-		DocumentFilter filter = new DocumentFilter() {
-		    @Override
-		    public void insertString(FilterBypass fb, int off, String str, AttributeSet attr) 
-		        throws BadLocationException 
-		    {
-		    	String current = fb.getDocument().getText(0, 1);
-		    	if(off==0&&str.length()>0&&str.charAt(0)=='-'&&(current.length()<=0||current.charAt(0)!='-')){
-		    		fb.insertString(off++, str.substring(0, 1), attr);
-		    		str = str.substring(1);
-		    	}
-		        fb.insertString(off, str.replaceAll("\\D++", ""), attr);  // remove non-digits
-		    } 
-		    @Override
-		    public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) 
-		        throws BadLocationException 
-		    {
-		    	String current = fb.getDocument().getText(0, 1);
-		    	if(off==0&&str.length()>0&&str.charAt(0)=='-'&&(current.length()<=0||current.charAt(0)!='-')){
-		    		fb.insertString(off++, str.substring(0, 1), attr);
-		    		str = str.substring(1);
-		    	}
-		        fb.replace(off, len, str.replaceAll("\\D++", ""), attr);  // remove non-digits
-		    }
-		};
+		DocumentFilter filter = new IntegerDocumentFilter();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{80, 60, 0};
 		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0};

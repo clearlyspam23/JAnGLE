@@ -7,23 +7,24 @@ public class VectorPropertyDefinition extends PropertyDefinition<VectorPanel, Ve
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Vector";
 	}
 
 	@Override
 	public VectorPanel getLayerComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return new VectorPanel();
 	}
 
 	@Override
 	public VectorPropertyTemplate buildFromGUI(VectorPanel gui, String name) {
-		return new VectorPropertyTemplate(name, this);
+		return new VectorPropertyTemplate(name, this, gui.getMinVector(), gui.getMaxVector(), gui.getDefaultVector());
 	}
 
 	@Override
 	public void setGUITo(VectorPanel gui, VectorPropertyTemplate template) {
+		gui.setMinVector(template.getMin());
+		gui.setMaxVector(template.getMax());
+		gui.setDefaultVector(template.getDefault());
 	}
 
 }
