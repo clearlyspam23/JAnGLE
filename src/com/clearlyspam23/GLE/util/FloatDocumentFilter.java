@@ -58,7 +58,7 @@ public class FloatDocumentFilter extends DocumentFilter {
     	    	off = Math.max(0, off-1);
         	}
     	}
-        fb.insertString(off, str.replaceAll("\\D++", ""), attr);  // remove non-digits
+    	fb.replace(off, len, str.replaceAll("\\D++", ""), attr);  // remove non-digits
     }
 
 }
