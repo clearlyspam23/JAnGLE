@@ -9,5 +9,7 @@ public abstract class PropertyDefinition<T extends SubPanel, E extends PropertyT
 	public abstract E buildFromGUI(T gui, String name);
 	
 	public abstract void setGUITo(T gui, E template);
+	
+	public abstract Class<E> getLayerClass();
 
 }

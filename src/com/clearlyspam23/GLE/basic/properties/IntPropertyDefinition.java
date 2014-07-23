@@ -27,4 +27,9 @@ public class IntPropertyDefinition extends PropertyDefinition<IntegerPanel, IntP
 		gui.setMax(template.getMax());
 	}
 
+	@Override
+	public Class<IntPropertyTemplate> getLayerClass() {
+		return IntPropertyTemplate.class;
+	}
+
 }

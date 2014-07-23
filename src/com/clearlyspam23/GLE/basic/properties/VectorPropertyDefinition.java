@@ -27,4 +27,9 @@ public class VectorPropertyDefinition extends PropertyDefinition<VectorPanel, Ve
 		gui.setDefaultVector(template.getDefault());
 	}
 
+	@Override
+	public Class<VectorPropertyTemplate> getLayerClass() {
+		return VectorPropertyTemplate.class;
+	}
+
 }

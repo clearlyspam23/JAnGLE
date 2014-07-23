@@ -5,14 +5,14 @@ import java.util.List;
 
 public abstract class PropertyTemplate<T extends Component, E> implements Nameable{
 	
-	private final String name;
+	private String name;
 	@SuppressWarnings("rawtypes")
-	private final PropertyDefinition def;
+	private final PropertyDefinition definition;
 	
 	@SuppressWarnings("rawtypes")
 	public PropertyTemplate(String name, PropertyDefinition def){
 		this.name = name;
-		this.def = def;
+		this.definition = def;
 	}
 	
 	public final String getName(){
@@ -21,7 +21,7 @@ public abstract class PropertyTemplate<T extends Component, E> implements Nameab
 	
 	@SuppressWarnings("rawtypes")
 	public final PropertyDefinition getDefinition(){
-		return def;
+		return definition;
 	}
 	
 	public abstract T getEditorComponent();

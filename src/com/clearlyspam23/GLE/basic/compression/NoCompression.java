@@ -1,6 +1,6 @@
 package com.clearlyspam23.GLE.basic.compression;
 
-import com.clearlyspam23.GLE.CompressionFormat;
+import com.clearlyspam23.GLE.template.CompressionFormat;
 
 public class NoCompression extends CompressionFormat{
 

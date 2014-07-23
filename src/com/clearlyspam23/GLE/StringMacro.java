@@ -1,5 +1,7 @@
 package com.clearlyspam23.GLE;
 
+import com.clearlyspam23.GLE.template.ParameterMacro;
+
 public class StringMacro extends ParameterMacro
 {
 	

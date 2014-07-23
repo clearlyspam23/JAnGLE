@@ -84,10 +84,7 @@ public class IntegerPanel extends SubPanel{
 		gbc_defaultField.gridy = 2;
 		add(defaultField, gbc_defaultField);
 		defaultField.setColumns(10);
-		
-		setMin(0);
-		setMax(255);
-		setDefault(0);
+	
 	}
 	
 	public int getMin(){
@@ -119,7 +116,9 @@ public class IntegerPanel extends SubPanel{
 	}
 	@Override
 	public void reset() {
-		
+		setMin(0);
+		setMax(255);
+		setDefault(0);
 	}
 
 }

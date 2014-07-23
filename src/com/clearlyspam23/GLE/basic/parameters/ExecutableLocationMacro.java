@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE.basic.parameters;
 
 import com.clearlyspam23.GLE.JAnGLEData;
-import com.clearlyspam23.GLE.ParameterMacro;
+import com.clearlyspam23.GLE.template.ParameterMacro;
 
 public class ExecutableLocationMacro extends ParameterMacro {
 

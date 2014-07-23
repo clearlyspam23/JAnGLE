@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import com.clearlyspam23.GLE.CoordinateSystem;
+import com.clearlyspam23.GLE.template.CoordinateSystem;
 
 public class TopLeft extends CoordinateSystem {
 	

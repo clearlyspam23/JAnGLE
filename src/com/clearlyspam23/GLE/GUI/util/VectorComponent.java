@@ -100,8 +100,8 @@ public class VectorComponent extends JPanel {
 		textField1.setText(format.format(x));
 	}
 	
-	public void setYField(double x){
-		textField2.setText(format.format(x));
+	public void setYField(double y){
+		textField2.setText(format.format(y));
 	}
 	
 	public Vector2 getVector(){

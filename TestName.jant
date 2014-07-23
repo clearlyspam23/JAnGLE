@@ -1,0 +1,27 @@
+{
+  "name": "testName",
+  "runtimeCommand": [],
+  "extension": ".json",
+  "useCustomExtension": false,
+  "useDefaultDirectory": true,
+  "layerTemplates": [],
+  "serializer": "JSON",
+  "compression": "None",
+  "coordinateSystem": "Top Left",
+  "activeProperties": {
+    "Prop0": {
+      "def": 0,
+      "min": 0,
+      "max": 255,
+      "name": "Prop0",
+      "definition": "Integer"
+    },
+    "Prop1": {
+      "def": 0,
+      "min": 50,
+      "max": 255,
+      "name": "Prop1",
+      "definition": "Integer"
+    }
+  }
+}

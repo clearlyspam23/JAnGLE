@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE.basic.languages;
 
-import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.basic.gui.JavaLanguagePanel;
+import com.clearlyspam23.GLE.template.PLanguageOptions;
 
 public class JavaLanguageOptions extends PLanguageOptions<JavaLanguagePanel> {
 

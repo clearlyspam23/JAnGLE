@@ -1,6 +1,10 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.template;
 
-public abstract class Serializer implements Nameable{
+import com.clearlyspam23.GLE.ExportData;
+import com.clearlyspam23.GLE.Level;
+import com.clearlyspam23.GLE.Nameable;
+
+public abstract class LevelSerializer implements Nameable{
 	
 	public abstract String serialize(Level data);
 	public abstract Level deserialize(String data);

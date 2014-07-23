@@ -19,11 +19,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.clearlyspam23.GLE.PLanguageOptions;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.PLangSubPanel;
 import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
+import com.clearlyspam23.GLE.template.PLanguageOptions;
 import com.clearlyspam23.GLE.util.Utility;
 
 public class PLangPanel extends TemplateSubPanel implements ChangeListener{

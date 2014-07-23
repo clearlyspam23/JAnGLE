@@ -2,8 +2,10 @@ package com.clearlyspam23.GLE.GUI.template;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +29,7 @@ import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
-
-import java.awt.GridLayout;
+import com.clearlyspam23.GLE.template.TemplateSerializer;
 
 public class TemplateDialog extends JDialog implements ActionListener{
 
@@ -79,6 +80,14 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			TemplateDialog dialog = new TemplateDialog(manager);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
+			Template t = dialog.getTemplate();
+			TemplateSerializer serializer = new TemplateSerializer(manager);
+			if(t!=null){
+				String s = serializer.serialize(t);
+				PrintWriter w = new PrintWriter(t.getTemplateFile());
+				w.print(s);
+				w.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,6 +97,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	 * Create the dialog.
 	 */
 	public TemplateDialog(PluginManager manager) {
+		setModal(true);
 		
 		//this code should be moved somewhere else eventually
 		subPanels.add(new GeneralPanel(manager));
@@ -134,7 +144,10 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		accepted = false;
 		this.template = template;
 		for(TemplateSubPanel p : subPanels)
-			p.setToTemplate(template);
+			p.reset();
+		if(template!=null)
+			for(TemplateSubPanel p : subPanels)
+				p.setToTemplate(template);
 		setVisible(true);
 	}
 	

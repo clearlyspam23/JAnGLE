@@ -3,6 +3,12 @@ package com.clearlyspam23.GLE;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clearlyspam23.GLE.template.CompressionFormat;
+import com.clearlyspam23.GLE.template.CoordinateSystem;
+import com.clearlyspam23.GLE.template.PLanguageOptions;
+import com.clearlyspam23.GLE.template.ParameterMacro;
+import com.clearlyspam23.GLE.template.LevelSerializer;
+
 public class PluginManager {
 	
 	private List<CoordinateSystem> recognizedCoordinateSystems = new ArrayList<CoordinateSystem>();
@@ -12,7 +18,7 @@ public class PluginManager {
 	@SuppressWarnings("rawtypes")
 	private List<LayerDefinition> recognizedLayerDefs = new ArrayList<LayerDefinition>();
 	private List<CompressionFormat> recognizedCompressions = new ArrayList<CompressionFormat>();
-	private List<Serializer> recognizedSerializers = new ArrayList<Serializer>();
+	private List<LevelSerializer> recognizedSerializers = new ArrayList<LevelSerializer>();
 	@SuppressWarnings("rawtypes")
 	private List<PropertyDefinition> recognizedProperties = new ArrayList<PropertyDefinition>();
 	public List<CoordinateSystem> getRecognizedCoordinateSystems() {
@@ -47,10 +53,10 @@ public class PluginManager {
 	public void addCompression(CompressionFormat compression) {
 		recognizedCompressions.add(compression);
 	}
-	public List<Serializer> getRecognizedSerializers() {
+	public List<LevelSerializer> getRecognizedSerializers() {
 		return recognizedSerializers;
 	}
-	public void addSerializer(Serializer serializer) {
+	public void addSerializer(LevelSerializer serializer) {
 		recognizedSerializers.add(serializer);
 	}
 	@SuppressWarnings("rawtypes")

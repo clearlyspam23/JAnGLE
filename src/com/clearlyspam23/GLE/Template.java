@@ -8,10 +8,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.clearlyspam23.GLE.template.CompressionFormat;
+import com.clearlyspam23.GLE.template.CoordinateSystem;
+import com.clearlyspam23.GLE.template.LevelSerializer;
+import com.clearlyspam23.GLE.template.PLanguageOptions;
+import com.clearlyspam23.GLE.template.ParameterMacro;
+
 public class Template {
 	
 	//meta data
-	private String templateName;
+	private String name;
 	private File templateFile;
 	
 	//Runtime data
@@ -20,16 +26,18 @@ public class Template {
 	private PLanguageOptions usedPLanguage;
 	private Object pLanguageData;
 	
-	//Level Data
+	//General Data
 	private CoordinateSystem coordinateSystem;
-	private Serializer serializer;
-	private String extension;
+	private LevelSerializer serializer;
 	private CompressionFormat compression;
+	private String extension;
+	private boolean useCustomExtension;
+	private boolean useDefaultDirectory;
 	
 	//Layer data
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
-	private Map<String, Class<?>> recognizedProperties = new HashMap<String, Class<?>>();
-	private boolean allowArbitraryProperties = false;
+	@SuppressWarnings("rawtypes")
+	private Map<String, PropertyTemplate> activeProperties = new HashMap<String, PropertyTemplate>();
 	
 	public void addParameter(ParameterMacro macro)
 	{
@@ -81,40 +89,34 @@ public class Template {
 		return l;
 	}
 
-	public boolean allowsArbitraryProperties() {
-		return allowArbitraryProperties;
-	}
-
-	public void allowArbitraryProperties(boolean allowArbitraryProperties) {
-		this.allowArbitraryProperties = allowArbitraryProperties;
-	}
-
-	public Serializer getSerializer() {
+	public LevelSerializer getSerializer() {
 		return serializer;
 	}
 
-	public void setSerializer(Serializer serializer) {
+	public void setSerializer(LevelSerializer serializer) {
 		this.serializer = serializer;
 	}
 
-	public Set<Entry<String, Class<?>>> getProperties() {
-		return recognizedProperties.entrySet();
+	@SuppressWarnings("rawtypes")
+	public Set<Entry<String, PropertyTemplate>> getProperties() {
+		return activeProperties.entrySet();
 	}
 
-	public void addProperty(String name, Class<?> cls) {
-		recognizedProperties.put(name, cls);
+	@SuppressWarnings("rawtypes")
+	public void addProperty(String name, PropertyTemplate tmp) {
+		activeProperties.put(name, tmp);
 	}
 	
-	public boolean isValidProperty(String name, Class<?> cls){
-		return allowArbitraryProperties||(cls!=null&&cls.equals(recognizedProperties.get(name)));
+	public void setPropertyMap(Map<String, PropertyTemplate> map){
+		activeProperties = map;
 	}
 
 	public String getTemplateName() {
-		return templateName;
+		return name;
 	}
 
 	public void setTemplateName(String templateName) {
-		this.templateName = templateName;
+		this.name = templateName;
 	}
 
 	public File getTemplateFile() {
@@ -155,6 +157,22 @@ public class Template {
 
 	public void setCompression(CompressionFormat compression) {
 		this.compression = compression;
+	}
+
+	public boolean isUsingCustomExtension() {
+		return useCustomExtension;
+	}
+
+	public void useCustomExtension(boolean useCustom) {
+		useCustomExtension = useCustom;
+	}
+
+	public boolean isUsingDefaultDirectory() {
+		return useDefaultDirectory;
+	}
+
+	public void useDefaultDirectory(boolean useDefaultDirectory) {
+		this.useDefaultDirectory = useDefaultDirectory;
 	}
 
 }

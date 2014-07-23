@@ -69,8 +69,9 @@ public class VectorPanel extends SubPanel {
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-
+		setMinVector(new Vector2(0, 0));
+		setMaxVector(new Vector2(1000, 1000));
+		setDefaultVector(new Vector2(0, 0));
 	}
 	
 	public Vector2 getMinVector(){

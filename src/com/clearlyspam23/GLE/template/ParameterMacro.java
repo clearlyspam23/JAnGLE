@@ -1,4 +1,6 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.template;
+
+import com.clearlyspam23.GLE.JAnGLEData;
 
 public abstract class ParameterMacro {
 	

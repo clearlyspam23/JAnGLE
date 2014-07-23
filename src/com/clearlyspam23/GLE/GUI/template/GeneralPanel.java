@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -22,19 +23,21 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.clearlyspam23.GLE.CompressionFormat;
-import com.clearlyspam23.GLE.CoordinateSystem;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.PropertyTemplate;
-import com.clearlyspam23.GLE.Serializer;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.template.CompressionFormat;
+import com.clearlyspam23.GLE.template.CoordinateSystem;
+import com.clearlyspam23.GLE.template.LevelSerializer;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -48,7 +51,7 @@ public class GeneralPanel extends TemplateSubPanel{
 	
 	private List<CoordinateSystem> possibleCoordinates;
 	private List<CompressionFormat> possibleCompressions;
-	private List<Serializer> possibleSerializers;
+	private List<LevelSerializer> possibleSerializers;
 	@SuppressWarnings("rawtypes")
 	private List<PropertyDefinition> possibleProperties;
 	private JTextField nameField;
@@ -58,6 +61,8 @@ public class GeneralPanel extends TemplateSubPanel{
 	private JTextField extensionField;
 	private JPanel propsPanel;
 	private JList<String> propsList;
+	private final JCheckBox defaultLocCB;
+	private final JCheckBox chckbxUseCustomExtension;
 	
 	private List<SubPanel> propertiesPanels = new ArrayList<SubPanel>();
 	private List<PropWrapper> activeProperties = new ArrayList<PropWrapper>();
@@ -95,6 +100,8 @@ public class GeneralPanel extends TemplateSubPanel{
 		super(pluginManager);
 		setLayout(null);
 		
+		final String defaultLocation = System.getProperty("user.dir");
+		
 		JLabel label_2 = new JLabel("Coordinate System");
 		label_2.setBounds(20, 140, 117, 14);
 		add(label_2);
@@ -110,8 +117,9 @@ public class GeneralPanel extends TemplateSubPanel{
 		this.possibleProperties = pluginManager.getRecognizedProperties();
 		
 		for(PropertyDefinition<?, ?> p : possibleProperties){
-			propertiesPanels.add(p.getLayerComponent());
-			System.out.println(p.getLayerComponent());
+			SubPanel sp = p.getLayerComponent();
+			sp.reset();
+			propertiesPanels.add(sp);
 		}
 		
 		
@@ -140,6 +148,34 @@ public class GeneralPanel extends TemplateSubPanel{
 		nameField.setBounds(114, 42, 383, 20);
 		add(nameField);
 		nameField.setColumns(10);
+		nameField.getDocument().addDocumentListener(new DocumentListener(){
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				updateText();
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				updateText();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				updateText();
+			}
+			
+			private void updateText(){
+				if(defaultLocCB.isSelected()){
+					StringBuilder text = new StringBuilder(defaultLocation);
+					if(nameField.getText().length()>0){
+						text.append(File.separator).append(nameField.getText()).append(".jant");
+					}
+					locationField.setText(text.toString());
+				}
+			}
+			
+		});
 		
 		JLabel lblFileLocation = new JLabel("Template Location");
 		lblFileLocation.setBounds(20, 77, 99, 14);
@@ -149,6 +185,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		locationField.setBounds(114, 74, 305, 20);
 		add(locationField);
 		locationField.setColumns(10);
+		locationField.setText(defaultLocation);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -168,7 +205,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		browseButton.setBounds(430, 73, 67, 23);
 		add(browseButton);
 		
-		final JCheckBox defaultLocCB = new JCheckBox("Use Default Location");
+		defaultLocCB = new JCheckBox("Use Default Location");
 		defaultLocCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				checkUseDefault((defaultLocCB.isSelected()));
@@ -190,11 +227,11 @@ public class GeneralPanel extends TemplateSubPanel{
 				int i = activeProperties.size();
 				String defName = "Prop"+i;
 				PropertyDefinition def = possibleProperties.get(propsTypeField.getSelectedIndex());
+				//propsTypeField.setSelectedIndex(propsTypeField.getSelectedIndex());
 				activeProperties.add(new PropWrapper(def.buildFromGUI(propertiesPanels.get(propsTypeField.getSelectedIndex()), defName)));
 				propsListModel.addElement(defName);
 				propsList.setSelectedIndex(propsListModel.getSize()-1);
 				propsNameField.setText(defName);
-				propsTypeField.setSelectedIndex(propsTypeField.getSelectedIndex());
 			}
 		});
 		btnAdd.setBounds(114, 516, 76, 23);
@@ -247,10 +284,10 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		propsTypeField = new JComboBox<String>();
 		propsTypeField.addActionListener(new ActionListener() {
-			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent arg0) {
 				propsPanel.removeAll();
 				SubPanel p = propertiesPanels.get(propsTypeField.getSelectedIndex());
+				p.reset();
 				propsPanel.add(p);
 				validate();
 				repaint();
@@ -296,7 +333,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(extensionField);
 		extensionField.setColumns(10);
 		
-		final JCheckBox chckbxUseCustomExtension = new JCheckBox("Use Custom Extension");
+		chckbxUseCustomExtension = new JCheckBox("Use Custom Extension");
 		chckbxUseCustomExtension.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				checkCustomExtension((chckbxUseCustomExtension.isSelected()));
@@ -372,18 +409,49 @@ public class GeneralPanel extends TemplateSubPanel{
 			box.setSelectedIndex(index);
 	}
 	
+	private void buildFromActiveProps(){
+		propsListModel.removeAllElements();
+		for(PropWrapper t : activeProperties){
+			propsListModel.addElement(t.prop.getName());
+		}
+		propsList.setSelectedIndex(activeProperties.size()> 0 ? 0 : -1);
+	}
+	
+	@SuppressWarnings("rawtypes")
 	public void setToTemplate(Template template)
 	{
-		if(template!=null){
-			nameField.setText(template.getTemplateName());
-			locationField.setText(locationField.getText());
-			extensionField.setText(template.getExtension());
-			trySetIndex(template.getCompression(), possibleCompressions, compressionBox);
-			trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
-			trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
+		nameField.setText(template.getTemplateName());
+		locationField.setText(template.getTemplateFile().getAbsolutePath());
+		extensionField.setText(template.getExtension());
+		defaultLocCB.setSelected(template.isUsingDefaultDirectory());
+		chckbxUseCustomExtension.setSelected(template.isUsingCustomExtension());
+		trySetIndex(template.getCompression(), possibleCompressions, compressionBox);
+		trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
+		trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
+		for(Entry<String, PropertyTemplate> t : template.getProperties()){
+			activeProperties.add(new PropWrapper(t.getValue()));
+		}
+		buildFromActiveProps();
+	}
+	
+	@Override
+	public void generateTemplate(Template template) {
+		if(currentProp!=null)
+			buildCurrentProp();
+		template.setTemplateName(nameField.getText());
+		template.setTemplateFile(new File(locationField.getText()));
+		template.setExtension(extensionField.getText());
+		template.useDefaultDirectory(defaultLocCB.isSelected());
+		template.useCustomExtension(chckbxUseCustomExtension.isSelected());
+		template.setCompression(tryGetValue(compressionBox, possibleCompressions));
+		template.setCoordinateSystem(tryGetValue(coordBox, possibleCoordinates));
+		template.setSerializer(tryGetValue(serializerBox, possibleSerializers));
+		for(PropWrapper t : activeProperties){
+			template.addProperty(t.prop.getName(), t.prop);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void checkPropsList(){
 		boolean shouldBeEnabled = propsList.getSelectedIndex()>=0;
 		if(currentProp!=null){
@@ -396,6 +464,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		if(shouldBeEnabled){
 			currentProp = activeProperties.get(propsList.getSelectedIndex());
 			propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.prop.getDefinition()));
+			currentProp.prop.getDefinition().setGUITo((SubPanel) propsPanel.getComponent(0), currentProp.prop);
 			propsNameField.setText(currentProp.prop.getName());
 		}
 		else
@@ -414,15 +483,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		return "Properties";
 	}
 
-	@Override
-	public void generateTemplate(Template template) {
-		template.setTemplateName(nameField.getText());
-		template.setTemplateFile(new File(locationField.getText()));
-		template.setExtension(extensionField.getText());
-		template.setCompression(tryGetValue(compressionBox, possibleCompressions));
-		template.setCoordinateSystem(tryGetValue(coordBox, possibleCoordinates));
-		template.setSerializer(tryGetValue(serializerBox, possibleSerializers));
-	}
 
 	@Override
 	public void reset() {

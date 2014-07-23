@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.clearlyspam23.GLE.ParameterMacro;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
+import com.clearlyspam23.GLE.template.ParameterMacro;
 
 public class ParameterDialog extends JDialog implements ActionListener{
 

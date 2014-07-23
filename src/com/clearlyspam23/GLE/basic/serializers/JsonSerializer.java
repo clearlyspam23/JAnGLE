@@ -5,11 +5,11 @@ import java.util.Map;
 
 import com.clearlyspam23.GLE.ExportData;
 import com.clearlyspam23.GLE.Level;
-import com.clearlyspam23.GLE.Serializer;
+import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class JsonSerializer extends Serializer {
+public class JsonSerializer extends LevelSerializer {
 	
 	private Gson gson;
 	
