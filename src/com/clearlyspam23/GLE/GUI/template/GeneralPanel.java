@@ -222,16 +222,11 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		JButton btnAdd = new JButton("Add");
 		btnAdd.addActionListener(new ActionListener() {
-			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent arg0) {
 				int i = activeProperties.size();
 				String defName = "Prop"+i;
-				PropertyDefinition def = possibleProperties.get(propsTypeField.getSelectedIndex());
-				//propsTypeField.setSelectedIndex(propsTypeField.getSelectedIndex());
-				activeProperties.add(new PropWrapper(def.buildFromGUI(propertiesPanels.get(propsTypeField.getSelectedIndex()), defName)));
 				propsListModel.addElement(defName);
 				propsList.setSelectedIndex(propsListModel.getSize()-1);
-				propsNameField.setText(defName);
 			}
 		});
 		btnAdd.setBounds(114, 516, 76, 23);
@@ -462,6 +457,15 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsTypeField.setEnabled(shouldBeEnabled);
 		propsNameField.setEnabled(shouldBeEnabled);
 		if(shouldBeEnabled){
+			if(propsList.getSelectedIndex()==activeProperties.size()){
+				int i = activeProperties.size();
+				String defName = "Prop"+i;
+				propsNameField.setText(defName);
+				PropertyDefinition def = possibleProperties.get(propsTypeField.getSelectedIndex());
+				SubPanel sub = propertiesPanels.get(propsTypeField.getSelectedIndex());
+				sub.reset();
+				activeProperties.add(new PropWrapper(def.buildFromGUI(sub, defName)));
+			}
 			currentProp = activeProperties.get(propsList.getSelectedIndex());
 			propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.prop.getDefinition()));
 			currentProp.prop.getDefinition().setGUITo((SubPanel) propsPanel.getComponent(0), currentProp.prop);

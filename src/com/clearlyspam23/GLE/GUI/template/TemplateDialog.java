@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
+import com.clearlyspam23.GLE.basic.compression.ZipCompression;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredDown;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
@@ -74,6 +75,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			manager.addProperty(new VectorPropertyDefinition());
 			
 			manager.addCompression(new NoCompression());
+			manager.addCompression(new ZipCompression());
 			
 			manager.addSerializer(new JsonSerializer());
 			

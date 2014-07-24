@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -87,13 +88,23 @@ public class VectorComponent extends JPanel {
 	public double getXField(){
 		if(textField1.getText().length()<=0)
 			return 0;
-		return Double.parseDouble(textField1.getText());
+		try {
+			return format.parse(textField1.getText()).doubleValue();
+		} catch (ParseException e) {
+			//should never happen, thanks java
+		}
+		return 0;
 	}
 	
 	public double getYField(){
 		if(textField2.getText().length()<=0)
 			return 0;
-		return Double.parseDouble(textField2.getText());
+		try {
+			return format.parse(textField2.getText()).doubleValue();
+		} catch (ParseException e) {
+			//should never happen, thanks java
+		}
+		return 0;
 	}
 	
 	public void setXField(double x){
