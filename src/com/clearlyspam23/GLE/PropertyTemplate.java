@@ -3,21 +3,19 @@ package com.clearlyspam23.GLE;
 import java.awt.Component;
 import java.util.List;
 
-public abstract class PropertyTemplate<T extends Component, E> implements Nameable{
+public abstract class PropertyTemplate<T extends Component, E>{
 	
-	private String name;
 	@SuppressWarnings("rawtypes")
 	private final PropertyDefinition definition;
 	
 	@SuppressWarnings("rawtypes")
-	public PropertyTemplate(String name, PropertyDefinition def){
-		this.name = name;
+	public PropertyTemplate(PropertyDefinition def){
 		this.definition = def;
 	}
 	
-	public final String getName(){
-		return name;
-	}
+//	public final String getName(){
+//		return name;
+//	}
 	
 	@SuppressWarnings("rawtypes")
 	public final PropertyDefinition getDefinition(){

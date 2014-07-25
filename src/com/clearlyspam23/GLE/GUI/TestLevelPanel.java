@@ -2,16 +2,11 @@ package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.piccolo2d.PLayer;
@@ -27,10 +22,9 @@ import com.clearlyspam23.GLE.LayerNode;
 import com.clearlyspam23.GLE.LayerNodeListener;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
-import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 
 public class TestLevelPanel extends JPanel implements ComponentListener, LayerNodeListener{
 
@@ -82,9 +76,10 @@ public class TestLevelPanel extends JPanel implements ComponentListener, LayerNo
 		
 		Template t = new Template();
 		
-		TileLayerTemplate template = new TileLayerTemplate();
-		template.setGridWidth(32);
-		template.setGridHeight(32);
+		TileLayerDefinition def = new TileLayerDefinition();
+		
+		TileLayerTemplate template = new TileLayerTemplate(def);
+		template.setGridDimensions(32, 32);
 		
 		level = new Level(t);
 		level.setDimensions(320, 320);

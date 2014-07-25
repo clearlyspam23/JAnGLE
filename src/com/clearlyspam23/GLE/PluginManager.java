@@ -44,7 +44,7 @@ public class PluginManager {
 	public List<LayerDefinition> getRecognizedLayerDefs() {
 		return recognizedLayerDefs;
 	}
-	public void setRecognizedLayerDefs(LayerDefinition<?, ?> layerDef) {
+	public void addLayerDefinition(LayerDefinition<?, ?> layerDef) {
 		recognizedLayerDefs.add(layerDef);
 	}
 	public List<CompressionFormat> getRecognizedCompressions() {

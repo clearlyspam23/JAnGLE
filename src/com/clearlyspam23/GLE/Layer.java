@@ -53,5 +53,13 @@ public abstract class Layer<T extends ExportData> {
 	 */
 	public abstract List<PInputEventListener> getListeners();
 	
+	/**
+	 * hint to serializers that the ExportData provided by this class might have subtypes
+	 * @return whether or not this Layer can provide subtypes of ExportData
+	 */
+	public boolean hasDataSubtypes(){
+		return false;
+	}
+	
 
 }

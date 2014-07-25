@@ -2,7 +2,7 @@ package com.clearlyspam23.GLE;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,7 +37,7 @@ public class Template {
 	//Layer data
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
 	@SuppressWarnings("rawtypes")
-	private Map<String, PropertyTemplate> activeProperties = new HashMap<String, PropertyTemplate>();
+	private LinkedHashMap<String, PropertyTemplate> activeProperties = new LinkedHashMap<String, PropertyTemplate>();
 	
 	public void addParameter(ParameterMacro macro)
 	{
@@ -59,6 +59,14 @@ public class Template {
 	public void addLayerTemplate(LayerTemplate temp)
 	{
 		layerTemplates.add(temp);
+	}
+	
+	public List<LayerTemplate> getLayers(){
+		return layerTemplates;
+	}
+	
+	public void setLayers(List<LayerTemplate> list){
+		layerTemplates = list;
 	}
 	
 	public String getRuntimeCall(JAnGLEData data)
@@ -107,7 +115,7 @@ public class Template {
 		activeProperties.put(name, tmp);
 	}
 	
-	public void setPropertyMap(Map<String, PropertyTemplate> map){
+	public void setPropertyMap(LinkedHashMap<String, PropertyTemplate> map){
 		activeProperties = map;
 	}
 

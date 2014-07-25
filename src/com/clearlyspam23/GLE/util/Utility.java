@@ -1,6 +1,12 @@
 package com.clearlyspam23.GLE.util;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
+import com.clearlyspam23.GLE.Nameable;
 
 public class Utility {
 	
@@ -38,6 +44,39 @@ public class Utility {
 		}
 		ans.add(buf.toString());
 		return ans;
+	}
+	
+	public static void setModelTo(JComboBox<String> box, List<? extends Nameable> namedList){
+		String[] model = new String[namedList.size()];
+		for(int i = 0; i < namedList.size(); i++)
+			model[i] = namedList.get(i).getName();
+		
+		box.setModel(new DefaultComboBoxModel<String>(model));
+		box.setSelectedIndex(model.length>0 ? 0 : -1);
+	}
+	
+	public static boolean isValidIndex(JComboBox<?> box, List<?> list){
+		return isValidIndex(box.getSelectedIndex(), list);
+	}
+	
+	public static boolean isValidIndex(int index, List<?> list){
+		return index>=0&&index<list.size();
+	}
+	
+	public static <T> T getValue(JComboBox<?> box, List<T> list){
+		return list.get(box.getSelectedIndex());
+	}
+	
+	public static <T> T tryGetValue(JComboBox<?> box, List<T> list){
+		if(Utility.isValidIndex(box, list))
+			return getValue(box, list);
+		return null;
+	}
+	
+	public static <T> void trySetIndex(T t, List<T> list, JComboBox<?> box){
+		int index = list.indexOf(t);
+		if(index>=0)
+			box.setSelectedIndex(index);
 	}
 
 }

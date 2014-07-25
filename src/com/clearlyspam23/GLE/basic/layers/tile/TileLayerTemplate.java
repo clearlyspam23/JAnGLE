@@ -1,13 +1,21 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.util.List;
+
 import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.Level;
+import com.clearlyspam23.GLE.util.Vector2;
 
 public class TileLayerTemplate extends LayerTemplate{
 	
-	private double gridWidth;
-	private double gridHeight;
+	private Vector2 gridDimensions = new Vector2();
+	private List<TileConstraint> constraints;
+	
+	public TileLayerTemplate(TileLayerDefinition def) {
+		super(def);
+	}
 
 	@Override
 	public Layer<?> createLayer(Level level) {
@@ -15,19 +23,23 @@ public class TileLayerTemplate extends LayerTemplate{
 	}
 
 	public double getGridHeight() {
-		return gridHeight;
+		return gridDimensions.y;
 	}
-
-	public void setGridHeight(double gridHeight) {
-		this.gridHeight = gridHeight;
+	
+	public Vector2 getGridDimensions(){
+		return gridDimensions;
 	}
 
 	public double getGridWidth() {
-		return gridWidth;
+		return gridDimensions.x;
 	}
 
-	public void setGridWidth(double gridWidth) {
-		this.gridWidth = gridWidth;
+	public void setGridDimensions(double gridWidth, double gridHeight) {
+		gridDimensions.set(gridWidth, gridHeight);
+	}
+	
+	public void setGridDimensions(Vector2 dimensions){
+		gridDimensions.set(dimensions);
 	}
 
 }

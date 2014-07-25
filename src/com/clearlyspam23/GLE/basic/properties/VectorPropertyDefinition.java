@@ -16,8 +16,8 @@ public class VectorPropertyDefinition extends PropertyDefinition<VectorPanel, Ve
 	}
 
 	@Override
-	public VectorPropertyTemplate buildFromGUI(VectorPanel gui, String name) {
-		return new VectorPropertyTemplate(name, this, gui.getMinVector(), gui.getMaxVector(), gui.getDefaultVector());
+	public VectorPropertyTemplate buildFromGUI(VectorPanel gui) {
+		return new VectorPropertyTemplate(this, gui.getMinVector(), gui.getMaxVector(), gui.getDefaultVector());
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class VectorPropertyDefinition extends PropertyDefinition<VectorPanel, Ve
 	}
 
 	@Override
-	public Class<VectorPropertyTemplate> getLayerClass() {
+	public Class<VectorPropertyTemplate> getPropertyClass() {
 		return VectorPropertyTemplate.class;
 	}
 

@@ -9,12 +9,12 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	private int min;
 	private int max;
 	
-	public IntPropertyTemplate(String name, IntPropertyDefinition def){
-		super(name, def);
+	public IntPropertyTemplate(IntPropertyDefinition def){
+		super(def);
 	}
 	
-	public IntPropertyTemplate(String name, IntPropertyDefinition def, int defa, int min, int max){
-		super(name, def);
+	public IntPropertyTemplate(IntPropertyDefinition def, int defa, int min, int max){
+		super(def);
 		this.setDefault(defa);
 		this.setMin(min);
 		this.setMax(max);

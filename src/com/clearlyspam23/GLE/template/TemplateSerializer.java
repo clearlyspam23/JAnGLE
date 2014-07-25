@@ -1,9 +1,13 @@
 package com.clearlyspam23.GLE.template;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
+import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.PropertyTemplate;
@@ -11,6 +15,7 @@ import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,6 +25,7 @@ public class TemplateSerializer {
 	private Gson gson;
 	private JsonParser parser;
 	private TwoWayMap<String, Class> propsMap = new TwoWayMap<String, Class>();
+	private TwoWayMap<String, Class> layersMap = new TwoWayMap<String, Class>();
 	private TwoWayMap<String, LevelSerializer> serializerMap = new TwoWayMap<String, LevelSerializer>();
 	private TwoWayMap<String, CompressionFormat> compressionMap = new TwoWayMap<String, CompressionFormat>();
 	private TwoWayMap<String, CoordinateSystem> coordinateMap = new TwoWayMap<String, CoordinateSystem>();
@@ -28,7 +34,11 @@ public class TemplateSerializer {
 		parser = new JsonParser();
 		for(PropertyDefinition def : manager.getRecognizedProperties())
 		{
-			propsMap.put(def.getName(), def.getLayerClass());
+			propsMap.put(def.getName(), def.getPropertyClass());
+		}
+		for(LayerDefinition def : manager.getRecognizedLayerDefs())
+		{
+			layersMap.put(def.getName(), def.getLayerClass());
 		}
 		for(LevelSerializer ser : manager.getRecognizedSerializers())
 		{
@@ -67,6 +77,17 @@ public class TemplateSerializer {
 			prop.addProperty("definition", name);
 			properties.add(p.getKey(), prop);
 		}
+		//serialize layers
+		json.remove("layerTemplates");
+		JsonArray layers = new JsonArray();
+		json.add("layerTemplates", layers);
+		for(LayerTemplate lt : t.getLayers()){
+			JsonObject layer = gson.toJsonTree(lt).getAsJsonObject();
+			String name = layersMap.getReverse(lt.getClass());
+			layer.remove("definition");
+			layer.addProperty("definition", name);
+			layers.add(layer);
+		}
 		return gson.toJson(json);
 	}
 	
@@ -76,12 +97,19 @@ public class TemplateSerializer {
 		String serializer = o.remove("serializer").getAsString();
 		String compression = o.remove("compression").getAsString();
 		String coordinateSystem = o.remove("coordinateSystem").getAsString();
-		HashMap<String, PropertyTemplate> finalProps = new HashMap<String, PropertyTemplate>();
+		LinkedHashMap<String, PropertyTemplate> finalProps = new LinkedHashMap<String, PropertyTemplate>();
 		JsonObject properties = o.remove("activeProperties").getAsJsonObject();
 		for(Entry<String, JsonElement> e : properties.entrySet()){
 			JsonObject prop = e.getValue().getAsJsonObject();
 			String type = prop.remove("definition").getAsString();
 			finalProps.put(e.getKey(), (PropertyTemplate) gson.fromJson(prop, propsMap.getNormal(type)));
+		}
+		List<LayerTemplate> finalLayers = new ArrayList<LayerTemplate>();
+		JsonArray layers = o.remove("layerTemplates").getAsJsonArray();
+		for(JsonElement e : layers){
+			JsonObject prop = e.getAsJsonObject();
+			String type = prop.remove("definition").getAsString();
+			finalLayers.add((LayerTemplate) gson.fromJson(prop, layersMap.getNormal(type)));
 		}
 		Template ans = gson.fromJson(o, Template.class);
 		ans.setSerializer(serializerMap.getNormal(serializer));
@@ -89,6 +117,7 @@ public class TemplateSerializer {
 		ans.setCoordinateSystem(coordinateMap.getNormal(coordinateSystem));
 		ans.setPropertyMap(finalProps);
 		ans.setTemplateFile(path);
+		ans.setLayers(finalLayers);
 		return ans;
 	}
 

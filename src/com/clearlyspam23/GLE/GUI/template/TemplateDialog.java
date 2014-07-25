@@ -26,7 +26,12 @@ import com.clearlyspam23.GLE.basic.coordinates.CenteredDown;
 import com.clearlyspam23.GLE.basic.coordinates.CenteredUp;
 import com.clearlyspam23.GLE.basic.coordinates.TopLeft;
 import com.clearlyspam23.GLE.basic.languages.JavaLanguageOptions;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition;
 import com.clearlyspam23.GLE.basic.parameters.CurrentLevelMacro;
+import com.clearlyspam23.GLE.basic.parameters.CurrentTemplateMacro;
+import com.clearlyspam23.GLE.basic.parameters.ExecutableDirectoryMacro;
+import com.clearlyspam23.GLE.basic.parameters.ExecutableLocationMacro;
+import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
@@ -70,6 +75,10 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			manager.addProgrammingLanguage(new JavaLanguageOptions());
 			
 			manager.addMacro(new CurrentLevelMacro());
+			manager.addMacro(new CurrentTemplateMacro());
+			manager.addMacro(new ExecutableDirectoryMacro());
+			manager.addMacro(new ExecutableLocationMacro());
+			manager.addMacro(new WorkingDirectoryMacro());
 			
 			manager.addProperty(new IntPropertyDefinition());
 			manager.addProperty(new VectorPropertyDefinition());
@@ -78,6 +87,8 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			manager.addCompression(new ZipCompression());
 			
 			manager.addSerializer(new JsonSerializer());
+			
+			manager.addLayerDefinition(new TileLayerDefinition());
 			
 			TemplateDialog dialog = new TemplateDialog(manager);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

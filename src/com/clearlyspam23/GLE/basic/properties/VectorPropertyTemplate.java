@@ -10,8 +10,8 @@ public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Ve
 	private Vector2 max;
 	private Vector2 def;
 
-	public VectorPropertyTemplate(String name, VectorPropertyDefinition def, Vector2 min, Vector2 max, Vector2 defa) {
-		super(name, def);
+	public VectorPropertyTemplate(VectorPropertyDefinition def, Vector2 min, Vector2 max, Vector2 defa) {
+		super(def);
 		this.min = min;
 		this.max = max;
 		this.def = defa;

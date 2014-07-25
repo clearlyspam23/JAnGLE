@@ -16,8 +16,8 @@ public class IntPropertyDefinition extends PropertyDefinition<IntegerPanel, IntP
 	}
 
 	@Override
-	public IntPropertyTemplate buildFromGUI(IntegerPanel gui, String name) {
-		return new IntPropertyTemplate(name, this, gui.getDefault(), gui.getMin(), gui.getMax());
+	public IntPropertyTemplate buildFromGUI(IntegerPanel gui) {
+		return new IntPropertyTemplate(this, gui.getDefault(), gui.getMin(), gui.getMax());
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class IntPropertyDefinition extends PropertyDefinition<IntegerPanel, IntP
 	}
 
 	@Override
-	public Class<IntPropertyTemplate> getLayerClass() {
+	public Class<IntPropertyTemplate> getPropertyClass() {
 		return IntPropertyTemplate.class;
 	}
 
