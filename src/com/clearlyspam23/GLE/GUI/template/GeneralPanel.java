@@ -79,12 +79,15 @@ public class GeneralPanel extends TemplateSubPanel{
 		@SuppressWarnings("rawtypes")
 		public PropertyTemplate prop;
 		
-		public String name;
-		
 		@SuppressWarnings("rawtypes")
 		public PropWrapper(PropertyTemplate prop, String name){
 			this.prop = prop;
-			this.name = name;
+			prop.setName(name);
+		}
+		
+		@SuppressWarnings("rawtypes")
+		public PropWrapper(PropertyTemplate prop){
+			this.prop = prop;
 		}
 	}
 	
@@ -376,7 +379,7 @@ public class GeneralPanel extends TemplateSubPanel{
 	private void buildFromActiveProps(){
 		propsListModel.removeAllElements();
 		for(PropWrapper t : activeProperties){
-			propsListModel.addElement(t.name);
+			propsListModel.addElement(t.prop.getName());
 		}
 		propsList.setSelectedIndex(activeProperties.size()> 0 ? 0 : -1);
 	}
@@ -392,8 +395,8 @@ public class GeneralPanel extends TemplateSubPanel{
 		Utility.trySetIndex(template.getCompression(), possibleCompressions, compressionBox);
 		Utility.trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
 		Utility.trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
-		for(Entry<String, PropertyTemplate> t : template.getProperties()){
-			activeProperties.add(new PropWrapper(t.getValue(), t.getKey()));
+		for(PropertyTemplate t : template.getActiveProperties()){
+			activeProperties.add(new PropWrapper(t));
 		}
 		buildFromActiveProps();
 	}
@@ -411,7 +414,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		template.setCoordinateSystem(Utility.tryGetValue(coordBox, possibleCoordinates));
 		template.setSerializer(Utility.tryGetValue(serializerBox, possibleSerializers));
 		for(PropWrapper t : activeProperties){
-			template.addProperty(t.name, t.prop);
+			template.addProperty(t.prop);
 		}
 	}
 	
@@ -438,7 +441,7 @@ public class GeneralPanel extends TemplateSubPanel{
 			currentProp = activeProperties.get(propsList.getSelectedIndex());
 			propsTypeField.setSelectedIndex(possibleProperties.indexOf(currentProp.prop.getDefinition()));
 			currentProp.prop.getDefinition().setGUITo((SubPanel) propsPanel.getComponent(0), currentProp.prop);
-			propsNameField.setText(currentProp.name);
+			propsNameField.setText(currentProp.prop.getName());
 		}
 		else
 			propsNameField.setText("");
@@ -449,7 +452,7 @@ public class GeneralPanel extends TemplateSubPanel{
 	private void buildCurrentProp(){
 		String text = propsNameField.getText();
 		currentProp.prop = possibleProperties.get(propsTypeField.getSelectedIndex()).buildFromGUI((SubPanel) propsPanel.getComponent(0));
-		currentProp.name = text;
+		currentProp.prop.setName(text);
 	}
 
 	@Override

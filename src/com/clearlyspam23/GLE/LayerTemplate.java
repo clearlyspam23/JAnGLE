@@ -5,8 +5,12 @@ public abstract class LayerTemplate implements Nameable{
 	
 	private String name;
 	
+	protected LayerTemplate(){
+		
+	}
+	
 	@SuppressWarnings("rawtypes")
-	private final LayerDefinition definition;
+	private LayerDefinition definition;
 	
 	@SuppressWarnings("rawtypes")
 	public LayerTemplate(LayerDefinition def){

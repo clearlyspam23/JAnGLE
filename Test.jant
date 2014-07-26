@@ -1,12 +1,4 @@
 !!com.clearlyspam23.GLE.Template
-activeProperties:
-- !!com.clearlyspam23.GLE.basic.properties.IntPropertyTemplate {default: 0, max: 255,
-  min: 0, name: Prop0}
-- !!com.clearlyspam23.GLE.basic.properties.VectorPropertyTemplate
-  default: {x: 0.0, y: 0.0}
-  max: {x: 1000.0, y: 1000.0}
-  min: {x: 0.0, y: 0.0}
-  name: Prop1
 compression: !compress 'None'
 coordinateSystem: !coord 'Top Left'
 extension: .json
@@ -19,5 +11,5 @@ layers:
   name: Prop1
 pLanguageData: null
 serializer: !serialize 'JSON'
-templateName: TestName
+templateName: Test
 usedPLanguage: null

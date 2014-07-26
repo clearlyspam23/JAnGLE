@@ -17,6 +17,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import org.yaml.snakeyaml.Yaml;
+
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
@@ -35,7 +37,7 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
-import com.clearlyspam23.GLE.template.TemplateSerializer;
+import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
 
 public class TemplateDialog extends JDialog implements ActionListener{
 
@@ -100,6 +102,8 @@ public class TemplateDialog extends JDialog implements ActionListener{
 				PrintWriter w = new PrintWriter(t.getTemplateFile());
 				w.print(s);
 				w.close();
+				Template recreate = serializer.deserialize(s, t.getTemplateFile());
+				System.out.println(recreate);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

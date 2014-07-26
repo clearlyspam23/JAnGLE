@@ -37,7 +37,7 @@ public class Template {
 	//Layer data
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
 	@SuppressWarnings("rawtypes")
-	private LinkedHashMap<String, PropertyTemplate> activeProperties = new LinkedHashMap<String, PropertyTemplate>();
+	private List<PropertyTemplate> activeProperties = new ArrayList<PropertyTemplate>();
 	
 	public void addParameter(ParameterMacro macro)
 	{
@@ -106,17 +106,17 @@ public class Template {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Set<Entry<String, PropertyTemplate>> getProperties() {
-		return activeProperties.entrySet();
+	public List<PropertyTemplate> getActiveProperties() {
+		return activeProperties;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void addProperty(String name, PropertyTemplate tmp) {
-		activeProperties.put(name, tmp);
+	public void addProperty(PropertyTemplate tmp) {
+		activeProperties.add(tmp);
 	}
 	
-	public void setPropertyMap(LinkedHashMap<String, PropertyTemplate> map){
-		activeProperties = map;
+	public void setActiveProperties(List<PropertyTemplate> props){
+		activeProperties = props;
 	}
 
 	public String getTemplateName() {

@@ -9,6 +9,8 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	private int min;
 	private int max;
 	
+	public IntPropertyTemplate(){}
+	
 	public IntPropertyTemplate(IntPropertyDefinition def){
 		super(def);
 	}

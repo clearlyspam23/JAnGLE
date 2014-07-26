@@ -13,6 +13,9 @@ public class TileLayerTemplate extends LayerTemplate{
 	private Vector2 gridDimensions = new Vector2();
 	private List<TileConstraint> constraints;
 	
+	public TileLayerTemplate() {
+	}
+	
 	public TileLayerTemplate(TileLayerDefinition def) {
 		super(def);
 	}
