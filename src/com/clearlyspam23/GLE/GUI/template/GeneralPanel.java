@@ -91,6 +91,8 @@ public class GeneralPanel extends TemplateSubPanel{
 		}
 	}
 	
+	private static final String defaultLocation = System.getProperty("user.dir");
+	
 //	private class PropPair{
 //		@SuppressWarnings("rawtypes")
 //		public PropertyTemplate prop;
@@ -104,8 +106,6 @@ public class GeneralPanel extends TemplateSubPanel{
 	public GeneralPanel(PluginManager pluginManager) {
 		super(pluginManager);
 		setLayout(null);
-		
-		final String defaultLocation = System.getProperty("user.dir");
 		
 		JLabel label_2 = new JLabel("Coordinate System");
 		label_2.setBounds(20, 140, 117, 14);
@@ -392,9 +392,9 @@ public class GeneralPanel extends TemplateSubPanel{
 		extensionField.setText(template.getExtension());
 		defaultLocCB.setSelected(template.isUsingDefaultDirectory());
 		chckbxUseCustomExtension.setSelected(template.isUsingCustomExtension());
-		Utility.trySetIndex(template.getCompression(), possibleCompressions, compressionBox);
-		Utility.trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox);
-		Utility.trySetIndex(template.getSerializer(), possibleSerializers, serializerBox);
+		Utility.trySetIndex(template.getCompression(), possibleCompressions, compressionBox, (possibleCompressions.size() > 0 ? 0 : -1));
+		Utility.trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox,(possibleCoordinates.size() > 0 ? 0 : -1));
+		Utility.trySetIndex(template.getSerializer(), possibleSerializers, serializerBox, (possibleSerializers.size() > 0 ? 0 : -1));
 		for(PropertyTemplate t : template.getActiveProperties()){
 			activeProperties.add(new PropWrapper(t));
 		}
@@ -463,8 +463,9 @@ public class GeneralPanel extends TemplateSubPanel{
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		Template temp = new Template();
+		temp.setTemplateFile(new File(defaultLocation));
+		setToTemplate(temp);
 	}
 
 	@Override

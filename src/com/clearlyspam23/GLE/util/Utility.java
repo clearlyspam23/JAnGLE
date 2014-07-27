@@ -78,5 +78,12 @@ public class Utility {
 		if(index>=0)
 			box.setSelectedIndex(index);
 	}
+	
+	public static <T> void trySetIndex(T t, List<T> list, JComboBox<?> box, int indexOnFailure){
+		int index = list.indexOf(t);
+		if(index<0)
+			index = indexOnFailure;
+		box.setSelectedIndex(index);
+	}
 
 }

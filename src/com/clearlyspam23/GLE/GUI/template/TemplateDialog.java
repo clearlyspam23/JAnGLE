@@ -21,6 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
 import com.clearlyspam23.GLE.basic.compression.ZipCompression;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
@@ -187,5 +188,10 @@ public class TemplateDialog extends JDialog implements ActionListener{
 
 	public Template getTemplate() {
 		return template;
+	}
+	
+	public void reset(){
+		for(TemplateSubPanel p : subPanels)
+			p.reset();
 	}
 }

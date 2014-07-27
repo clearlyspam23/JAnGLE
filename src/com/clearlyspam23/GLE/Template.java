@@ -2,11 +2,7 @@ package com.clearlyspam23.GLE;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
@@ -17,7 +13,7 @@ import com.clearlyspam23.GLE.template.ParameterMacro;
 public class Template {
 	
 	//meta data
-	private String name;
+	private String name = "";
 	private File templateFile;
 	
 	//Runtime data
@@ -31,8 +27,8 @@ public class Template {
 	private LevelSerializer serializer;
 	private CompressionFormat compression;
 	private String extension;
-	private boolean useCustomExtension;
-	private boolean useDefaultDirectory;
+	private boolean useCustomExtension = false;
+	private boolean useDefaultDirectory = true;
 	
 	//Layer data
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
