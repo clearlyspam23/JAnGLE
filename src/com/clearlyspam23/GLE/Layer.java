@@ -8,7 +8,7 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
-public abstract class Layer<T extends ExportData> {
+public abstract class Layer<T extends LayerData> {
 	
 	/**
 	 * get an object representing the data necessary to recreate this layer in game. This data should not include anything necessary
@@ -52,6 +52,8 @@ public abstract class Layer<T extends ExportData> {
 	 * @return a list of relevant PInputEventListeners
 	 */
 	public abstract List<PInputEventListener> getListeners();
+	
+	public abstract void onResize(double x, double y);
 	
 	/**
 	 * hint to serializers that the ExportData provided by this class might have subtypes

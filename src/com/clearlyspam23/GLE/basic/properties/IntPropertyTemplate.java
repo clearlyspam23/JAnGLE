@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE.basic.properties;
 
+import com.clearlyspam23.GLE.Property;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.basic.gui.properties.IntegerComponent;
 
@@ -28,12 +29,12 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	}
 
 	@Override
-	public void setToValue(IntegerComponent component, Integer value) {
+	public void setToValue(IntegerComponent component, Property<Integer> value) {
 		
 	}
 
 	@Override
-	public Integer getValueFrom(IntegerComponent component) {
+	public Property<Integer> getValueFrom(IntegerComponent component) {
 		return null;
 	}
 
@@ -59,6 +60,11 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 
 	public void setMax(int max) {
 		this.max = max;
+	}
+
+	@Override
+	public Property<Integer> getDefaultValue() {
+		return new Property<Integer>(getName(), def);
 	}
 
 }

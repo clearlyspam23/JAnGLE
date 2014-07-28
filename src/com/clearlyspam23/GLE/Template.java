@@ -86,10 +86,6 @@ public class Template {
 	public Level generateLevel()
 	{
 		Level l = new Level(this);
-		for(LayerTemplate t : layerTemplates)
-		{
-			l.addLayer(t.createLayer(l));
-		}
 		return l;
 	}
 
@@ -177,6 +173,13 @@ public class Template {
 
 	public void useDefaultDirectory(boolean useDefaultDirectory) {
 		this.useDefaultDirectory = useDefaultDirectory;
+	}
+	
+	public LayerTemplate getLayerTemplate(String name){
+		for(LayerTemplate t : layerTemplates)
+			if(t.getName().equals(name))
+				return t;
+		return null;
 	}
 
 }

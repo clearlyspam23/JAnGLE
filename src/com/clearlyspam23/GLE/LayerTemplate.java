@@ -17,8 +17,7 @@ public abstract class LayerTemplate implements Nameable{
 		this.definition = def;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public abstract Layer createLayer(Level level);
+	public abstract Layer createLayer();
 	
 	public String getName()
 	{

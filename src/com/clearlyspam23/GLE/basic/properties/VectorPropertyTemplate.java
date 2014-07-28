@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE.basic.properties;
 
+import com.clearlyspam23.GLE.Property;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.util.Vector2;
@@ -26,13 +27,13 @@ public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Ve
 	}
 
 	@Override
-	public void setToValue(VectorComponent component, Vector2 value) {
+	public void setToValue(VectorComponent component, Property<Vector2> value) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Vector2 getValueFrom(VectorComponent component) {
+	public Property<Vector2> getValueFrom(VectorComponent component) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -59,6 +60,11 @@ public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Ve
 
 	public void setDefault(Vector2 def) {
 		this.def = def;
+	}
+
+	@Override
+	public Property<Vector2> getDefaultValue() {
+		return new Property<Vector2>(getName(), def);
 	}
 
 }

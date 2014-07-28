@@ -83,7 +83,9 @@ public class TestLevelPanel extends JPanel implements ComponentListener, LayerNo
 		
 		level = new Level(t);
 		level.setDimensions(320, 320);
-		level.addLayer(template.createLayer(level));
+		Layer layer = template.createLayer();
+		layer.onResize(level.getWidth(), level.getHeight());
+		level.addLayer(layer);
 		
 		add(canvas, BorderLayout.CENTER);
 		
@@ -109,7 +111,7 @@ public class TestLevelPanel extends JPanel implements ComponentListener, LayerNo
 			d.setVisible(true);
 		}
 		
-		PLayer layer = canvas.getLayer();
+		PLayer pLayer = canvas.getLayer();
 		
 		canvas.getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
         canvas.removeInputEventListener(canvas.getZoomEventHandler());

@@ -21,8 +21,8 @@ public class TileLayerTemplate extends LayerTemplate{
 	}
 
 	@Override
-	public Layer<?> createLayer(Level level) {
-		return new TileLayer(this, level);
+	public Layer<?> createLayer() {
+		return new TileLayer(this);
 	}
 
 	public double getGridHeight() {

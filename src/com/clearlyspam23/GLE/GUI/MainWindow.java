@@ -23,6 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -55,6 +57,12 @@ public class MainWindow extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
+		}
 		try {
 			PluginManager manager = new PluginManager();
 			manager.addCoordinateSystems(new TopLeft());
@@ -125,7 +133,7 @@ public class MainWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		
-		final TemplateDialog dialog = new TemplateDialog(data.getPlugins());
+		final TemplateDialog dialog = new TemplateDialog(data);
 		dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
 //		dialog.setVisible(true);
 //		Template t = dialog.getTemplate();
@@ -148,11 +156,13 @@ public class MainWindow extends JFrame {
 		mntmNewTemplate = new JMenuItem("New Template");
 		mntmNewTemplate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				dialog.reset();
 				dialog.setVisible(true);
 				Template t = dialog.getTemplate();
 				if(t!=null){
 					data.setOpenTemplate(t);
 				}
+				System.out.println("finished");
 			}
 		});
 		
@@ -229,8 +239,8 @@ public class MainWindow extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane);
 		
-		JPanel levelPanel = new TestLevelPanel();
-		tabbedPane.addTab("New tab", null, levelPanel, null);
+//		JPanel levelPanel = new TestLevelPanel();
+//		tabbedPane.addTab("New tab", null, levelPanel, null);
 		
 //		TestInternal testInternal = new TestInternal();
 //		contentPane.add(testInternal);
@@ -250,8 +260,8 @@ public class MainWindow extends JFrame {
 	
 	private void checkMenu(){
 		boolean hasData = data!=null;
-		mntmNewTemplate.setEnabled(hasData);
-		mntmOpenTemplate.setEnabled(hasData);
+		mntmNewTemplate.setEnabled(hasData&&data.getOpenTemplate()==null);
+		mntmOpenTemplate.setEnabled(hasData&&data.getOpenTemplate()==null);
 		mntmCloseTemplate.setEnabled(hasData&&data.getOpenTemplate()!=null);
 		mntmNewLevel.setEnabled(hasData&&data.getOpenTemplate()!=null);
 		mntmOpenLevel.setEnabled(hasData&&data.getOpenTemplate()!=null);

@@ -3,7 +3,7 @@ package com.clearlyspam23.GLE.basic.serializers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clearlyspam23.GLE.ExportData;
+import com.clearlyspam23.GLE.LayerData;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.google.gson.Gson;
@@ -25,7 +25,7 @@ public class JsonSerializer extends LevelSerializer {
 	}
 
 	@Override
-	public boolean canSerialize(ExportData data) {
+	public boolean canSerialize(LayerData data) {
 		return true;
 	}
 
@@ -35,7 +35,7 @@ public class JsonSerializer extends LevelSerializer {
 	}
 
 	@Override
-	public boolean registerDataType(ExportData data) {
+	public boolean registerDataType(LayerData data) {
 		registeredClassesMap.put(data.getClassAlias(), data.getClass());
 		return canSerialize(data);
 	}
@@ -47,7 +47,7 @@ public class JsonSerializer extends LevelSerializer {
 
 	@Override
 	public String getDefaultExtension() {
-		return "json";
+		return ".json";
 	}
 
 }

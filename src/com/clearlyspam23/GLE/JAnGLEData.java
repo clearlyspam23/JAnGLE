@@ -1,9 +1,9 @@
 package com.clearlyspam23.GLE;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +109,20 @@ public class JAnGLEData {
 
 	public TemplateSerializer getSerializer() {
 		return serializer;
+	}
+	
+	public boolean saveTemplate(Template template){
+		try {
+			PrintWriter w = new PrintWriter(template.getTemplateFile());
+			String s = serializer.serialize(template);
+			w.print(s);
+			w.close();
+			return true;
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

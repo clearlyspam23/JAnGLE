@@ -34,9 +34,11 @@ public abstract class PropertyTemplate<T extends Component, E> implements Nameab
 	
 	public abstract T getEditorComponent();
 	
-	public abstract void setToValue(T component, E value);
+	public abstract void setToValue(T component, Property<E> value);
 	
-	public abstract E getValueFrom(T component);
+	public abstract Property<E> getValueFrom(T component);
+	
+	public abstract Property<E> getDefaultValue();
 	
 	public List<String> checkValidity(){
 		return null;

@@ -12,16 +12,15 @@ import javax.imageio.ImageIO;
 
 import org.piccolo2d.event.PInputEventListener;
 
-import com.clearlyspam23.GLE.ExportData;
+import com.clearlyspam23.GLE.LayerData;
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.LayerNode;
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 
-public class TileLayer extends Layer<ExportData> {
+public class TileLayer extends Layer<LayerData> {
 	
 	private TileLayerTemplate template;
 	
@@ -32,7 +31,7 @@ public class TileLayer extends Layer<ExportData> {
 	private double height;
 	private TilesetEditorData data;
 	
-	public TileLayer(TileLayerTemplate template, Level level)
+	public TileLayer(TileLayerTemplate template)
 	{
 		this.template = template;
 		base = new LayerNode<TileLayerPNode>(){
@@ -49,10 +48,6 @@ public class TileLayer extends Layer<ExportData> {
 			}
 			
 		};
-		tiles = new TileLayerPNode(width = level.getWidth(), height = level.getHeight(), template.getGridWidth(), template.getGridHeight());
-		base.addChild(tiles);
-		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
-		base.addChild(grid);
 		data = new TilesetEditorData();
 		
 		//the below code should be removed as soon as a better solution is found
@@ -84,7 +79,7 @@ public class TileLayer extends Layer<ExportData> {
 	}
 
 	@Override
-	public ExportData getExportData() {
+	public LayerData getExportData() {
 		return null;
 	}
 
@@ -99,7 +94,7 @@ public class TileLayer extends Layer<ExportData> {
 	}
 
 	@Override
-	public void buildFromData(ExportData data) {
+	public void buildFromData(LayerData data) {
 		
 	}
 
@@ -111,6 +106,16 @@ public class TileLayer extends Layer<ExportData> {
 	@Override
 	public List<PInputEventListener> getListeners() {
 		return Arrays.asList((PInputEventListener)data);
+	}
+
+	@Override
+	public void onResize(double x, double y) {
+		width = x;
+		height = y;
+		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
+		base.addChild(tiles);
+		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
+		base.addChild(grid);
 	}
 
 }

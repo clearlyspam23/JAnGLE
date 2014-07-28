@@ -137,7 +137,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				}
 			}
 		});
-		coordBox.setBounds(114, 140, 238, 20);
+		coordBox.setBounds(135, 140, 217, 20);
 		add(coordBox);
 		
 		JLabel lblTemplateProperties = new JLabel("General Properties");
@@ -146,11 +146,11 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(lblTemplateProperties);
 		
 		JLabel lblTemplateName = new JLabel("Template Name");
-		lblTemplateName.setBounds(20, 42, 84, 14);
+		lblTemplateName.setBounds(20, 42, 105, 14);
 		add(lblTemplateName);
 		
 		nameField = new JTextField();
-		nameField.setBounds(114, 42, 383, 20);
+		nameField.setBounds(135, 42, 362, 20);
 		add(nameField);
 		nameField.setColumns(10);
 		nameField.getDocument().addDocumentListener(new DocumentListener(){
@@ -183,11 +183,11 @@ public class GeneralPanel extends TemplateSubPanel{
 		});
 		
 		JLabel lblFileLocation = new JLabel("Template Location");
-		lblFileLocation.setBounds(20, 77, 99, 14);
+		lblFileLocation.setBounds(20, 77, 105, 14);
 		add(lblFileLocation);
 		
 		locationField = new JTextField();
-		locationField.setBounds(114, 74, 305, 20);
+		locationField.setBounds(135, 74, 284, 20);
 		add(locationField);
 		locationField.setColumns(10);
 		locationField.setText(defaultLocation);
@@ -216,7 +216,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				checkUseDefault((defaultLocCB.isSelected()));
 			}
 		});
-		defaultLocCB.setBounds(114, 101, 128, 23);
+		defaultLocCB.setBounds(135, 101, 197, 23);
 		defaultLocCB.setSelected(true);
 		add(defaultLocCB);
 		checkUseDefault(defaultLocCB.isSelected());
@@ -302,6 +302,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsList = new JList<String>();
 		propsList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
+				System.out.println("building");
 				checkPropsList();
 			}
 		});
@@ -311,11 +312,11 @@ public class GeneralPanel extends TemplateSubPanel{
 		scrollPane.setViewportView(propsList);
 		
 		JLabel lblOutputFormat = new JLabel("Level Format");
-		lblOutputFormat.setBounds(20, 174, 84, 14);
+		lblOutputFormat.setBounds(20, 174, 105, 14);
 		add(lblOutputFormat);
 		
 		serializerBox = new JComboBox<String>();
-		serializerBox.setBounds(114, 171, 238, 20);
+		serializerBox.setBounds(135, 171, 217, 20);
 		add(serializerBox);
 		
 		propsPanel = new JPanel();
@@ -324,29 +325,29 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsPanel.setLayout(new BoxLayout(propsPanel, BoxLayout.X_AXIS));
 		
 		JLabel lblExtension = new JLabel("Level Extension");
-		lblExtension.setBounds(20, 205, 84, 14);
+		lblExtension.setBounds(20, 205, 105, 14);
 		add(lblExtension);
 		
 		extensionField = new JTextField();
-		extensionField.setBounds(114, 202, 86, 20);
+		extensionField.setBounds(135, 202, 83, 20);
 		add(extensionField);
 		extensionField.setColumns(10);
 		
-		chckbxUseCustomExtension = new JCheckBox("Use Custom Extension");
+		chckbxUseCustomExtension = new JCheckBox("Custom Extension");
 		chckbxUseCustomExtension.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				checkCustomExtension((chckbxUseCustomExtension.isSelected()));
 			}
 		});
-		chckbxUseCustomExtension.setBounds(206, 198, 146, 23);
+		chckbxUseCustomExtension.setBounds(224, 198, 128, 23);
 		add(chckbxUseCustomExtension);
 		
-		JLabel lblLevelCompression = new JLabel("Level Compression");
-		lblLevelCompression.setBounds(20, 236, 99, 14);
+		JLabel lblLevelCompression = new JLabel("Compression");
+		lblLevelCompression.setBounds(20, 236, 105, 14);
 		add(lblLevelCompression);
 		
 		compressionBox = new JComboBox<String>();
-		compressionBox.setBounds(114, 233, 128, 20);
+		compressionBox.setBounds(135, 233, 107, 20);
 		add(compressionBox);
 		
 		//set up the models for the comboBoxes
@@ -371,30 +372,39 @@ public class GeneralPanel extends TemplateSubPanel{
 	
 	private void checkCustomExtension(boolean flag){
 		if(!flag){
-			extensionField.setText('.'+Utility.getValue(serializerBox, possibleSerializers).getDefaultExtension());
+			extensionField.setText(Utility.getValue(serializerBox, possibleSerializers).getDefaultExtension());
 		}
 		extensionField.setEditable(flag);
 	}
 	
 	private void buildFromActiveProps(){
+		System.out.println("removing everything");
+		currentProp = null;
 		propsListModel.removeAllElements();
 		for(PropWrapper t : activeProperties){
 			propsListModel.addElement(t.prop.getName());
+			System.out.println("adding 1 thing");
 		}
+		if(activeProperties.isEmpty())
+			currentProp = null;
+		else
+			currentProp = activeProperties.get(0);
 		propsList.setSelectedIndex(activeProperties.size()> 0 ? 0 : -1);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	public void setToTemplate(Template template)
 	{
+		activeProperties.clear();
 		nameField.setText(template.getTemplateName());
 		locationField.setText(template.getTemplateFile().getAbsolutePath());
-		extensionField.setText(template.getExtension());
 		defaultLocCB.setSelected(template.isUsingDefaultDirectory());
 		chckbxUseCustomExtension.setSelected(template.isUsingCustomExtension());
 		Utility.trySetIndex(template.getCompression(), possibleCompressions, compressionBox, (possibleCompressions.size() > 0 ? 0 : -1));
 		Utility.trySetIndex(template.getCoordinateSystem(), possibleCoordinates, coordBox,(possibleCoordinates.size() > 0 ? 0 : -1));
 		Utility.trySetIndex(template.getSerializer(), possibleSerializers, serializerBox, (possibleSerializers.size() > 0 ? 0 : -1));
+		extensionField.setText((template.isUsingCustomExtension()||possibleSerializers.isEmpty() ? 
+				template.getExtension() : possibleSerializers.get(0).getDefaultExtension()));
 		for(PropertyTemplate t : template.getActiveProperties()){
 			activeProperties.add(new PropWrapper(t));
 		}

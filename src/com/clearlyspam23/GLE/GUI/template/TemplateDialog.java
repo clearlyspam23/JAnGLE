@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
@@ -93,7 +94,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			
 			manager.addLayerDefinition(new TileLayerDefinition());
 			
-			TemplateDialog dialog = new TemplateDialog(manager);
+			TemplateDialog dialog = new TemplateDialog(new JAnGLEData(manager));
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 			Template t = dialog.getTemplate();
@@ -110,17 +111,20 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			e.printStackTrace();
 		}
 	}
+	
+	private JAnGLEData data;
 
 	/**
 	 * Create the dialog.
 	 */
-	public TemplateDialog(PluginManager manager) {
+	public TemplateDialog(JAnGLEData data) {
 		setModal(true);
+		this.data = data;
 		
 		//this code should be moved somewhere else eventually
-		subPanels.add(new GeneralPanel(manager));
-		subPanels.add(new PLangPanel(manager));
-		subPanels.add(new LayerPanel(manager));
+		subPanels.add(new GeneralPanel(data.getPlugins()));
+		subPanels.add(new PLangPanel(data.getPlugins()));
+		subPanels.add(new LayerPanel(data.getPlugins()));
 		setResizable(false);
 		
 		setBounds(100, 100, 580, 680);
@@ -182,6 +186,10 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			for(TemplateSubPanel p : subPanels)
 				p.generateTemplate(template);
 			this.template = template;
+			if(!data.saveTemplate(template)){
+				//TODO this is an error, handle it somehow
+				return;
+			}
 		}
 		setVisible(false);
 	}
