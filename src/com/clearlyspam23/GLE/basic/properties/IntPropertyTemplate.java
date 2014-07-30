@@ -2,9 +2,9 @@ package com.clearlyspam23.GLE.basic.properties;
 
 import com.clearlyspam23.GLE.Property;
 import com.clearlyspam23.GLE.PropertyTemplate;
-import com.clearlyspam23.GLE.basic.gui.properties.IntegerComponent;
+import com.clearlyspam23.GLE.GUI.util.IntegerComponent;
 
-public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Integer> {
+public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Number> {
 	
 	private int def;
 	private int min;
@@ -29,12 +29,12 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	}
 
 	@Override
-	public void setToValue(IntegerComponent component, Property<Integer> value) {
+	public void setToValue(IntegerComponent component, Property<Number> value) {
 		
 	}
 
 	@Override
-	public Property<Integer> getValueFrom(IntegerComponent component) {
+	public Property<Number> getValueFrom(IntegerComponent component) {
 		return null;
 	}
 
@@ -63,8 +63,8 @@ public class IntPropertyTemplate extends PropertyTemplate<IntegerComponent, Inte
 	}
 
 	@Override
-	public Property<Integer> getDefaultValue() {
-		return new Property<Integer>(getName(), def);
+	public Property<Number> getDefaultValue() {
+		return new Property<Number>(getName(), def);
 	}
 
 }

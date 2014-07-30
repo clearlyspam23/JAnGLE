@@ -12,9 +12,9 @@ public class TemplateMismatchException extends Exception {
 	private final Template template;
 	private final Level level;
 	
-	public TemplateMismatchException(Template t, Level l)
+	public TemplateMismatchException(Template t, Level l, boolean property, String name)
 	{
-		super("Unable to construct level  from Template");
+		super("Unable to construct level (" + l.getName() + ")  from Template (" + t.getTemplateName() + ") : " + (property ? "Property " : "Layer ") + name + " isn't a part of the template");
 		this.template = t;
 		this.level = l;
 	}

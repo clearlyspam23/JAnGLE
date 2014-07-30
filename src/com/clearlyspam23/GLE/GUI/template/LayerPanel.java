@@ -237,11 +237,11 @@ public class LayerPanel extends TemplateSubPanel{
 				LayerDefinition def = knownLayerDefs.get(typeBox.getSelectedIndex());
 				SubPanel sub = layerPanels.get(typeBox.getSelectedIndex());
 				sub.reset();
-				activeLayers.add(new LayerWrapper(def.buildFromGUI(sub), defName));
+				activeLayers.add(new LayerWrapper(def.buildFromEditorGUI(sub), defName));
 			}
 			currentLayer = activeLayers.get(layerList.getSelectedIndex());
 			typeBox.setSelectedIndex(knownLayerDefs.indexOf(currentLayer.template.getDefinition()));
-			currentLayer.template.getDefinition().setGUITo((SubPanel) scrollPane.getViewport().getView(), currentLayer.template);
+			currentLayer.template.getDefinition().setEditorGUITo((SubPanel) scrollPane.getViewport().getView(), currentLayer.template);
 			nameField.setText(currentLayer.template.getName());
 		}
 		else
@@ -253,7 +253,7 @@ public class LayerPanel extends TemplateSubPanel{
 	@SuppressWarnings("unchecked")
 	private void buildCurrentProp(){
 		String text = nameField.getText();
-		currentLayer.template = knownLayerDefs.get(typeBox.getSelectedIndex()).buildFromGUI((SubPanel) scrollPane.getViewport().getView());
+		currentLayer.template = knownLayerDefs.get(typeBox.getSelectedIndex()).buildFromEditorGUI((SubPanel) scrollPane.getViewport().getView());
 		currentLayer.template.setName(text);
 	}
 	

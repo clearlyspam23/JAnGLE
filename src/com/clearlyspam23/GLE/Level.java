@@ -41,18 +41,28 @@ public class Level implements Nameable{
 		for(LayerData d : data.layers){
 			LayerTemplate t = template.getLayerTemplate(d.getName());
 			if(t==null)
-				throw new TemplateMismatchException(template, this);
+				throw new TemplateMismatchException(template, this, false, d.getName());
 			try{
 				Layer l = t.createLayer();
 				l.buildFromData(d);
 				layers.add(l);
 			}
 			catch(Exception e){
-				throw new TemplateMismatchException(template, this);
+				throw new TemplateMismatchException(template, this, false, d.getName());
 			}
 		}
 		for(Entry<String, Object> e : data.properties.entrySet()){
-			
+			PropertyTemplate t = template.getPropertyTemplate(e.getKey());
+			if(t==null)
+				throw new TemplateMismatchException(template, this, true, e.getKey());
+			try{
+//				Layer l = t.createLayer();
+//				l.buildFromData(d);
+//				layers.add(l);
+			}
+			catch(Exception exc){
+				throw new TemplateMismatchException(template, this, false, e.getKey());
+			}
 		}
 	}
 	

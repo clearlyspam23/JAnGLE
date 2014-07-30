@@ -12,16 +12,14 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 	 * @param gui the current gui for this LayerDefinition
 	 * @return a LayerTemplate representing the given gui
 	 */
-	public abstract E buildFromGUI(T gui);
+	public abstract E buildFromEditorGUI(T gui);
 	
 	/**
-	 * essentially the inverse method to buildFromGUI, this method should take a gui and a template,
+	 * essentially the inverse method to buildFromEditorGUI, this method should take a gui and a template,
 	 * and set the gui to reflect the template
 	 * @param gui
 	 * @param template
 	 */
-	public abstract void setGUITo(T gui, E template);
-	
-	public abstract Class<E> getLayerClass();
+	public abstract void setEditorGUITo(T gui, E template);
 
 }

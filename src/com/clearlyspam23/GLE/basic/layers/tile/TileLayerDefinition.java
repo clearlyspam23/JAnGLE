@@ -11,7 +11,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	}
 
 	@Override
-	public TileLayerTemplate buildFromGUI(TileLayerGUIOptions gui) {
+	public TileLayerTemplate buildFromEditorGUI(TileLayerGUIOptions gui) {
 		TileLayerTemplate t = new TileLayerTemplate(this);
 		t.setGridDimensions(gui.getGridDimensions());
 		return t;
@@ -23,13 +23,8 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	}
 
 	@Override
-	public void setGUITo(TileLayerGUIOptions gui, TileLayerTemplate template) {
+	public void setEditorGUITo(TileLayerGUIOptions gui, TileLayerTemplate template) {
 		gui.setGridDimensions(template.getGridDimensions());
-	}
-
-	@Override
-	public Class<TileLayerTemplate> getLayerClass() {
-		return TileLayerTemplate.class;
 	}
 
 }

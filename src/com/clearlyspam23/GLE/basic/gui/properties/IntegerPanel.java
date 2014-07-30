@@ -5,20 +5,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.text.DocumentFilter;
-import javax.swing.text.PlainDocument;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
-import com.clearlyspam23.GLE.util.IntegerDocumentFilter;
+import com.clearlyspam23.GLE.GUI.util.IntegerComponent;
 
 public class IntegerPanel extends SubPanel{
-	private JTextField minField;
-	private JTextField maxField;
-	private JTextField defaultField;
+	private IntegerComponent minField;
+	private IntegerComponent maxField;
+	private IntegerComponent defaultField;
 	public IntegerPanel() {
 		
-		DocumentFilter filter = new IntegerDocumentFilter();
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{80, 60, 0};
 		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0};
@@ -34,10 +30,7 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblValue.gridy = 0;
 		add(lblValue, gbc_lblValue);
 		
-		minField = new JTextField();
-		PlainDocument doc = new PlainDocument();
-		doc.setDocumentFilter(filter);
-		minField.setDocument(doc);
+		minField = new IntegerComponent();
 		GridBagConstraints gbc_minField = new GridBagConstraints();
 		gbc_minField.insets = new Insets(0, 0, 5, 0);
 		gbc_minField.fill = GridBagConstraints.HORIZONTAL;
@@ -54,10 +47,7 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblMaxValue.gridy = 1;
 		add(lblMaxValue, gbc_lblMaxValue);
 		
-		maxField = new JTextField();
-		doc = new PlainDocument();
-		doc.setDocumentFilter(filter);
-		maxField.setDocument(doc);
+		maxField = new IntegerComponent();
 		GridBagConstraints gbc_maxField = new GridBagConstraints();
 		gbc_maxField.insets = new Insets(0, 0, 5, 0);
 		gbc_maxField.fill = GridBagConstraints.HORIZONTAL;
@@ -74,10 +64,7 @@ public class IntegerPanel extends SubPanel{
 		gbc_lblDefaultValue.gridy = 2;
 		add(lblDefaultValue, gbc_lblDefaultValue);
 		
-		defaultField = new JTextField();
-		doc = new PlainDocument();
-		doc.setDocumentFilter(filter);
-		defaultField.setDocument(doc);
+		defaultField = new IntegerComponent();
 		GridBagConstraints gbc_defaultField = new GridBagConstraints();
 		gbc_defaultField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_defaultField.gridx = 1;
@@ -88,31 +75,25 @@ public class IntegerPanel extends SubPanel{
 	}
 	
 	public int getMin(){
-		if(minField.getText().length()<=0)
-			return 0;
-		return Integer.parseInt(minField.getText());
+		return minField.getValue();
 	}
 	
 	public int getMax(){
-		if(maxField.getText().length()<=0)
-			return 0;
-		return Integer.parseInt(maxField.getText());
+		return maxField.getValue();
 	}
 	
 	public int getDefault(){
-		if(defaultField.getText().length()<=0)
-			return 0;
-		return Integer.parseInt(defaultField.getText());
+		return defaultField.getValue();
 	}
 	
 	public void setMin(int min){
-		minField.setText(Integer.toString(min));
+		minField.setValue(min);
 	}
 	public void setMax(int max){
-		maxField.setText(Integer.toString(max));
+		maxField.setValue(max);
 	}
 	public void setDefault(int def){
-		defaultField.setText(Integer.toString(def));
+		defaultField.setValue(def);
 	}
 	@Override
 	public void reset() {

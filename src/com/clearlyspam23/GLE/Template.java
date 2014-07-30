@@ -182,4 +182,12 @@ public class Template {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public PropertyTemplate getPropertyTemplate(String key) {
+		for(PropertyTemplate t : activeProperties)
+			if(t.getName().equals(name))
+				return t;
+		return null;
+	}
+
 }
