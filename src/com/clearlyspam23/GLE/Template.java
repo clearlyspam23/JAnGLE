@@ -9,6 +9,7 @@ import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.template.PLanguageOptions;
 import com.clearlyspam23.GLE.template.ParameterMacro;
+import com.clearlyspam23.GLE.util.Vector2;
 
 public class Template {
 	
@@ -29,6 +30,7 @@ public class Template {
 	private String extension;
 	private boolean useCustomExtension = false;
 	private boolean useDefaultDirectory = true;
+	private Vector2 defaultSize = new Vector2();
 	
 	//Layer data
 	private List<LayerTemplate> layerTemplates = new ArrayList<LayerTemplate>();
@@ -188,6 +190,14 @@ public class Template {
 			if(t.getName().equals(name))
 				return t;
 		return null;
+	}
+
+	public Vector2 getDefaultSize() {
+		return defaultSize;
+	}
+
+	public void setDefaultSize(Vector2 defaultSize) {
+		this.defaultSize = defaultSize;
 	}
 
 }

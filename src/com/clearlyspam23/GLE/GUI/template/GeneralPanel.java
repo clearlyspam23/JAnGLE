@@ -37,6 +37,7 @@ import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.util.Utility;
+import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -62,6 +63,7 @@ public class GeneralPanel extends TemplateSubPanel{
 	private JList<String> propsList;
 	private final JCheckBox defaultLocCB;
 	private final JCheckBox chckbxUseCustomExtension;
+	private final VectorComponent sizeComponent;
 	
 	private List<SubPanel> propertiesPanels = new ArrayList<SubPanel>();
 	private List<PropWrapper> activeProperties = new ArrayList<PropWrapper>();
@@ -234,7 +236,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				propsList.setSelectedIndex(propsListModel.getSize()-1);
 			}
 		});
-		btnAdd.setBounds(114, 516, 76, 23);
+		btnAdd.setBounds(114, 531, 76, 23);
 		add(btnAdd);
 		
 		JButton btnRemove = new JButton("Remove");
@@ -259,7 +261,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				}
 			}
 		});
-		btnRemove.setBounds(200, 516, 76, 23);
+		btnRemove.setBounds(200, 531, 76, 23);
 		add(btnRemove);
 		
 		JLabel lblName = new JLabel("Name");
@@ -278,7 +280,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsNameField.setColumns(10);
 		
 		JLabel lblType = new JLabel("Type");
-		lblType.setBounds(286, 322, 46, 14);
+		lblType.setBounds(286, 328, 46, 14);
 		add(lblType);
 		
 		propsTypeField = new JComboBox<String>();
@@ -292,11 +294,11 @@ public class GeneralPanel extends TemplateSubPanel{
 				repaint();
 			}
 		});
-		propsTypeField.setBounds(325, 319, 172, 20);
+		propsTypeField.setBounds(325, 325, 172, 20);
 		add(propsTypeField);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(85, 295, 191, 209);
+		scrollPane.setBounds(85, 295, 191, 225);
 		add(scrollPane);
 		
 		propsList = new JList<String>();
@@ -320,7 +322,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		add(serializerBox);
 		
 		propsPanel = new JPanel();
-		propsPanel.setBounds(286, 347, 211, 157);
+		propsPanel.setBounds(286, 353, 211, 167);
 		add(propsPanel);
 		propsPanel.setLayout(new BoxLayout(propsPanel, BoxLayout.X_AXIS));
 		
@@ -355,6 +357,14 @@ public class GeneralPanel extends TemplateSubPanel{
 		Utility.setModelTo(compressionBox, possibleCompressions);
 		Utility.setModelTo(serializerBox, possibleSerializers);
 		Utility.setModelTo(propsTypeField, possibleProperties);
+		
+		sizeComponent = new VectorComponent();
+		sizeComponent.setBounds(135, 264, 217, 20);
+		add(sizeComponent);
+		
+		JLabel lblDefaultSize = new JLabel("Default Size");
+		lblDefaultSize.setBounds(20, 267, 105, 14);
+		add(lblDefaultSize);
 		
 		checkCustomExtension(chckbxUseCustomExtension.isSelected());
 		checkPropsList();
@@ -405,6 +415,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		Utility.trySetIndex(template.getSerializer(), possibleSerializers, serializerBox, (possibleSerializers.size() > 0 ? 0 : -1));
 		extensionField.setText((template.isUsingCustomExtension()||possibleSerializers.isEmpty() ? 
 				template.getExtension() : possibleSerializers.get(0).getDefaultExtension()));
+		sizeComponent.setToVector(template.getDefaultSize());
 		for(PropertyTemplate t : template.getActiveProperties()){
 			activeProperties.add(new PropWrapper(t));
 		}
@@ -423,6 +434,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		template.setCompression(Utility.tryGetValue(compressionBox, possibleCompressions));
 		template.setCoordinateSystem(Utility.tryGetValue(coordBox, possibleCoordinates));
 		template.setSerializer(Utility.tryGetValue(serializerBox, possibleSerializers));
+		template.setDefaultSize(sizeComponent.getVector());
 		for(PropWrapper t : activeProperties){
 			template.addProperty(t.prop);
 		}

@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,11 +11,17 @@ import com.clearlyspam23.GLE.exception.TemplateMismatchException;
 public class Level implements Nameable{
 	
 	private Template template;
+	@SuppressWarnings("rawtypes")
 	private List<Layer> layers = new ArrayList<Layer>();
+	private List<ActionData> undoStack = new ArrayList<ActionData>();
+	private List<ActionData> redoStack = new ArrayList<ActionData>();
+	private int lastAction;
+	private int currentAction;
 	private double width;
 	private double height;
 	private List<Property> properties = new ArrayList<Property>();
 	private String name;
+	private File saveFile;
 	
 	@SuppressWarnings("rawtypes")
 	public Level(Template template)
@@ -66,6 +73,31 @@ public class Level implements Nameable{
 		}
 	}
 	
+	public boolean needsSave(){
+		return currentAction!=lastAction;
+	}
+	
+	public void addAction(ActionData data){
+		undoStack.add(data);
+		redoStack.clear();
+	}
+	
+	public boolean canUndo(){
+		return !undoStack.isEmpty();
+	}
+	
+	public ActionData undoAction(){
+		return undoStack.remove(undoStack.size()-1);
+	}
+	
+	public boolean canRedo(){
+		return !redoStack.isEmpty();
+	}
+	
+	public ActionData redoAction(){
+		return redoStack.remove(redoStack.size()-1);
+	}
+	
 	public void setDimensions(double width, double height){
 		this.width = width;
 		this.height = height;
@@ -97,7 +129,7 @@ public class Level implements Nameable{
 		return Collections.unmodifiableList(layers);
 	}
 	
-	public LevelData generateLevelData(){
+	public LayerData generateLevelData(){
 		return null;
 	}
 	
@@ -112,6 +144,14 @@ public class Level implements Nameable{
 	
 	public void setName(String name){
 		this.name = name;
+	}
+
+	public File getSaveFile() {
+		return saveFile;
+	}
+
+	public void setSaveFile(File saveFile) {
+		this.saveFile = saveFile;
 	}
 
 }

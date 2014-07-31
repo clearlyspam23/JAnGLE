@@ -22,11 +22,8 @@ import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.LayerNode;
 import com.clearlyspam23.GLE.LayerNodeListener;
 import com.clearlyspam23.GLE.Level;
-import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition;
-import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
 
-public class LevelPanel extends JPanel implements ComponentListener, LayerNodeListener{
+public class LevelPanel extends JPanel implements ComponentListener, LayerNodeListener, LayerContainer{
 
 	/**
 	 * 
@@ -45,24 +42,19 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
 	private List<LayerNode> layers = new ArrayList<LayerNode>();
 	private List<PInputEventListener> currentListeners = new ArrayList<PInputEventListener>();
 	
-	public LevelPanel()
+	public LevelPanel(Level level)
 	{
 		canvas = new PSwingCanvas();
 		
+		this.level = level;
+		
 		setLayout(new BorderLayout());
 		
-		Template t = new Template();
-		
-		TileLayerDefinition def = new TileLayerDefinition();
-		
-		TileLayerTemplate template = new TileLayerTemplate(def);
-		template.setGridDimensions(32, 32);
-		
-		level = new Level(t);
-		level.setDimensions(320, 320);
-		Layer layer = template.createLayer();
-		layer.onResize(level.getWidth(), level.getHeight());
-		level.addLayer(layer);
+//		level = new Level(t);
+//		level.setDimensions(320, 320);
+//		Layer layer = template.createLayer();
+//		layer.onResize(level.getWidth(), level.getHeight());
+//		level.addLayer(layer);
 		
 		add(canvas, BorderLayout.CENTER);
 		
@@ -76,7 +68,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
 			base.addChild(node);
 		}
 		//need some way to determine currentLayer, for now this will have to do
-		setCurrentLayer(level.getLayers().size()-1);
+		changeLayer(level.getLayers().size()-1);
 		
 		canvas.getPanEventHandler().setEventFilter(new PInputEventFilter(InputEvent.BUTTON3_MASK));
         canvas.removeInputEventListener(canvas.getZoomEventHandler());
@@ -93,7 +85,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
         this.validate();
 	}
 	
-	public void setCurrentLayer(int index){
+	public void changeLayer(int index){
 		if(selectedIndex>=0){
 			Layer<?> currentLayer = level.getLayers().get(selectedIndex);
 			for(PInputEventListener l : currentListeners){

@@ -118,4 +118,9 @@ public class TileLayer extends Layer<LayerData> {
 		base.addChild(grid);
 	}
 
+	@Override
+	public String getName() {
+		return template.getName();
+	}
+
 }

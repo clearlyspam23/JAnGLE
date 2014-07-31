@@ -8,7 +8,7 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
-public abstract class Layer<T extends LayerData> {
+public abstract class Layer<T extends LayerData> implements Nameable{
 	
 	/**
 	 * get an object representing the data necessary to recreate this layer in game. This data should not include anything necessary
@@ -61,6 +61,15 @@ public abstract class Layer<T extends LayerData> {
 	 */
 	public boolean hasDataSubtypes(){
 		return false;
+	}
+	
+	public ActionData getActionData(){
+		return new ActionData(getName(), this, getExportData());
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setToActionData(ActionData data){
+		this.buildFromData((T) data.data);
 	}
 	
 

@@ -24,7 +24,7 @@ public class LayerSelectDialog extends JDialog {
 				ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 				int index = lsm.getMinSelectionIndex();
 				if(index>=0)
-					container.changeToLayer(index);
+					container.changeLayer(index);
 			}
 		});
 		scrollPane.setViewportView(list);

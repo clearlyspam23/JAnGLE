@@ -4,72 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.clearlyspam23.GLE.template.CompressionFormat;
+import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
 
 public class JAnGLEData {
 	
-	private static class EditActionData{
-		public final EditAction data;
-		public final Layer<?> layer;
-		
-		public EditActionData(EditAction data, Layer<?> layer){
-			this.data = data;
-			this.layer = layer;
-		}
-	}
-	
-	private class LevelData{
-		private final Level level;
-		private final List<EditActionData> undoStack = new ArrayList<EditActionData>();
-		private int lastAction;
-		private int lastSave;
-		private File saveFile;
-		
-		public LevelData(Level level){
-			this.level = level;
-		}
-		
-		public void pushAction(EditAction data, Layer<?> layer){
-			undoStack.add(new EditActionData(data, layer));
-			lastAction++;
-		}
-		
-		public EditActionData popAction(){
-			lastAction--;
-			return undoStack.remove(undoStack.size()-1);
-		}
-
-		public Level getLevel() {
-			return level;
-		}
-		
-		public boolean save(){
-			String output = openTemplate.getSerializer().serialize(level);
-			try {
-				openTemplate.getCompression().compress(output, saveFile);
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return false;
-		}
-		
-		public boolean saveAs(File file){
-			saveFile = file;
-			return save();
-		}
-		
-		public boolean hasChanged(){
-			return lastAction!=lastSave;
-		}
-	}
-	
 	private final PluginManager plugins;
-	private LevelData currentLevel;
-	private List<LevelData> openLevels;
+	private Level currentLevel;
+	private List<Level> openLevels;
 	private Template openTemplate;
 	
 	private final TemplateSerializer serializer;
@@ -83,20 +28,32 @@ public class JAnGLEData {
 		return plugins;
 	}
 	
-	public LevelData getCurrentLevel() {
+	public Level getCurrentLevel() {
 		return currentLevel;
 	}
 	
-	public void setCurrentLevel(LevelData currentLevel) {
+	public void setCurrentLevel(Level currentLevel) {
 		this.currentLevel = currentLevel;
 	}
 	
-	public List<LevelData> getOpenLevels() {
+	public List<Level> getOpenLevels() {
 		return openLevels;
 	}
 	
-	public void setOpenLevels(List<LevelData> openLevels) {
-		this.openLevels = openLevels;
+	public void addOpenLevel(Level level){
+		openLevels.add(level);
+	}
+	
+	public void addOpenLevels(List<Level> levels){
+		openLevels.addAll(levels);
+	}
+	
+	public void closeLevel(Level level){
+		openLevels.remove(level);
+	}
+	
+	public void closeAllLevels(){
+		openLevels.clear();
 	}
 	
 	public Template getOpenTemplate() {
@@ -111,6 +68,14 @@ public class JAnGLEData {
 		return serializer;
 	}
 	
+	public Level openLevel(File file) throws IOException{
+		LevelSerializer serializer = openTemplate.getSerializer();
+		CompressionFormat format = openTemplate.getCompression();
+		String output = format.decompress(file);
+		Level l = serializer.deserialize(output);
+		return l;
+	}
+	
 	public boolean saveTemplate(Template template){
 		try {
 			PrintWriter w = new PrintWriter(template.getTemplateFile());
@@ -123,6 +88,18 @@ public class JAnGLEData {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public boolean saveLevel(Level level){
+		LevelSerializer serializer = openTemplate.getSerializer();
+		String s = serializer.serialize(level);
+		CompressionFormat format = openTemplate.getCompression();
+		try {
+			format.compress(s, level.getSaveFile());
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
 	}
 
 }
