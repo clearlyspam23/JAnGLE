@@ -10,11 +10,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventListener;
 
-import com.clearlyspam23.GLE.LayerData;
 import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerNode;
+import com.clearlyspam23.GLE.LayerData;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
@@ -24,7 +24,7 @@ public class TileLayer extends Layer<LayerData> {
 	
 	private TileLayerTemplate template;
 	
-	private LayerNode<TileLayerPNode> base;
+	private PNode base;
 	private TileLayerPNode tiles;
 	private GridNode grid;
 	private double width;
@@ -34,20 +34,7 @@ public class TileLayer extends Layer<LayerData> {
 	public TileLayer(TileLayerTemplate template)
 	{
 		this.template = template;
-		base = new LayerNode<TileLayerPNode>(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public TileLayerPNode getCopy() {
-				return tiles.getCopy();
-			}
-
-			@Override
-			public void setToCopy(TileLayerPNode copy) {
-				tiles.setToCopy(copy);
-			}
-			
-		};
+		base = new PNode();
 		data = new TilesetEditorData();
 		
 		//the below code should be removed as soon as a better solution is found
@@ -89,7 +76,7 @@ public class TileLayer extends Layer<LayerData> {
 	}
 
 	@Override
-	public LayerNode<?> getLayerGUI() {
+	public PNode getLayerGUI() {
 		return base;
 	}
 

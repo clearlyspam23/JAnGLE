@@ -6,10 +6,9 @@ import java.util.Map;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.EditAction;
-import com.clearlyspam23.GLE.LayerNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
 
-public class TileLayerPNode extends LayerNode<TileLayerPNode> implements EditAction{
+public class TileLayerPNode extends PNode implements EditAction{
 
 	/**
 	 * 
@@ -94,16 +93,6 @@ public class TileLayerPNode extends LayerNode<TileLayerPNode> implements EditAct
 			}
 		}
 		return ans;
-	}
-
-	@Override
-	public TileLayerPNode getCopy() {
-		return new TileLayerPNode(this);
-	}
-
-	@Override
-	public void setToCopy(TileLayerPNode copy) {
-		nodeGrid = copy.nodeGrid;
 	}
 
 	@Override

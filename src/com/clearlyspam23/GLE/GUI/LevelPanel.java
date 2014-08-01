@@ -19,11 +19,9 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerNode;
-import com.clearlyspam23.GLE.LayerNodeListener;
 import com.clearlyspam23.GLE.Level;
 
-public class LevelPanel extends JPanel implements ComponentListener, LayerNodeListener, LayerContainer{
+public class LevelPanel extends JPanel implements ComponentListener, LayerContainer{
 
 	/**
 	 * 
@@ -39,7 +37,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
 	
 	private PNode base;
 	
-	private List<LayerNode> layers = new ArrayList<LayerNode>();
+	private List<PNode> layers = new ArrayList<PNode>();
 	private List<PInputEventListener> currentListeners = new ArrayList<PInputEventListener>();
 	
 	public LevelPanel(Level level)
@@ -63,7 +61,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
 		
 		for(Layer l : level.getLayers())
 		{
-			LayerNode node = l.getLayerGUI();
+			PNode node = l.getLayerGUI();
 			layers.add(node);
 			base.addChild(node);
 		}
@@ -143,12 +141,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerNodeLi
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onChange(LayerNode<?> node) {
 		// TODO Auto-generated method stub
 		
 	}

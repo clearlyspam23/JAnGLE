@@ -3,6 +3,7 @@ package com.clearlyspam23.GLE;
 import java.awt.Frame;
 import java.util.List;
 
+import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.GUI.LayerDialog;
@@ -29,7 +30,7 @@ public abstract class Layer<T extends LayerData> implements Nameable{
 	 * get the actual main UI part of this Layer. This should be the display for whatever would be seen "in game" on this layer
 	 * @return the Piccolo2D Node representing this layer
 	 */
-	public abstract LayerNode<?> getLayerGUI();
+	public abstract PNode getLayerGUI();
 	
 	/**
 	 * the inverse operation of getExportData. Should set this grid to represent the given data.

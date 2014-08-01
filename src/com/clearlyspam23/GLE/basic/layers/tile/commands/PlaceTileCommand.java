@@ -52,13 +52,13 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
         }
 	}
 	
-	public void endDrag(PInputEvent event){
-		super.endDrag(event);
-		PNode p = getPickedNode(event.getCanvasPosition(), event.getCamera());
-		if(p.getParent() instanceof TileLayerPNode){
-			((TileLayerPNode)p.getParent()).registerChange();
-		}
-	}
+//	public void endDrag(PInputEvent event){
+//		super.endDrag(event);
+//		PNode p = getPickedNode(event.getCanvasPosition(), event.getCamera());
+//		if(p.getParent() instanceof TileLayerPNode){
+//			((TileLayerPNode)p.getParent()).registerChange();
+//		}
+//	}
 	
 	protected void drag(PInputEvent event) {
         super.drag(event);
