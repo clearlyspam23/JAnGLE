@@ -1,17 +1,27 @@
 package com.clearlyspam23.GLE;
 
-public abstract class LayerData implements Nameable{
+public class LayerData implements Nameable{
 	
 	public String name;
+	public Object data;
+	
+	public LayerData(){
+		
+	}
+	
+	public LayerData(String name, Object data){
+		this.name = name;
+		this.data = data;
+	}
+	
+	//TODO, split this up
 	
 	public final String getName(){
 		return name;
 	}
 	
-	public final void setName(String name){
-		this.name = name;
+	public final Object getData(){
+		return data;
 	}
-	
-	public abstract String getClassAlias();
 
 }

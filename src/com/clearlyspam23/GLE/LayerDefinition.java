@@ -21,5 +21,17 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 	 * @param template
 	 */
 	public abstract void setEditorGUITo(T gui, E template);
+	
+	public void onTemplateCreation(Template template){
+		
+	}
+	
+	public void onTemplateOpen(Template template){
+		
+	}
+	
+	public void onTemplateClose(Template template){
+		
+	}
 
 }

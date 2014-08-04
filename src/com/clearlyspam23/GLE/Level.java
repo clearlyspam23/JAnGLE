@@ -3,8 +3,11 @@ package com.clearlyspam23.GLE;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.apache.commons.io.FilenameUtils;
 
 import com.clearlyspam23.GLE.exception.TemplateMismatchException;
 
@@ -19,8 +22,7 @@ public class Level implements Nameable{
 	private int currentAction;
 	private double width;
 	private double height;
-	private List<Property> properties = new ArrayList<Property>();
-	private String name;
+	private LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>();
 	private File saveFile;
 	
 	@SuppressWarnings("rawtypes")
@@ -31,7 +33,8 @@ public class Level implements Nameable{
 			layers.add(t.createLayer());
 		}
 		for(PropertyTemplate t : template.getActiveProperties()){
-			properties.add(t.getDefaultValue());
+			Property p = t.getDefaultValue();
+			properties.put(p.getName(), p.getValue());
 		}
 	}
 	
@@ -51,7 +54,7 @@ public class Level implements Nameable{
 				throw new TemplateMismatchException(template, this, false, d.getName());
 			try{
 				Layer l = t.createLayer();
-				l.buildFromData(d);
+				l.buildFromData(d.data);
 				layers.add(l);
 			}
 			catch(Exception e){
@@ -66,6 +69,31 @@ public class Level implements Nameable{
 //				Layer l = t.createLayer();
 //				l.buildFromData(d);
 //				layers.add(l);
+			}
+			catch(Exception exc){
+				throw new TemplateMismatchException(template, this, false, e.getKey());
+			}
+		}
+	}
+	
+	public void setToData(LevelData data) throws TemplateMismatchException{
+		setDimensions(data.width, data.height);
+		for(int i = 0; i < layers.size(); i++){
+			try{
+				Layer l = layers.get(i);
+				l.onResize(width, height);
+				l.buildFromData(data.layers[i]);
+			}
+			catch(Exception e){
+				throw new TemplateMismatchException(template, this, false, data.layers[i].getName());
+			}
+		}
+		for(Entry<String, Object> e : data.properties.entrySet()){
+			PropertyTemplate t = template.getPropertyTemplate(e.getKey());
+			if(t==null)
+				throw new TemplateMismatchException(template, this, true, e.getKey());
+			try{
+				properties.put(e.getKey(), e.getValue());
 			}
 			catch(Exception exc){
 				throw new TemplateMismatchException(template, this, false, e.getKey());
@@ -101,6 +129,9 @@ public class Level implements Nameable{
 	public void setDimensions(double width, double height){
 		this.width = width;
 		this.height = height;
+		for(Layer l : layers){
+			l.onResize(width, height);
+		}
 	}
 	
 	public double getWidth(){
@@ -129,8 +160,18 @@ public class Level implements Nameable{
 		return Collections.unmodifiableList(layers);
 	}
 	
-	public LayerData generateLevelData(){
-		return null;
+	public LevelData generateLevelData(){
+		LevelData data = new LevelData();
+		data.width = width;
+		data.height = height;
+		data.layers = new LayerData[layers.size()];
+		for(int i = 0; i < layers.size(); i++){
+			data.layers[i] = new LayerData(layers.get(i).getName(), layers.get(i).getExportData());
+		}
+		for(Entry<String, Object> p : properties.entrySet()){
+			data.properties.put(p.getKey(), p.getValue());
+		}
+		return data;
 	}
 	
 	public void setProperty(String name, Object property){
@@ -139,11 +180,7 @@ public class Level implements Nameable{
 
 	@Override
 	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name){
-		this.name = name;
+		return saveFile!=null ? FilenameUtils.removeExtension(saveFile.getName()) : "New Level";
 	}
 
 	public File getSaveFile() {

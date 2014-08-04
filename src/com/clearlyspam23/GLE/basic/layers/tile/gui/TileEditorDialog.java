@@ -49,8 +49,6 @@ public class TileEditorDialog extends LayerEditorDialog {
 		selectionPanel = new TilesetSelectionPanel();
 		panelTabs.addTab(selectionPanel.getName(), selectionPanel);
 		setBounds(100, 100, panel.getPreferredSize().width, panel.getPreferredSize().height+selectionPanel.getPreferredSize().height);
-		System.out.println(selectionPanel.getPanel().getPreferredSize());
-		System.out.println("here");
 
 	}
 	

@@ -105,7 +105,6 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 			canvas.addInputEventListener(l);
 		
 		for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
-			System.out.println(d);
 			d.setVisible(true);
 		}
 		

@@ -1,26 +1,23 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.awt.Frame;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.imageio.ImageIO;
+import java.util.Map;
 
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerData;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
+import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 
-public class TileLayer extends Layer<LayerData> {
+public class TileLayer extends Layer<Object> {
 	
 	private TileLayerTemplate template;
 	
@@ -36,38 +33,44 @@ public class TileLayer extends Layer<LayerData> {
 		this.template = template;
 		base = new PNode();
 		data = new TilesetEditorData();
-		
-		//the below code should be removed as soon as a better solution is found
-		BufferedImage tile = null;
-		Image[][] tiles = null;
-		try {
-			File f = new File("images/Pipes.png");
-			BufferedImage temp  = ImageIO.read(f);
-			tile = temp.getSubimage(0, 0, 64, 64);
-			tiles = new Image[8][8];
-			for(int i = 0; i < tiles.length; i++)
-			{
-				for(int j = 0; j < tiles[i].length; j++)
-				{
-					tiles[i][j] = temp.getSubimage(64*j, 64*i, 64, 64);
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(tile==null)
-		{
-			System.err.println("unable to load the image");
-			return;
-		}
-		data.addTileset(new Tileset("test1", tiles));
-//		data.setCurrentTileset(new Tileset("test1", new Image[][]{{tile}}));
-//		data.setSelectedIndex(0, 0);
+		//the below line should be removed as soon as a better solution is determined
+		for(Tileset t : getTilesetManager().getAllTilesets())
+			data.addTileset(t);
 	}
 
 	@Override
-	public LayerData getExportData() {
-		return null;
+	public Object getExportData() {
+		if(tiles==null)
+			return new CompactExportData[0];
+		Map<Tileset, CompactExportData> dataMap = new HashMap<Tileset, CompactExportData>();
+		TilePNode[][] grid = tiles.getNodeGrid();
+		for(int i = 0; i < grid.length; i++){
+			for(int j = 0; j < grid[i].length; j++){
+				if(grid[i][j]==null||grid[i][j].getTileset()==null)
+					continue;
+				if(!dataMap.containsKey(grid[i][j].getTileset())){
+					CompactExportData ced = new CompactExportData();
+					ced.tileset = grid[i][j].getTileset().getName();
+					fillWithMinus1(ced.tiles);
+					dataMap.put(grid[i][j].getTileset(), ced);
+				}
+				dataMap.get(grid[i][j].getTileset()).tiles[i][j] = grid[i][j].getTilesetX() + grid[i][j].getTileset().getWidth()*grid[i][j].getTilesetY();
+			}
+		}
+		CompactExportData[] ans = new CompactExportData[dataMap.size()];
+		int i = 0;
+		for(CompactExportData d : dataMap.values()){
+			ans[i++] = d;
+		}
+		return ans;
+	}
+	
+	private void fillWithMinus1(int[][] nodes){
+		for(int i = 0; i < nodes.length; i++){
+			for(int j = 0; j < nodes[i].length; j++){
+				nodes[i][j] = -1;
+			}
+		}
 	}
 
 	@Override
@@ -81,8 +84,21 @@ public class TileLayer extends Layer<LayerData> {
 	}
 
 	@Override
-	public void buildFromData(LayerData data) {
-		
+	public void buildFromData(Object data) {
+		CompactExportData[] ceds = (CompactExportData[])data;
+		for(CompactExportData d : ceds){
+			Tileset ts = getTilesetManager().getTilesetByName(d.tileset);
+			for(int i = 0; i < d.tiles.length; i++){
+				for(int j = 0; j < d.tiles.length; j++){
+					if(d.tiles[i][j]<0){
+						tiles.getNodeGrid()[i][j].resetTileset();
+					}
+					else{
+						tiles.getNodeGrid()[i][j].setTileset(ts, i, j);
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -97,12 +113,18 @@ public class TileLayer extends Layer<LayerData> {
 
 	@Override
 	public void onResize(double x, double y) {
+		System.out.println(x);
+		System.out.println(y);
 		width = x;
 		height = y;
 		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
 		base.addChild(tiles);
 		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
 		base.addChild(grid);
+	}
+	
+	public TilesetManager getTilesetManager(){
+		return (TilesetManager) template.getTemplate().getTemplateData(template.getDefinition(), "tilesets");
 	}
 
 	@Override

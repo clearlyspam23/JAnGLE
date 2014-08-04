@@ -22,7 +22,7 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
 	}
 	
 	protected void setTile(TilePNode tile, PCamera cam){
-		tile.setImage(data.getSelectedTile());
+//		tile.setImage(data.getSelectedTile());
 		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 	}
 	

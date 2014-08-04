@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
@@ -119,7 +118,7 @@ public class LayerPanel extends TemplateSubPanel{
 			public void actionPerformed(ActionEvent arg0) {
 				if(typeBox.getSelectedIndex()>=0){
 					int i = activeLayers.size();
-					String defName = "Prop"+i;
+					String defName = "Layer"+i;
 					layerListModel.addElement(defName);
 					layerList.setSelectedIndex(layerListModel.getSize()-1);
 				}
@@ -232,7 +231,7 @@ public class LayerPanel extends TemplateSubPanel{
 		if(shouldBeEnabled){
 			if(layerList.getSelectedIndex()==activeLayers.size()){
 				int i = activeLayers.size();
-				String defName = "Prop"+i;
+				String defName = "Layer"+i;
 				nameField.setText(defName);
 				LayerDefinition def = knownLayerDefs.get(typeBox.getSelectedIndex());
 				SubPanel sub = layerPanels.get(typeBox.getSelectedIndex());
@@ -257,20 +256,26 @@ public class LayerPanel extends TemplateSubPanel{
 		currentLayer.template.setName(text);
 	}
 	
-	private void buildFromActiveProps(){
+	private void buildFromActiveLayers(){
+		currentLayer = null;
 		layerListModel.removeAllElements();
 		for(LayerWrapper t : activeLayers){
 			layerListModel.addElement(t.template.getName());
 		}
+		if(activeLayers.isEmpty())
+			currentLayer = null;
+		else
+			currentLayer = activeLayers.get(0);
 		layerList.setSelectedIndex(activeLayers.size()> 0 ? 0 : -1);
 	}
 	
 	public void setToTemplate(Template template)
 	{
+		activeLayers.clear();
 		for(LayerTemplate t : template.getLayers()){
 			activeLayers.add(new LayerWrapper(t, t.getName()));
 		}
-		buildFromActiveProps();
+		buildFromActiveLayers();
 	}
 
 	@Override
@@ -289,8 +294,7 @@ public class LayerPanel extends TemplateSubPanel{
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		setToTemplate(new Template());
 	}
 
 	@Override

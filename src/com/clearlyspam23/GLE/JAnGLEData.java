@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.LevelSerializer;
@@ -14,7 +17,7 @@ public class JAnGLEData {
 	
 	private final PluginManager plugins;
 	private Level currentLevel;
-	private List<Level> openLevels;
+	private List<Level> openLevels = new ArrayList<Level>();
 	private Template openTemplate;
 	
 	private final TemplateSerializer serializer;
@@ -60,8 +63,26 @@ public class JAnGLEData {
 		return openTemplate;
 	}
 	
-	public void setOpenTemplate(Template openTemplate) {
-		this.openTemplate = openTemplate;
+	public void setOpenTemplate(Template template) {
+		if(openTemplate!=null){
+			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
+			for(LayerTemplate t : template.getLayers()){
+				if(!seen.contains(t.getDefinition())){
+					t.getDefinition().onTemplateClose(openTemplate);
+					seen.add(t.getDefinition());
+				}
+			}
+		}
+		openTemplate = template;
+		if(openTemplate!=null){
+			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
+			for(LayerTemplate t : template.getLayers()){
+				if(!seen.contains(t.getDefinition())){
+					t.getDefinition().onTemplateOpen(openTemplate);
+					seen.add(t.getDefinition());
+				}
+			}
+		}
 	}
 
 	public TemplateSerializer getSerializer() {
@@ -72,8 +93,15 @@ public class JAnGLEData {
 		LevelSerializer serializer = openTemplate.getSerializer();
 		CompressionFormat format = openTemplate.getCompression();
 		String output = format.decompress(file);
-		Level l = serializer.deserialize(output);
-		return l;
+		try {
+			Level level = new Level(openTemplate);
+			LevelData l = serializer.deserialize(level, output);
+			return level;
+		} catch (Exception e) {
+			e.printStackTrace();
+			//TODO something better here
+			return null;
+		}
 	}
 	
 	public boolean saveTemplate(Template template){
@@ -92,7 +120,7 @@ public class JAnGLEData {
 	
 	public boolean saveLevel(Level level){
 		LevelSerializer serializer = openTemplate.getSerializer();
-		String s = serializer.serialize(level);
+		String s = serializer.serialize(level.generateLevelData());
 		CompressionFormat format = openTemplate.getCompression();
 		try {
 			format.compress(s, level.getSaveFile());

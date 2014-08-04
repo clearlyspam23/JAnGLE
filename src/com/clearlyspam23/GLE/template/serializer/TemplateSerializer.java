@@ -4,6 +4,8 @@ import java.io.File;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.template.CompressionFormat;
@@ -15,6 +17,7 @@ public class TemplateSerializer {
 	static final String COORD_TAG = "!coord";
 	static final String SERIALIZER_TAG = "!serialize";
 	static final String COMPRESSION_TAG = "!compress";
+	static final String DEF_TAG = "!definition";
 	
 	private Yaml yaml;
 	private CustomConstructor construct;
@@ -35,10 +38,17 @@ public class TemplateSerializer {
 			construct.registerCompression(s);
 			represent.registerCompression(s);
 		}
+		for(LayerDefinition d : manager.getRecognizedLayerDefs()){
+			construct.registerLayerDef(d);
+			represent.registerLayerDef(d);
+		}
 		yaml = new Yaml(construct, represent);
 	}
 	
 	public String serialize(Template t){
+		for(LayerTemplate lt : t.getLayers()){
+			System.out.println(lt.getDefinition());
+		}
 		return yaml.dump(t);
 	}
 	

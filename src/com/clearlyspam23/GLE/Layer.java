@@ -9,7 +9,7 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.LayerDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
-public abstract class Layer<T extends LayerData> implements Nameable{
+public abstract class Layer<T> implements Nameable{
 	
 	/**
 	 * get an object representing the data necessary to recreate this layer in game. This data should not include anything necessary
@@ -56,16 +56,12 @@ public abstract class Layer<T extends LayerData> implements Nameable{
 	
 	public abstract void onResize(double x, double y);
 	
-	/**
-	 * hint to serializers that the ExportData provided by this class might have subtypes
-	 * @return whether or not this Layer can provide subtypes of ExportData
-	 */
-	public boolean hasDataSubtypes(){
-		return false;
-	}
-	
 	public ActionData getActionData(){
 		return new ActionData(getName(), this, getExportData());
+	}
+	
+	public Class<?> getExportDataClass(){
+		return getExportData().getClass();
 	}
 	
 	@SuppressWarnings("unchecked")

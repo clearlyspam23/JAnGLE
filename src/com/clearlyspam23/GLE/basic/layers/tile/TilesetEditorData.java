@@ -92,7 +92,6 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 			currentEvent = allEvents.get(index);
 		else
 			currentEvent = null;
-		System.out.println(currentEvent);
 	}
 
 	@Override

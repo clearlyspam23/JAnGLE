@@ -101,10 +101,10 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		panel.setLayout(new GridLayout(tileset.getWidth(), tileset.getHeight()));
 		int width = 0;
 		int height = 0;
-		for(int i = 0; i < tileset.getWidth(); i++){
+		for(int j = 0; j < tileset.getHeight(); j++){
 			int tempWidth = 0;
 			int tempHeight = 0;
-			for(int j = 0; j < tileset.getHeight(); j++){
+			for(int i = 0; i < tileset.getWidth(); i++){
 				final int x = i;
 				final int y = j;
 				ImageIcon ico = new StretchIcon(tileset.getTileAt(i, j), true);
@@ -144,7 +144,6 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 			width = Math.max(tempWidth, width);
 			height+=tempHeight;
 		}
-		System.out.println(width + ", " + height);
 		panel.setPreferredSize(new Dimension(width, height));
 		if(tileset.getWidth()>0)
 		{
@@ -190,7 +189,6 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		for(int i = 0; i < tilesets.size(); i++){
 			Tileset t = tilesets.get(i);
 			model.addElement(t.getName());
-			System.out.println(t.getName());
 			if(t.equals(currentTileset))
 				foundIndex = i;
 		}
@@ -239,7 +237,6 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		System.out.println(panel.getSize());
 		
 	}
 

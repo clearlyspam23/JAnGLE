@@ -93,8 +93,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		}
 	}
 	
-	private static final String defaultLocation = System.getProperty("user.dir");
-	
 //	private class PropPair{
 //		@SuppressWarnings("rawtypes")
 //		public PropertyTemplate prop;
@@ -174,7 +172,7 @@ public class GeneralPanel extends TemplateSubPanel{
 			
 			private void updateText(){
 				if(defaultLocCB.isSelected()){
-					StringBuilder text = new StringBuilder(defaultLocation);
+					StringBuilder text = new StringBuilder(Template.defaultLocation);
 					if(nameField.getText().length()>0){
 						text.append(File.separator).append(nameField.getText()).append(".jant");
 					}
@@ -192,7 +190,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		locationField.setBounds(135, 74, 284, 20);
 		add(locationField);
 		locationField.setColumns(10);
-		locationField.setText(defaultLocation);
+		locationField.setText(Template.defaultLocation);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -304,7 +302,6 @@ public class GeneralPanel extends TemplateSubPanel{
 		propsList = new JList<String>();
 		propsList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent arg0) {
-				System.out.println("building");
 				checkPropsList();
 			}
 		});
@@ -388,12 +385,10 @@ public class GeneralPanel extends TemplateSubPanel{
 	}
 	
 	private void buildFromActiveProps(){
-		System.out.println("removing everything");
 		currentProp = null;
 		propsListModel.removeAllElements();
 		for(PropWrapper t : activeProperties){
 			propsListModel.addElement(t.prop.getName());
-			System.out.println("adding 1 thing");
 		}
 		if(activeProperties.isEmpty())
 			currentProp = null;
@@ -486,7 +481,6 @@ public class GeneralPanel extends TemplateSubPanel{
 	@Override
 	public void reset() {
 		Template temp = new Template();
-		temp.setTemplateFile(new File(defaultLocation));
 		setToTemplate(temp);
 	}
 

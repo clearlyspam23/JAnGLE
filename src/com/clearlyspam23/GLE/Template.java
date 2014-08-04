@@ -2,7 +2,9 @@ package com.clearlyspam23.GLE;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
@@ -13,9 +15,12 @@ import com.clearlyspam23.GLE.util.Vector2;
 
 public class Template {
 	
+	//probably should change this later
+	public static final String defaultLocation = System.getProperty("user.dir");
+	
 	//meta data
 	private String name = "";
-	private File templateFile;
+	private File templateFile = new File(defaultLocation);
 	
 	//Runtime data
 	private List<ParameterMacro> runtimeCommand = new ArrayList<ParameterMacro>();
@@ -37,6 +42,8 @@ public class Template {
 	@SuppressWarnings("rawtypes")
 	private List<PropertyTemplate> activeProperties = new ArrayList<PropertyTemplate>();
 	
+	private Map<LayerDefinition, Map<String, Object>> templateData = new HashMap<LayerDefinition, Map<String, Object>>();
+	
 	public void addParameter(ParameterMacro macro)
 	{
 		runtimeCommand.add(macro); 
@@ -56,6 +63,7 @@ public class Template {
 	
 	public void addLayerTemplate(LayerTemplate temp)
 	{
+		temp.setTemplate(this);
 		layerTemplates.add(temp);
 	}
 	
@@ -191,6 +199,17 @@ public class Template {
 				return t;
 		return null;
 	}
+	
+	public void putTemplateData(LayerDefinition def, String name, Object data){
+		if(!templateData.containsKey(def)){
+			templateData.put(def, new HashMap<String, Object>());
+		}
+		templateData.get(def).put(name, data);
+	}
+	
+	public Object getTemplateData(LayerDefinition def, String name){
+		return templateData.get(def).get(name);
+	}
 
 	public Vector2 getDefaultSize() {
 		return defaultSize;
@@ -198,6 +217,15 @@ public class Template {
 
 	public void setDefaultSize(Vector2 defaultSize) {
 		this.defaultSize = defaultSize;
+	}
+
+	public Map<LayerDefinition, Map<String, Object>> getTemplateData() {
+		return templateData;
+	}
+
+	public void setTemplateData(
+			Map<LayerDefinition, Map<String, Object>> templateData) {
+		this.templateData = templateData;
 	}
 
 }

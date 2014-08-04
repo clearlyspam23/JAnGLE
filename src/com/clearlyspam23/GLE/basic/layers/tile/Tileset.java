@@ -2,7 +2,9 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.awt.Image;
 
-public class Tileset {
+import com.clearlyspam23.GLE.Nameable;
+
+public class Tileset implements Nameable{
 	
 	private Image[][] tileset;
 	private int width;

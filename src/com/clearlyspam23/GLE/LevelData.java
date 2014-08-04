@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 
 public class LevelData {
 	
-	public String name;
 	public double width;
 	public double height;
 	public LayerData[] layers;

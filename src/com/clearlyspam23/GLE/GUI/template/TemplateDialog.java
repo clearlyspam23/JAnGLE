@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,12 +19,11 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
-import org.yaml.snakeyaml.Yaml;
-
 import com.clearlyspam23.GLE.JAnGLEData;
+import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
 import com.clearlyspam23.GLE.basic.compression.ZipCompression;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
@@ -58,6 +59,8 @@ public class TemplateDialog extends JDialog implements ActionListener{
 	private boolean accepted = false;
 	
 	private Template template;
+	
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Launch the application.
@@ -133,7 +136,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPanel.add(tabbedPane);
 		
 		for(TemplateSubPanel panel : subPanels)
@@ -171,6 +174,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			for(TemplateSubPanel p : subPanels)
 				p.setToTemplate(template);
 		setVisible(true);
+		tabbedPane.setSelectedIndex(0);
 	}
 	
 	public void showDialog(){
@@ -185,6 +189,13 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			Template template = new Template();
 			for(TemplateSubPanel p : subPanels)
 				p.generateTemplate(template);
+			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
+			for(LayerTemplate lt : template.getLayers()){
+				if(!seen.contains(lt.getDefinition())){
+					lt.getDefinition().onTemplateCreation(template);
+					seen.add(lt.getDefinition());
+				}
+			}
 			this.template = template;
 			if(!data.saveTemplate(template)){
 				//TODO this is an error, handle it somehow

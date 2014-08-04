@@ -4,6 +4,7 @@ package com.clearlyspam23.GLE;
 public abstract class LayerTemplate implements Nameable{
 	
 	private String name;
+	private Template template;
 	
 	protected LayerTemplate(){
 		
@@ -32,6 +33,18 @@ public abstract class LayerTemplate implements Nameable{
 	@SuppressWarnings("rawtypes")
 	public LayerDefinition getDefinition() {
 		return definition;
+	}
+	
+	public void setDefinition(LayerDefinition def){
+		this.definition = def;
+	}
+
+	public Template getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(Template template) {
+		this.template = template;
 	}
 
 }

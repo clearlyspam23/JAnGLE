@@ -9,6 +9,7 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
+import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;
@@ -18,6 +19,8 @@ public class CustomConstructor extends Constructor {
 	private HashMap<String, CoordinateSystem> coordMap = new HashMap<String, CoordinateSystem>();
 	private HashMap<String, LevelSerializer> serializerMap = new HashMap<String, LevelSerializer>();
 	private HashMap<String, CompressionFormat> compressionMap = new HashMap<String, CompressionFormat>();
+	@SuppressWarnings("rawtypes")
+	private HashMap<String, LayerDefinition> definitionMap = new HashMap<String, LayerDefinition>();
 	
 	private class ConstructNameable extends AbstractConstruct {
 		
@@ -39,18 +42,23 @@ public class CustomConstructor extends Constructor {
 		this.yamlConstructors.put(new Tag(TemplateSerializer.COORD_TAG), new ConstructNameable(coordMap));
 		this.yamlConstructors.put(new Tag(TemplateSerializer.SERIALIZER_TAG), new ConstructNameable(serializerMap));
 		this.yamlConstructors.put(new Tag(TemplateSerializer.COMPRESSION_TAG), new ConstructNameable(compressionMap));
+		this.yamlConstructors.put(new Tag(TemplateSerializer.DEF_TAG), new ConstructNameable(definitionMap));
 	}
 	
     public void registerCoord(CoordinateSystem system){
     	coordMap.put(system.getName(), system);
     }
     
-    public void registerSerializer(LevelSerializer system){
-    	serializerMap.put(system.getName(), system);
+    public void registerSerializer(LevelSerializer serializer){
+    	serializerMap.put(serializer.getName(), serializer);
     }
     
-    public void registerCompression(CompressionFormat system){
-    	compressionMap.put(system.getName(), system);
+    public void registerCompression(CompressionFormat format){
+    	compressionMap.put(format.getName(), format);
+    }
+    
+    public void registerLayerDef(LayerDefinition definition){
+    	definitionMap.put(definition.getName(), definition);
     }
 
 }

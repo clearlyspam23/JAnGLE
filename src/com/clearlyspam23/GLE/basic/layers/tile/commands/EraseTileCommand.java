@@ -1,7 +1,5 @@
 package com.clearlyspam23.GLE.basic.layers.tile.commands;
 
-import java.awt.Image;
-
 import org.piccolo2d.PCamera;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
@@ -14,9 +12,9 @@ public class EraseTileCommand extends PlaceTileCommand {
 	}
 	
 	protected void setTile(TilePNode tile, PCamera cam){
-		tile.setImage((Image)null);
+//		tile.setImage((Image)null);
 		tile.resetTileset();
-		tile.invalidatePaint();
+//		tile.invalidatePaint();
 	}
 
 }

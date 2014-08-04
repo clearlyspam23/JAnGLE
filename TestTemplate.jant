@@ -1,0 +1,221 @@
+&id001 !!com.clearlyspam23.GLE.Template
+activeProperties:
+- !!com.clearlyspam23.GLE.basic.properties.IntPropertyTemplate {default: 0, max: 255,
+  min: 0, name: Prop0}
+- !!com.clearlyspam23.GLE.basic.properties.IntPropertyTemplate {default: 0, max: 255,
+  min: 0, name: Prop1}
+compression: !compress 'None'
+coordinateSystem: !coord 'Top Left'
+defaultSize: {x: 320.0, y: 320.0}
+extension: .json
+layers:
+- !!com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate
+  definition: !definition 'Tile'
+  gridDimensions: {x: 32.0, y: 32.0}
+  name: Layer0
+  template: *id001
+pLanguageData: null
+serializer: !serialize 'JSON'
+templateData:
+  !definition 'Tile':
+    tilesets: !!com.clearlyspam23.GLE.basic.layers.tile.TilesetManager
+      allTilesets:
+      - &id002
+        name: test1
+        tileset:
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+        - - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+          - !!java.awt.image.BufferedImage
+            accelerationPriority: 0.5
+            data: !!sun.awt.image.ByteInterleavedRaster {}
+      nameTable:
+        test1: *id002
+templateName: TestTemplate
+usedPLanguage: null

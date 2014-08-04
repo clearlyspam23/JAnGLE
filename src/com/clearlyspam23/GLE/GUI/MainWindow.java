@@ -31,6 +31,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
@@ -54,6 +56,11 @@ import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
 
 public class MainWindow extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private JPanel contentPane;
 
@@ -133,7 +140,6 @@ public class MainWindow extends JFrame {
 	private final JFileChooser fc;
 	
 	private Map<Level, LevelPanel> levelPanelMap = new HashMap<Level, LevelPanel>();
-	private LevelCreateDialog lcd = new LevelCreateDialog();
 
 	/**
 	 * Create the frame.
@@ -167,13 +173,11 @@ public class MainWindow extends JFrame {
 		mntmNewTemplate = new JMenuItem("New Template");
 		mntmNewTemplate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dialog.reset();
-				dialog.setVisible(true);
-				Template t = dialog.getTemplate();
-				if(t!=null){
+				dialog.showDialog();
+				if(dialog.isAccepted()){
+					Template t = dialog.getTemplate();
 					data.setOpenTemplate(t);
 				}
-				System.out.println("finished");
 				checkMenu();
 			}
 		});
@@ -254,6 +258,9 @@ public class MainWindow extends JFrame {
 						}
 					}
 				}
+				data.closeAllLevels();
+				levelPanelMap.clear();
+				tabbedPane.removeAll();
 				data.setOpenTemplate(null);
 				checkMenu();
 			}
@@ -305,12 +312,8 @@ public class MainWindow extends JFrame {
 	
 	private void newLevel(){
 		Level l = data.getOpenTemplate().generateLevel();
-		lcd.showDialog(data.getOpenTemplate().getDefaultSize());
-		if(lcd.isAccepted()){
-			l.setDimensions(lcd.getLevelDimensions().x, lcd.getLevelDimensions().y);
-			l.setName(lcd.getLevelName());
-			openLevel(l);
-		}
+		l.setDimensions(data.getOpenTemplate().getDefaultSize().x, data.getOpenTemplate().getDefaultSize().y);
+		openLevel(l);
 	}
 	
 	private void openLevels(){
@@ -340,8 +343,11 @@ public class MainWindow extends JFrame {
 	}
 	
 	private void saveLevelAs(Level level){
-		if(showSaveLevelDialog()){
-			level.setSaveFile(fc.getSelectedFile());
+		if(showSaveLevelDialog(level.getName())){
+			File f = fc.getSelectedFile();
+			String extension = data.getOpenTemplate().getExtension();
+			File ans = new File(FilenameUtils.removeExtension(f.getPath())+extension);
+			level.setSaveFile(ans);
 			saveLevel(level);
 		}
 	}
@@ -358,17 +364,19 @@ public class MainWindow extends JFrame {
 	
 	private boolean showOpenTemplateDialog(){
 		fc.setDialogType(JFileChooser.OPEN_DIALOG);
+		fc.setCurrentDirectory(new File(Template.defaultLocation));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (*.jant)", "jant");
 		fc.setFileFilter(filter);
 		fc.setMultiSelectionEnabled(false);
-		int ret = fc.showSaveDialog(MainWindow.this);
+		int ret = fc.showOpenDialog(MainWindow.this);
 		return ret==JFileChooser.APPROVE_OPTION;
 	}
 	
-	private boolean showSaveLevelDialog(){
+	private boolean showSaveLevelDialog(String name){
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
 		String extension = data.getOpenTemplate().getExtension();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Level File (*"+extension+")", extension);
+		fc.setSelectedFile(new File(name+extension));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Level File (*"+extension+")", extension.replaceAll("\\.", ""));
 		fc.setFileFilter(filter);
 		fc.setMultiSelectionEnabled(false);
 		int ret = fc.showSaveDialog(MainWindow.this);
@@ -378,10 +386,11 @@ public class MainWindow extends JFrame {
 	private boolean showOpenLevelDialog(){
 		fc.setDialogType(JFileChooser.OPEN_DIALOG);
 		String extension = data.getOpenTemplate().getExtension();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Level File (*"+extension+")", extension);
+		fc.setSelectedFile(new File(""));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Level File (*"+extension+")", extension.replaceAll("\\.", ""));
 		fc.setFileFilter(filter);
 		fc.setMultiSelectionEnabled(true);
-		int ret = fc.showSaveDialog(MainWindow.this);
+		int ret = fc.showOpenDialog(MainWindow.this);
 		return ret==JFileChooser.APPROVE_OPTION;
 	}
 	

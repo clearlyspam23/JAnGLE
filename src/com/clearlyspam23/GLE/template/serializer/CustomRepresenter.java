@@ -7,6 +7,7 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
+import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.template.CompressionFormat;
@@ -33,7 +34,6 @@ public class CustomRepresenter extends Representer {
     protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
             Object propertyValue, Tag customTag) {
         if (javaBean instanceof Template&&"templateFile".equals(property.getName())) {
-        	System.out.println("here");
             return null;
         } else {
             return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
@@ -53,6 +53,11 @@ public class CustomRepresenter extends Representer {
     private RepresentNameable compressNameable = new RepresentNameable(TemplateSerializer.COMPRESSION_TAG);
     public void registerCompression(CompressionFormat system){
     	this.representers.put(system.getClass(), compressNameable);
+    }
+    
+    private RepresentNameable layerNameable = new RepresentNameable(TemplateSerializer.DEF_TAG);
+    public void registerLayerDef(@SuppressWarnings("rawtypes") LayerDefinition def){
+    	this.representers.put(def.getClass(), layerNameable);
     }
 
 }
