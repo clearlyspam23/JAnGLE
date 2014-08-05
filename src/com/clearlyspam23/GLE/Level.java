@@ -58,7 +58,7 @@ public class Level implements Nameable{
 				layers.add(l);
 			}
 			catch(Exception e){
-				throw new TemplateMismatchException(template, this, false, d.getName());
+				throw new TemplateMismatchException(template, this, false, d.getName(), e);
 			}
 		}
 		for(Entry<String, Object> e : data.properties.entrySet()){
@@ -71,7 +71,7 @@ public class Level implements Nameable{
 //				layers.add(l);
 			}
 			catch(Exception exc){
-				throw new TemplateMismatchException(template, this, false, e.getKey());
+				throw new TemplateMismatchException(template, this, false, e.getKey(), exc);
 			}
 		}
 	}
@@ -82,10 +82,10 @@ public class Level implements Nameable{
 			try{
 				Layer l = layers.get(i);
 				l.onResize(width, height);
-				l.buildFromData(data.layers[i]);
+				l.buildFromData(data.layers[i].data);
 			}
 			catch(Exception e){
-				throw new TemplateMismatchException(template, this, false, data.layers[i].getName());
+				throw new TemplateMismatchException(template, this, false, data.layers[i].getName(), e);
 			}
 		}
 		for(Entry<String, Object> e : data.properties.entrySet()){
@@ -96,7 +96,7 @@ public class Level implements Nameable{
 				properties.put(e.getKey(), e.getValue());
 			}
 			catch(Exception exc){
-				throw new TemplateMismatchException(template, this, false, e.getKey());
+				throw new TemplateMismatchException(template, this, false, e.getKey(), exc);
 			}
 		}
 	}

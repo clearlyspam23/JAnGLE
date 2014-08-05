@@ -12,8 +12,6 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
-import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
-import com.clearlyspam23.GLE.GUI.util.BasicEditorDialog;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
@@ -34,7 +32,7 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 	
 	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
 	
-	private List<Tileset> tempTilesetStorage = new ArrayList<Tileset>();
+	private List<TilesetHandle> tempTilesetStorage = new ArrayList<TilesetHandle>();
 	
 	public TilesetEditorData()
 	{
@@ -58,7 +56,7 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 		return dialogs;
 	}
 	
-	public Tileset getCurrentTileset() {
+	public TilesetHandle getCurrentTileset() {
 		return dialog.getTilesetSelectionPanel().getCurrentTileset();
 	}
 //	public void setCurrentTileset(Tileset currentTileset) {
@@ -75,7 +73,7 @@ public class TilesetEditorData implements ChangeListener, PInputEventListener{
 //		this.selectedY = selectedY;
 //	}
 	
-	public void addTileset(Tileset t){
+	public void addTileset(TilesetHandle t){
 		if(dialog==null)
 			tempTilesetStorage.add(t);
 		else

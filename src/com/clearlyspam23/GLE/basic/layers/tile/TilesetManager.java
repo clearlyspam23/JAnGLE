@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class TilesetManager {
 	
-	private List<Tileset> allTilesets = new ArrayList<Tileset>();
-	private Map<String, Tileset> nameTable = new HashMap<String, Tileset>();
+	private List<TilesetHandle> allTilesets = new ArrayList<TilesetHandle>();
+	private Map<String, TilesetHandle> nameTable = new HashMap<String, TilesetHandle>();
 	
-	public boolean addTileset(Tileset t){
+	public boolean addTileset(TilesetHandle t){
 		if(nameTable.containsKey(t.getName()))
 			return false;
 		allTilesets.add(t);
@@ -18,23 +18,23 @@ public class TilesetManager {
 		return true;
 	}
 	
-	public List<Tileset> getAllTilesets(){
+	public List<TilesetHandle> getAllTilesets(){
 		return allTilesets;
 	}
 	
-	public Tileset getTilesetByName(String name){
+	public TilesetHandle getTilesetByName(String name){
 		return nameTable.get(name);
 	}
 
-	public Map<String, Tileset> getNameTable() {
+	public Map<String, TilesetHandle> getNameTable() {
 		return nameTable;
 	}
 
-	public void setNameTable(Map<String, Tileset> nameTable) {
+	public void setNameTable(Map<String, TilesetHandle> nameTable) {
 		this.nameTable = nameTable;
 	}
 
-	public void setAllTilesets(List<Tileset> allTilesets) {
+	public void setAllTilesets(List<TilesetHandle> allTilesets) {
 		this.allTilesets = allTilesets;
 	}
 

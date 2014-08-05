@@ -28,7 +28,6 @@ public class JsonSerializer extends LevelSerializer {
 
 	@Override
 	public String serialize(LevelData data) {
-		System.out.println(data);
 		String s = gson.toJson(data);
 		return s;
 	}

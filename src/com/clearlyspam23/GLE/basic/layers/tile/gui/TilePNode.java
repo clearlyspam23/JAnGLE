@@ -4,7 +4,7 @@ import java.awt.Image;
 
 import org.piccolo2d.nodes.PImage;
 
-import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TilePNode extends PImage {
 
@@ -13,7 +13,7 @@ public class TilePNode extends PImage {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Tileset currentTileset;
+	private TilesetHandle currentTileset;
 	private int tilesetX;
 	private int tilesetY;
 	
@@ -22,16 +22,16 @@ public class TilePNode extends PImage {
 		tilesetY = -1;
 	}
 	
-	public TilePNode(Tileset set, int x, int y){
+	public TilePNode(TilesetHandle set, int x, int y){
 		setTileset(set, x, y);
 	}
 	
-	public void setTileset(Tileset set, int x, int y)
+	public void setTileset(TilesetHandle set, int x, int y)
 	{
 		currentTileset = set;
 		tilesetX = x;
 		tilesetY = y;
-		if(currentTileset!=null&&tilesetX>=0&&tilesetX<currentTileset.getWidth()&&tilesetY>=0&&tilesetY<currentTileset.getHeight())
+		if(currentTileset!=null&&currentTileset.isValidLocation(tilesetX, tilesetY))
 			setImage(currentTileset.getTileAt(tilesetX, tilesetY));
 	}
 	
@@ -43,7 +43,7 @@ public class TilePNode extends PImage {
 		invalidatePaint();
 	}
 
-	public Tileset getTileset() {
+	public TilesetHandle getTileset() {
 		return currentTileset;
 	}
 

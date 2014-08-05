@@ -195,7 +195,7 @@ public class Template {
 	@SuppressWarnings("rawtypes")
 	public PropertyTemplate getPropertyTemplate(String key) {
 		for(PropertyTemplate t : activeProperties)
-			if(t.getName().equals(name))
+			if(t.getName().equals(key))
 				return t;
 		return null;
 	}

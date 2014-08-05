@@ -96,6 +96,8 @@ public class JAnGLEData {
 		try {
 			Level level = new Level(openTemplate);
 			LevelData l = serializer.deserialize(level, output);
+			level.setToData(l);
+			level.setSaveFile(file);
 			return level;
 		} catch (Exception e) {
 			e.printStackTrace();

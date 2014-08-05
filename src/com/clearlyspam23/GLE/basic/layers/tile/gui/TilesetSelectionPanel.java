@@ -22,7 +22,7 @@ import javax.swing.JScrollPane;
 import com.clearlyspam23.GLE.GUI.util.AspectRatioLayout;
 import com.clearlyspam23.GLE.GUI.util.DockablePanel;
 import com.clearlyspam23.GLE.GUI.util.StretchIcon;
-import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TilesetSelectionPanel extends DockablePanel implements ComponentListener{
 	
@@ -30,9 +30,9 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 	
 	private int selectedX;
 	private int selectedY;
-	private Tileset currentTileset;
+	private TilesetHandle currentTileset;
 	
-	private List<Tileset> tilesets = new ArrayList<Tileset>();
+	private List<TilesetHandle> tilesets = new ArrayList<TilesetHandle>();
 	
 	private JScrollPane scrollPane;
 	private JPanel panel;
@@ -78,7 +78,7 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 	
 	private void setToTileset(int index){
 		if(index>=0&&index<tilesets.size()){
-			Tileset t = tilesets.get(index);
+			TilesetHandle t = tilesets.get(index);
 			if(!t.equals(currentTileset)){
 				selectedX = -1;
 				selectedY = -1;
@@ -92,7 +92,7 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		}
 	}
 	
-	private void setToTileset(Tileset tileset){
+	private void setToTileset(TilesetHandle tileset){
 		currentTileset = tileset;
 		selectedX = -1;
 		selectedY = -1;
@@ -151,7 +151,7 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		}
 	}
 	
-	public Tileset getCurrentTileset(){
+	public TilesetHandle getCurrentTileset(){
 		return currentTileset;
 	}
 	
@@ -163,22 +163,22 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		return selectedY;
 	}
 	
-	public void addTileset(Tileset tileset){
+	public void addTileset(TilesetHandle tileset){
 		tilesets.add(tileset);
 		updateComboBox();
 	}
 	
-	public void addAllTilesets(List<Tileset> tilesets){
+	public void addAllTilesets(List<TilesetHandle> tilesets){
 		this.tilesets.addAll(tilesets);
 		updateComboBox();
 	}
 	
-	public void removeTileset(Tileset tileset){
+	public void removeTileset(TilesetHandle tileset){
 		tilesets.remove(tileset);
 		updateComboBox();
 	}
 	
-	public void removeTilesets(List<Tileset> tilesets){
+	public void removeTilesets(List<TilesetHandle> tilesets){
 		this.tilesets.removeAll(tilesets);
 		updateComboBox();
 	}
@@ -187,7 +187,7 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 		int foundIndex = -1;
 		for(int i = 0; i < tilesets.size(); i++){
-			Tileset t = tilesets.get(i);
+			TilesetHandle t = tilesets.get(i);
 			model.addElement(t.getName());
 			if(t.equals(currentTileset))
 				foundIndex = i;

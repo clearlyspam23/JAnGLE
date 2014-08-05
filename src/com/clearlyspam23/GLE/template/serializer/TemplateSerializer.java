@@ -46,9 +46,6 @@ public class TemplateSerializer {
 	}
 	
 	public String serialize(Template t){
-		for(LayerTemplate lt : t.getLayers()){
-			System.out.println(lt.getDefinition());
-		}
 		return yaml.dump(t);
 	}
 	

@@ -6,7 +6,7 @@ import java.util.Map;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.EditAction;
-import com.clearlyspam23.GLE.basic.layers.tile.Tileset;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TileLayerPNode extends PNode implements EditAction{
 
@@ -28,7 +28,7 @@ public class TileLayerPNode extends PNode implements EditAction{
 		double columnsd = height/gridHeight;
 		int rows = (int) rowsd;
 		int columns = (int) columnsd;
-		nodeGrid = new TilePNode[rows + (rowsd-epsilon > rows ? 0 : 1)][columns + (columnsd-epsilon > rows ? 0 : 1)];
+		nodeGrid = new TilePNode[rows + (rowsd-epsilon < rows ? 0 : 1)][columns + (columnsd-epsilon < columns ? 0 : 1)];
 		for(int i = 0; i < rows; i++){
 			for(int j = 0; j < columns; j++){
 				addNewPNode(i, j, gridWidth, gridHeight);
@@ -77,14 +77,14 @@ public class TileLayerPNode extends PNode implements EditAction{
 	 * calculates a mapping of TilePNodes to their appropriate Tilesets, returning a full grid (width x height of this layer) per each Tileset
 	 * @return a mapping of Tilesets to all the tiles in this grid, in their appropriate spot
 	 */
-	public Map<Tileset, TilePNode[][]> getMappedNodeGrid(){
-		Map<Tileset, TilePNode[][]> ans = new HashMap<Tileset, TilePNode[][]>();
+	public Map<TilesetHandle, TilePNode[][]> getMappedNodeGrid(){
+		Map<TilesetHandle, TilePNode[][]> ans = new HashMap<TilesetHandle, TilePNode[][]>();
 		for(int i = 0; i < nodeGrid.length; i++)
 		{
 			for(int j = 0; j < nodeGrid[i].length; j++)
 			{
 				TilePNode node = nodeGrid[i][j];
-				Tileset t = node.getTileset();
+				TilesetHandle t = node.getTileset();
 				if(t==null)
 					continue;
 				if(!ans.containsKey(t))

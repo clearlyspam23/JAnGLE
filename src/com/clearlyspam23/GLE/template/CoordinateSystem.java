@@ -1,7 +1,5 @@
 package com.clearlyspam23.GLE.template;
 
-import java.awt.Image;
-
 import javax.swing.Icon;
 
 import com.clearlyspam23.GLE.Nameable;

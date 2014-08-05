@@ -34,7 +34,7 @@ public class TileLayer extends Layer<Object> {
 		base = new PNode();
 		data = new TilesetEditorData();
 		//the below line should be removed as soon as a better solution is determined
-		for(Tileset t : getTilesetManager().getAllTilesets())
+		for(TilesetHandle t : getTilesetManager().getAllTilesets())
 			data.addTileset(t);
 	}
 
@@ -42,7 +42,7 @@ public class TileLayer extends Layer<Object> {
 	public Object getExportData() {
 		if(tiles==null)
 			return new CompactExportData[0];
-		Map<Tileset, CompactExportData> dataMap = new HashMap<Tileset, CompactExportData>();
+		Map<TilesetHandle, CompactExportData> dataMap = new HashMap<TilesetHandle, CompactExportData>();
 		TilePNode[][] grid = tiles.getNodeGrid();
 		for(int i = 0; i < grid.length; i++){
 			for(int j = 0; j < grid[i].length; j++){
@@ -50,11 +50,12 @@ public class TileLayer extends Layer<Object> {
 					continue;
 				if(!dataMap.containsKey(grid[i][j].getTileset())){
 					CompactExportData ced = new CompactExportData();
+					ced.tiles = new int[grid[0].length][grid.length];
 					ced.tileset = grid[i][j].getTileset().getName();
 					fillWithMinus1(ced.tiles);
 					dataMap.put(grid[i][j].getTileset(), ced);
 				}
-				dataMap.get(grid[i][j].getTileset()).tiles[i][j] = grid[i][j].getTilesetX() + grid[i][j].getTileset().getWidth()*grid[i][j].getTilesetY();
+				dataMap.get(grid[i][j].getTileset()).tiles[j][i] = grid[i][j].getTilesetX() + grid[i][j].getTileset().getWidth()*grid[i][j].getTilesetY();
 			}
 		}
 		CompactExportData[] ans = new CompactExportData[dataMap.size()];
@@ -87,14 +88,14 @@ public class TileLayer extends Layer<Object> {
 	public void buildFromData(Object data) {
 		CompactExportData[] ceds = (CompactExportData[])data;
 		for(CompactExportData d : ceds){
-			Tileset ts = getTilesetManager().getTilesetByName(d.tileset);
+			TilesetHandle ts = getTilesetManager().getTilesetByName(d.tileset);
 			for(int i = 0; i < d.tiles.length; i++){
-				for(int j = 0; j < d.tiles.length; j++){
+				for(int j = 0; j < d.tiles[i].length; j++){
 					if(d.tiles[i][j]<0){
-						tiles.getNodeGrid()[i][j].resetTileset();
+						tiles.getNodeGrid()[j][i].resetTileset();
 					}
 					else{
-						tiles.getNodeGrid()[i][j].setTileset(ts, i, j);
+						tiles.getNodeGrid()[j][i].setTileset(ts, ts.getXFromIndex(d.tiles[i][j]), ts.getYFromIndex(d.tiles[i][j]));
 					}
 				}
 			}
@@ -113,8 +114,6 @@ public class TileLayer extends Layer<Object> {
 
 	@Override
 	public void onResize(double x, double y) {
-		System.out.println(x);
-		System.out.println(y);
 		width = x;
 		height = y;
 		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
