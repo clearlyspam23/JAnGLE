@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.GUI.level;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -20,6 +20,8 @@ import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.Level;
+import com.clearlyspam23.GLE.GUI.LayerContainer;
+import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
 
 public class LevelPanel extends JPanel implements ComponentListener, LayerContainer{
 
@@ -29,6 +31,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private static final long serialVersionUID = 4240456098926254073L;
 	private final PSwingCanvas canvas;
 	private Level level;
+	private Frame myFrame;
 	
 	private double currWidth;
 	private double currHeight;
@@ -40,8 +43,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private List<PNode> layers = new ArrayList<PNode>();
 	private List<PInputEventListener> currentListeners = new ArrayList<PInputEventListener>();
 	
-	public LevelPanel(Level level)
+	public LevelPanel(Level level, Frame frame)
 	{
+		myFrame = frame;
 		canvas = new PSwingCanvas();
 		
 		this.level = level;
@@ -83,6 +87,10 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
         this.validate();
 	}
 	
+	public String getLevelName(){
+		return level.getName();
+	}
+	
 	public void changeLayer(int index){
 		if(selectedIndex>=0){
 			Layer<?> currentLayer = level.getLayers().get(selectedIndex);
@@ -90,7 +98,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 				canvas.removeInputEventListener(l);
 			}
 			currentListeners.clear();
-			for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
+			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
 				d.setVisible(false);
 			}
 		}
@@ -105,14 +113,23 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			currentListeners.add(l);
 			canvas.addInputEventListener(l);
 		}
-		for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
-			d.setVisible(true);
-		}
+		if(isShowing())
+			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
+				d.setVisible(true);
+			}
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		
+		Layer<?> currentLayer = level.getLayers().get(selectedIndex);
+		for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
+			d.setVisible(false);
+		}
+	}
+	
+	//super hacker way to get this thing's frame, might be temporary
+	private Frame getFrame(){
+		return myFrame;
 	}
 
 	@Override
@@ -141,8 +158,15 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		Layer<?> currentLayer = level.getLayers().get(selectedIndex);
+		for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
+			d.setVisible(true);
+		}
+	}
+
+	@Override
+	public List<Layer> getLayers() {
+		return level.getLayers();
 	}
 
 }

@@ -66,7 +66,7 @@ public class JAnGLEData {
 	public void setOpenTemplate(Template template) {
 		if(openTemplate!=null){
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
-			for(LayerTemplate t : template.getLayers()){
+			for(LayerTemplate t : openTemplate.getLayers()){
 				if(!seen.contains(t.getDefinition())){
 					t.getDefinition().onTemplateClose(openTemplate);
 					seen.add(t.getDefinition());
@@ -76,7 +76,7 @@ public class JAnGLEData {
 		openTemplate = template;
 		if(openTemplate!=null){
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
-			for(LayerTemplate t : template.getLayers()){
+			for(LayerTemplate t : openTemplate.getLayers()){
 				if(!seen.contains(t.getDefinition())){
 					t.getDefinition().onTemplateOpen(openTemplate);
 					seen.add(t.getDefinition());

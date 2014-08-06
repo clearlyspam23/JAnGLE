@@ -25,5 +25,10 @@ public class TwoWayMap<T, E> {
 	public T getReverse(E e){
 		return reverseMap.get(e);
 	}
+	
+	public void clear(){
+		normMap.clear();
+		reverseMap.clear();
+	}
 
 }

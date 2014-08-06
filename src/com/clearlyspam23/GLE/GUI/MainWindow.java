@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -11,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -29,6 +28,8 @@ import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FilenameUtils;
@@ -37,7 +38,9 @@ import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.level.LevelPanel;
 import com.clearlyspam23.GLE.GUI.template.TemplateDialog;
+import com.clearlyspam23.GLE.GUI.util.ConfirmationFileChooser;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
 import com.clearlyspam23.GLE.basic.compression.ZipCompression;
 import com.clearlyspam23.GLE.basic.coordinates.BottomLeft;
@@ -54,6 +57,7 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
+import com.clearlyspam23.GLE.util.TwoWayMap;
 
 public class MainWindow extends JFrame {
 
@@ -139,7 +143,7 @@ public class MainWindow extends JFrame {
 	
 	private final JFileChooser fc;
 	
-	private Map<Level, LevelPanel> levelPanelMap = new HashMap<Level, LevelPanel>();
+	private TwoWayMap<Level, LevelPanel> levelPanelMap = new TwoWayMap<Level, LevelPanel>();
 
 	/**
 	 * Create the frame.
@@ -224,7 +228,8 @@ public class MainWindow extends JFrame {
 		mnFile.add(separator);
 		mnFile.add(mntmNewTemplate);
 		
-		fc = new JFileChooser();
+		fc = new ConfirmationFileChooser();
+		
 		
 		mntmOpenTemplate = new JMenuItem("Open Template");
 		mntmOpenTemplate.addActionListener(new ActionListener() {
@@ -289,6 +294,22 @@ public class MainWindow extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if(tabbedPane.getSelectedIndex()>=0){
+					Component c = tabbedPane.getComponent(tabbedPane.getSelectedIndex());
+					if(c instanceof LevelPanel){
+						LevelPanel current = levelPanelMap.getNormal(data.getCurrentLevel());
+						if(current!=null){
+							
+						}
+						LevelPanel panel = (LevelPanel)c;
+						data.setCurrentLevel(levelPanelMap.getReverse(panel));
+						System.out.println("changed current level");
+					}
+				}
+			}
+		});
 		contentPane.add(tabbedPane);
 		
 //		JPanel levelPanel = new TestLevelPanel();
@@ -334,7 +355,7 @@ public class MainWindow extends JFrame {
 	
 	private void openLevel(Level l){
 		data.addOpenLevel(l);
-		LevelPanel pan = new LevelPanel(l);
+		LevelPanel pan = new LevelPanel(l, this);
 		levelPanelMap.put(l, pan);
 		tabbedPane.addTab(l.getName(), pan);
 		if(data.getCurrentLevel()==null){
@@ -349,6 +370,14 @@ public class MainWindow extends JFrame {
 			File ans = new File(FilenameUtils.removeExtension(f.getPath())+extension);
 			level.setSaveFile(ans);
 			saveLevel(level);
+			for(int i = 0; i < tabbedPane.getTabCount(); i++){
+				Component comp = tabbedPane.getComponentAt(i);
+				System.out.println("index : " + tabbedPane.getTitleAt(i) + " : " + comp);
+				if(comp instanceof LevelPanel){
+					System.out.println("new title : " + ((LevelPanel)comp).getLevelName());
+					tabbedPane.setTitleAt(i, ((LevelPanel)comp).getLevelName());
+				}
+			}
 		}
 	}
 	
