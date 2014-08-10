@@ -1,17 +1,12 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
-import java.awt.Frame;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.piccolo2d.PNode;
-import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.GUI.LayerDialog;
-import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
+import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.GridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
@@ -34,8 +29,10 @@ public class TileLayer extends Layer<Object> {
 		base = new PNode();
 		data = new TilesetEditorData();
 		//the below line should be removed as soon as a better solution is determined
-		for(TilesetHandle t : getTilesetManager().getAllTilesets())
+		for(TilesetHandle t : getTilesetManager().getAllTilesets()){
+			System.out.println(t);
 			data.addTileset(t);
+		}
 	}
 
 	@Override
@@ -75,11 +72,6 @@ public class TileLayer extends Layer<Object> {
 	}
 
 	@Override
-	public List<LayerDialog> getLayerDialogs() { 
-		return null;
-	}
-
-	@Override
 	public PNode getLayerGUI() {
 		return base;
 	}
@@ -102,15 +94,11 @@ public class TileLayer extends Layer<Object> {
 		}
 	}
 
-	@Override
-	public List<LayerEditorDialog> getEditors(Frame frame) {
-		return data.getEditorDialogs(frame);
-	}
-
-	@Override
-	public List<PInputEventListener> getListeners() {
-		return Arrays.asList((PInputEventListener)data);
-	}
+//	@Override
+//	public List<LayerEditorDialog> getEditors(Frame frame) {
+//		data.buildDialogs(frame);
+//		return data.getDialogs();
+//	}
 
 	@Override
 	public void onResize(double x, double y) {
@@ -129,6 +117,11 @@ public class TileLayer extends Layer<Object> {
 	@Override
 	public String getName() {
 		return template.getName();
+	}
+
+	@Override
+	public LayerEditManager getEditManager() {
+		return data;
 	}
 
 }

@@ -20,11 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.clearlyspam23.GLE.GUI.util.AspectRatioLayout;
-import com.clearlyspam23.GLE.GUI.util.DockablePanel;
 import com.clearlyspam23.GLE.GUI.util.StretchIcon;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
-public class TilesetSelectionPanel extends DockablePanel implements ComponentListener{
+public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -206,11 +205,6 @@ public class TilesetSelectionPanel extends DockablePanel implements ComponentLis
 		}
 		this.revalidate();
 		this.repaint();
-	}
-
-	@Override
-	public String getPanelName() {
-		return "Tileset";
 	}
 	
 	public Image getSelectedTile(){

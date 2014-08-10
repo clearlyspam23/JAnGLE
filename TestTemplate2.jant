@@ -1,0 +1,23 @@
+&id001 !!com.clearlyspam23.GLE.Template
+activeProperties: []
+compression: !compress 'None'
+coordinateSystem: !coord 'Top Left'
+defaultSize: {x: 100.0, y: 100.0}
+extension: .json
+layers:
+- !!com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate
+  definition: !definition 'Tile'
+  gridDimensions: {x: 10.0, y: 10.0}
+  name: Layer0
+  template: *id001
+pLanguageData: null
+serializer: !serialize 'JSON'
+templateData:
+  !definition 'Tile':
+    tilesets: !!com.clearlyspam23.GLE.basic.layers.tile.TilesetManager
+      allTilesets:
+      - &id002 {filename: images/Pipes.png, name: test1, tileHeight: 64, tileWidth: 64}
+      nameTable:
+        test1: *id002
+templateName: TestTemplate2
+usedPLanguage: null

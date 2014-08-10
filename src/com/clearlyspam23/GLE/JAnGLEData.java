@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE;
 
+import java.awt.Frame;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class JAnGLEData {
 	private Level currentLevel;
 	private List<Level> openLevels = new ArrayList<Level>();
 	private Template openTemplate;
+	private Frame frame;
 	
 	private final TemplateSerializer serializer;
 	
@@ -130,6 +132,14 @@ public class JAnGLEData {
 			return false;
 		}
 		return true;
+	}
+
+	public Frame getFrame() {
+		return frame;
+	}
+
+	public void setFrame(Frame frame) {
+		this.frame = frame;
 	}
 
 }

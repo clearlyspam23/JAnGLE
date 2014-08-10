@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 import java.awt.Component;
 import java.awt.Graphics;

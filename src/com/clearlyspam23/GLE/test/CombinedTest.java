@@ -1,9 +1,8 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
@@ -12,7 +11,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.piccolo2d.PLayer;
 import org.piccolo2d.PNode;
@@ -23,8 +23,8 @@ import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PPaintContext;
 
-public class CombinedPanel extends JPanel {
-
+public class CombinedTest extends JFrame{
+	
 	static protected Line2D gridLine = new Line2D.Double();
     static protected Rectangle2D rect = new Rectangle2D.Double();
     static protected Color gridPaint = Color.BLACK;
@@ -33,14 +33,13 @@ public class CombinedPanel extends JPanel {
     static protected Stroke gridStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing, lineSpacing}, lineSpacing/2);
     static protected Stroke startStroke = new BasicStroke(1, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{lineSpacing/2, lineSpacing}, 0);
 	
-	public CombinedPanel()
+	public CombinedTest()
 	{
-		setLayout(new BorderLayout());
+		setSize(800, 600);
 		final PSwingCanvas canvas = new PSwingCanvas();
 		add(canvas, BorderLayout.CENTER);
         final PNode gridNode = new PNode() {
         	 protected void paint(PPaintContext paintContext) {
-        		 System.out.println("here");
                  double bx = (getX());
                  double by = (getY());
                  double rightBorder = getX() + getWidth();
@@ -90,7 +89,8 @@ public class CombinedPanel extends JPanel {
         PMouseWheelZoomEventHandler eh = new PMouseWheelZoomEventHandler();
         eh.zoomAboutMouse();
         eh.setScaleFactor(-0.1);
-        canvas.addInputEventListener(eh);   
+        canvas.addInputEventListener(eh);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
 
         // add a drag event handler that supports snap to grid.
         canvas.addInputEventListener(new PDragSequenceEventHandler() {
@@ -128,5 +128,18 @@ public class CombinedPanel extends JPanel {
             }
         });
 	}
+	
+	 public static void main(String[] args) {
+	        SwingUtilities.invokeLater(new Runnable() {
+	 
+	            @Override
+	            public void run() {
+	                JFrame frame = new JFrame();
+	                frame.add(new CombinedPanel());
+	                frame.revalidate();
+	                frame.setVisible(true);
+	            }
+	        });
+	    }
 
 }

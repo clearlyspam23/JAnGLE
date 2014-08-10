@@ -101,12 +101,12 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 		TilesetEditorData data = new TilesetEditorData();
 //		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
 //		data.setSelectedIndex(0, 0);
-		for(PInputEventListener l : currentLayer.getListeners())
-			canvas.addInputEventListener(l);
-		
-		for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
-			d.setVisible(true);
-		}
+//		for(PInputEventListener l : currentLayer.getListeners())
+//			canvas.addInputEventListener(l);
+//		
+//		for(LayerEditorDialog d : currentLayer.getEditors((Frame)this.getParent())){
+//			d.setVisible(true);
+//		}
 		
 		PLayer pLayer = canvas.getLayer();
 		

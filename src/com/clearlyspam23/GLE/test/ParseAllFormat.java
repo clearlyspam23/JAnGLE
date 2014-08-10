@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;

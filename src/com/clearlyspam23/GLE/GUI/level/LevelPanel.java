@@ -7,13 +7,14 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventFilter;
-import org.piccolo2d.event.PInputEventListener;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
@@ -21,7 +22,8 @@ import org.piccolo2d.util.PBounds;
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerContainer;
-import com.clearlyspam23.GLE.GUI.LayerEditorDialog;
+import com.clearlyspam23.GLE.GUI.LayerDockingDialog;
+import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
 public class LevelPanel extends JPanel implements ComponentListener, LayerContainer{
 
@@ -41,7 +43,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private PNode base;
 	
 	private List<PNode> layers = new ArrayList<PNode>();
-	private List<PInputEventListener> currentListeners = new ArrayList<PInputEventListener>();
+	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
+	
+	private HashMap<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
 	
 	public LevelPanel(Level level, Frame frame)
 	{
@@ -67,6 +71,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		{
 			PNode node = l.getLayerGUI();
 			layers.add(node);
+			editors.add(l.getEditManager());
 			base.addChild(node);
 		}
 		//need some way to determine currentLayer, for now this will have to do
@@ -93,14 +98,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	public void changeLayer(int index){
 		if(selectedIndex>=0){
-			Layer<?> currentLayer = level.getLayers().get(selectedIndex);
-			for(PInputEventListener l : currentListeners){
-				canvas.removeInputEventListener(l);
-			}
-			currentListeners.clear();
-			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
-				d.setVisible(false);
-			}
+			LayerEditManager editor = editors.get(selectedIndex);
+			canvas.removeInputEventListener(editor);
+			editDialogs.get(editor).setVisible(false);
 		}
 		base.removeAllChildren();
 		//setup currentLayer
@@ -108,29 +108,35 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		for(int i = 0; i < index+1; i++){
 			base.addChild(layers.get(i));
 		}
-		Layer<?> currentLayer = level.getLayers().get(selectedIndex);
-		for(PInputEventListener l : currentLayer.getListeners()){
-			currentListeners.add(l);
-			canvas.addInputEventListener(l);
+		LayerEditManager editor = editors.get(selectedIndex);
+//		for(PInputEventListener l : currentLayer.getListeners()){
+		canvas.addInputEventListener(editor);
+//			currentListeners.add(l);
+//			canvas.addInputEventListener(l);
+//		}
+		if(!editDialogs.containsKey(editor)){
+			LayerDockingDialog dialog = new LayerDockingDialog(myFrame, editor.toString(), editor);
+			editDialogs.put(editor, dialog);
 		}
 		if(isShowing())
-			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
-				d.setVisible(true);
-			}
+			editDialogs.get(editor).setVisible(true);
+//			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
+//				d.setVisible(true);
 	}
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		Layer<?> currentLayer = level.getLayers().get(selectedIndex);
-		for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
-			d.setVisible(false);
+		LayerEditManager manager = editors.get(selectedIndex);
+		if(editDialogs.containsKey(manager)){
+			editDialogs.get(manager).setVisible(false);
 		}
 	}
 	
 	//super hacker way to get this thing's frame, might be temporary
-	private Frame getFrame(){
-		return myFrame;
-	}
+	//it was
+//	private Frame getFrame(){
+//		return myFrame;
+//	}
 
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
@@ -158,9 +164,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		Layer<?> currentLayer = level.getLayers().get(selectedIndex);
-		for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
-			d.setVisible(true);
+		LayerEditManager manager = editors.get(selectedIndex);
+		if(editDialogs.containsKey(manager)){
+			editDialogs.get(manager).setVisible(true);
 		}
 	}
 

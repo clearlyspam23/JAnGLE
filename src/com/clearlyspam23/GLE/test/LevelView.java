@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 public class LevelView {
 	

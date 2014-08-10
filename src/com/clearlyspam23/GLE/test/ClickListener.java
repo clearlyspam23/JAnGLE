@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 import org.piccolo2d.event.PBasicInputEventHandler;
 import org.piccolo2d.event.PInputEvent;

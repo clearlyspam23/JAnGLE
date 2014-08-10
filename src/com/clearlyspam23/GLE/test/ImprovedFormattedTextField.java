@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.piccolotest;
+package com.clearlyspam23.GLE.test;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
