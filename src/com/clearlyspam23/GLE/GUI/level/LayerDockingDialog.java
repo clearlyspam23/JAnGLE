@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.GUI.level;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -11,10 +11,12 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.intern.DefaultCDockable.Permissions;
 import bibliothek.gui.dock.util.DirectWindowProvider;
 
+import com.clearlyspam23.GLE.GUI.LayerEditManager;
+
 public class LayerDockingDialog extends JDialog{
 	
 	public LayerDockingDialog(Frame frame, String layerName, LayerEditManager manager){
-		super(frame, layerName + " layer");
+		super(frame, layerName);
 		control = new CControl(new DirectWindowProvider(this));
 		
 //		addWindowListener( new WindowAdapter(){

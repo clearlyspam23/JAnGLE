@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI.level;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -21,8 +22,6 @@ import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.Level;
-import com.clearlyspam23.GLE.GUI.LayerContainer;
-import com.clearlyspam23.GLE.GUI.LayerDockingDialog;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
 public class LevelPanel extends JPanel implements ComponentListener, LayerContainer{
@@ -34,6 +33,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private final PSwingCanvas canvas;
 	private Level level;
 	private Frame myFrame;
+	private boolean initialResize = true;
+	
+	private LayerSelectionDialog dialog;
 	
 	private double currWidth;
 	private double currHeight;
@@ -51,6 +53,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	{
 		myFrame = frame;
 		canvas = new PSwingCanvas();
+		dialog = new LayerSelectionDialog(frame, level.getLayers(), this);
+		dialog.setSize(150, 600);
 		
 		this.level = level;
 		
@@ -92,6 +96,21 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
         this.validate();
 	}
 	
+	private double calculateStartingScale(){
+		Dimension d = getSize();
+		double width = level.getWidth();
+		double height = level.getHeight();
+		System.out.println(d);
+		System.out.println(width + ", " + height);
+		if(width/d.width>height/d.height){
+			//the bigger ratio is horizontal
+			double w = d.width*3/4;
+			return w/width;
+		}
+		double h = d.height*3/4;
+		return h/height;
+	}
+	
 	public String getLevelName(){
 		return level.getName();
 	}
@@ -115,7 +134,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 //			canvas.addInputEventListener(l);
 //		}
 		if(!editDialogs.containsKey(editor)){
-			LayerDockingDialog dialog = new LayerDockingDialog(myFrame, editor.toString(), editor);
+			LayerDockingDialog dialog = new LayerDockingDialog(myFrame, editor.getName(), editor);
 			editDialogs.put(editor, dialog);
 		}
 		if(isShowing())
@@ -130,6 +149,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(false);
 		}
+		dialog.setVisible(false);
 	}
 	
 	//super hacker way to get this thing's frame, might be temporary
@@ -145,7 +165,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-//		System.out.println("current: " + canvas.getWidth() + ", " + canvas.getHeight());
 		PBounds bounds = canvas.getCamera().getViewBounds();
 		double x;
 		double y;
@@ -157,22 +176,42 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			y = level.getHeight()/2 - canvas.getHeight()/2;
 		else
 			y = bounds.y - (canvas.getHeight()-currHeight)/2;
-		canvas.getCamera().setViewBounds(new Rectangle2D.Double(x, y, canvas.getWidth(), canvas.getHeight()));
+//		double scale = canvas.getCamera().getViewScale();
+//		canvas.getCamera().setViewBounds(new Rectangle2D.Double(x, y, canvas.getWidth(), canvas.getHeight()));
+//		canvas.getCamera().scaleAboutPoint(scale, x, y);
+//		canvas.getCamera().centerBoundsOnPoint(x, y);
+		System.out.println(canvas.getCamera().getViewScale());
 		currWidth = canvas.getWidth();
 		currHeight = canvas.getHeight();
+		if(initialResize){
+			double scaling = calculateStartingScale();
+			canvas.getCamera().scaleView(calculateStartingScale());
+			initialResize = false;
+		}
 	}
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
+		if(!isShowing())
+			//lol wut?
+			return;
 		LayerEditManager manager = editors.get(selectedIndex);
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(true);
 		}
+		dialog.setVisible(true);
 	}
 
 	@Override
 	public List<Layer> getLayers() {
 		return level.getLayers();
+	}
+	
+	public void dispose(){
+		dialog.dispose();
+		for(JDialog d : editDialogs.values()){
+			d.dispose();
+		}
 	}
 
 }

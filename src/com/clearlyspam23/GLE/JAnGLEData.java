@@ -96,6 +96,7 @@ public class JAnGLEData {
 		CompressionFormat format = openTemplate.getCompression();
 		String output = format.decompress(file);
 		try {
+			System.out.println(output);
 			Level level = new Level(openTemplate);
 			LevelData l = serializer.deserialize(level, output);
 			level.setToData(l);

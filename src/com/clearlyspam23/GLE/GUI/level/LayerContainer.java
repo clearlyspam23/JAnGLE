@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.GUI.level;
 
 import com.clearlyspam23.GLE.Layer;
 

@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FilenameUtils;
 
 import com.clearlyspam23.GLE.JAnGLEData;
+import com.clearlyspam23.GLE.LastRunInfo;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
@@ -143,6 +146,8 @@ public class MainWindow extends JFrame {
 	
 	private final JFileChooser fc;
 	
+	private LastRunInfo lastRunInfo = new LastRunInfo();
+	
 	private TwoWayMap<Level, LevelPanel> levelPanelMap = new TwoWayMap<Level, LevelPanel>();
 
 	/**
@@ -237,13 +242,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(showOpenTemplateDialog()){
 					File f = fc.getSelectedFile();
-					try {
-						String contents = new String(Files.readAllBytes(Paths.get(f.toURI())));
-						data.setOpenTemplate(data.getSerializer().deserialize(contents, f));
-					} catch (IOException e) {
-						//TODO something better here, some sort of error maybe
-						e.printStackTrace();
-					}
+					loadTemplate(f);
 				}
 				checkMenu();
 			}
@@ -265,8 +264,11 @@ public class MainWindow extends JFrame {
 					}
 				}
 				data.closeAllLevels();
-				levelPanelMap.clear();
 				tabbedPane.removeAll();
+				for(LevelPanel p : levelPanelMap.getValues()){
+					p.dispose();
+				}
+				levelPanelMap.clear();
 				data.setOpenTemplate(null);
 				checkMenu();
 			}
@@ -313,12 +315,6 @@ public class MainWindow extends JFrame {
 		});
 		contentPane.add(tabbedPane);
 		
-//		JPanel levelPanel = new TestLevelPanel();
-//		tabbedPane.addTab("New tab", null, levelPanel, null);
-		
-//		TestInternal testInternal = new TestInternal();
-//		contentPane.add(testInternal);
-		
 		JPanel InfoPanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) InfoPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
@@ -329,7 +325,52 @@ public class MainWindow extends JFrame {
 		
 		JLabel mouseLoc = new JLabel("");
 		InfoPanel.add(mouseLoc);
+		if(lastRunInfo.load()){
+			if(lastRunInfo.hasOpenTemplate()){
+				File f = lastRunInfo.getTemplateFile();
+				if(f.exists()&&loadTemplate(f)){
+					int num = 0;
+					for(File file : lastRunInfo.getOpenLevels()){
+						try{
+							Level l = data.openLevel(file);
+							openLevel(l);
+							if(lastRunInfo.isCurrentLevel(file)){
+								data.setCurrentLevel(l);
+								tabbedPane.setSelectedIndex(num);
+							}
+							num++;
+						}
+						catch(IOException e){
+							//JOptionPane.showMessageDialog(this, "Unable to Open Level " + f.getAbsolutePath() + " : Access Might Be Denied", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+						}
+						catch(Exception e){
+							//this failure will fail subtly
+							//JOptionPane.showMessageDialog(this, "Unable to Deserialize " + f.getAbsolutePath() + " : A Mismatching Template Might Be Open", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+				}
+			}
+		}
+		addWindowListener(new WindowAdapter(){
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+			    lastRunInfo.save(data);
+			}
+		});
 		checkMenu();
+	}
+	
+	private boolean loadTemplate(File f){
+		try {
+			String contents = new String(Files.readAllBytes(Paths.get(f.toURI())));
+			data.setOpenTemplate(data.getSerializer().deserialize(contents, f));
+			return true;
+		} catch (IOException e) {
+			//TODO something better here, some sort of error maybe
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	private void newLevel(){
@@ -338,19 +379,34 @@ public class MainWindow extends JFrame {
 		openLevel(l);
 	}
 	
+	private void openLevels(File[] files){
+		for(File f : fc.getSelectedFiles()){
+			try{
+				openLevel(data.openLevel(f));
+			}
+			catch(IOException e){
+				JOptionPane.showMessageDialog(this, "Unable to Open Level " + f.getAbsolutePath() + " : Access Might Be Denied", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+			}
+			catch(Exception e){
+				JOptionPane.showMessageDialog(this, "Unable to Deserialize " + f.getAbsolutePath() + " : A Mismatching Template Might Be Open", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
 	private void openLevels(){
 		if(showOpenLevelDialog()){
-			for(File f : fc.getSelectedFiles()){
-				try{
-					openLevel(data.openLevel(f));
-				}
-				catch(IOException e){
-					JOptionPane.showMessageDialog(this, "Unable to Open Level " + f.getAbsolutePath() + " : Access Might Be Denied", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
-				}
-				catch(Exception e){
-					JOptionPane.showMessageDialog(this, "Unable to Deserialize " + f.getAbsolutePath() + " : A Mismatching Template Might Be Open", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
-				}
-			}
+			openLevels(fc.getSelectedFiles());
+//			for(File f : fc.getSelectedFiles()){
+//				try{
+//					openLevel(data.openLevel(f));
+//				}
+//				catch(IOException e){
+//					JOptionPane.showMessageDialog(this, "Unable to Open Level " + f.getAbsolutePath() + " : Access Might Be Denied", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+//				}
+//				catch(Exception e){
+//					JOptionPane.showMessageDialog(this, "Unable to Deserialize " + f.getAbsolutePath() + " : A Mismatching Template Might Be Open", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
+//				}
+//			}
 		}
 	}
 	
