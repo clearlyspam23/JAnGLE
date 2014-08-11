@@ -32,6 +32,7 @@ public class GridNode extends PNode {
 		this.setBounds(0, 0, levelWidth, levelHeight);
 		float widthLineSpacing = (float) (gridWidth/4);
 		float heightLineSpacing = (float) (gridHeight/4);
+		rect.setRect(0, 0, levelWidth, levelHeight);
 		widthGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{widthLineSpacing, widthLineSpacing}, widthLineSpacing/2);
 		heightGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{heightLineSpacing, heightLineSpacing}, heightLineSpacing/2);
 		setPickable(false);
@@ -45,7 +46,6 @@ public class GridNode extends PNode {
 
         Graphics2D g2 = paintContext.getGraphics();
         g2.setBackground(new Color(0, 0, 0, 0));
-        g2.draw(rect);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setStroke(widthGridStroke);
@@ -62,6 +62,8 @@ public class GridNode extends PNode {
             gridLine.setLine(bx, y, rightBorder, y);
                 g2.draw(gridLine);
         }
+        g2.setStroke(new BasicStroke(0));
+        g2.draw(rect);
     }
 
 }
