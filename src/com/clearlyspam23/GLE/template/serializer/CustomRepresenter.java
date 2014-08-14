@@ -9,6 +9,7 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
@@ -58,6 +59,11 @@ public class CustomRepresenter extends Representer {
     private RepresentNameable layerNameable = new RepresentNameable(TemplateSerializer.DEF_TAG);
     public void registerLayerDef(@SuppressWarnings("rawtypes") LayerDefinition def){
     	this.representers.put(def.getClass(), layerNameable);
+    }
+    
+    private RepresentNameable propsNameable = new RepresentNameable(TemplateSerializer.PROP_TAG);
+    public void registerPropDef(@SuppressWarnings("rawtypes") PropertyDefinition def){
+    	this.representers.put(def.getClass(), propsNameable);
     }
 
 }

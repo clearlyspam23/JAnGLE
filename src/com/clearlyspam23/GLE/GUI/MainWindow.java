@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -42,6 +43,7 @@ import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.level.LevelPanel;
+import com.clearlyspam23.GLE.GUI.level.LevelPropertyDialog;
 import com.clearlyspam23.GLE.GUI.template.TemplateDialog;
 import com.clearlyspam23.GLE.GUI.util.ConfirmationFileChooser;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
@@ -149,6 +151,10 @@ public class MainWindow extends JFrame {
 	private LastRunInfo lastRunInfo = new LastRunInfo();
 	
 	private TwoWayMap<Level, LevelPanel> levelPanelMap = new TwoWayMap<Level, LevelPanel>();
+	private JPanel buttonsPanel;
+	private JMenuItem mntmProperties;
+	
+	private LevelPropertyDialog propertyDialog;
 
 	/**
 	 * Create the frame.
@@ -186,7 +192,7 @@ public class MainWindow extends JFrame {
 				dialog.showDialog();
 				if(dialog.isAccepted()){
 					Template t = dialog.getTemplate();
-					data.setOpenTemplate(t);
+					openTemplate(t);
 				}
 				checkMenu();
 			}
@@ -289,8 +295,18 @@ public class MainWindow extends JFrame {
 		JMenu mnLevel = new JMenu("Level");
 		menuBar.add(mnLevel);
 		
-		JMenu mnGle = new JMenu("GLE");
-		menuBar.add(mnGle);
+		mntmProperties = new JMenuItem("Properties");
+		mntmProperties.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(propertyDialog!=null){
+					propertyDialog.showDialog(data.getCurrentLevel());
+				}
+			}
+		});
+		mnLevel.add(mntmProperties);
+		
+		JMenu mnLayer = new JMenu("Layer");
+		menuBar.add(mnLayer);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -325,6 +341,9 @@ public class MainWindow extends JFrame {
 		
 		JLabel mouseLoc = new JLabel("");
 		InfoPanel.add(mouseLoc);
+		
+		buttonsPanel = new JPanel();
+		contentPane.add(buttonsPanel, BorderLayout.NORTH);
 		if(lastRunInfo.load()){
 			if(lastRunInfo.hasOpenTemplate()){
 				File f = lastRunInfo.getTemplateFile();
@@ -361,10 +380,15 @@ public class MainWindow extends JFrame {
 		checkMenu();
 	}
 	
+	private void openTemplate(Template t){
+		List<EditorItems> items = data.setOpenTemplate(t);
+		propertyDialog = new LevelPropertyDialog(data.getOpenTemplate());
+	}
+	
 	private boolean loadTemplate(File f){
 		try {
 			String contents = new String(Files.readAllBytes(Paths.get(f.toURI())));
-			data.setOpenTemplate(data.getSerializer().deserialize(contents, f));
+			openTemplate(data.getSerializer().deserialize(contents, f));
 			return true;
 		} catch (IOException e) {
 			//TODO something better here, some sort of error maybe
@@ -489,5 +513,6 @@ public class MainWindow extends JFrame {
 		mntmOpenLevel.setEnabled(hasData&&data.getOpenTemplate()!=null);
 		mntmSaveLevel.setEnabled(hasData&&data.getCurrentLevel()!=null);
 		mntmSaveLevelAs.setEnabled(hasData&&data.getCurrentLevel()!=null);
+		mntmProperties.setEnabled(hasData&&data.getCurrentLevel()!=null);
 	}
 }

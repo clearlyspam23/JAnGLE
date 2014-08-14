@@ -8,18 +8,20 @@ import javax.swing.JLabel;
 
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.util.IntegerComponent;
+import javax.swing.JCheckBox;
 
 public class IntegerPanel extends SubPanel{
 	private IntegerComponent minField;
 	private IntegerComponent maxField;
 	private IntegerComponent defaultField;
+	private JCheckBox chckbxUseSlider;
 	public IntegerPanel() {
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{80, 60, 0};
-		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{14, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JLabel lblValue = new JLabel("Min Value");
@@ -59,18 +61,26 @@ public class IntegerPanel extends SubPanel{
 		JLabel lblDefaultValue = new JLabel("Default Value");
 		GridBagConstraints gbc_lblDefaultValue = new GridBagConstraints();
 		gbc_lblDefaultValue.anchor = GridBagConstraints.WEST;
-		gbc_lblDefaultValue.insets = new Insets(0, 0, 0, 5);
+		gbc_lblDefaultValue.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDefaultValue.gridx = 0;
 		gbc_lblDefaultValue.gridy = 2;
 		add(lblDefaultValue, gbc_lblDefaultValue);
 		
 		defaultField = new IntegerComponent();
 		GridBagConstraints gbc_defaultField = new GridBagConstraints();
+		gbc_defaultField.insets = new Insets(0, 0, 5, 0);
 		gbc_defaultField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_defaultField.gridx = 1;
 		gbc_defaultField.gridy = 2;
 		add(defaultField, gbc_defaultField);
 		defaultField.setColumns(10);
+		
+		chckbxUseSlider = new JCheckBox("Use Slider");
+		GridBagConstraints gbc_chckbxUseSlider = new GridBagConstraints();
+		gbc_chckbxUseSlider.anchor = GridBagConstraints.WEST;
+		gbc_chckbxUseSlider.gridx = 1;
+		gbc_chckbxUseSlider.gridy = 3;
+		add(chckbxUseSlider, gbc_chckbxUseSlider);
 	
 	}
 	
@@ -86,6 +96,10 @@ public class IntegerPanel extends SubPanel{
 		return defaultField.getValue();
 	}
 	
+	public boolean useSlider(){
+		return chckbxUseSlider.isSelected();
+	}
+	
 	public void setMin(int min){
 		minField.setValue(min);
 	}
@@ -95,11 +109,15 @@ public class IntegerPanel extends SubPanel{
 	public void setDefault(int def){
 		defaultField.setValue(def);
 	}
+	public void setUseSlider(boolean flag){
+		chckbxUseSlider.setSelected(flag);
+	}
 	@Override
 	public void reset() {
 		setMin(0);
 		setMax(255);
 		setDefault(0);
+		setUseSlider(false);
 	}
 
 }

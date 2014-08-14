@@ -1,13 +1,15 @@
 &id001 !!com.clearlyspam23.GLE.Template
-activeProperties: []
+activeProperties:
+- !!com.clearlyspam23.GLE.basic.properties.IntPropertyTemplate {default: 0, definition: !prop 'Integer',
+  max: 255, min: 0, name: Prop0, useSlider: false}
 compression: !compress 'None'
 coordinateSystem: !coord 'Top Left'
-defaultSize: {x: 320.0, y: 320.0}
+defaultSize: {x: 10.0, y: 10.0}
 extension: .json
 layers:
 - !!com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate
   definition: !definition 'Tile'
-  gridDimensions: {x: 32.0, y: 32.0}
+  gridDimensions: {x: 1.0, y: 1.0}
   name: Layer0
   template: *id001
 pLanguageData: null
@@ -19,5 +21,5 @@ templateData:
       - &id002 {filename: images/Pipes.png, name: test1, tileHeight: 64, tileWidth: 64}
       nameTable:
         test1: *id002
-templateName: ShowTemplate
+templateName: TestSlider
 usedPLanguage: null

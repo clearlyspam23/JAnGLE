@@ -10,6 +10,7 @@ import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
 import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;
@@ -21,6 +22,8 @@ public class CustomConstructor extends Constructor {
 	private HashMap<String, CompressionFormat> compressionMap = new HashMap<String, CompressionFormat>();
 	@SuppressWarnings("rawtypes")
 	private HashMap<String, LayerDefinition> definitionMap = new HashMap<String, LayerDefinition>();
+	@SuppressWarnings("rawtypes")
+	private HashMap<String, PropertyDefinition> propsMap = new HashMap<String, PropertyDefinition>();
 	
 	private class ConstructNameable extends AbstractConstruct {
 		
@@ -43,6 +46,7 @@ public class CustomConstructor extends Constructor {
 		this.yamlConstructors.put(new Tag(TemplateSerializer.SERIALIZER_TAG), new ConstructNameable(serializerMap));
 		this.yamlConstructors.put(new Tag(TemplateSerializer.COMPRESSION_TAG), new ConstructNameable(compressionMap));
 		this.yamlConstructors.put(new Tag(TemplateSerializer.DEF_TAG), new ConstructNameable(definitionMap));
+		this.yamlConstructors.put(new Tag(TemplateSerializer.PROP_TAG), new ConstructNameable(propsMap));
 	}
 	
     public void registerCoord(CoordinateSystem system){
@@ -59,6 +63,10 @@ public class CustomConstructor extends Constructor {
     
     public void registerLayerDef(LayerDefinition definition){
     	definitionMap.put(definition.getName(), definition);
+    }
+    
+    public void registerPropDef(PropertyDefinition definition){
+    	propsMap.put(definition.getName(), definition);
     }
 
 }

@@ -121,11 +121,27 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			canvas.removeInputEventListener(editor);
 			editDialogs.get(editor).setVisible(false);
 		}
-		base.removeAllChildren();
+//		base.removeAllChildren();
+		System.out.println("is pickable = " + base.getPickable());
 		//setup currentLayer
 		selectedIndex = index;
-		for(int i = 0; i < index+1; i++){
-			base.addChild(layers.get(i));
+		for(int i = 0; i < layers.size(); i++){
+			PNode node = layers.get(i);
+			if(i<selectedIndex){
+				node.setTransparency(1);
+				node.setPickable(false);
+				node.setChildrenPickable(false);
+			}
+			else if(i==selectedIndex){
+				node.setTransparency(1);
+				node.setPickable(true);
+				node.setChildrenPickable(true);
+			}
+			else{
+				node.setTransparency(0f);
+				node.setPickable(false);
+				node.setChildrenPickable(false);
+			}
 		}
 		LayerEditManager editor = editors.get(selectedIndex);
 //		for(PInputEventListener l : currentLayer.getListeners()){

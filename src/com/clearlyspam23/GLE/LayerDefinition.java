@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE;
 
+import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.LayerTemplate;
 
@@ -26,8 +27,8 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 		
 	}
 	
-	public void onTemplateOpen(Template template){
-		
+	public EditorItems onTemplateOpen(Template template){
+		return null;
 	}
 	
 	public void onTemplateClose(Template template){

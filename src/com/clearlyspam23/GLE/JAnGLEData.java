@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
@@ -59,13 +60,14 @@ public class JAnGLEData {
 	
 	public void closeAllLevels(){
 		openLevels.clear();
+		currentLevel = null;
 	}
 	
 	public Template getOpenTemplate() {
 		return openTemplate;
 	}
 	
-	public void setOpenTemplate(Template template) {
+	public List<EditorItems> setOpenTemplate(Template template) {
 		if(openTemplate!=null){
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
 			for(LayerTemplate t : openTemplate.getLayers()){
@@ -76,15 +78,19 @@ public class JAnGLEData {
 			}
 		}
 		openTemplate = template;
+		List<EditorItems> items = new ArrayList<EditorItems>();
 		if(openTemplate!=null){
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
 			for(LayerTemplate t : openTemplate.getLayers()){
 				if(!seen.contains(t.getDefinition())){
-					t.getDefinition().onTemplateOpen(openTemplate);
+					EditorItems i = t.getDefinition().onTemplateOpen(openTemplate);
+					if(i!=null)
+						items.add(i);
 					seen.add(t.getDefinition());
 				}
 			}
 		}
+		return items;
 	}
 
 	public TemplateSerializer getSerializer() {

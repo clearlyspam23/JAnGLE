@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.FilenameUtils;
@@ -33,8 +34,8 @@ public class Level implements Nameable{
 			layers.add(t.createLayer());
 		}
 		for(PropertyTemplate t : template.getActiveProperties()){
-			Property p = t.getDefaultValue();
-			properties.put(p.getName(), p.getValue());
+			Object o = t.getDefaultValue();
+			properties.put(t.getName(), o);
 		}
 	}
 	
@@ -172,6 +173,10 @@ public class Level implements Nameable{
 			data.properties.put(p.getKey(), p.getValue());
 		}
 		return data;
+	}
+	
+	public Map<String, Object> getProperties(){
+		return properties;
 	}
 	
 	public void setProperty(String name, Object property){

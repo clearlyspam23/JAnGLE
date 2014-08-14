@@ -1,11 +1,13 @@
 package com.clearlyspam23.GLE.basic.properties;
 
-import com.clearlyspam23.GLE.Property;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.util.Vector2;
 
-public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Vector2> {
+public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Map<String, Number>> {
 	
 	private Vector2 min;
 	private Vector2 max;
@@ -22,20 +24,21 @@ public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Ve
 
 	@Override
 	public VectorComponent getEditorComponent() {
-		// TODO Auto-generated method stub
-		return null;
+		return new VectorComponent();
 	}
 
 	@Override
-	public void setToValue(VectorComponent component, Property<Vector2> value) {
-		// TODO Auto-generated method stub
-		
+	public void setToValue(VectorComponent component, Map<String, Number> value) {
+		component.setXField(value.get("x").doubleValue());
+		component.setYField(value.get("y").doubleValue());
 	}
 
 	@Override
-	public Property<Vector2> getValueFrom(VectorComponent component) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Number> getValueFrom(VectorComponent component) {
+		HashMap<String, Number> output = new HashMap<String, Number>();
+		output.put("x", component.getXField());
+		output.put("y", component.getYField());
+		return output;
 	}
 
 	public Vector2 getMin() {
@@ -63,8 +66,11 @@ public class VectorPropertyTemplate extends PropertyTemplate<VectorComponent, Ve
 	}
 
 	@Override
-	public Property<Vector2> getDefaultValue() {
-		return new Property<Vector2>(getName(), def);
+	public Map<String, Number> getDefaultValue() {
+		HashMap<String, Number> output = new HashMap<String, Number>();
+		output.put("x", def.x);
+		output.put("y", def.y);
+		return output;
 	}
 
 }

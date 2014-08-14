@@ -1,5 +1,9 @@
 package com.clearlyspam23.GLE;
 
+import java.util.List;
+
+import javax.swing.JMenuItem;
+
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
@@ -41,6 +45,10 @@ public abstract class Layer<T> implements Nameable{
 	@SuppressWarnings("unchecked")
 	public void setToActionData(ActionData data){
 		this.buildFromData((T) data.data);
+	}
+	
+	public List<JMenuItem> getMenuItems(){
+		return null;
 	}
 	
 
