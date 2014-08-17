@@ -21,29 +21,72 @@ public class TileLayerPNode extends PNode implements EditAction{
 	
 	private static final double epsilon = 1e-4;
 	
-	public TileLayerPNode(double width, double height, double gridWidth, double gridHeight)
+	private double gridWidth;
+	private double gridHeight;
+	
+	public TileLayerPNode(double gridWidth, double gridHeight)
 	{
+//		setBounds(0, 0, width, height);
+		this.gridWidth = gridWidth;
+		this.gridHeight = gridHeight;
+		nodeGrid = new TilePNode[0][0];
+//		double rowsd = width/gridWidth;
+//		double columnsd = height/gridHeight;
+//		int rows = (int) rowsd;
+//		int columns = (int) columnsd;
+//		nodeGrid = new TilePNode[rows + (rowsd-epsilon < rows ? 0 : 1)][columns + (columnsd-epsilon < columns ? 0 : 1)];
+//		for(int i = 0; i < rows; i++){
+//			for(int j = 0; j < columns; j++){
+//				addNewPNode(i, j, gridWidth, gridHeight);
+//			}
+//		}
+//		if(rows<nodeGrid.length){
+//			double remainder = (rowsd-rows)*gridWidth;
+//			for(int j = 0; j < nodeGrid[rows].length; j++){
+//				addNewPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight);
+//			}
+//		}
+//		if(nodeGrid.length>0&&columns<nodeGrid[0].length){
+//			double remainder = (columnsd-columns)*gridHeight;
+//			for(int i = 0; i < nodeGrid.length; i++){
+//				addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
+//			}
+//		}
+	}
+	
+	public void resize(double width, double height){
+		this.removeAllChildren();
 		setBounds(0, 0, width, height);
 		double rowsd = width/gridWidth;
 		double columnsd = height/gridHeight;
 		int rows = (int) rowsd;
 		int columns = (int) columnsd;
+		TilePNode[][] oldNodeGrid = nodeGrid;
 		nodeGrid = new TilePNode[rows + (rowsd-epsilon < rows ? 0 : 1)][columns + (columnsd-epsilon < columns ? 0 : 1)];
 		for(int i = 0; i < rows; i++){
 			for(int j = 0; j < columns; j++){
-				addNewPNode(i, j, gridWidth, gridHeight);
+				if(oldNodeGrid!=null&&i<oldNodeGrid.length&&j<oldNodeGrid[i].length)
+					addPNode(i, j, gridWidth, gridHeight, oldNodeGrid[i][j]);
+				else
+					addNewPNode(i, j, gridWidth, gridHeight);
 			}
 		}
 		if(rows<nodeGrid.length){
 			double remainder = (rowsd-rows)*gridWidth;
 			for(int j = 0; j < nodeGrid[rows].length; j++){
-				addNewPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight);
+				if(oldNodeGrid!=null&&rows<oldNodeGrid.length&&j<oldNodeGrid[rows].length)
+					addPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight, oldNodeGrid[rows][j]);
+				else
+					addNewPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight);
 			}
 		}
 		if(nodeGrid.length>0&&columns<nodeGrid[0].length){
 			double remainder = (columnsd-columns)*gridHeight;
 			for(int i = 0; i < nodeGrid.length; i++){
-				addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
+				if(oldNodeGrid!=null&&i<oldNodeGrid.length&&columns<oldNodeGrid[i].length)
+					addPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight, oldNodeGrid[i][columns]);
+				else
+					addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
 			}
 		}
 	}
@@ -64,7 +107,18 @@ public class TileLayerPNode extends PNode implements EditAction{
 	}
 	
 	private void addNewPNode(int i, int j, double width, double height, double gridWidth, double gridHeight){
-		nodeGrid[i][j] = new TilePNode();
+		addPNode(i, j, width, height, gridWidth, gridHeight, new TilePNode());
+//		nodeGrid[i][j] = new TilePNode();
+//		addChild(nodeGrid[i][j]);
+//		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
+	}
+	
+	private void addPNode(int i, int j, double width, double height, TilePNode pnode){
+		addPNode(i, j, width, height, width, height, pnode);
+	}
+	
+	private void addPNode(int i, int j, double width, double height, double gridWidth, double gridHeight, TilePNode pnode){
+		nodeGrid[i][j] = pnode;
 		addChild(nodeGrid[i][j]);
 		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
 	}

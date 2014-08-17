@@ -7,19 +7,29 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.LayerDefinition;
+
 public class EditorItems {
 	
-	private List<JMenuItem> levelItems = new ArrayList<JMenuItem>();
+	private List<LayerMenuItem> levelItems = new ArrayList<LayerMenuItem>();
 	private List<JMenu> menuItems = new ArrayList<JMenu>();
 	private List<Button> buttonBarItems = new ArrayList<Button>();
-	public List<JMenuItem> getLevelItems() {
+	
+	private LayerDefinition def;
+	
+	public EditorItems(LayerDefinition def){
+		this.setDef(def);
+	}
+	
+	public List<LayerMenuItem> getLevelItems() {
 		return levelItems;
 	}
-	public EditorItems addLevelItems(List<JMenuItem> levelItems) {
+	public EditorItems addLevelItems(List<LayerMenuItem> levelItems) {
 		this.levelItems.addAll(levelItems);
 		return this;
 	}
-	public EditorItems addLevelItem(JMenuItem item){
+	public EditorItems addLevelItem(LayerMenuItem item){
 		this.levelItems.add(item);
 		return this;
 	}
@@ -44,6 +54,14 @@ public class EditorItems {
 	public EditorItems addButtonBarItem(Button buttonBarItem){
 		buttonBarItems.add(buttonBarItem);
 		return this;
+	}
+
+	public LayerDefinition getDef() {
+		return def;
+	}
+
+	public void setDef(LayerDefinition def) {
+		this.def = def;
 	}
 
 }

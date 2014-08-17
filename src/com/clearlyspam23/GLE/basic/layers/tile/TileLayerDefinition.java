@@ -2,7 +2,9 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
@@ -62,6 +64,13 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 		manager.addTileset(new TilesetHandle("test1", "images/Pipes.png", 64, 64));
 		//except for this line below
 		template.putTemplateData(this, "tilesets", manager);
+	}
+	
+	@Override
+	public EditorItems onTemplateOpen(Template template){
+		EditorItems ans = new EditorItems(this);
+		ans.addLevelItem(new LayerGridMenuItem());
+		return ans;
 	}
 
 }

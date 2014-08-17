@@ -6,7 +6,6 @@ import java.awt.Frame;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +47,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
 	
 	private HashMap<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
+	
+	private List<ChangeLayerListener> listeners = new ArrayList<ChangeLayerListener>();
 	
 	public LevelPanel(Level level, Frame frame)
 	{
@@ -115,8 +116,16 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		return level.getName();
 	}
 	
+	public Layer getCurrentLayer(){
+		if(selectedIndex>=0)
+			return level.getLayers().get(selectedIndex);
+		return null;
+	}
+	
 	public void changeLayer(int index){
+		Layer old = null;
 		if(selectedIndex>=0){
+			old = level.getLayers().get(selectedIndex);
 			LayerEditManager editor = editors.get(selectedIndex);
 			canvas.removeInputEventListener(editor);
 			editDialogs.get(editor).setVisible(false);
@@ -157,6 +166,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			editDialogs.get(editor).setVisible(true);
 //			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
 //				d.setVisible(true);
+		for(ChangeLayerListener l : listeners){
+			l.onLayerChange(old, level.getLayers().get(selectedIndex));
+		}
 	}
 
 	@Override
@@ -228,6 +240,10 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		for(JDialog d : editDialogs.values()){
 			d.dispose();
 		}
+	}
+	
+	public void addChangeLayerListener(ChangeLayerListener l){
+		listeners.add(l);
 	}
 
 }

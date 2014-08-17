@@ -10,6 +10,12 @@ import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
 public abstract class Layer<T> implements Nameable{
 	
+	private final LayerDefinition def;
+	
+	public Layer(LayerDefinition def){
+		this.def = def;
+	}
+	
 	/**
 	 * get an object representing the data necessary to recreate this layer in game. This data should not include anything necessary
 	 * to render in JAnGLE (only stuff useful for games), and ideally shouldnt be dependant on a specific form of serialization
@@ -49,6 +55,10 @@ public abstract class Layer<T> implements Nameable{
 	
 	public List<JMenuItem> getMenuItems(){
 		return null;
+	}
+
+	public LayerDefinition getDefinition() {
+		return def;
 	}
 	
 

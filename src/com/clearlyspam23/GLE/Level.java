@@ -180,7 +180,7 @@ public class Level implements Nameable{
 	}
 	
 	public void setProperty(String name, Object property){
-		
+		properties.put(name, property);
 	}
 
 	@Override

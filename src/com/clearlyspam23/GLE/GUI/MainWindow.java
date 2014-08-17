@@ -14,7 +14,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -39,9 +43,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.LastRunInfo;
+import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.level.ChangeLayerListener;
 import com.clearlyspam23.GLE.GUI.level.LevelPanel;
 import com.clearlyspam23.GLE.GUI.level.LevelPropertyDialog;
 import com.clearlyspam23.GLE.GUI.template.TemplateDialog;
@@ -64,7 +71,7 @@ import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements ChangeLayerListener{
 
 	/**
 	 * 
@@ -132,6 +139,10 @@ public class MainWindow extends JFrame {
 	private JAnGLEData data;
 	
 	private JMenu mnFile;
+	private JMenu mnEdit;
+	private JMenu mnLevel;
+	private JMenu mnLayer;
+	
 	private JMenuItem mntmNewTemplate;
 	private JMenuItem mntmOpenTemplate;
 	private JMenuItem mntmCloseTemplate;
@@ -155,6 +166,10 @@ public class MainWindow extends JFrame {
 	private JMenuItem mntmProperties;
 	
 	private LevelPropertyDialog propertyDialog;
+	
+	private Map<LayerDefinition, List<LayerMenuItem>> layerMenuItems = new HashMap<LayerDefinition, List<LayerMenuItem>>();
+	
+//	private List<LayerMenuItem> currentLayerItems;
 
 	/**
 	 * Create the frame.
@@ -258,30 +273,13 @@ public class MainWindow extends JFrame {
 		mntmCloseTemplate = new JMenuItem("Close Template");
 		mntmCloseTemplate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for(Level l : data.getOpenLevels()){
-					if(l.needsSave()){
-						int i = JOptionPane.showConfirmDialog(MainWindow.this, l.getName() + " Has Unsaved Changes. Would You Like to Save?", "Save Level", JOptionPane.YES_NO_CANCEL_OPTION);
-						if(i==JOptionPane.YES_OPTION){
-							saveLevel(l);
-						}
-						else if(i==JOptionPane.CANCEL_OPTION){
-							return;
-						}
-					}
-				}
-				data.closeAllLevels();
-				tabbedPane.removeAll();
-				for(LevelPanel p : levelPanelMap.getValues()){
-					p.dispose();
-				}
-				levelPanelMap.clear();
-				data.setOpenTemplate(null);
+				closeTemplate();
 				checkMenu();
 			}
 		});
 		mnFile.add(mntmCloseTemplate);
 		
-		JMenu mnEdit = new JMenu("Edit");
+		mnEdit = new JMenu("Edit");
 		menuBar.add(mnEdit);
 		
 		mntmUndo = new JMenuItem("Undo");
@@ -292,7 +290,7 @@ public class MainWindow extends JFrame {
 		mntmRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmRedo);
 		
-		JMenu mnLevel = new JMenu("Level");
+		mnLevel = new JMenu("Level");
 		menuBar.add(mnLevel);
 		
 		mntmProperties = new JMenuItem("Properties");
@@ -305,7 +303,7 @@ public class MainWindow extends JFrame {
 		});
 		mnLevel.add(mntmProperties);
 		
-		JMenu mnLayer = new JMenu("Layer");
+		mnLayer = new JMenu("Layer");
 		menuBar.add(mnLayer);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -318,12 +316,15 @@ public class MainWindow extends JFrame {
 				if(tabbedPane.getSelectedIndex()>=0){
 					Component c = tabbedPane.getComponent(tabbedPane.getSelectedIndex());
 					if(c instanceof LevelPanel){
+						Layer old = null;
 						LevelPanel current = levelPanelMap.getNormal(data.getCurrentLevel());
 						if(current!=null){
-							
+							old = current.getCurrentLayer();
 						}
 						LevelPanel panel = (LevelPanel)c;
 						data.setCurrentLevel(levelPanelMap.getReverse(panel));
+						if(panel!=null)
+							onLayerChange(old, panel.getCurrentLayer());
 						System.out.println("changed current level");
 					}
 				}
@@ -380,8 +381,47 @@ public class MainWindow extends JFrame {
 		checkMenu();
 	}
 	
+	private void closeTemplate(){
+		for(Level l : data.getOpenLevels()){
+			if(l.needsSave()){
+				int i = JOptionPane.showConfirmDialog(MainWindow.this, l.getName() + " Has Unsaved Changes. Would You Like to Save?", "Save Level", JOptionPane.YES_NO_CANCEL_OPTION);
+				if(i==JOptionPane.YES_OPTION){
+					saveLevel(l);
+				}
+				else if(i==JOptionPane.CANCEL_OPTION){
+					return;
+				}
+			}
+		}
+		onLayerChange(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer(), null);
+		data.closeAllLevels();
+		tabbedPane.removeAll();
+		for(LevelPanel p : levelPanelMap.getValues()){
+			p.dispose();
+		}
+		levelPanelMap.clear();
+		layerMenuItems.clear();
+		data.setOpenTemplate(null);
+	}
+	
 	private void openTemplate(Template t){
 		List<EditorItems> items = data.setOpenTemplate(t);
+		for(EditorItems i : items){
+			List<LayerMenuItem> mi = new ArrayList<LayerMenuItem>();
+			for(LayerMenuItem item : i.getLevelItems()){
+				final LayerMenuItem temp = item;
+				mi.add(item);
+				item.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						temp.performAction(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer());
+					}
+					
+				});
+			}
+			layerMenuItems.put(i.getDef(), Collections.unmodifiableList(mi));
+		}
 		propertyDialog = new LevelPropertyDialog(data.getOpenTemplate());
 	}
 	
@@ -437,6 +477,7 @@ public class MainWindow extends JFrame {
 	private void openLevel(Level l){
 		data.addOpenLevel(l);
 		LevelPanel pan = new LevelPanel(l, this);
+		pan.addChangeLayerListener(this);
 		levelPanelMap.put(l, pan);
 		tabbedPane.addTab(l.getName(), pan);
 		if(data.getCurrentLevel()==null){
@@ -514,5 +555,21 @@ public class MainWindow extends JFrame {
 		mntmSaveLevel.setEnabled(hasData&&data.getCurrentLevel()!=null);
 		mntmSaveLevelAs.setEnabled(hasData&&data.getCurrentLevel()!=null);
 		mntmProperties.setEnabled(hasData&&data.getCurrentLevel()!=null);
+	}
+
+	@Override
+	public void onLayerChange(Layer oldLayer, Layer newLayer) {
+		if(oldLayer!=null&&layerMenuItems.containsKey(oldLayer.getDefinition())){
+			for(LayerMenuItem i : layerMenuItems.get(oldLayer.getDefinition())){
+				mnLayer.remove(i);
+				i.onHide(oldLayer);
+			}
+		}
+		if(newLayer!=null&&layerMenuItems.containsKey(newLayer.getDefinition())){
+			for(LayerMenuItem i : layerMenuItems.get(newLayer.getDefinition())){
+				mnLayer.add(i);
+				i.onShow(newLayer);
+			}
+		}
 	}
 }

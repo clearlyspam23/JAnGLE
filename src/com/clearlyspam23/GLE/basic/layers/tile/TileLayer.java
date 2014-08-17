@@ -19,15 +19,21 @@ public class TileLayer extends Layer<Object> {
 	private PNode base;
 	private TileLayerPNode tiles;
 	private GridNode grid;
-	private double width;
-	private double height;
+//	private double width;
+//	private double height;
 	private TilesetEditorData data;
 	
 	public TileLayer(TileLayerTemplate template)
 	{
+		super(template.getDefinition());
 		this.template = template;
 		base = new PNode();
 		data = new TilesetEditorData();
+		tiles = new TileLayerPNode(template.getGridWidth(), template.getGridHeight());
+		base.addChild(tiles);
+		grid = new GridNode(template.getGridWidth(), template.getGridHeight());
+		grid.setTransparency(0);
+		base.addChild(grid);
 		//the below line should be removed as soon as a better solution is determined
 		for(TilesetHandle t : getTilesetManager().getAllTilesets()){
 			System.out.println(t);
@@ -102,12 +108,12 @@ public class TileLayer extends Layer<Object> {
 
 	@Override
 	public void onResize(double x, double y) {
-		width = x;
-		height = y;
-		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
-		base.addChild(tiles);
-		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
-		base.addChild(grid);
+//		width = x;
+//		height = y;
+		tiles.resize(x, y);
+		grid.resize(x, y);
+//		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
+//		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
 	}
 	
 	public TilesetManager getTilesetManager(){
@@ -122,6 +128,17 @@ public class TileLayer extends Layer<Object> {
 	@Override
 	public LayerEditManager getEditManager() {
 		return data;
+	}
+	
+	public void toggleShowGrid(boolean flag){
+		if(flag)
+			grid.setTransparency(1);
+		else
+			grid.setTransparency(0);
+	}
+	
+	public boolean isGridShowing(){
+		return grid.getTransparency()>0.5f;
 	}
 
 }

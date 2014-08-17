@@ -25,17 +25,25 @@ public class GridNode extends PNode {
 	private Stroke widthGridStroke;
 	private Stroke heightGridStroke;
 	
+	public GridNode(double gridWidth, double gridHeight){
+		this(0, 0, gridWidth, gridHeight);
+	}
+	
 	public GridNode(double levelWidth, double levelHeight, double gridWidth, double gridHeight)
 	{
 		this.gridWidth = gridWidth;
 		this.gridHeight = gridHeight;
-		this.setBounds(0, 0, levelWidth, levelHeight);
 		float widthLineSpacing = (float) (gridWidth/4);
 		float heightLineSpacing = (float) (gridHeight/4);
-		rect.setRect(0, 0, levelWidth, levelHeight);
 		widthGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{widthLineSpacing, widthLineSpacing}, widthLineSpacing/2);
 		heightGridStroke = new BasicStroke(0, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{heightLineSpacing, heightLineSpacing}, heightLineSpacing/2);
 		setPickable(false);
+		resize(levelWidth, levelHeight);
+	}
+	
+	public void resize(double width, double height){
+		this.setBounds(0, 0, width, height);
+		rect.setRect(0, 0, width, height);
 	}
 	
 	protected void paint(PPaintContext paintContext) {
@@ -51,14 +59,14 @@ public class GridNode extends PNode {
         g2.setStroke(widthGridStroke);
         g2.setPaint(gridPaint);
 
-        for (double x = bx; x < rightBorder; x += gridWidth) {
+        for (double x = bx+gridWidth; x < rightBorder; x += gridWidth) {
             gridLine.setLine(x, by, x, bottomBorder);
                 g2.draw(gridLine);
         }
         
         g2.setStroke(heightGridStroke);
 
-        for (double y = by; y < bottomBorder; y += gridHeight) {
+        for (double y = by+gridHeight; y < bottomBorder; y += gridHeight) {
             gridLine.setLine(bx, y, rightBorder, y);
                 g2.draw(gridLine);
         }
