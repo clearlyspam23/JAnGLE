@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
+
 public class TilesetManager {
 	
 	private List<TilesetHandle> allTilesets = new ArrayList<TilesetHandle>();
 	private Map<String, TilesetHandle> nameTable = new HashMap<String, TilesetHandle>();
 	
-	public boolean addTileset(TilesetHandle t){
+	public boolean addTileset(TilesetFileHandle t){
 		if(nameTable.containsKey(t.getName()))
 			return false;
 		allTilesets.add(t);

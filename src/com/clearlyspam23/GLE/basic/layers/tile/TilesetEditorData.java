@@ -16,6 +16,7 @@ import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetSelectionPanel;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilesetEditorData extends LayerEditManager implements ChangeListener, PInputEventListener{
 	

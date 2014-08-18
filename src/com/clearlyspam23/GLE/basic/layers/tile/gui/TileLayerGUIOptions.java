@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.gui;
+package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import com.clearlyspam23.GLE.GUI.SubPanel;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.util.Vector2;
+import javax.swing.JComboBox;
 
 public class TileLayerGUIOptions extends SubPanel {
 	
@@ -22,16 +23,16 @@ public class TileLayerGUIOptions extends SubPanel {
 		list.setBounds(0, 0, 0, 0);
 		
 		JButton btnAdd = new JButton("Add");
-		btnAdd.setBounds(189, 210, 51, 23);
+		btnAdd.setBounds(189, 228, 51, 23);
 		
 		JLabel lblConstraints = new JLabel("Constraints");
-		lblConstraints.setBounds(10, 59, 55, 14);
+		lblConstraints.setBounds(10, 77, 55, 14);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(107, 57, 214, 142);
+		scrollPane.setBounds(107, 75, 214, 142);
 		
 		JButton btnRemove = new JButton("Remove");
-		btnRemove.setBounds(250, 210, 71, 23);
+		btnRemove.setBounds(250, 228, 71, 23);
 		
 		JList list_1 = new JList();
 		scrollPane.setViewportView(list_1);
@@ -45,7 +46,17 @@ public class TileLayerGUIOptions extends SubPanel {
 		
 		vectorPanel = new VectorComponent();
 		vectorPanel.setBounds(106, 15, 215, 20);
+		vectorPanel.setXField(16);
+		vectorPanel.setYField(16);
 		add(vectorPanel);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(107, 46, 214, 20);
+		add(comboBox);
+		
+		JLabel lblExportFormat = new JLabel("Export Format");
+		lblExportFormat.setBounds(10, 46, 87, 14);
+		add(lblExportFormat);
 	}
 
 	/**

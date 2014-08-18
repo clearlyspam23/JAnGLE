@@ -4,7 +4,8 @@ import java.awt.Image;
 
 import org.piccolo2d.nodes.PImage;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilePNode extends PImage {
 

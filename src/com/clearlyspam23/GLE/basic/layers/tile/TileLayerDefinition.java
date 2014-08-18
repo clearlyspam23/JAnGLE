@@ -3,9 +3,10 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
-import com.clearlyspam23.GLE.basic.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
@@ -61,7 +62,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 //			System.err.println("unable to load the image");
 //			return;
 //		}
-		manager.addTileset(new TilesetHandle("test1", "images/Pipes.png", 64, 64));
+		manager.addTileset(new TilesetFileHandle("test1", "images/Pipes.png", 64, 64));
 		//except for this line below
 		template.putTemplateData(this, "tilesets", manager);
 	}

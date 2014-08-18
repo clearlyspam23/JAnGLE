@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile;
+package com.clearlyspam23.GLE.basic.layers.tile.resources;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -7,19 +7,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.clearlyspam23.GLE.Nameable;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class TilesetHandle implements ResourceLoader<Tileset>, Nameable{
+public class TilesetFileHandle implements ResourceLoader<Tileset>, TilesetHandle{
 	
 	private int tileWidth;
 	private int tileHeight;
+	private int tileXSpacing;
+	private int tileYSpacing;
 	private String name;
 	private String filename;
 	
-	public TilesetHandle(){
+	public TilesetFileHandle(){
 		
 	}
 	
@@ -27,11 +27,17 @@ public class TilesetHandle implements ResourceLoader<Tileset>, Nameable{
 		return ResourceManager.get().getResource(filename, Tileset.class, this).getTileset();
 	}
 	
-	public TilesetHandle(String name, String filename, int tileWidth, int tileHeight){
+	public TilesetFileHandle(String name, String filename, int tileWidth, int tileHeight){
+		this(name, filename, tileWidth, tileHeight, 0, 0);
+	}
+	
+	public TilesetFileHandle(String name, String filename, int tileWidth, int tileHeight, int xSpacing, int ySpacing){
 		this.name = name;
 		this.filename = filename;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
+		this.tileXSpacing = xSpacing;
+		this.tileYSpacing = ySpacing;
 	}
 
 	@Override
@@ -39,12 +45,12 @@ public class TilesetHandle implements ResourceLoader<Tileset>, Nameable{
 		Image[][] tiles = null;
 		try {
 			BufferedImage temp  = ImageIO.read(file);
-			tiles = new Image[temp.getWidth()/tileWidth][temp.getHeight()/tileHeight];
+			tiles = new Image[temp.getWidth()/getTileWidth()][temp.getHeight()/getTileHeight()];
 			for(int i = 0; i < tiles.length; i++)
 			{
 				for(int j = 0; j < tiles[i].length; j++)
 				{
-					tiles[i][j] = temp.getSubimage(tileWidth*i, tileHeight*j, tileWidth, tileHeight);
+					tiles[i][j] = temp.getSubimage(getTileWidth()*i, getTileHeight()*j, getTileWidth(), getTileHeight());
 				}
 			}
 		} catch (IOException e) {
@@ -115,6 +121,22 @@ public class TilesetHandle implements ResourceLoader<Tileset>, Nameable{
 	
 	public int getHeight(){
 		return ResourceManager.get().getResource(filename, Tileset.class, this).getHeight();
+	}
+
+	public int getTileXSpacing() {
+		return tileXSpacing;
+	}
+
+	public void setTileXSpacing(int tileXSpacing) {
+		this.tileXSpacing = tileXSpacing;
+	}
+
+	public int getTileYSpacing() {
+		return tileYSpacing;
+	}
+
+	public void setTileYSpacing(int tileYSpacing) {
+		this.tileYSpacing = tileYSpacing;
 	}
 
 }
