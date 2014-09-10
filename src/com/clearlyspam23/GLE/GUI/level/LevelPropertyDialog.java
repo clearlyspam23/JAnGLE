@@ -8,8 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.level.Level;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

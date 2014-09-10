@@ -11,7 +11,7 @@ import java.awt.geom.Rectangle2D;
 import org.piccolo2d.PNode;
 import org.piccolo2d.util.PPaintContext;
 
-public class GridNode extends PNode {
+public class AxisAlignedRectGridNode extends PNode {
 	
 	/**
 	 * 
@@ -25,11 +25,16 @@ public class GridNode extends PNode {
 	private Stroke widthGridStroke;
 	private Stroke heightGridStroke;
 	
-	public GridNode(double gridWidth, double gridHeight){
+	/**
+	 * hacker way to allow toggling grid to work across stuff
+	 */
+	public static boolean isVisible;
+	
+	public AxisAlignedRectGridNode(double gridWidth, double gridHeight){
 		this(0, 0, gridWidth, gridHeight);
 	}
 	
-	public GridNode(double levelWidth, double levelHeight, double gridWidth, double gridHeight)
+	public AxisAlignedRectGridNode(double levelWidth, double levelHeight, double gridWidth, double gridHeight)
 	{
 		this.gridWidth = gridWidth;
 		this.gridHeight = gridHeight;

@@ -1,6 +1,6 @@
 package com.clearlyspam23.GLE.GUI.level;
 
-import com.clearlyspam23.GLE.Layer;
+import com.clearlyspam23.GLE.level.Layer;
 
 public interface LayerContainer {
 	

@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.level;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,6 +10,10 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.clearlyspam23.GLE.ActionData;
+import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.PropertyTemplate;
+import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.exception.TemplateMismatchException;
 
 public class Level implements Nameable{
@@ -17,6 +21,7 @@ public class Level implements Nameable{
 	private Template template;
 	@SuppressWarnings("rawtypes")
 	private List<Layer> layers = new ArrayList<Layer>();
+	private List<LevelChangeListener> listeners = new ArrayList<LevelChangeListener>();
 	private List<ActionData> undoStack = new ArrayList<ActionData>();
 	private List<ActionData> redoStack = new ArrayList<ActionData>();
 	private int lastAction;
@@ -31,7 +36,7 @@ public class Level implements Nameable{
 	{
 		this.template = template;
 		for(LayerTemplate t : template.getLayers()){
-			layers.add(t.createLayer());
+			addLayer(t.createLayer());
 		}
 		for(PropertyTemplate t : template.getActiveProperties()){
 			Object o = t.getDefaultValue();
@@ -56,7 +61,7 @@ public class Level implements Nameable{
 			try{
 				Layer l = t.createLayer();
 				l.buildFromData(d.data);
-				layers.add(l);
+				addLayer(l);
 			}
 			catch(Exception e){
 				throw new TemplateMismatchException(template, this, false, d.getName(), e);
@@ -130,7 +135,7 @@ public class Level implements Nameable{
 	public void setDimensions(double width, double height){
 		this.width = width;
 		this.height = height;
-		for(Layer l : layers){
+		for(LevelChangeListener l : listeners){
 			l.onResize(width, height);
 		}
 	}
@@ -154,6 +159,7 @@ public class Level implements Nameable{
 	public void addLayer(Layer l)
 	{
 		layers.add(l);
+		listeners.add(l);
 	}
 	
 	public List<Layer> getLayers()
@@ -194,6 +200,10 @@ public class Level implements Nameable{
 
 	public void setSaveFile(File saveFile) {
 		this.saveFile = saveFile;
+	}
+	
+	public void addChangeListener(LevelChangeListener listener){
+		listeners.add(listener);
 	}
 
 }

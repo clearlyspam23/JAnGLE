@@ -43,9 +43,6 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.LastRunInfo;
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.level.ChangeLayerListener;
@@ -69,6 +66,9 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 
 public class MainWindow extends JFrame implements ChangeLayerListener{
@@ -168,6 +168,8 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	private LevelPropertyDialog propertyDialog;
 	
 	private Map<LayerDefinition, List<LayerMenuItem>> layerMenuItems = new HashMap<LayerDefinition, List<LayerMenuItem>>();
+	
+	private Map<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
 	
 //	private List<LayerMenuItem> currentLayerItems;
 
@@ -411,7 +413,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 			for(LayerMenuItem item : i.getLevelItems()){
 				final LayerMenuItem temp = item;
 				mi.add(item);
-				item.addActionListener(new ActionListener(){
+				item.getMenuItem().addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
@@ -476,7 +478,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	
 	private void openLevel(Level l){
 		data.addOpenLevel(l);
-		LevelPanel pan = new LevelPanel(l, this);
+		LevelPanel pan = new LevelPanel(l, this, editDialogs);
 		pan.addChangeLayerListener(this);
 		levelPanelMap.put(l, pan);
 		tabbedPane.addTab(l.getName(), pan);
@@ -561,13 +563,13 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	public void onLayerChange(Layer oldLayer, Layer newLayer) {
 		if(oldLayer!=null&&layerMenuItems.containsKey(oldLayer.getDefinition())){
 			for(LayerMenuItem i : layerMenuItems.get(oldLayer.getDefinition())){
-				mnLayer.remove(i);
+				mnLayer.remove(i.getMenuItem());
 				i.onHide(oldLayer);
 			}
 		}
 		if(newLayer!=null&&layerMenuItems.containsKey(newLayer.getDefinition())){
 			for(LayerMenuItem i : layerMenuItems.get(newLayer.getDefinition())){
-				mnLayer.add(i);
+				mnLayer.add(i.getMenuItem());
 				i.onShow(newLayer);
 			}
 		}

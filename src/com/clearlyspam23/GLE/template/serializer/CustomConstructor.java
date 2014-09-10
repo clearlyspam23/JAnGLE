@@ -9,8 +9,8 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.nodes.ScalarNode;
 import org.yaml.snakeyaml.nodes.Tag;
 
-import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.PropertyDefinition;
+import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;

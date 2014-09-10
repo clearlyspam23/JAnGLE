@@ -1,28 +1,19 @@
 package com.clearlyspam23.GLE.GUI;
 
-import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.level.Layer;
 
-public abstract class LayerMenuItem <T extends Layer> extends JMenuItem{
+public abstract class LayerMenuItem <T extends Layer, E extends JMenuItem>{
 	
-	public LayerMenuItem() {
-		super();
+	private final E menuItem;
+	
+	public LayerMenuItem(E item){
+		menuItem = item;
 	}
-
-	public LayerMenuItem(Action a) {
-		super(a);
-	}
-
-	public LayerMenuItem(Icon icon) {
-		super(icon);
-	}
-
-	public LayerMenuItem(String text, int mnemonic) {
-		super(text, mnemonic);
+	
+	public final E getMenuItem(){
+		return menuItem;
 	}
 
 	/**
@@ -30,13 +21,13 @@ public abstract class LayerMenuItem <T extends Layer> extends JMenuItem{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public LayerMenuItem(String name){
-		super(name);
-	}
-	
-	public LayerMenuItem(String name, Icon icon){
-		super(name, icon);
-	}
+//	public LayerMenuItem(String name){
+//		super(name);
+//	}
+//	
+//	public LayerMenuItem(String name, Icon icon){
+//		super(name, icon);
+//	}
 
 	public abstract void performAction(T layer);
 	

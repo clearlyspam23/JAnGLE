@@ -1,18 +1,24 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
-import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
+import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
+	private TilesetEditorData editorData;
+	
 	public TileLayerDefinition(){
 		ResourceManager.get().registerResourceType(Tileset.class);
+		ResourceManager.get().registerResourceType(TilesetHandle.class);
+		editorData = new TilesetEditorData();
 	}
 
 	@Override
@@ -71,7 +77,16 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	public EditorItems onTemplateOpen(Template template){
 		EditorItems ans = new EditorItems(this);
 		ans.addLevelItem(new LayerGridMenuItem());
+		editorData.clearTilesets();
+		for(TilesetHandle t : ((TilesetManager) template.getTemplateData(this, "tilesets")).getAllTilesets()){
+			System.out.println(t);
+			editorData.addTileset(t);
+		}
 		return ans;
+	}
+
+	public TilesetEditorData getEditorData() {
+		return editorData;
 	}
 
 }

@@ -4,10 +4,10 @@ import java.io.File;
 
 import org.yaml.snakeyaml.Yaml;
 
-import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;

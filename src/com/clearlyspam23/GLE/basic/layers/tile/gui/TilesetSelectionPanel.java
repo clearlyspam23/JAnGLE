@@ -241,4 +241,10 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 		
 	}
 
+	public void clearTilesets() {
+		tilesets.clear();
+		currentTileset = null;
+		updateComboBox();
+	}
+
 }

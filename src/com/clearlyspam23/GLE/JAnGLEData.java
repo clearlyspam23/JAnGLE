@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.clearlyspam23.GLE.GUI.EditorItems;
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.LayerTemplate;
+import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.level.LevelData;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;

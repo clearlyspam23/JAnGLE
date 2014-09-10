@@ -2,10 +2,10 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 
 import java.util.List;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.LayerTemplate;
-import com.clearlyspam23.GLE.Level;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.LayerTemplate;
+import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.util.Vector2;
 
 public class TileLayerTemplate extends LayerTemplate{

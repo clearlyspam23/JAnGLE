@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.LayerTemplate;
+import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;

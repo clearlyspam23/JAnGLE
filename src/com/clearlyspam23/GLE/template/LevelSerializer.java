@@ -1,9 +1,9 @@
 package com.clearlyspam23.GLE.template;
 
-import com.clearlyspam23.GLE.LayerData;
-import com.clearlyspam23.GLE.Level;
-import com.clearlyspam23.GLE.LevelData;
 import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.level.LayerData;
+import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.level.LevelData;
 
 public abstract class LevelSerializer implements Nameable{
 	

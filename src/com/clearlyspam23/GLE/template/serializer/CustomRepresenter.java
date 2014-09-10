@@ -7,10 +7,10 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
-import com.clearlyspam23.GLE.LayerDefinition;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;

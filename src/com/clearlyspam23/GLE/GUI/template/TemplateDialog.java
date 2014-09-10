@@ -20,8 +20,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import com.clearlyspam23.GLE.JAnGLEData;
-import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
@@ -40,6 +38,8 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.LayerTemplate;
 import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
 
 public class TemplateDialog extends JDialog implements ActionListener{

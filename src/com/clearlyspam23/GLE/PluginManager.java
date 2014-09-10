@@ -3,6 +3,7 @@ package com.clearlyspam23.GLE;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.PLanguageOptions;

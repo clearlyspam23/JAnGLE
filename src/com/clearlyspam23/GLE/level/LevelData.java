@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.level;
 
 import java.util.LinkedHashMap;
 

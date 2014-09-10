@@ -1,8 +1,10 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.level;
 
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.GUI.SubPanel;
-import com.clearlyspam23.GLE.LayerTemplate;
+import com.clearlyspam23.GLE.level.LayerTemplate;
+import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.Template;
 
 public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplate> implements Nameable{
 	
@@ -27,6 +29,11 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 		
 	}
 	
+	/**
+	 * called when a template is opened that contains atleast one LayerTemplate defined by this definition
+	 * @param template the template being opened
+	 * @return an EditorItems object describing the various GUIs employed by this type of layer, or null if there are no GUI elements
+	 */
 	public EditorItems onTemplateOpen(Template template){
 		return null;
 	}

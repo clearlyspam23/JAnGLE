@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 
+import com.clearlyspam23.GLE.level.Level;
+
 public class LastRunInfo {
 	
 	private static final File DEFAULT_LAST_RUN = new File(".jangle");

@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.GUI.level;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.util.List;
 
@@ -11,14 +12,15 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.clearlyspam23.GLE.Layer;
-import java.awt.Font;
+import org.piccolo2d.PNode;
+
+import com.clearlyspam23.GLE.level.Layer;
 
 public class LayerSelectionDialog extends JDialog{
 	
 	private JList<String> list;
 	
-	public LayerSelectionDialog(Frame frame, @SuppressWarnings("rawtypes") List<Layer> layers, final LayerContainer container) {
+	public LayerSelectionDialog(Frame frame, @SuppressWarnings("rawtypes") List<Layer> layers, List<PNode> nodes, final LayerContainer container) {
 		super(frame, "Layers");
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -40,6 +42,7 @@ public class LayerSelectionDialog extends JDialog{
 			
 		});
 		scrollPane.setViewportView(list);
+		list.setSelectedIndex(listModel.size()-1);
 	}
 
 	/**

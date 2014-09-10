@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile.resources;
 
 import java.awt.Image;
+import java.util.Set;
 
 import com.clearlyspam23.GLE.Nameable;
 
@@ -31,5 +32,7 @@ public interface TilesetHandle extends Nameable{
 	public int getTileXSpacing();
 
 	public int getTileYSpacing();
+	
+	public Set<String> getTags();
 
 }

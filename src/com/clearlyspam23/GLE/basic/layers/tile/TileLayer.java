@@ -5,14 +5,14 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.Layer;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
-import com.clearlyspam23.GLE.GUI.util.GridNode;
+import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
+import com.clearlyspam23.GLE.level.Layer;
 
 public class TileLayer extends Layer<Object> {
 	
@@ -20,9 +20,7 @@ public class TileLayer extends Layer<Object> {
 	
 	private PNode base;
 	private TileLayerPNode tiles;
-	private GridNode grid;
-//	private double width;
-//	private double height;
+	private AxisAlignedRectGridNode grid;
 	private TilesetEditorData data;
 	
 	public TileLayer(TileLayerTemplate template)
@@ -30,17 +28,17 @@ public class TileLayer extends Layer<Object> {
 		super(template.getDefinition());
 		this.template = template;
 		base = new PNode();
-		data = new TilesetEditorData();
+		data = ((TileLayerDefinition)template.getDefinition()).getEditorData();
 		tiles = new TileLayerPNode(template.getGridWidth(), template.getGridHeight());
 		base.addChild(tiles);
-		grid = new GridNode(template.getGridWidth(), template.getGridHeight());
+		grid = new AxisAlignedRectGridNode(template.getGridWidth(), template.getGridHeight());
 		grid.setTransparency(0);
-		base.addChild(grid);
+//		base.addChild(grid);
 		//the below line should be removed as soon as a better solution is determined
-		for(TilesetHandle t : getTilesetManager().getAllTilesets()){
-			System.out.println(t);
-			data.addTileset(t);
-		}
+//		for(TilesetHandle t : getTilesetManager().getAllTilesets()){
+//			System.out.println(t);
+//			data.addTileset(t);
+//		}
 	}
 
 	@Override
@@ -141,6 +139,14 @@ public class TileLayer extends Layer<Object> {
 	
 	public boolean isGridShowing(){
 		return grid.getTransparency()>0.5f;
+	}
+	
+	public float minBorderWidth(){
+		return (float) (Math.min(template.getGridWidth(), template.getGridHeight())/10);
+	}
+	
+	public PNode getOverlayGUI(){
+		return grid;
 	}
 
 }

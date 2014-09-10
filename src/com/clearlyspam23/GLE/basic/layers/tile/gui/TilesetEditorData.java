@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile;
+package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetSelectionPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilesetEditorData extends LayerEditManager implements ChangeListener, PInputEventListener{
@@ -82,6 +81,10 @@ public class TilesetEditorData extends LayerEditManager implements ChangeListene
 	
 	public void addTileset(TilesetHandle t){
 		selectionPanel.addTileset(t);
+	}
+	
+	public void clearTilesets(){
+		selectionPanel.clearTilesets();
 	}
 	
 //	public void addAllTilesets(){

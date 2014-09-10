@@ -17,12 +17,12 @@ import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
-import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.Level;
 
 public class TestLevelPanel extends JPanel implements ComponentListener{
 

@@ -10,11 +10,11 @@ import java.util.Map.Entry;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Property;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
+import com.clearlyspam23.GLE.level.Level;
 
 public class LevelPropertyPanel extends JPanel{
 	/**

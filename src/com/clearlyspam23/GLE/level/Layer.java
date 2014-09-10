@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.level;
 
 import java.util.List;
 
@@ -6,9 +6,11 @@ import javax.swing.JMenuItem;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.ActionData;
+import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
-public abstract class Layer<T> implements Nameable{
+public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	
 	private final LayerDefinition def;
 	
@@ -30,6 +32,10 @@ public abstract class Layer<T> implements Nameable{
 	 */
 	public abstract PNode getLayerGUI();
 	
+	public PNode getOverlayGUI(){
+		return null;
+	}
+	
 	/**
 	 * the inverse operation of getExportData. Should set this grid to represent the given data.
 	 * @param data
@@ -37,8 +43,6 @@ public abstract class Layer<T> implements Nameable{
 	public abstract void buildFromData(T data);
 	
 	public abstract LayerEditManager getEditManager();
-	
-	public abstract void onResize(double x, double y);
 	
 	public ActionData getActionData(){
 		return new ActionData(getName(), this, getExportData());
@@ -59,6 +63,14 @@ public abstract class Layer<T> implements Nameable{
 
 	public LayerDefinition getDefinition() {
 		return def;
+	}
+	
+	/**
+	 * kind of hacker way to allow the borders to be the right size, might change this later
+	 * @return the minimum border width of this level, or -1 if this layer does not care
+	 */
+	public float minBorderWidth(){
+		return -1f;
 	}
 	
 

@@ -16,11 +16,11 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.clearlyspam23.GLE.LayerDefinition;
-import com.clearlyspam23.GLE.LayerTemplate;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.LayerTemplate;
 import com.clearlyspam23.GLE.util.Utility;
 
 public class LayerPanel extends TemplateSubPanel{

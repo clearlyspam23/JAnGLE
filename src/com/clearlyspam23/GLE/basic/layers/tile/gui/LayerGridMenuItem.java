@@ -1,30 +1,26 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
+import javax.swing.JCheckBoxMenuItem;
+
 import com.clearlyspam23.GLE.GUI.LayerMenuItem;
+import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 
-public class LayerGridMenuItem extends LayerMenuItem<TileLayer> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class LayerGridMenuItem extends LayerMenuItem<TileLayer, JCheckBoxMenuItem> {
 
 	public LayerGridMenuItem() {
-		super("Show Grid");
+		super(new JCheckBoxMenuItem("Show Grid"));
 	}
 
 	@Override
 	public void performAction(TileLayer layer) {
-		layer.toggleShowGrid(!layer.isGridShowing());
+		AxisAlignedRectGridNode.isVisible = !AxisAlignedRectGridNode.isVisible;
 		onShow(layer);
 	}
 	
 	public void onShow(TileLayer layer){
-		if(layer.isGridShowing())
-			setText("Hide Grid");
-		else
-			setText("Show Grid");
+		layer.toggleShowGrid(AxisAlignedRectGridNode.isVisible);
+		getMenuItem().setSelected(AxisAlignedRectGridNode.isVisible);
 	}
 
 }

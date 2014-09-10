@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -16,6 +18,7 @@ public class TilesetFileHandle implements ResourceLoader<Tileset>, TilesetHandle
 	private int tileHeight;
 	private int tileXSpacing;
 	private int tileYSpacing;
+	private Set<String> tags;
 	private String name;
 	private String filename;
 	
@@ -137,6 +140,18 @@ public class TilesetFileHandle implements ResourceLoader<Tileset>, TilesetHandle
 
 	public void setTileYSpacing(int tileYSpacing) {
 		this.tileYSpacing = tileYSpacing;
+	}
+
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
+	}
+	
+	public String toString(){
+		return name;
 	}
 
 }

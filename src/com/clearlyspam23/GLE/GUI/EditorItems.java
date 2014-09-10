@@ -7,8 +7,8 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerDefinition;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.LayerDefinition;
 
 public class EditorItems {
 	

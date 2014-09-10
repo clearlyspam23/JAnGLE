@@ -3,10 +3,10 @@ package com.clearlyspam23.GLE.basic.serializers;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.LayerData;
-import com.clearlyspam23.GLE.Level;
-import com.clearlyspam23.GLE.LevelData;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.LayerData;
+import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.level.LevelData;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

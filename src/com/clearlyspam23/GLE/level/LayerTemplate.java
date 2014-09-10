@@ -1,4 +1,7 @@
-package com.clearlyspam23.GLE;
+package com.clearlyspam23.GLE.level;
+
+import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.Template;
 
 
 public abstract class LayerTemplate implements Nameable{

@@ -1,14 +1,15 @@
 package com.clearlyspam23.GLE.GUI.level;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -19,11 +20,13 @@ import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 
-import com.clearlyspam23.GLE.Layer;
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
+import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
+import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.level.LevelChangeListener;
 
-public class LevelPanel extends JPanel implements ComponentListener, LayerContainer{
+public class LevelPanel extends JPanel implements ComponentListener, LayerContainer, LevelChangeListener{
 
 	/**
 	 * 
@@ -42,24 +45,40 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private int selectedIndex = -1;
 	
 	private PNode base;
+	private PNode background;
+	private OutlineBoxNode outline;
 	
 	private List<PNode> layers = new ArrayList<PNode>();
 	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
 	
-	private HashMap<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
+	private Map<LayerEditManager, JDialog> editDialogs;
 	
 	private List<ChangeLayerListener> listeners = new ArrayList<ChangeLayerListener>();
 	
-	public LevelPanel(Level level, Frame frame)
+	private static final Color backgroundColor = new Color(200, 200, 240);
+	
+	private PNode overlayNode;
+	
+	public LevelPanel(Level level, Frame frame, Map<LayerEditManager, JDialog> editDialogs)
 	{
 		myFrame = frame;
 		canvas = new PSwingCanvas();
-		dialog = new LayerSelectionDialog(frame, level.getLayers(), this);
-		dialog.setSize(150, 600);
+		canvas.setBackground(Color.white);
 		
 		this.level = level;
+		level.addChangeListener(this);
+		background = new PNode();
+		background.setPaint(backgroundColor);
+		background.setBounds(0, 0, level.getWidth(), level.getHeight());
+		
+		outline = new OutlineBoxNode(level.getWidth(), level.getHeight(), calculateRatio(level.getWidth(), level.getHeight()));
+		outline.setPickable(false);
+		outline.setChildrenPickable(false);
+//		
 		
 		setLayout(new BorderLayout());
+		
+		this.editDialogs = editDialogs;
 		
 //		level = new Level(t);
 //		level.setDimensions(320, 320);
@@ -71,6 +90,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		
 		base = new PNode();
 		canvas.getLayer().addChild(base);
+		base.addChild(background);
 		
 		for(Layer l : level.getLayers())
 		{
@@ -79,6 +99,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			editors.add(l.getEditManager());
 			base.addChild(node);
 		}
+		base.addChild(outline);
 		//need some way to determine currentLayer, for now this will have to do
 		changeLayer(level.getLayers().size()-1);
 		
@@ -89,6 +110,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
         eh.setScaleFactor(-0.1);
         canvas.addInputEventListener(eh); 
         addComponentListener(this);
+        
+        dialog = new LayerSelectionDialog(frame, level.getLayers(), layers, this);
+		dialog.setSize(150, 600);
         
 //        System.out.println("initial: " + canvas.getWidth() + ", " + canvas.getHeight());
 		
@@ -127,8 +151,10 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		if(selectedIndex>=0){
 			old = level.getLayers().get(selectedIndex);
 			LayerEditManager editor = editors.get(selectedIndex);
+			LayerEditManager nextEditor = editors.get(index);
 			canvas.removeInputEventListener(editor);
-			editDialogs.get(editor).setVisible(false);
+			if(isShowing()&&!editor.equals(nextEditor))
+				editDialogs.get(editor).setVisible(false);
 		}
 //		base.removeAllChildren();
 		System.out.println("is pickable = " + base.getPickable());
@@ -136,22 +162,36 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		selectedIndex = index;
 		for(int i = 0; i < layers.size(); i++){
 			PNode node = layers.get(i);
-			if(i<selectedIndex){
-				node.setTransparency(1);
-				node.setPickable(false);
-				node.setChildrenPickable(false);
-			}
-			else if(i==selectedIndex){
-				node.setTransparency(1);
+			if(i==selectedIndex){
 				node.setPickable(true);
 				node.setChildrenPickable(true);
 			}
 			else{
-				node.setTransparency(0f);
 				node.setPickable(false);
 				node.setChildrenPickable(false);
 			}
+//			if(i<selectedIndex){
+//				node.setTransparency(1);
+//				node.setPickable(false);
+//				node.setChildrenPickable(false);
+//			}
+//			else if(i==selectedIndex){
+//				node.setTransparency(1);
+//				node.setPickable(true);
+//				node.setChildrenPickable(true);
+//			}
+//			else{
+//				node.setTransparency(1f);
+//				node.setPickable(false);
+//				node.setChildrenPickable(false);
+//			}
 		}
+		Layer active = level.getLayers().get(selectedIndex);
+		if(overlayNode!=null)
+			base.removeChild(overlayNode);
+		overlayNode = active.getOverlayGUI();
+		if(overlayNode!=null)
+			base.addChild(overlayNode);
 		LayerEditManager editor = editors.get(selectedIndex);
 //		for(PInputEventListener l : currentLayer.getListeners()){
 		canvas.addInputEventListener(editor);
@@ -160,6 +200,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 //		}
 		if(!editDialogs.containsKey(editor)){
 			LayerDockingDialog dialog = new LayerDockingDialog(myFrame, editor.getName(), editor);
+			dialog.setSize(300, 800);
 			editDialogs.put(editor, dialog);
 		}
 		if(isShowing())
@@ -244,6 +285,22 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	public void addChangeLayerListener(ChangeLayerListener l){
 		listeners.add(l);
+	}
+	
+	private float calculateRatio(double width, double height){
+		float min = Float.MAX_VALUE;
+		for(Layer l : level.getLayers()){
+			float f = l.minBorderWidth();
+			if(f>=0)
+				min = Math.min(min, f);
+		}
+		return Math.min(min, (float) Math.min(width, height)/120f);
+	}
+
+	@Override
+	public void onResize(double width, double height) {
+		background.setBounds(0, 0, level.getWidth(), level.getHeight());
+		outline.resize(width, height, calculateRatio(width, height));
 	}
 
 }

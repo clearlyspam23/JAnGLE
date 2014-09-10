@@ -3,6 +3,7 @@ package com.clearlyspam23.GLE.basic.layers.tile.resources;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
@@ -84,6 +85,11 @@ public class TilesetReferenceHandle implements ResourceLoader<TilesetFileHandle>
 	@Override
 	public int getTileYSpacing() {
 		return getTilesetFileHandle().getTileYSpacing();
+	}
+	
+	@Override
+	public Set<String> getTags() {
+		return getTilesetFileHandle().getTags();
 	}
 	
 	private TilesetFileHandle getTilesetFileHandle(){

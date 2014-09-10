@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE.exception;
 
-import com.clearlyspam23.GLE.Level;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.level.Level;
 
 public class TemplateMismatchException extends Exception {
 	

@@ -2,8 +2,8 @@ package com.clearlyspam23.GLE.basic.layers.tile.commands;
 
 import org.piccolo2d.PCamera;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 
 public class EraseTileCommand extends PlaceTileCommand {
 
