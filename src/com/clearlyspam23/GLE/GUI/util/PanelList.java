@@ -2,6 +2,7 @@ package com.clearlyspam23.GLE.GUI.util;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -12,22 +13,33 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class PanelList extends JPanel implements FocusListener{
 	
 	public static void main(String[] args){
 		final PanelList pList = new PanelList();
-		pList.addComponent(new JLabel("test1"));
+		JPanel panel = new JPanel();
+		JButton button = new JButton("nothing");
+		panel.add(button);
+		JLabel test = new JLabel("test1");
+		test.addMouseListener(pList.getMouseListener(panel));
+		test.setBackground(new Color(0, 0, 0, 0));
+		panel.add(test);
+		pList.addPanel(panel);
 		pList.addComponent(new JLabel("test2"));
 		pList.addComponent(new JLabel("test3"));
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.add(pList);
+					JScrollPane scroll = new JScrollPane(pList);
+					frame.add(scroll);
+					frame.setSize(150, 400);
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				} catch (Exception e) {
@@ -95,7 +107,6 @@ public class PanelList extends JPanel implements FocusListener{
 	}
 	
 	public void clearAllSelections(){
-		System.out.println("should be clearing");
 		for(JPanel panel : selectedPanels){
 			panel.setBackground(panelColor);
 		}
@@ -103,7 +114,8 @@ public class PanelList extends JPanel implements FocusListener{
 	}
 	
 	public void clearSelection(JPanel panel){
-//		selectedPanels.clear();
+		if(selectedPanels.remove(panel))
+			panel.setBackground(panelColor);
 	}
 	
 	private void selectPanel(JPanel panel){
@@ -170,6 +182,8 @@ public class PanelList extends JPanel implements FocusListener{
 		return ans;
 	}
 	
+	private boolean clicked = false;
+	
 	/**
 	 * adds any component to this PanelList
 	 * will internally create a JPanel to surround this component
@@ -177,16 +191,22 @@ public class PanelList extends JPanel implements FocusListener{
 	 */
 	public void addComponent(Component component){
 		final JPanel panel = new JPanel();
+		component.setBackground(new Color(0, 0, 0, 0));
 		panel.setLayout(new GridBagLayout());
 		panel.add(component);
 		final int index = panels.size();
-		panel.addMouseListener(new MouseListener(){
+		panel.addMouseListener(getMouseListener(panel));
+		addPanel(panel);
+	}
+	
+	public MouseListener getMouseListener(final JPanel panel){
+		return new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				setSelection(panel);
-				System.out.println("clicked on " + index);
-				repaint();
+//				setSelection(panel);
+//				System.out.println("clicked on " + index);
+//				repaint();
 			}
 
 			@Override
@@ -196,21 +216,29 @@ public class PanelList extends JPanel implements FocusListener{
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
+				clicked = false;
 				// intentionally empty
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
+				clicked = true;
 				// intentionally empty
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// intentionally empty
+				if(clicked){
+					if(selectedPanels.contains(panel)&&selectionMode==MULTIPLE_SELECTION)
+						clearSelection(panel);
+					else
+						setSelection(panel);
+					repaint();
+					clicked = false;
+				}
 			}
 			
-		});
-		addPanel(panel);
+		};
 	}
 	
 	/**
@@ -236,6 +264,10 @@ public class PanelList extends JPanel implements FocusListener{
 		for(JPanel panel : selectedPanels){
 			panel.setBackground(outOfFocusColor);
 		}
+	}
+	
+	public Dimension getMaximumSize(){
+		return getPreferredSize();
 	}
 
 }
