@@ -1,9 +1,11 @@
 package com.clearlyspam23.GLE.GUI.util;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
@@ -16,8 +18,10 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 public class PanelList extends JPanel implements FocusListener{
 	
@@ -33,10 +37,12 @@ public class PanelList extends JPanel implements FocusListener{
 		pList.addPanel(panel);
 		pList.addComponent(new JLabel("test2"));
 		pList.addComponent(new JLabel("test3"));
+		final JList<String> list = new JList<String>(new String[]{"test1", "test2", "test3"});
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
+					frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
 					JScrollPane scroll = new JScrollPane(pList);
 					frame.add(scroll);
 					frame.setSize(150, 400);
@@ -57,6 +63,8 @@ public class PanelList extends JPanel implements FocusListener{
 	
 	public static final int SINGLE_SELECTION = 0;
 	public static final int MULTIPLE_SELECTION = 1;
+	
+	private JPanel subPanel = new JPanel();
 	
 	private List<JPanel> panels = new ArrayList<JPanel>();
 	
@@ -81,8 +89,16 @@ public class PanelList extends JPanel implements FocusListener{
 	}
 	
 	public PanelList(List<Component> components, int selectionMode){
-		setLayout(new GridLayout(0, 1, 0, 0));
+		setLayout(new BorderLayout());
+		JPanel temp = new JPanel();
+		temp.setBackground(DEFAULT_BACKGROUND);
+		add(temp, BorderLayout.CENTER);
+		add(subPanel, BorderLayout.NORTH);
+		subPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		setBackground(DEFAULT_BACKGROUND);
+		subPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
+		subPanel.setBackground(DEFAULT_BACKGROUND);
+		subPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		if(!isValidSelectionMode(selectionMode))
 			throw new IllegalArgumentException("selection mode needs to be either \"PanelList.SINGLE_SELECTION\" or \"PanelList.MULTIPLE_SELECTION\"");
 		for(Component c : components){
@@ -192,9 +208,8 @@ public class PanelList extends JPanel implements FocusListener{
 	public void addComponent(Component component){
 		final JPanel panel = new JPanel();
 		component.setBackground(new Color(0, 0, 0, 0));
-		panel.setLayout(new GridBagLayout());
+		panel.setLayout(new GridLayout(1, 1, 0, 0));
 		panel.add(component);
-		final int index = panels.size();
 		panel.addMouseListener(getMouseListener(panel));
 		addPanel(panel);
 	}
@@ -204,26 +219,20 @@ public class PanelList extends JPanel implements FocusListener{
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-//				setSelection(panel);
-//				System.out.println("clicked on " + index);
-//				repaint();
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// intentionally empty
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
 				clicked = false;
-				// intentionally empty
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				clicked = true;
-				// intentionally empty
 			}
 
 			@Override
@@ -248,8 +257,13 @@ public class PanelList extends JPanel implements FocusListener{
 	 */
 	public void addPanel(JPanel panel){
 		panel.setBackground(panelColor);
+//		GridBagConstraints constraints = new GridBagConstraints();
+//		constraints.anchor = GridBagConstraints.LINE_START;
+//		constraints.gridx = 0;
+//		constraints.gridy = GridBagConstraints.RELATIVE;
+//		constraints.fill = GridBagConstraints.HORIZONTAL;
 		panels.add(panel);
-		add(panel);
+		subPanel.add(panel);
 	}
 
 	@Override
