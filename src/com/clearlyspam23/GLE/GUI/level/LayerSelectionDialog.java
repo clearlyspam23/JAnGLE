@@ -8,8 +8,6 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.List;
 
@@ -71,21 +69,6 @@ public class LayerSelectionDialog extends JDialog{
 		scrollPane.setViewportView(list);
 		list.setSelection(layers.size()-1);
 		add(list);
-//		DefaultListModel<String> listModel = new DefaultListModel<String>();
-//		for(Layer<?> l : layers){
-//			listModel.addElement(l.getName());
-//		}
-//		list.setModel(listModel);
-//		list.addListSelectionListener(new ListSelectionListener(){
-//
-//			@Override
-//			public void valueChanged(ListSelectionEvent arg0) {
-//				container.changeLayer(list.getSelectedIndex());
-//			}
-//			
-//		});
-//		scrollPane.setViewportView(list);
-//		list.setSelectedIndex(listModel.size()-1);
 	}
 	
 	@SuppressWarnings("rawtypes")

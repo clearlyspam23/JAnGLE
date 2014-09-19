@@ -32,7 +32,5 @@ public interface TilesetHandle extends Nameable{
 	public int getTileXSpacing();
 
 	public int getTileYSpacing();
-	
-	public Set<String> getTags();
 
 }

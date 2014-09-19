@@ -64,7 +64,9 @@ public class TreeTest extends JFrame {
 		
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("Tilesets");
 		DefaultMutableTreeNode group = new DefaultMutableTreeNode("Group");
+		DefaultMutableTreeNode group2 = new DefaultMutableTreeNode("Group2", true);
 		top.add(group);
+		top.add(group2);
 		DefaultMutableTreeNode testNode1 = new DefaultMutableTreeNode("node1");
 		group.add(testNode1);
 		DefaultMutableTreeNode testNode2 = new DefaultMutableTreeNode("node2");
