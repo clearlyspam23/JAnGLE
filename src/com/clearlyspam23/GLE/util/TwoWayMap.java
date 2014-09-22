@@ -39,5 +39,17 @@ public class TwoWayMap<T, E>{
 	public Set<E> getValues(){
 		return reverseMap.keySet();
 	}
+	
+	public E removeNormal(T value){
+		E e = normMap.remove(value);
+		reverseMap.remove(e);
+		return e;
+	}
+	
+	public T removeReverse(E value){
+		T t = reverseMap.remove(value);
+		normMap.remove(t);
+		return t;
+	}
 
 }

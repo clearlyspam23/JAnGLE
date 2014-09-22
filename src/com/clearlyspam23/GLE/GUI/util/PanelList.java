@@ -65,7 +65,6 @@ public class PanelList extends JPanel implements FocusListener{
 			@Override
 			public void mousePressed(MouseEvent e) {
 				pList.repaint();
-				System.out.println("painting");
 				
 			}
 
