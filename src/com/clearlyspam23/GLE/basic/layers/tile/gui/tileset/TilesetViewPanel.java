@@ -27,6 +27,8 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -171,6 +173,29 @@ public class TilesetViewPanel extends JPanel {
 		add(scrollPane);
 		
 		model = new DefaultTreeModel(top);
+		model.addTreeModelListener(new TreeModelListener(){
+
+			@Override
+			public void treeNodesChanged(TreeModelEvent e) {
+				System.out.println("nodes changed!");
+			}
+
+			@Override
+			public void treeNodesInserted(TreeModelEvent e) {
+				System.out.println("nodes inserted!");
+			}
+
+			@Override
+			public void treeNodesRemoved(TreeModelEvent e) {
+				System.out.println("nodes removed!");
+			}
+
+			@Override
+			public void treeStructureChanged(TreeModelEvent e) {
+				System.out.println("structure changed!");
+			}
+			
+		});
 		
 		tilesetTree = new JTree(model);
 		tilesetTree.addMouseListener(new MouseListener(){
@@ -222,6 +247,9 @@ public class TilesetViewPanel extends JPanel {
 		try {
 			Image image = ImageIO.read(new File("images/TilesetIconSmall.png"));
 			    tilesetTree.setCellRenderer(new TilesetTreeCellRenderer(new ImageIcon(image)));
+			    TilesetTreeCellEditor editor = new TilesetTreeCellEditor(tilesetTree, (DefaultTreeCellRenderer) tilesetTree.getCellRenderer());
+			    tilesetTree.setCellEditor(editor);
+			    tilesetTree.setEditable(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -241,7 +269,6 @@ public class TilesetViewPanel extends JPanel {
 	private void conditionalLoadTilesets(TilesetTreeNode node, DefaultMutableTreeNode parent, Set<TilesetTreeNode> nodes){
 		DefaultMutableTreeNode current;
 		nodes.add(node);
-		System.out.println("parent:" + ((TilesetTreeNode)parent.getUserObject()).getName() + " child: " + node.getName());
 		if((current = nodeMap.getNormal(node))==null){
 			current = new DefaultMutableTreeNode(node);
 			nodeMap.put(node, current);
@@ -268,8 +295,6 @@ public class TilesetViewPanel extends JPanel {
 		}
 		for(TilesetTreeNode n : toRemove)
 			nodeMap.removeNormal(n);
-		DefaultTreeModel model = (DefaultTreeModel) tilesetTree.getModel();
-		System.out.println(model);
 	}
 	
 	private static class TilesetTreeCellRenderer extends DefaultTreeCellRenderer{

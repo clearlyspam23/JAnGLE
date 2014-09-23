@@ -72,6 +72,7 @@ public class TreeTest extends JFrame {
 		DefaultMutableTreeNode testNode2 = new DefaultMutableTreeNode("node2");
 		group.add(testNode2);
 		JTree tree = new JTree(top);
+		tree.setEditable(true);
 		add(tree);
 		DefaultTreeCellRenderer renderer = 
 		        new DefaultTreeCellRenderer();
