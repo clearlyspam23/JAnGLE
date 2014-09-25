@@ -10,10 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.DropMode;
@@ -41,7 +37,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode.Type;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
-import com.clearlyspam23.GLE.util.TwoWayMap;
 
 public class TilesetViewPanel extends JPanel {
 	/**
@@ -53,8 +48,6 @@ public class TilesetViewPanel extends JPanel {
 	
 	private DefaultMutableTreeNode top = new DefaultMutableTreeNode();
 	private DefaultTreeModel model;
-	
-	private TilesetGroupNode base;
 	
 	//private TwoWayMap<TilesetTreeNode, DefaultMutableTreeNode> nodeMap = new TwoWayMap<TilesetTreeNode, DefaultMutableTreeNode>();
 	
@@ -209,26 +202,20 @@ public class TilesetViewPanel extends JPanel {
 
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {
-				System.out.println("nodes changed!");
 			}
 
 			@Override
 			public void treeNodesInserted(TreeModelEvent e) {
-				System.out.println(e.getTreePath().getLastPathComponent().getClass());
 				TilesetGroupNode group = (TilesetGroupNode) ((DefaultMutableTreeNode)e.getTreePath().getLastPathComponent()).getUserObject();
 				((TilesetTreeNode)((DefaultMutableTreeNode)e.getChildren()[e.getChildren().length-1]).getUserObject()).setParent(group);
-				System.out.println(e.getChildren()[e.getChildren().length-1]);
-				System.out.println("nodes inserted!");
 			}
 
 			@Override
 			public void treeNodesRemoved(TreeModelEvent e) {
-				System.out.println("nodes removed!");
 			}
 
 			@Override
 			public void treeStructureChanged(TreeModelEvent e) {
-				System.out.println("structure changed!");
 			}
 			
 		});
@@ -237,65 +224,6 @@ public class TilesetViewPanel extends JPanel {
 		tilesetTree.setDragEnabled(true);
 		tilesetTree.setDropMode(DropMode.ON_OR_INSERT);
 		tilesetTree.setTransferHandler(new TreeTransferHandler());
-//		tilesetTree.setTransferHandler(new TransferHandler(){
-//			/**
-//			 * 
-//			 */
-//			private static final long serialVersionUID = 1L;
-//
-//			public boolean canImport(TransferHandler.TransferSupport support) {
-//	            if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) ||
-//	                !support.isDrop()) {
-//	            	System.out.println(support);
-//	              return false;
-//	            }
-//
-//	            JTree.DropLocation dropLocation =
-//	              (JTree.DropLocation)support.getDropLocation();
-//	            System.out.println(dropLocation.getPath() != null);
-//	            return dropLocation.getPath() != null;
-//	          }
-//
-//	          public boolean importData(TransferHandler.TransferSupport support) {
-//	            if (!canImport(support)) {
-//	              return false;
-//	            }
-//
-//	            JTree.DropLocation dropLocation =
-//	              (JTree.DropLocation)support.getDropLocation();
-//
-//	            TreePath path = dropLocation.getPath();
-//
-//	            Transferable transferable = support.getTransferable();
-//
-//	            String transferData;
-//	            try {
-//	              transferData = (String)transferable.getTransferData(
-//	                DataFlavor.stringFlavor);
-//	            } catch (IOException e) {
-//	              return false;
-//	            } catch (UnsupportedFlavorException e) {
-//	              return false;
-//	            }
-//
-//	            int childIndex = dropLocation.getChildIndex();
-//	            if (childIndex == -1) {
-//	              childIndex = model.getChildCount(path.getLastPathComponent());
-//	            }
-//
-//	            DefaultMutableTreeNode newNode = 
-//	              new DefaultMutableTreeNode(transferData);
-//	            DefaultMutableTreeNode parentNode =
-//	              (DefaultMutableTreeNode)path.getLastPathComponent();
-//	            model.insertNodeInto(newNode, parentNode, childIndex);
-//
-//	            TreePath newPath = path.pathByAddingChild(newNode);
-//	            tilesetTree.makeVisible(newPath);
-//	            tilesetTree.scrollRectToVisible(tilesetTree.getPathBounds(newPath));
-//
-//	            return true;
-//	          }
-//		});
 		tilesetTree.addMouseListener(new MouseListener(){
 
 			@Override
@@ -365,38 +293,6 @@ public class TilesetViewPanel extends JPanel {
 		}
 	}
 	
-	/*private void conditionalLoadTilesets(TilesetTreeNode node, DefaultMutableTreeNode parent, Set<TilesetTreeNode> nodes){
-		DefaultMutableTreeNode current;
-		nodes.add(node);
-		if((current = nodeMap.getNormal(node))==null){
-			current = new DefaultMutableTreeNode(node);
-			nodeMap.put(node, current);
-			model.insertNodeInto(current, parent, parent.getChildCount());
-		}
-		if(node.getType()==Type.GROUP){
-			for(TilesetTreeNode n : node.getAsGroup().getChildren())
-				conditionalLoadTilesets(n, current, nodes);
-		}
-	}*/
-	
-	/*public void refreshTilesets(){
-		HashSet<TilesetTreeNode> nodes = new HashSet<TilesetTreeNode>();
-		nodes.add(base);
-		for(TilesetTreeNode n : base.getChildren()){
-			conditionalLoadTilesets(n, top, nodes);
-		}
-		List<TilesetTreeNode> toRemove = new ArrayList<TilesetTreeNode>();
-		for(TilesetTreeNode node : nodeMap.getEntries()){
-			if(!nodes.contains(node)){
-				System.out.println("node removal detected : " + node.getName());
-				nodeMap.getNormal(node).removeFromParent();
-				toRemove.add(node);
-			}
-		}
-		for(TilesetTreeNode n : toRemove)
-			nodeMap.removeNormal(n);
-	}*/
-	
 	private static class TilesetTreeCellRenderer extends DefaultTreeCellRenderer{
 		
 		/**
@@ -434,7 +330,6 @@ public class TilesetViewPanel extends JPanel {
 	
 	public void setToTilesets(TilesetGroupNode root, TilesetViewListener listener){
 		this.listener = listener;
-		base = root;
 		top.removeAllChildren();
 		top.setUserObject(root);
 		for(TilesetTreeNode n : root.getChildren())
@@ -454,6 +349,13 @@ public class TilesetViewPanel extends JPanel {
 			 treeNode = (DefaultMutableTreeNode) treeNode.getParent();
 		 }
 		 model.insertNodeInto(new DefaultMutableTreeNode(node, node.getType()==Type.GROUP), treeNode, index);
+	}
+	
+	public TilesetTreeNode getSelectedNode(){
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent();
+		if(node!=null)
+			return (TilesetTreeNode) node.getUserObject();
+		return null;
 	}
 
 }
