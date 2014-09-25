@@ -1,13 +1,18 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
-public class TilesetTileNode extends TilesetTreeNode {
+public class TilesetTileNode extends TilesetTreeNode{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<TilesetHandle> tilesetArray;
 
 	public TilesetTileNode(String name, TilesetHandle tileset) {

@@ -9,6 +9,10 @@ import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TilesetReferenceHandle implements ResourceLoader<TilesetFileHandle>, TilesetHandle{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String tilesetFile;
 
 	@Override

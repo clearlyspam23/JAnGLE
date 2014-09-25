@@ -1,11 +1,11 @@
 package com.clearlyspam23.GLE.basic.layers.tile.resources;
 
 import java.awt.Image;
-import java.util.Set;
+import java.io.Serializable;
 
 import com.clearlyspam23.GLE.Nameable;
 
-public interface TilesetHandle extends Nameable{
+public interface TilesetHandle extends Nameable, Serializable{
 	
 	public String getFilename();
 	

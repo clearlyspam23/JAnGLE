@@ -7,6 +7,10 @@ import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilesetGroupNode extends TilesetTreeNode{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<TilesetTreeNode> children = new ArrayList<TilesetTreeNode>();
 
 	public TilesetGroupNode(String name) {

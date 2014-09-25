@@ -1,23 +1,29 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
-public abstract class TilesetTreeNode implements Nameable{
+public abstract class TilesetTreeNode implements Nameable, Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public static enum Type{
 		TILE, GROUP
 	}
 	
 	private String name;
-	private TilesetTreeNode parent;
+	private TilesetGroupNode parent;
 	
 	public TilesetTreeNode(String name){
 		this(name, null);
 	}
-	public TilesetTreeNode(String name, TilesetTreeNode parent){
+	public TilesetTreeNode(String name, TilesetGroupNode parent){
 		this.name = name;
 		this.parent = parent;
 	}
@@ -40,12 +46,17 @@ public abstract class TilesetTreeNode implements Nameable{
 		return (TilesetGroupNode) this;
 	}
 	
-	public final TilesetTreeNode getParent(){
+	public final TilesetGroupNode getParent(){
 		return parent;
 	}
 	
-	public final TilesetGroupNode getParentAsGroup(){
-		return parent.getAsGroup();
+	public final void setParent(TilesetGroupNode parent){
+		if(this.parent!=null){
+			this.parent.getChildren().remove(this);
+		}
+		this.parent = parent;
+		if(parent!=null&&!parent.getChildren().contains(this))
+			parent.addNode(this);
 	}
 	
 	public abstract List<TilesetHandle> getTilesets();
