@@ -5,29 +5,19 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.tileset.TilesetEditPanel;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
-import javax.swing.JTree;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.tileset.TilesetViewPanel;
 
 public class TilesetLoadDialog extends JDialog {
 
@@ -37,12 +27,9 @@ public class TilesetLoadDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	
-	private List<TilesetHandle> tilesets;
-	private DefaultListModel<TilesetFileHandle> listModel;
-	
 	private TilesetHandle currentTileset;
 	private TilesetEditPanel tilesetEditPanel;
-	private JTree tilesetTree;
+	private TilesetViewPanel tilesetViewPanel;
 
 	/**
 	 * Launch the application.
@@ -86,9 +73,8 @@ public class TilesetLoadDialog extends JDialog {
 		gbc_scrollPane.gridy = 0;
 		listPanel.add(scrollPane, gbc_scrollPane);
 		
-		tilesetTree = new JTree();
-		scrollPane.setViewportView(tilesetTree);
-		listModel = new DefaultListModel<TilesetFileHandle>();
+		tilesetViewPanel = new TilesetViewPanel();
+		scrollPane.setViewportView(tilesetViewPanel);
 		
 		tilesetEditPanel = new TilesetEditPanel();
 		contentPanel.add(tilesetEditPanel, BorderLayout.CENTER);
@@ -110,23 +96,8 @@ public class TilesetLoadDialog extends JDialog {
 		}
 	}
 	
-	public List<TilesetHandle> getResultingTilesets(){
-		return getValidTilesets();
-	}
-	
-	public boolean allTilesetsValid(){
-		for(TilesetHandle h : tilesets)
-			if(!isValidTileset(h))
-				return false;
-		return true;
-	}
-	
-	private List<TilesetHandle> getValidTilesets(){
-		ArrayList<TilesetHandle> ans = new ArrayList<TilesetHandle>();
-		for(TilesetHandle h : tilesets)
-			if(isValidTileset(h))
-				ans.add(h);
-		return ans;
+	public void setToTileset(TilesetTreeNode tilesetTree){
+		
 	}
 	
 	private boolean isValidTileset(TilesetHandle current){
@@ -142,13 +113,5 @@ public class TilesetLoadDialog extends JDialog {
         if(current.getTileXSpacing()<0||current.getTileYSpacing()<0)
         	return false;
         return true;
-	}
-	
-	public void showDialog(TilesetManager manager){
-		tilesets = new ArrayList<TilesetHandle>();
-		for(TilesetHandle h : manager.getAllTilesets()){
-			tilesets.add(new TilesetFileHandle(h.getName(), h.getFilename(), h.getTileWidth(), h.getTileHeight(), h.getTileXSpacing(), h.getTileYSpacing()));
-		}
-		setVisible(true);
 	}
 }

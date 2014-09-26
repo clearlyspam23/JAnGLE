@@ -3,8 +3,6 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
-
 public class TilesetGroupNode extends TilesetTreeNode{
 	
 	/**
@@ -12,9 +10,11 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<TilesetTreeNode> children = new ArrayList<TilesetTreeNode>();
+	
+	private String name;
 
 	public TilesetGroupNode(String name) {
-		super(name);
+		this.name = name;
 	}
 
 	@Override
@@ -28,6 +28,7 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	
 	public void addNode(TilesetTreeNode node){
 		children.add(node);
+		node.setParent(this);
 	}
 	
 	public List<TilesetTreeNode> getChildren(){
@@ -37,6 +38,16 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	@Override
 	public Type getType() {
 		return Type.GROUP;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

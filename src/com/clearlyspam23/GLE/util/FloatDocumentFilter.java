@@ -12,6 +12,16 @@ public class FloatDocumentFilter extends DocumentFilter {
 	
 	private static final DecimalFormat formatter = new DecimalFormat("#.####");
 	
+	private boolean allowsNegative;
+	
+	public FloatDocumentFilter(){
+		this(true);
+	}
+	
+	public FloatDocumentFilter(boolean allowsNegative){
+		this.allowsNegative = allowsNegative;
+	}
+	
     @Override
     public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) 
         throws BadLocationException 
@@ -19,7 +29,7 @@ public class FloatDocumentFilter extends DocumentFilter {
     	String current = fb.getDocument().getText(0, fb.getDocument().getLength());
     	String total = new StringBuilder(current).replace(off, off+len, str).toString();
     	if(NumberUtils.isNumber(total)
-    			||"-".equals(str)&&(off==0||"0".equals(current))
+    			||allowsNegative&&"-".equals(str)&&(off==0||"0".equals(current))
     			||"0".equals(current)&&(NumberUtils.isNumber(str)||".".equals(str)&&off==1))
     	{
     		if("-".equals(str)){

@@ -15,7 +15,11 @@ public class IntegerComponent extends JTextField {
 	private static final long serialVersionUID = -8908075517690943424L;
 
 	public IntegerComponent() {
-		DocumentFilter filter = new IntegerDocumentFilter();
+		this(true);
+	}
+	
+	public IntegerComponent(boolean allowsNegative){
+		DocumentFilter filter = new IntegerDocumentFilter(allowsNegative);
 		PlainDocument doc = new PlainDocument();
 		doc.setDocumentFilter(filter);
 		setDocument(doc);

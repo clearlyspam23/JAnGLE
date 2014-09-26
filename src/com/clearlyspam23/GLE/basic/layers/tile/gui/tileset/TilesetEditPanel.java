@@ -13,11 +13,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilesetEditPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField nameField;
 	private JTextField fileNameField;
 	

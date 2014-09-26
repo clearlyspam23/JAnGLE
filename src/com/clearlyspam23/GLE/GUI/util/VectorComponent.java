@@ -24,13 +24,17 @@ public class VectorComponent extends JPanel {
 	private JTextField textField2;
 	
 	private static final DecimalFormat format = new DecimalFormat("#.####");
+	
+	public VectorComponent(){
+		this(true);
+	}
 
 	/**
 	 * Create the panel.
 	 */
-	public VectorComponent() {
+	public VectorComponent(boolean allowsNegative) {
 		
-		DocumentFilter filter = new FloatDocumentFilter();
+		DocumentFilter filter = new FloatDocumentFilter(allowsNegative);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{86, 6, 86, 0};
 		gridBagLayout.rowHeights = new int[]{20, 0};

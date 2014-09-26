@@ -4,10 +4,11 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class TilesetReferenceHandle implements ResourceLoader<TilesetFileHandle>, TilesetHandle{
+public class TilesetReferenceHandle extends TilesetHandle implements ResourceLoader<TilesetFileHandle>{
 	
 	/**
 	 * 
@@ -92,6 +93,11 @@ public class TilesetReferenceHandle implements ResourceLoader<TilesetFileHandle>
 	
 	private TilesetFileHandle getTilesetFileHandle(){
 		return ResourceManager.get().getResource(tilesetFile, TilesetFileHandle.class, this);
+	}
+
+	@Override
+	public void setName(String name) {
+		getTilesetFileHandle().setName(name);
 	}
 
 }

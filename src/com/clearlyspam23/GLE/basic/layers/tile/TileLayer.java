@@ -11,7 +11,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 import com.clearlyspam23.GLE.level.Layer;
 
 public class TileLayer extends Layer<Object> {

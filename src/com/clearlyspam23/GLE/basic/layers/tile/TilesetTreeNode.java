@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.clearlyspam23.GLE.Nameable;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public abstract class TilesetTreeNode implements Nameable, Serializable{
 	
@@ -16,25 +15,18 @@ public abstract class TilesetTreeNode implements Nameable, Serializable{
 	public static enum Type{
 		TILE, GROUP
 	}
-	
-	private String name;
 	private TilesetGroupNode parent;
 	
-	public TilesetTreeNode(String name){
-		this(name, null);
+	public TilesetTreeNode(){
+		
 	}
-	public TilesetTreeNode(String name, TilesetGroupNode parent){
-		this.name = name;
+	public TilesetTreeNode(TilesetGroupNode parent){
 		this.parent = parent;
 	}
 	
-	public final String getName(){
-		return name;
-	}
+	public abstract String getName();
 	
-	public final void setName(String name){
-		this.name = name;
-	}
+	public abstract void setName(String name);
 	
 	public abstract Type getType();
 	

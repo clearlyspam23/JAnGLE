@@ -7,7 +7,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
@@ -68,7 +67,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 //			System.err.println("unable to load the image");
 //			return;
 //		}
-		manager.addTileset(new TilesetFileHandle("test1", "images/Pipes.png", 64, 64));
+		manager.addTilesetToRoot(new TilesetFileHandle("test1", "images/Pipes.png", 64, 64));
 		//except for this line below
 		template.putTemplateData(this, "tilesets", manager);
 	}

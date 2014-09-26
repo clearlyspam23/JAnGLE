@@ -21,8 +21,8 @@ import javax.swing.JScrollPane;
 
 import com.clearlyspam23.GLE.GUI.util.AspectRatioLayout;
 import com.clearlyspam23.GLE.GUI.util.StretchIcon;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
 
 public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 	

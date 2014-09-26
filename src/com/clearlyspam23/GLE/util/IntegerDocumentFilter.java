@@ -8,6 +8,16 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 public class IntegerDocumentFilter extends DocumentFilter {
 	
+	private boolean allowsNegative;
+	
+	public IntegerDocumentFilter(){
+		this(true);
+	}
+	
+	public IntegerDocumentFilter(boolean allowsNegative){
+		this.allowsNegative = allowsNegative;
+	}
+	
     @Override
     public void replace(FilterBypass fb, int off, int len, String str, AttributeSet attr) 
         throws BadLocationException 
@@ -15,7 +25,7 @@ public class IntegerDocumentFilter extends DocumentFilter {
     	String current = fb.getDocument().getText(0, fb.getDocument().getLength());
     	String total = new StringBuilder(current).replace(off, off+len, str).toString();
     	if(NumberUtils.isNumber(total)&&total.indexOf('.')<0
-    			||"-".equals(str)&&(off==0||"0".equals(current))
+    			||allowsNegative&&"-".equals(str)&&(off==0||"0".equals(current))
     			||"0".equals(current)&&NumberUtils.isNumber(str))
     	{
     		if("-".equals(str)){

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetHandle;
-
 public class TilesetTileNode extends TilesetTreeNode{
 	
 	/**
@@ -14,9 +12,12 @@ public class TilesetTileNode extends TilesetTreeNode{
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<TilesetHandle> tilesetArray;
+	
+	public TilesetTileNode(TilesetHandle tileset) {
+		setTileset(tileset);
+	}
 
 	public TilesetTileNode(String name, TilesetHandle tileset) {
-		super(name);
 		setTileset(tileset);
 	}
 	
@@ -31,9 +32,23 @@ public class TilesetTileNode extends TilesetTreeNode{
 		return tilesetArray;
 	}
 	
+	public TilesetHandle getTileset(){
+		if(tilesetArray.isEmpty())
+			return null;
+		return tilesetArray.get(0);
+	}
+	
 	@Override
 	public Type getType() {
 		return Type.TILE;
+	}
+	
+	public String getName(){
+		return getTileset().getName();
+	}
+	
+	public void setName(String name){
+		getTileset().setName(name);
 	}
 
 }

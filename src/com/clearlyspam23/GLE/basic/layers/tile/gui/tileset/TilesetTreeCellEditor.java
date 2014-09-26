@@ -16,11 +16,6 @@ public class TilesetTreeCellEditor extends DefaultTreeCellEditor{
 	public TilesetTreeCellEditor(JTree arg0, DefaultTreeCellRenderer arg1) {
 		super(arg0, arg1);
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private TilesetTreeNode node;
 	private JTextField field;
 

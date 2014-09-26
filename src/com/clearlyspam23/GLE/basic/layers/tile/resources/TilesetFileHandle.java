@@ -7,10 +7,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class TilesetFileHandle implements ResourceLoader<Tileset>, TilesetHandle{
+public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<Tileset>{
 	
 	/**
 	 * 

@@ -194,8 +194,8 @@ public class TilesetViewPanel extends JPanel {
 	public TilesetViewPanel() {
 		setLayout(new GridLayout(1, 1, 0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		add(scrollPane);
+//		JScrollPane scrollPane = new JScrollPane();
+//		add(scrollPane);
 		
 		model = new DefaultTreeModel(top);
 		model.addTreeModelListener(new TreeModelListener(){
@@ -269,7 +269,7 @@ public class TilesetViewPanel extends JPanel {
 			}
 			
 		});
-		scrollPane.setViewportView(tilesetTree);
+		add(tilesetTree);
 		try {
 			Image image = ImageIO.read(new File("images/TilesetIconSmall.png"));
 			    tilesetTree.setCellRenderer(new TilesetTreeCellRenderer(new ImageIcon(image)));
