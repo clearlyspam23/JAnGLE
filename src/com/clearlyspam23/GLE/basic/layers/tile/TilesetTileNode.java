@@ -1,6 +1,5 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,11 +12,11 @@ public class TilesetTileNode extends TilesetTreeNode{
 	private static final long serialVersionUID = 1L;
 	private List<TilesetHandle> tilesetArray;
 	
-	public TilesetTileNode(TilesetHandle tileset) {
-		setTileset(tileset);
+	public TilesetTileNode(){
+		
 	}
-
-	public TilesetTileNode(String name, TilesetHandle tileset) {
+	
+	public TilesetTileNode(TilesetHandle tileset) {
 		setTileset(tileset);
 	}
 	
@@ -25,6 +24,14 @@ public class TilesetTileNode extends TilesetTreeNode{
 		ArrayList<TilesetHandle> l = new ArrayList<TilesetHandle>();
 		l.add(tileset);
 		tilesetArray = Collections.unmodifiableList(l);
+	}
+	
+	public void setTilesetArray(List<TilesetHandle> tilesets){
+		tilesetArray = tilesets;
+	}
+	
+	public List<TilesetHandle> getTilesetArray(){
+		return tilesetArray;
 	}
 
 	@Override
@@ -49,6 +56,11 @@ public class TilesetTileNode extends TilesetTreeNode{
 	
 	public void setName(String name){
 		getTileset().setName(name);
+	}
+
+	@Override
+	public TilesetTreeNode cloneAsBasic() {
+		return new TilesetTileNode(getTileset().cloneAsBasic());
 	}
 
 }

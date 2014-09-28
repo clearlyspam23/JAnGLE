@@ -8,7 +8,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class TilesetReferenceHandle extends TilesetHandle implements ResourceLoader<TilesetFileHandle>{
+public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoader<BasicTilesetHandle>{
 	
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class TilesetReferenceHandle extends TilesetHandle implements ResourceLoa
 	private String tilesetFile;
 
 	@Override
-	public TilesetFileHandle loadResource(File file) throws IOException {
+	public BasicTilesetHandle loadResource(File file) throws IOException {
 		return null;
 	}
 
@@ -91,13 +91,18 @@ public class TilesetReferenceHandle extends TilesetHandle implements ResourceLoa
 		return getTilesetFileHandle().getTileYSpacing();
 	}
 	
-	private TilesetFileHandle getTilesetFileHandle(){
-		return ResourceManager.get().getResource(tilesetFile, TilesetFileHandle.class, this);
+	private BasicTilesetHandle getTilesetFileHandle(){
+		return ResourceManager.get().getResource(tilesetFile, BasicTilesetHandle.class, this);
 	}
 
 	@Override
 	public void setName(String name) {
 		getTilesetFileHandle().setName(name);
+	}
+
+	@Override
+	public BasicTilesetHandle cloneAsBasic() {
+		return getTilesetFileHandle().cloneAsBasic();
 	}
 
 }

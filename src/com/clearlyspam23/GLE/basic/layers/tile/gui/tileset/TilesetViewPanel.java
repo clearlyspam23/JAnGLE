@@ -36,7 +36,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetGroupNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode.Type;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
 
 public class TilesetViewPanel extends JPanel {
 	/**
@@ -52,6 +52,8 @@ public class TilesetViewPanel extends JPanel {
 	//private TwoWayMap<TilesetTreeNode, DefaultMutableTreeNode> nodeMap = new TwoWayMap<TilesetTreeNode, DefaultMutableTreeNode>();
 	
 	private TilesetViewListener listener;
+	
+	private TilesetTreeCellEditor editor;
 	
 	private static final TilesetViewListener DEFAULT_LISTENER = new TilesetViewListener(){
 
@@ -70,6 +72,13 @@ public class TilesetViewPanel extends JPanel {
 		@Override
 		public void onGroupRightClick(TilesetViewPanel panel,
 				TilesetGroupNode tileNode, MouseEvent e) {}
+
+		@Override
+		public void onTilesetRenamed(TilesetViewPanel panel,
+				TilesetTileNode node) {}
+
+		@Override
+		public void onGroupRenamed(TilesetViewPanel panel, TilesetGroupNode node) {}
 		
 	};
 	
@@ -103,9 +112,9 @@ public class TilesetViewPanel extends JPanel {
 		final TilesetViewPanel panel = new TilesetViewPanel();
 		final TilesetGroupNode root = new TilesetGroupNode("tilesets");
 		final TilesetGroupNode group = new TilesetGroupNode("group");
-		final TilesetTileNode node1 = new TilesetTileNode("tileset1", new TilesetFileHandle());
-		final TilesetTileNode node2 = new TilesetTileNode("tileset2", new TilesetFileHandle());
-		final TilesetTileNode node3 = new TilesetTileNode("tileset3", new TilesetFileHandle());
+		final TilesetTileNode node1 = new TilesetTileNode(new BasicTilesetHandle("tileset1"));
+		final TilesetTileNode node2 = new TilesetTileNode(new BasicTilesetHandle("tileset2"));
+		final TilesetTileNode node3 = new TilesetTileNode(new BasicTilesetHandle("tileset3"));
 		final JPopupMenu rightPopUp = new JPopupMenu();
 		JMenuItem button = new JMenuItem("New Tileset");
 		button.addActionListener(new ActionListener(){
@@ -113,7 +122,7 @@ public class TilesetViewPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("I was Clicked!");
-				panel.insertNode(new TilesetTileNode("New Tileset", new TilesetFileHandle()));
+				panel.insertNode(new TilesetTileNode(new BasicTilesetHandle("New Tileset")));
 			}
 			
 		});
@@ -169,6 +178,18 @@ public class TilesetViewPanel extends JPanel {
 				System.out.println("Right Click on Group - " + tileNode.getName());
 				rightPopUp.show(e.getComponent(), e.getX(), e.getY());
 			}
+
+			@Override
+			public void onTilesetRenamed(TilesetViewPanel panel,
+					TilesetTileNode node) {
+				System.out.println("Renamed Tile node!");
+			}
+
+			@Override
+			public void onGroupRenamed(TilesetViewPanel panel,
+					TilesetGroupNode node) {
+				System.out.println("Renamed Group node!");
+			}
 			
 		});
 		EventQueue.invokeLater(new Runnable() {
@@ -202,12 +223,18 @@ public class TilesetViewPanel extends JPanel {
 
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {
+				TilesetTreeNode out = (TilesetTreeNode)((DefaultMutableTreeNode)e.getChildren()[e.getChildren().length-1]).getUserObject();
+				if(out.getType()==Type.GROUP)
+					listener.onGroupRenamed(TilesetViewPanel.this, out.getAsGroup());
+				else
+					listener.onTilesetRenamed(TilesetViewPanel.this, out.getAsTiles());
 			}
 
 			@Override
 			public void treeNodesInserted(TreeModelEvent e) {
 				TilesetGroupNode group = (TilesetGroupNode) ((DefaultMutableTreeNode)e.getTreePath().getLastPathComponent()).getUserObject();
-				((TilesetTreeNode)((DefaultMutableTreeNode)e.getChildren()[e.getChildren().length-1]).getUserObject()).setParent(group);
+				TilesetTreeNode out = (TilesetTreeNode)((DefaultMutableTreeNode)e.getChildren()[e.getChildren().length-1]).getUserObject();
+				out.setParent(group);
 			}
 
 			@Override
@@ -273,11 +300,11 @@ public class TilesetViewPanel extends JPanel {
 		try {
 			Image image = ImageIO.read(new File("images/TilesetIconSmall.png"));
 			    tilesetTree.setCellRenderer(new TilesetTreeCellRenderer(new ImageIcon(image)));
-			    TilesetTreeCellEditor editor = new TilesetTreeCellEditor(tilesetTree, (DefaultTreeCellRenderer) tilesetTree.getCellRenderer());
+			    editor = new TilesetTreeCellEditor(tilesetTree, (DefaultTreeCellRenderer) tilesetTree.getCellRenderer());
 			    tilesetTree.setCellEditor(editor);
 			    tilesetTree.setEditable(true);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -332,6 +359,7 @@ public class TilesetViewPanel extends JPanel {
 		this.listener = listener;
 		top.removeAllChildren();
 		top.setUserObject(root);
+		editor.setTilesetRoot(root);
 		for(TilesetTreeNode n : root.getChildren())
 			loadTilesets(n, top);
 		tilesetTree.expandRow(0);

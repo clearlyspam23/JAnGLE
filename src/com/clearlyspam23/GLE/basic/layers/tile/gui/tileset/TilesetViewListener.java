@@ -14,5 +14,9 @@ public interface TilesetViewListener {
 	public void onTilesetRightClick(TilesetViewPanel panel, TilesetTileNode tileNode, MouseEvent e);
 	
 	public void onGroupRightClick(TilesetViewPanel panel, TilesetGroupNode tileNode, MouseEvent e);
+	
+	public void onTilesetRenamed(TilesetViewPanel panel, TilesetTileNode node);
+	
+	public void onGroupRenamed(TilesetViewPanel panel, TilesetGroupNode node);
 
 }

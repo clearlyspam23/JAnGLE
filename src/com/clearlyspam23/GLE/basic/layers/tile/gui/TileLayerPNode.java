@@ -7,7 +7,7 @@ import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
 public class TileLayerPNode extends PNode implements EditAction{
 
@@ -15,8 +15,6 @@ public class TileLayerPNode extends PNode implements EditAction{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	//need some way to map PNode to Tilesets
 	
 	private TilePNode[][] nodeGrid;
 	
@@ -27,32 +25,9 @@ public class TileLayerPNode extends PNode implements EditAction{
 	
 	public TileLayerPNode(double gridWidth, double gridHeight)
 	{
-//		setBounds(0, 0, width, height);
 		this.gridWidth = gridWidth;
 		this.gridHeight = gridHeight;
 		nodeGrid = new TilePNode[0][0];
-//		double rowsd = width/gridWidth;
-//		double columnsd = height/gridHeight;
-//		int rows = (int) rowsd;
-//		int columns = (int) columnsd;
-//		nodeGrid = new TilePNode[rows + (rowsd-epsilon < rows ? 0 : 1)][columns + (columnsd-epsilon < columns ? 0 : 1)];
-//		for(int i = 0; i < rows; i++){
-//			for(int j = 0; j < columns; j++){
-//				addNewPNode(i, j, gridWidth, gridHeight);
-//			}
-//		}
-//		if(rows<nodeGrid.length){
-//			double remainder = (rowsd-rows)*gridWidth;
-//			for(int j = 0; j < nodeGrid[rows].length; j++){
-//				addNewPNode(rows, j, remainder, gridHeight, gridWidth, gridHeight);
-//			}
-//		}
-//		if(nodeGrid.length>0&&columns<nodeGrid[0].length){
-//			double remainder = (columnsd-columns)*gridHeight;
-//			for(int i = 0; i < nodeGrid.length; i++){
-//				addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
-//			}
-//		}
 	}
 	
 	public void resize(double width, double height){
@@ -92,16 +67,16 @@ public class TileLayerPNode extends PNode implements EditAction{
 		}
 	}
 	
-	private TileLayerPNode(TileLayerPNode base){
-		
-		nodeGrid = new TilePNode[base.nodeGrid.length][base.nodeGrid.length>0 ? base.nodeGrid[0].length : 0];
-		for(int i = 0; i < base.nodeGrid.length; i++){
-			for(int j = 0; j < base.nodeGrid.length; j++){
-				nodeGrid[i][j] = base.nodeGrid[i][j].getCopy();
-				addChild(nodeGrid[i][j]);
-			}
-		}
-	}
+//	private TileLayerPNode(TileLayerPNode base){
+//		
+//		nodeGrid = new TilePNode[base.nodeGrid.length][base.nodeGrid.length>0 ? base.nodeGrid[0].length : 0];
+//		for(int i = 0; i < base.nodeGrid.length; i++){
+//			for(int j = 0; j < base.nodeGrid.length; j++){
+//				nodeGrid[i][j] = base.nodeGrid[i][j].getCopy();
+//				addChild(nodeGrid[i][j]);
+//			}
+//		}
+//	}
 	
 	private void addNewPNode(int i, int j, double width, double height){
 		addNewPNode(i, j, width, height, width, height);
@@ -109,9 +84,6 @@ public class TileLayerPNode extends PNode implements EditAction{
 	
 	private void addNewPNode(int i, int j, double width, double height, double gridWidth, double gridHeight){
 		addPNode(i, j, width, height, gridWidth, gridHeight, new TilePNode());
-//		nodeGrid[i][j] = new TilePNode();
-//		addChild(nodeGrid[i][j]);
-//		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
 	}
 	
 	private void addPNode(int i, int j, double width, double height, TilePNode pnode){
@@ -148,6 +120,34 @@ public class TileLayerPNode extends PNode implements EditAction{
 			}
 		}
 		return ans;
+	}
+	
+	/**
+	 * try and refresh all of the nodes in this TileLayer. if there happens to be a problem, clear out that node and report it here
+	 * this should be called whenever new tilesets are added, or old tilesets are modified.
+	 * if an existing tileset in use has been changed such that existing tiles are no longer valid, this method will zero out those tiles and return false
+	 * @param manager the tileset manager to use for updates
+	 * @return whether or not this refresh completed without incident
+	 */
+	public boolean refreshNodes(TilesetManager manager){
+		boolean output = true;
+		for(int i = 0; i < nodeGrid.length; i++){
+			for(int j = 0; j < nodeGrid[i].length; j++){
+				TilePNode node = nodeGrid[i][j];
+				try{
+					TilesetHandle h = manager.getTilesetByName(node.getTileset().getName());
+					if(h==null){
+						throw new NullPointerException();
+					}
+					node.setTileset(h, node.getTilesetX(), node.getTilesetY());
+				}
+				catch(Exception e){
+					node.resetTileset();
+					output = false;
+				}
+			}
+		}
+		return output;
 	}
 
 	@Override

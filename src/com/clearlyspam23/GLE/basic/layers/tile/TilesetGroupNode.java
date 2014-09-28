@@ -12,6 +12,10 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	private List<TilesetTreeNode> children = new ArrayList<TilesetTreeNode>();
 	
 	private String name;
+	
+	public TilesetGroupNode(){
+		name = "";
+	}
 
 	public TilesetGroupNode(String name) {
 		this.name = name;
@@ -45,9 +49,25 @@ public class TilesetGroupNode extends TilesetTreeNode{
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public List<TilesetHandle> getTilesetsByName(String name){
+		List<TilesetHandle> out = new ArrayList<TilesetHandle>();
+		for(TilesetHandle h : getTilesets()){
+			if(h.getName().equals(name))
+				out.add(h);
+		}
+		return out;
+	}
+
+	@Override
+	public TilesetTreeNode cloneAsBasic() {
+		TilesetGroupNode out = new TilesetGroupNode(name);
+		for(TilesetTreeNode n : children)
+			out.addNode(n.cloneAsBasic());
+		return out;
 	}
 
 }

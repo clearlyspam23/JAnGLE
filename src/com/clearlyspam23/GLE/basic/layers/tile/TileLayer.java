@@ -32,12 +32,6 @@ public class TileLayer extends Layer<Object> {
 		base.addChild(tiles);
 		grid = new AxisAlignedRectGridNode(template.getGridWidth(), template.getGridHeight());
 		grid.setTransparency(0);
-//		base.addChild(grid);
-		//the below line should be removed as soon as a better solution is determined
-//		for(TilesetHandle t : getTilesetManager().getAllTilesets()){
-//			System.out.println(t);
-//			data.addTileset(t);
-//		}
 	}
 
 	@Override
@@ -99,20 +93,10 @@ public class TileLayer extends Layer<Object> {
 		}
 	}
 
-//	@Override
-//	public List<LayerEditorDialog> getEditors(Frame frame) {
-//		data.buildDialogs(frame);
-//		return data.getDialogs();
-//	}
-
 	@Override
 	public void onResize(double x, double y) {
-//		width = x;
-//		height = y;
 		tiles.resize(x, y);
 		grid.resize(x, y);
-//		tiles = new TileLayerPNode(width, height, template.getGridWidth(), template.getGridHeight());
-//		grid = new GridNode(width, height, template.getGridWidth(), template.getGridHeight());
 	}
 	
 	public TilesetManager getTilesetManager(){
@@ -146,6 +130,10 @@ public class TileLayer extends Layer<Object> {
 	
 	public PNode getOverlayGUI(){
 		return grid;
+	}
+	
+	public boolean refreshTilesets(){
+		return tiles.refreshNodes(getTilesetManager());
 	}
 
 }

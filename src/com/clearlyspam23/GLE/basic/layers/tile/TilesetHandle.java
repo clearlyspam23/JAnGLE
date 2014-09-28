@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.Serializable;
 
 import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
 
 public abstract class TilesetHandle implements Nameable, Serializable{
 	
@@ -39,5 +40,7 @@ public abstract class TilesetHandle implements Nameable, Serializable{
 	public abstract int getTileXSpacing();
 
 	public abstract int getTileYSpacing();
+	
+	public abstract BasicTilesetHandle cloneAsBasic();
 
 }

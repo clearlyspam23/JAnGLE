@@ -43,7 +43,7 @@ public abstract class TilesetTreeNode implements Nameable, Serializable{
 	}
 	
 	public final void setParent(TilesetGroupNode parent){
-		if(this.parent!=null){
+		if(this.parent!=null&&this.parent!=parent){
 			this.parent.getChildren().remove(this);
 		}
 		this.parent = parent;
@@ -52,5 +52,7 @@ public abstract class TilesetTreeNode implements Nameable, Serializable{
 	}
 	
 	public abstract List<TilesetHandle> getTilesets();
+	
+	public abstract TilesetTreeNode cloneAsBasic();
 
 }

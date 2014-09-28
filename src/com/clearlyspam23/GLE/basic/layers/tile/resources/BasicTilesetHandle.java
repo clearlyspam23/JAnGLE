@@ -11,7 +11,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
 import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<Tileset>{
+public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<Tileset>{
 	
 	/**
 	 * 
@@ -22,23 +22,27 @@ public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<T
 	private int tileXSpacing;
 	private int tileYSpacing;
 	private String name;
-	private String filename;
+	private String imageFile;
 	
-	public TilesetFileHandle(){
+	public BasicTilesetHandle(){
 		
 	}
 	
-	public Image[][] getTileset() {
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getTileset();
+	public BasicTilesetHandle(String name){
+		this.name = name;
 	}
 	
-	public TilesetFileHandle(String name, String filename, int tileWidth, int tileHeight){
+	public Image[][] getTileset() {
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileset();
+	}
+	
+	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight){
 		this(name, filename, tileWidth, tileHeight, 0, 0);
 	}
 	
-	public TilesetFileHandle(String name, String filename, int tileWidth, int tileHeight, int xSpacing, int ySpacing){
+	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight, int xSpacing, int ySpacing){
 		this.name = name;
-		this.filename = filename;
+		this.imageFile = filename;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.tileXSpacing = xSpacing;
@@ -73,35 +77,35 @@ public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<T
 	}
 
 	public String getFilename() {
-		return filename;
+		return imageFile;
 	}
 
 	public void setFilename(String filename) {
-		this.filename = filename;
+		this.imageFile = filename;
 	}
 	
 	public Image getTileAt(int x, int y){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getTileAt(x, y);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileAt(x, y);
 	}
 	
 	public Image getTileByIndex(int index){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getTileByIndex(index);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileByIndex(index);
 	}
 	
 	public int getXFromIndex(int index){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getXFromIndex(index);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getXFromIndex(index);
 	}
 	
 	public int getYFromIndex(int index){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getYFromIndex(index);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getYFromIndex(index);
 	}
 	
 	public boolean isValidLocation(int x, int y){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).isValidLocation(x, y);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).isValidLocation(x, y);
 	}
 	
 	public int getIndex(int x, int y){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getIndex(x, y);
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getIndex(x, y);
 	}
 
 	public int getTileWidth() {
@@ -121,11 +125,11 @@ public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<T
 	}
 	
 	public int getWidth(){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getWidth();
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getWidth();
 	}
 	
 	public int getHeight(){
-		return ResourceManager.get().getResource(filename, Tileset.class, this).getHeight();
+		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getHeight();
 	}
 
 	public int getTileXSpacing() {
@@ -146,6 +150,18 @@ public class TilesetFileHandle extends TilesetHandle implements ResourceLoader<T
 	
 	public String toString(){
 		return name;
+	}
+
+	@Override
+	public BasicTilesetHandle cloneAsBasic() {
+		BasicTilesetHandle out = new BasicTilesetHandle();
+		out.tileWidth = tileWidth;
+		out.tileHeight = tileHeight;
+		out.tileXSpacing = tileXSpacing;
+		out.tileYSpacing = tileYSpacing;
+		out.name = name;
+		out.imageFile = imageFile;
+		return out;
 	}
 
 }

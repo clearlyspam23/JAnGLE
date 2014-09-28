@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import com.clearlyspam23.GLE.basic.layers.tile.TilesetGroupNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 
 public class TilesetTreeCellEditor extends DefaultTreeCellEditor{
@@ -18,6 +19,12 @@ public class TilesetTreeCellEditor extends DefaultTreeCellEditor{
 	}
 	private TilesetTreeNode node;
 	private JTextField field;
+	
+	private TilesetGroupNode root;
+	
+	public void setTilesetRoot(TilesetGroupNode root){
+		this.root = root;
+	}
 
 	@Override
 	public Component getTreeCellEditorComponent(JTree tree, Object value,
@@ -31,7 +38,8 @@ public class TilesetTreeCellEditor extends DefaultTreeCellEditor{
 
 	@Override
 	public Object getCellEditorValue() {
-		node.setName(field.getText());
+		if(field.getText()!=null&&!"".equals(field.getText())&&root.getTilesetsByName(field.getText()).isEmpty())
+			node.setName(field.getText());
 		//System.out.println("get Cell Editor Value "+ o);
 		return node;
 	}

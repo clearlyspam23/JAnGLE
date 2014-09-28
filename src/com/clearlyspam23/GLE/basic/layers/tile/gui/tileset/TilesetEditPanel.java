@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui.tileset;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -14,7 +15,7 @@ import javax.swing.JTextField;
 
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
 
 public class TilesetEditPanel extends JPanel {
 	
@@ -35,6 +36,7 @@ public class TilesetEditPanel extends JPanel {
 	 */
 	public TilesetEditPanel() {
 		setLayout(new BorderLayout(0, 0));
+		setMinimumSize(new Dimension(370, 300));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		add(scrollPane_1, BorderLayout.CENTER);
@@ -46,7 +48,7 @@ public class TilesetEditPanel extends JPanel {
 		JPanel panel_2 = new JPanel();
 		add(panel_2, BorderLayout.SOUTH);
 		GridBagLayout gbl_panel_2 = new GridBagLayout();
-		gbl_panel_2.columnWidths = new int[]{0, 235, 0, 0, 0};
+		gbl_panel_2.columnWidths = new int[]{40, 235, 0, 0, 0};
 		gbl_panel_2.rowHeights = new int[]{0, 0, 0, 0, 0, 0};
 		gbl_panel_2.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_panel_2.rowWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
@@ -155,8 +157,12 @@ public class TilesetEditPanel extends JPanel {
 		}
 	}
 	
-	public TilesetHandle getTileset(){
-		TilesetFileHandle tileset = new TilesetFileHandle(nameField.getText(), fileNameField.getText(), 
+	public void updateName(String name){
+		nameField.setText(name);
+	}
+	
+	public BasicTilesetHandle getTileset(){
+		BasicTilesetHandle tileset = new BasicTilesetHandle(nameField.getText(), fileNameField.getText(), 
 				(int) tileSizeComponent.getVector().x, (int) tileSizeComponent.getVector().y, 
 				(int) tileSpaceComponent.getVector().x, (int) tileSpaceComponent.getVector().y);
 		return tileset;
