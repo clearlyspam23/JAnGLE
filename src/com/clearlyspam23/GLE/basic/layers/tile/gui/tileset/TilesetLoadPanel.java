@@ -140,6 +140,10 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		
 	}
 	
+	public void removeInvalidTilesets(){
+		removeInvalidTilesets(root);
+	}
+	
 	private void removeInvalidTilesets(TilesetGroupNode parent){
 		for(int i = 0; i < parent.getChildren().size(); i++){
 			TilesetTreeNode node = parent.getChildren().get(i);
@@ -152,6 +156,10 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		}
 	}
 	
+	/**
+	 * attempts to validate the existing tilesets
+	 * @return a string, either the empty string if all tilesets were validated successfully, or a string with the name of every failed string, followed by a new line
+	 */
 	public String validateTilesets(){
 		StringBuilder err = new StringBuilder("");
 		for(TilesetHandle h : root.getTilesets()){

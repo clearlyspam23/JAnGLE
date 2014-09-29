@@ -12,7 +12,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode.Type;
 
 public class TilesetManager {
 	
-	private TilesetGroupNode allTilesets = new TilesetGroupNode("Tilesets");
+	private TilesetGroupNode root = new TilesetGroupNode("Tilesets");
 	private Map<String, TilesetHandle> nameTable = new HashMap<String, TilesetHandle>();
 	
 	/**
@@ -23,7 +23,7 @@ public class TilesetManager {
 	public boolean addTilesetToRoot(TilesetHandle t){
 		if(nameTable.containsKey(t.getName()))
 			return false;
-		allTilesets.addNode(new TilesetTileNode(t));
+		root.addNode(new TilesetTileNode(t));
 		nameTable.put(t.getName(), t);
 		return true;
 	}
@@ -51,7 +51,7 @@ public class TilesetManager {
 	public boolean updateMap(){
 		Set<String> entries = new HashSet<String>();
 		Map<String, TilesetHandle> tempMap = new HashMap<String, TilesetHandle>();
-		if(!helperUpdate(allTilesets, entries, tempMap))
+		if(!helperUpdate(root, entries, tempMap))
 			return false;
 		for(Entry<String, TilesetHandle> e : tempMap.entrySet()){
 			nameTable.put(e.getKey(), e.getValue());
@@ -67,7 +67,7 @@ public class TilesetManager {
 	}
 	
 	public List<TilesetHandle> getAllTilesets(){
-		return allTilesets.getTilesets();
+		return root.getTilesets();
 	}
 	
 	private boolean willWork(TilesetHandle h, List<TilesetSelectionConstraint> constraints){
@@ -98,6 +98,27 @@ public class TilesetManager {
 
 	public void setNameTable(Map<String, TilesetHandle> nameTable) {
 		this.nameTable = nameTable;
+	}
+	
+	public TilesetGroupNode getRoot(){
+		return root;
+	}
+	
+	private void discoverNodes(TilesetGroupNode node){
+		for(TilesetTreeNode n : node.getChildren()){
+			if(n.getType()==Type.TILE){
+				nameTable.put(n.getName(), n.getAsTiles().getTileset());
+			}
+			else{
+				discoverNodes(n.getAsGroup());
+			}
+		}
+	}
+	
+	public void setRoot(TilesetGroupNode root){
+		this.root = root;
+		nameTable.clear();
+		discoverNodes(root);
 	}
 
 //	public void setAllTilesets(List<TilesetHandle> allTilesets) {

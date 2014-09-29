@@ -2,16 +2,28 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui.tileset;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
@@ -30,6 +42,34 @@ public class TilesetEditPanel extends JPanel {
 	private VectorComponent tileSpaceComponent;
 	
 	private JPanel tilesetGridPanel;
+	private JButton browseButton;
+	
+	public static void main(String[] args){
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
+			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
+		}
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TilesetEditPanel panel = new TilesetEditPanel();
+					JFrame frame = new JFrame();
+					frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
+					JScrollPane scroll = new JScrollPane(panel);
+					frame.getContentPane().add(scroll);
+					frame.setSize(500, 400);
+					frame.setVisible(true);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	private JFileChooser imageChooser = new JFileChooser();
 
 	/**
 	 * Create the panel.
@@ -37,6 +77,15 @@ public class TilesetEditPanel extends JPanel {
 	public TilesetEditPanel() {
 		setLayout(new BorderLayout(0, 0));
 		setMinimumSize(new Dimension(370, 300));
+		
+		// Get array of available formats
+		String[] suffices = ImageIO.getReaderFileSuffixes();
+
+		// Add a file filter for each one
+		for (int i = 0; i < suffices.length; i++) {
+		    FileNameExtensionFilter filter = new FileNameExtensionFilter(suffices[i] + " files", suffices[i]);
+		    imageChooser.addChoosableFileFilter(filter);
+		}
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		add(scrollPane_1, BorderLayout.CENTER);
@@ -88,6 +137,10 @@ public class TilesetEditPanel extends JPanel {
 		panel_2.add(lblImageFile, gbc_lblImageFile);
 		
 		fileNameField = new JTextField();
+		fileNameField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		GridBagConstraints gbc_fileNameField = new GridBagConstraints();
 		gbc_fileNameField.gridwidth = 2;
 		gbc_fileNameField.insets = new Insets(0, 0, 5, 5);
@@ -97,14 +150,22 @@ public class TilesetEditPanel extends JPanel {
 		panel_2.add(fileNameField, gbc_fileNameField);
 		fileNameField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Browse");
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton.gridx = 3;
-		gbc_btnNewButton.gridy = 1;
-		panel_2.add(btnNewButton, gbc_btnNewButton);
+		browseButton = new JButton("Browse");
+		browseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				imageChooser.setSelectedFile(new File(fileNameField.getText()));
+				if(imageChooser.showOpenDialog(TilesetEditPanel.this)==JFileChooser.APPROVE_OPTION){
+					fileNameField.setText(imageChooser.getSelectedFile().getPath());
+				}
+			}
+		});
+		GridBagConstraints gbc_browseButton = new GridBagConstraints();
+		gbc_browseButton.insets = new Insets(0, 0, 5, 0);
+		gbc_browseButton.gridx = 3;
+		gbc_browseButton.gridy = 1;
+		panel_2.add(browseButton, gbc_browseButton);
 		
-		tileSizeComponent = new VectorComponent();
+		tileSizeComponent = new VectorComponent(false);
 		GridBagConstraints gbc_tileSizeComponent = new GridBagConstraints();
 		gbc_tileSizeComponent.insets = new Insets(0, 0, 5, 5);
 		gbc_tileSizeComponent.fill = GridBagConstraints.BOTH;
@@ -120,13 +181,34 @@ public class TilesetEditPanel extends JPanel {
 		gbc_lblTileSpacing.gridy = 3;
 		panel_2.add(lblTileSpacing, gbc_lblTileSpacing);
 		
-		tileSpaceComponent = new VectorComponent();
+		tileSpaceComponent = new VectorComponent(false);
 		GridBagConstraints gbc_tileSpaceComponent = new GridBagConstraints();
 		gbc_tileSpaceComponent.insets = new Insets(0, 0, 5, 5);
 		gbc_tileSpaceComponent.fill = GridBagConstraints.BOTH;
 		gbc_tileSpaceComponent.gridx = 1;
 		gbc_tileSpaceComponent.gridy = 3;
 		panel_2.add(tileSpaceComponent, gbc_tileSpaceComponent);
+		toggleFields(false);
+		
+		
+	}
+	
+	private void updateTilesetView(){
+		tilesetGridPanel.removeAll();
+		try{
+			BufferedImage img = ImageIO.read(new File(fileNameField.getText()));
+			int width = (int) tileSizeComponent.getVector().x;
+			int height = (int) tileSizeComponent.getVector().y;
+			int xSpace = (int) tileSpaceComponent.getVector().x;
+			int ySpace = (int) tileSpaceComponent.getVector().y;
+			int numX = (img.getWidth()+xSpace)/(width+xSpace);
+			int numY = (img.getHeight()+ySpace)/(height+ySpace);
+			BufferedImage[][] tiles = new BufferedImage[numX][numY];
+			
+		}
+		catch(Exception e){
+			tilesetGridPanel.removeAll(); //no matter how many tiles were placed properly, cut them all out
+		}
 	}
 	
 	private void toggleFields(boolean flag){
@@ -134,6 +216,7 @@ public class TilesetEditPanel extends JPanel {
 		fileNameField.setEnabled(flag);
 		tileSizeComponent.setEnabled(flag);
 		tileSpaceComponent.setEnabled(flag);
+		browseButton.setEnabled(flag);
 		if(!flag){
 			tilesetGridPanel.removeAll();
 			nameField.setText("");

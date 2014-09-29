@@ -13,6 +13,7 @@ import javax.swing.text.DocumentFilter;
 import javax.swing.text.PlainDocument;
 
 import com.clearlyspam23.GLE.util.FloatDocumentFilter;
+import com.clearlyspam23.GLE.util.IntegerDocumentFilter;
 import com.clearlyspam23.GLE.util.Vector2;
 
 public class VectorComponent extends JPanel {
@@ -26,15 +27,19 @@ public class VectorComponent extends JPanel {
 	private static final DecimalFormat format = new DecimalFormat("#.####");
 	
 	public VectorComponent(){
-		this(true);
+		this(true, true);
+	}
+	
+	public VectorComponent(boolean allowsNegative){
+		this(allowsNegative, true);
 	}
 
 	/**
 	 * Create the panel.
 	 */
-	public VectorComponent(boolean allowsNegative) {
+	public VectorComponent(boolean allowsNegative, boolean allowsDecimal) {
 		
-		DocumentFilter filter = new FloatDocumentFilter(allowsNegative);
+		DocumentFilter filter = (allowsDecimal ? new FloatDocumentFilter(allowsNegative) : new IntegerDocumentFilter(allowsDecimal));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{86, 6, 86, 0};
 		gridBagLayout.rowHeights = new int[]{20, 0};
@@ -126,6 +131,13 @@ public class VectorComponent extends JPanel {
 	public void setToVector(Vector2 vec){
 		setXField(vec.x);
 		setYField(vec.y);
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled){
+		super.setEnabled(enabled);
+		textField1.setEnabled(enabled);
+		textField2.setEnabled(enabled);
 	}
 
 }
