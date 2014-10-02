@@ -23,7 +23,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private TilesetViewPanel tilesetViewPanel;
+	private TilesetTreeViewPanel tilesetViewPanel;
 	private TilesetEditPanel tilesetEditPanel;
 	private TilesetGroupNode root;
 	
@@ -40,7 +40,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.WEST);
 		
-		tilesetViewPanel = new TilesetViewPanel();
+		tilesetViewPanel = new TilesetTreeViewPanel();
 		tilesetViewPanel.setPreferredSize(new Dimension(160, 0));
 		scrollPane.setViewportView(tilesetViewPanel);
 		
@@ -106,37 +106,37 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	}
 	
 	@Override
-	public void onTilesetDoubleClick(TilesetViewPanel panel,
+	public void onTilesetDoubleClick(TilesetTreeViewPanel panel,
 			TilesetTileNode tileNode, MouseEvent e) {
 		changeToTileset(tileNode);
 	}
 
 	@Override
-	public void onGroupDoubleClick(TilesetViewPanel panel,
+	public void onGroupDoubleClick(TilesetTreeViewPanel panel,
 			TilesetGroupNode tileNode, MouseEvent e) {
 		
 	}
 
 	@Override
-	public void onTilesetRightClick(TilesetViewPanel panel,
+	public void onTilesetRightClick(TilesetTreeViewPanel panel,
 			TilesetTileNode tileNode, MouseEvent e) {
 		
 	}
 
 	@Override
-	public void onGroupRightClick(TilesetViewPanel panel,
+	public void onGroupRightClick(TilesetTreeViewPanel panel,
 			TilesetGroupNode tileNode, MouseEvent e) {
 		
 	}
 
 	@Override
-	public void onTilesetRenamed(TilesetViewPanel panel, TilesetTileNode node) {
+	public void onTilesetRenamed(TilesetTreeViewPanel panel, TilesetTileNode node) {
 		if(node==currentTilesetNode)
 			tilesetEditPanel.updateName(node.getName());
 	}
 
 	@Override
-	public void onGroupRenamed(TilesetViewPanel panel, TilesetGroupNode node) {
+	public void onGroupRenamed(TilesetTreeViewPanel panel, TilesetGroupNode node) {
 		
 	}
 	

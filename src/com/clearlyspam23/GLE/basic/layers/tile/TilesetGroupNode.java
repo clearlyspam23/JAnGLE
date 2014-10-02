@@ -38,6 +38,10 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	public List<TilesetTreeNode> getChildren(){
 		return children;
 	}
+	
+	public void setChildren(List<TilesetTreeNode> children){
+		this.children = children;
+	}
 
 	@Override
 	public Type getType() {

@@ -1,30 +1,75 @@
-&id001 !!com.clearlyspam23.GLE.Template
-activeProperties: []
-compression: !compress 'None'
-coordinateSystem: !coord 'Top Left'
-defaultSize: {x: 10.0, y: 10.0}
-extension: .json
-layers:
-- !!com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate
-  definition: !definition 'Tile'
-  gridDimensions: {x: 1.0, y: 1.0}
-  name: Layer0
-  template: *id001
-- !!com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate
-  definition: !definition 'Tile'
-  gridDimensions: {x: 2.0, y: 2.0}
-  name: Layer1
-  template: *id001
-pLanguageData: null
-serializer: !serialize 'JSON'
-templateData:
-  !definition 'Tile':
-    tilesets: !!com.clearlyspam23.GLE.basic.layers.tile.TilesetManager
-      allTilesets:
-      - &id002 !!com.clearlyspam23.GLE.basic.layers.tile.resources.TilesetFileHandle {
-        filename: images/Pipes.png, name: test1, tags: null, tileHeight: 64, tileWidth: 64,
-        tileXSpacing: 0, tileYSpacing: 0}
-      nameTable:
-        test1: *id002
-templateName: TestTemplate
-usedPLanguage: null
+<Template>
+  <name>TestTemplate</name>
+  <templateFile>D:\Programming\Java\Playground\GenericGameEditor\TestTemplate.jant</templateFile>
+  <runtimeCommand/>
+  <coordinateSystem class="com.clearlyspam23.GLE.basic.coordinates.TopLeft">Top Left</coordinateSystem>
+  <serializer class="com.clearlyspam23.GLE.basic.serializers.JsonSerializer">JSON</serializer>
+  <compression class="com.clearlyspam23.GLE.basic.compression.NoCompression">None</compression>
+  <extension>.json</extension>
+  <useCustomExtension>false</useCustomExtension>
+  <useDefaultDirectory>true</useDefaultDirectory>
+  <defaultSize>
+    <x>10.0</x>
+    <y>10.0</y>
+  </defaultSize>
+  <layerTemplates>
+    <com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate>
+      <name>Layer0</name>
+      <template reference="../../.."/>
+      <definition class="com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition">Tile</definition>
+      <gridDimensions>
+        <x>1.0</x>
+        <y>1.0</y>
+      </gridDimensions>
+    </com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate>
+    <com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate>
+      <name>Layer1</name>
+      <template reference="../../.."/>
+      <definition class="com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition" reference="../../com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate/definition"/>
+      <gridDimensions>
+        <x>2.0</x>
+        <y>2.0</y>
+      </gridDimensions>
+    </com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate>
+  </layerTemplates>
+  <activeProperties/>
+  <templateData>
+    <entry>
+      <com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition reference="../../../layerTemplates/com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate/definition"/>
+      <map>
+        <entry>
+          <string>tilesets</string>
+          <com.clearlyspam23.GLE.basic.layers.tile.TilesetManager>
+            <root>
+              <children>
+                <com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode>
+                  <parent reference="../../.."/>
+                  <tilesetArray class="java.util.Collections$UnmodifiableRandomAccessList" resolves-to="java.util.Collections$UnmodifiableList">
+                    <c class="list">
+                      <com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle>
+                        <tileWidth>64</tileWidth>
+                        <tileHeight>64</tileHeight>
+                        <tileXSpacing>0</tileXSpacing>
+                        <tileYSpacing>0</tileYSpacing>
+                        <name>test1</name>
+                        <imageFile>images/Pipes.png</imageFile>
+                      </com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle>
+                    </c>
+                    <list reference="../c"/>
+                  </tilesetArray>
+                </com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode>
+              </children>
+              <name>Tilesets</name>
+            </root>
+            <nameTable>
+              <entry>
+                <string>test1</string>
+                <com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle reference="../../../root/children/com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode/tilesetArray/c/com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle"/>
+              </entry>
+            </nameTable>
+          </com.clearlyspam23.GLE.basic.layers.tile.TilesetManager>
+        </entry>
+      </map>
+    </entry>
+  </templateData>
+</Template>

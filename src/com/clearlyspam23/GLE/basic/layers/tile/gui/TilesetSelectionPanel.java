@@ -2,28 +2,23 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.clearlyspam23.GLE.GUI.util.AspectRatioLayout;
-import com.clearlyspam23.GLE.GUI.util.StretchIcon;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.tileset.TilesetViewPanel;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.tileset.TilesetViewSelectionListener;
 
-public class TilesetSelectionPanel extends JPanel implements ComponentListener{
+public class TilesetSelectionPanel extends JPanel implements TilesetViewSelectionListener{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -34,11 +29,11 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 	private List<TilesetHandle> tilesets = new ArrayList<TilesetHandle>();
 	
 	private JScrollPane scrollPane;
-	private JPanel panel;
+	private TilesetViewPanel tilesetView;
+//	private JPanel panel;
 	private JPanel panel_1;
 	private JLabel lblTileset;
 	private JComboBox<String> comboBox;
-	private List<JButton> buttons = new ArrayList<JButton>();
 
 	/**
 	 * Create the panel.
@@ -49,10 +44,13 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 		scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.CENTER);
 		
-		panel = new JPanel();
-		JPanel parentPanel = new JPanel(new AspectRatioLayout());
-		parentPanel.add(panel);
-		scrollPane.setViewportView(parentPanel);
+		tilesetView = new TilesetViewPanel();
+		tilesetView.addListener(this);
+		
+//		panel = new JPanel();
+//		JPanel parentPanel = new JPanel(new AspectRatioLayout());
+//		parentPanel.add(panel);
+		scrollPane.setViewportView(tilesetView);
 //		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		panel_1 = new JPanel();
@@ -70,7 +68,6 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 			}
 		});
 		panel_1.add(comboBox, BorderLayout.CENTER);
-		panel.addComponentListener(this);
 		this.setPreferredSize(new Dimension(160, 200));
 
 	}
@@ -82,7 +79,10 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 				selectedX = -1;
 				selectedY = -1;
 			}
-			setToTileset(tilesets.get(index));
+			currentTileset = t;
+			tilesetView.setToTileset(tilesets.get(index));
+			if(currentTileset.getWidth()>0)
+				tilesetView.selectTile(0, 0);
 		}
 		else{
 			currentTileset = null;
@@ -91,64 +91,7 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 		}
 	}
 	
-	private void setToTileset(TilesetHandle tileset){
-		currentTileset = tileset;
-		selectedX = -1;
-		selectedY = -1;
-		panel.removeAll();
-		buttons.clear();
-		panel.setLayout(new GridLayout(tileset.getWidth(), tileset.getHeight()));
-		int width = 0;
-		int height = 0;
-		for(int j = 0; j < tileset.getHeight(); j++){
-			int tempWidth = 0;
-			int tempHeight = 0;
-			for(int i = 0; i < tileset.getWidth(); i++){
-				final int x = i;
-				final int y = j;
-				ImageIcon ico = new StretchIcon(tileset.getTileAt(i, j), true);
-				JButton button = new JButton(ico){
-					private static final long serialVersionUID = 1L;
-					public void setSelected(boolean flag){
-						super.setSelected(flag);
-						if(flag){
-							setBorderPainted(true);
-						}
-						else {
-							setBorderPainted(false);
-						}
-					}
-					
-				};
-				button.addActionListener(new ActionListener(){
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						for(JButton b : buttons)
-							b.setSelected(false);
-						((JButton)arg0.getSource()).setSelected(true);
-						selectedX = x;
-						selectedY = y;
-					}
-					
-				});
-				button.setLayout(null);
-				button.setBorderPainted(false);
-				button.setContentAreaFilled(false);
-				panel.add(button);
-				buttons.add(button);
-				tempWidth+=tileset.getTileAt(i, j).getWidth(null);
-				tempHeight = Math.max(tempHeight, tileset.getTileAt(i, j).getHeight(null));
-			}
-			width = Math.max(tempWidth, width);
-			height+=tempHeight;
-		}
-		panel.setPreferredSize(new Dimension(width, height));
-		if(tileset.getWidth()>0)
-		{
-			((JButton)panel.getComponent(0)).doClick();
-		}
-	}
 	
 	public TilesetHandle getCurrentTileset(){
 		return currentTileset;
@@ -213,37 +156,20 @@ public class TilesetSelectionPanel extends JPanel implements ComponentListener{
 		return null;
 	}
 	
-	public JPanel getPanel(){
-		return panel;
-	}
-
-	@Override
-	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentResized(ComponentEvent arg0) {
-		
-	}
-
-	@Override
-	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+//	public JPanel getPanel(){
+//		return panel;
+//	}
 
 	public void clearTilesets() {
 		tilesets.clear();
 		currentTileset = null;
 		updateComboBox();
+	}
+
+	@Override
+	public void onSelection(int x, int y, ActionEvent e) {
+		selectedX = x;
+		selectedY = y;
 	}
 
 }

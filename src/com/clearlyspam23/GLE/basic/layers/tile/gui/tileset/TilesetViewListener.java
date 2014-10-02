@@ -7,16 +7,16 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 
 public interface TilesetViewListener {
 	
-	public void onTilesetDoubleClick(TilesetViewPanel panel, TilesetTileNode tileNode, MouseEvent e);
+	public void onTilesetDoubleClick(TilesetTreeViewPanel panel, TilesetTileNode tileNode, MouseEvent e);
 	
-	public void onGroupDoubleClick(TilesetViewPanel panel, TilesetGroupNode tileNode, MouseEvent e);
+	public void onGroupDoubleClick(TilesetTreeViewPanel panel, TilesetGroupNode tileNode, MouseEvent e);
 	
-	public void onTilesetRightClick(TilesetViewPanel panel, TilesetTileNode tileNode, MouseEvent e);
+	public void onTilesetRightClick(TilesetTreeViewPanel panel, TilesetTileNode tileNode, MouseEvent e);
 	
-	public void onGroupRightClick(TilesetViewPanel panel, TilesetGroupNode tileNode, MouseEvent e);
+	public void onGroupRightClick(TilesetTreeViewPanel panel, TilesetGroupNode tileNode, MouseEvent e);
 	
-	public void onTilesetRenamed(TilesetViewPanel panel, TilesetTileNode node);
+	public void onTilesetRenamed(TilesetTreeViewPanel panel, TilesetTileNode node);
 	
-	public void onGroupRenamed(TilesetViewPanel panel, TilesetGroupNode node);
+	public void onGroupRenamed(TilesetTreeViewPanel panel, TilesetGroupNode node);
 
 }

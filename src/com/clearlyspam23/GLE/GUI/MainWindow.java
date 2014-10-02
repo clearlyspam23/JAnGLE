@@ -395,7 +395,8 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 				}
 			}
 		}
-		onLayerChange(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer(), null);
+		if(levelPanelMap.getNormal(data.getCurrentLevel())!=null)
+			onLayerChange(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer(), null);
 		data.closeAllLevels();
 		tabbedPane.removeAll();
 		for(LevelPanel p : levelPanelMap.getValues()){

@@ -6,11 +6,9 @@ import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -28,6 +26,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
+import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TilesetEditPanel extends JPanel {
 	
@@ -41,7 +41,7 @@ public class TilesetEditPanel extends JPanel {
 	private VectorComponent tileSizeComponent;
 	private VectorComponent tileSpaceComponent;
 	
-	private JPanel tilesetGridPanel;
+	private TilesetViewPanel tilesetGridPanel;
 	private JButton browseButton;
 	
 	public static void main(String[] args){
@@ -51,10 +51,14 @@ public class TilesetEditPanel extends JPanel {
 				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
 			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
 		}
+		ResourceManager.get().registerResourceType(Tileset.class);
+		ResourceManager.get().registerResourceType(TilesetHandle.class);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					BasicTilesetHandle basic = new BasicTilesetHandle("test", "bad file", 10, 10, 0, 0);
 					TilesetEditPanel panel = new TilesetEditPanel();
+					panel.setToTileset(basic);
 					JFrame frame = new JFrame();
 					frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
 					JScrollPane scroll = new JScrollPane(panel);
@@ -78,19 +82,14 @@ public class TilesetEditPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		setMinimumSize(new Dimension(370, 300));
 		
-		// Get array of available formats
-		String[] suffices = ImageIO.getReaderFileSuffixes();
 
-		// Add a file filter for each one
-		for (int i = 0; i < suffices.length; i++) {
-		    FileNameExtensionFilter filter = new FileNameExtensionFilter(suffices[i] + " files", suffices[i]);
-		    imageChooser.addChoosableFileFilter(filter);
-		}
+//		imageChooser.addChoosableFileFilter();
+		imageChooser.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		add(scrollPane_1, BorderLayout.CENTER);
 		
-		tilesetGridPanel = new JPanel();
+		tilesetGridPanel = new TilesetViewPanel();
 		scrollPane_1.setViewportView(tilesetGridPanel);
 		tilesetGridPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -139,6 +138,8 @@ public class TilesetEditPanel extends JPanel {
 		fileNameField = new JTextField();
 		fileNameField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("action");
+				updateTilesetView();
 			}
 		});
 		GridBagConstraints gbc_fileNameField = new GridBagConstraints();
@@ -194,20 +195,25 @@ public class TilesetEditPanel extends JPanel {
 	}
 	
 	private void updateTilesetView(){
-		tilesetGridPanel.removeAll();
-		try{
-			BufferedImage img = ImageIO.read(new File(fileNameField.getText()));
-			int width = (int) tileSizeComponent.getVector().x;
-			int height = (int) tileSizeComponent.getVector().y;
-			int xSpace = (int) tileSpaceComponent.getVector().x;
-			int ySpace = (int) tileSpaceComponent.getVector().y;
-			int numX = (img.getWidth()+xSpace)/(width+xSpace);
-			int numY = (img.getHeight()+ySpace)/(height+ySpace);
-			BufferedImage[][] tiles = new BufferedImage[numX][numY];
-			
+		tilesetGridPanel.setToTileset(null);
+		if(isImageFileValid()&&isSizeValid()){
+			try{
+				TilesetHandle h = getTileset();
+				tilesetGridPanel.setToTileset(h);
+				System.out.println("should be successful");
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				tilesetGridPanel.setToTileset(null); //no matter how many tiles were placed properly, cut them all out
+			}
 		}
-		catch(Exception e){
-			tilesetGridPanel.removeAll(); //no matter how many tiles were placed properly, cut them all out
+		else{
+			if(!isImageFileValid()){
+				System.out.println(fileNameField.getText() + " is not valid");
+			}
+			else{
+				System.out.println("size is not valid");
+			}
 		}
 	}
 	
@@ -249,6 +255,19 @@ public class TilesetEditPanel extends JPanel {
 				(int) tileSizeComponent.getVector().x, (int) tileSizeComponent.getVector().y, 
 				(int) tileSpaceComponent.getVector().x, (int) tileSpaceComponent.getVector().y);
 		return tileset;
+	}
+	
+	public boolean isNameValid(){
+		return nameField.getText()!=null&&!"".equals(nameField.getText());
+	}
+	
+	public boolean isImageFileValid(){
+		File f = new File(fileNameField.getText());
+        return f.exists()&&f.canRead();
+	}
+	
+	public boolean isSizeValid(){
+		return tileSizeComponent.getVector().x>0&&tileSizeComponent.getVector().y>0;
 	}
 
 }

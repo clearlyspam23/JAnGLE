@@ -74,6 +74,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	
 	@Override
 	public EditorItems onTemplateOpen(Template template){
+		System.out.println("here");
 		EditorItems ans = new EditorItems(this);
 		ans.addLevelItem(new LayerGridMenuItem());
 		updateTilesets(template);
@@ -83,7 +84,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	public void updateTilesets(Template template){
 		editorData.clearTilesets();
 		for(TilesetHandle t : ((TilesetManager) template.getTemplateData(this, "tilesets")).getAllTilesets()){
-			//System.out.println(t);
+			System.out.println(t);
 			editorData.addTileset(t);
 		}
 	}
