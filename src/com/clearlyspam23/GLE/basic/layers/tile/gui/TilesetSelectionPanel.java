@@ -45,6 +45,7 @@ public class TilesetSelectionPanel extends JPanel implements TilesetViewSelectio
 		add(scrollPane, BorderLayout.CENTER);
 		
 		tilesetView = new TilesetViewPanel();
+		tilesetView.toggleButtonSelection(true);
 		tilesetView.addListener(this);
 		
 //		panel = new JPanel();

@@ -61,8 +61,9 @@ public class TilesetEditPanel extends JPanel {
 					panel.setToTileset(basic);
 					JFrame frame = new JFrame();
 					frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
-					JScrollPane scroll = new JScrollPane(panel);
-					frame.getContentPane().add(scroll);
+					frame.add(panel);
+					//JScrollPane scroll = new JScrollPane(panel);
+					//frame.getContentPane().add(scroll);
 					frame.setSize(500, 400);
 					frame.setVisible(true);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,7 +81,7 @@ public class TilesetEditPanel extends JPanel {
 	 */
 	public TilesetEditPanel() {
 		setLayout(new BorderLayout(0, 0));
-		setMinimumSize(new Dimension(370, 300));
+		//setMinimumSize(new Dimension(370, 300));
 		
 
 //		imageChooser.addChoosableFileFilter();
@@ -90,8 +91,8 @@ public class TilesetEditPanel extends JPanel {
 		add(scrollPane_1, BorderLayout.CENTER);
 		
 		tilesetGridPanel = new TilesetViewPanel();
+		
 		scrollPane_1.setViewportView(tilesetGridPanel);
-		tilesetGridPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JPanel panel_2 = new JPanel();
 		add(panel_2, BorderLayout.SOUTH);
@@ -157,6 +158,7 @@ public class TilesetEditPanel extends JPanel {
 				imageChooser.setSelectedFile(new File(fileNameField.getText()));
 				if(imageChooser.showOpenDialog(TilesetEditPanel.this)==JFileChooser.APPROVE_OPTION){
 					fileNameField.setText(imageChooser.getSelectedFile().getPath());
+					updateTilesetView();
 				}
 			}
 		});
@@ -215,6 +217,8 @@ public class TilesetEditPanel extends JPanel {
 				System.out.println("size is not valid");
 			}
 		}
+		revalidate();
+		repaint();
 	}
 	
 	private void toggleFields(boolean flag){
@@ -224,7 +228,6 @@ public class TilesetEditPanel extends JPanel {
 		tileSpaceComponent.setEnabled(flag);
 		browseButton.setEnabled(flag);
 		if(!flag){
-			tilesetGridPanel.removeAll();
 			nameField.setText("");
 			fileNameField.setText("");
 			tileSizeComponent.setXField(0);

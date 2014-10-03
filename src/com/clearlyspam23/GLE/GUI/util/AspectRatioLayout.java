@@ -44,12 +44,16 @@ public class AspectRatioLayout implements LayoutManager2 {
 
 	@Override
 	public Dimension minimumLayoutSize(Container arg0) {
-		return component.getPreferredSize();
+		if(component!=null)
+			return component.getMinimumSize();
+		return new Dimension();
 	}
 
 	@Override
 	public Dimension preferredLayoutSize(Container arg0) {
-		return component.getPreferredSize();
+		if(component!=null)
+			return component.getPreferredSize();
+		return new Dimension();
 	}
 
 	@Override

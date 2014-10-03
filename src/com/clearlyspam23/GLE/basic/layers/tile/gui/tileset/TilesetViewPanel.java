@@ -42,6 +42,7 @@ public class TilesetViewPanel extends JPanel {
 		
 		panel = new JPanel();
 		add(panel);
+		//setMinimumSize(new Dimension(0, 0));
 
 	}
 	
@@ -71,8 +72,9 @@ public class TilesetViewPanel extends JPanel {
 		currentTileset = handle;
 		panel.removeAll();
 		buttons.clear();
-		if(handle==null)
+		if(handle==null){
 			return;
+		}
 		panel.setLayout(new GridLayout(handle.getWidth(), handle.getHeight()));
 		int width = 0;
 		int height = 0;
