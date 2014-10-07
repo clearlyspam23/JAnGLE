@@ -37,6 +37,11 @@ public class ResourceManager {
 			return data;
 		}
 		
+		@SuppressWarnings({"unchecked", "rawtypes" })
+		public void setResourceLoader(ResourceLoader loader){
+			this.loader = loader;
+		}
+		
 		public final void setFile(String file) throws IOException{
 			backingFile = new File(file);
 			data = loader.loadResource(backingFile);
@@ -81,9 +86,11 @@ public class ResourceManager {
 				throw new RuntimeException("Type " + type + " is not registered");
 			if(!resourceFileMap.get(type).containsKey(filename))
 				resourceFileMap.get(type).put(filename, new Resource<T>(filename, resourceLoader));
+			else
+				resourceFileMap.get(type).get(filename).setResourceLoader(resourceLoader);
 			return type.cast(resourceFileMap.get(type).get(filename).getResource());
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		catch(Exception e){
 			//do something cool here too

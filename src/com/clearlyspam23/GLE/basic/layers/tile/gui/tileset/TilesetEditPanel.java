@@ -1,7 +1,6 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui.tileset;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,6 +27,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.resources.ResourceManager;
+import javax.swing.border.EmptyBorder;
 
 public class TilesetEditPanel extends JPanel {
 	
@@ -61,7 +61,7 @@ public class TilesetEditPanel extends JPanel {
 					panel.setToTileset(basic);
 					JFrame frame = new JFrame();
 					frame.getContentPane().setLayout(new GridLayout(1, 1, 0, 0));
-					frame.add(panel);
+					frame.getContentPane().add(panel);
 					//JScrollPane scroll = new JScrollPane(panel);
 					//frame.getContentPane().add(scroll);
 					frame.setSize(500, 400);
@@ -80,7 +80,8 @@ public class TilesetEditPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public TilesetEditPanel() {
-		setLayout(new BorderLayout(0, 0));
+		setBorder(new EmptyBorder(4, 4, 4, 4));
+		setLayout(new BorderLayout(0, 4));
 		//setMinimumSize(new Dimension(370, 300));
 		
 
@@ -202,7 +203,6 @@ public class TilesetEditPanel extends JPanel {
 			try{
 				TilesetHandle h = getTileset();
 				tilesetGridPanel.setToTileset(h);
-				System.out.println("should be successful");
 			}
 			catch(Exception e){
 				e.printStackTrace();
@@ -247,6 +247,7 @@ public class TilesetEditPanel extends JPanel {
 			tileSpaceComponent.setXField(tileset.getTileXSpacing());
 			tileSpaceComponent.setYField(tileset.getTileYSpacing());
 		}
+		updateTilesetView();
 	}
 	
 	public void updateName(String name){

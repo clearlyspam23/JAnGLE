@@ -3,10 +3,8 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui.tileset;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.List;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -17,6 +15,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode.Type;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
+import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	/**
@@ -83,9 +82,14 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	}
 	
 	private boolean isNameUnique(String name){
+		return isNameUnique(name, currentTilesetNode.getTileset());
+	}
+	
+	private boolean isNameUnique(String name, TilesetHandle handle){
 		List<TilesetHandle> h = root.getTilesetsByName(name);
-		if(h.size()==1)
-			return h==currentTilesetNode.getTileset();
+		if(h.size()==1){
+			return h.get(0)==handle;
+		}
 		return h.isEmpty();
 	}
 	
@@ -97,18 +101,23 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 			if(!isNameUnique(current.getName()))
 				out.append("name is not unique").append(newLine);
 		}
-		File f = new File(current.getFilename());
-        String mimetype= new MimetypesFileTypeMap().getContentType(f);
-        String type = mimetype.split("/")[0];
-        if(!type.equals("image"))
+        if(!isImageFileValid(current.getFilename()))
         	out.append("the image file is not valid").append(newLine);
+        else{
+        	
+        }
         return out.toString();
+	}
+	
+	private boolean isImageFileValid(String s){
+		return ResourceManager.get().getImageResource(s)!=null;
 	}
 	
 	@Override
 	public void onTilesetDoubleClick(TilesetTreeViewPanel panel,
 			TilesetTileNode tileNode, MouseEvent e) {
-		changeToTileset(tileNode);
+		if(tileNode!=currentTilesetNode)
+			changeToTileset(tileNode);
 	}
 
 	@Override
@@ -156,17 +165,33 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		}
 	}
 	
+	private void accumulate(TilesetGroupNode node, StringBuilder err){
+		for(TilesetTreeNode n : node.getChildren()){
+			if(n.getType()==TilesetTreeNode.Type.TILE){
+				currentTilesetNode = n.getAsTiles();
+				if(!isValidTileset(currentTilesetNode.getTileset()).isEmpty()){
+					err.append(currentTilesetNode.getTileset().getName()).append(newLine);
+				}
+			}
+			else{
+				accumulate(n.getAsGroup(), err);
+			}
+		}
+	}
+	
 	/**
 	 * attempts to validate the existing tilesets
 	 * @return a string, either the empty string if all tilesets were validated successfully, or a string with the name of every failed string, followed by a new line
 	 */
 	public String validateTilesets(){
 		StringBuilder err = new StringBuilder("");
-		for(TilesetHandle h : root.getTilesets()){
-			if(!isValidTileset(h).isEmpty()){
-				err.append(h.getName()).append(newLine);
-			}
-		}
+		accumulate(root, err);
+//		for(TilesetHandle h : root.getTilesets()){
+//			if(!isValidTileset(h).isEmpty()){
+//				System.out.println(isValidTileset(h));
+//				err.append(h.getName()).append(newLine);
+//			}
+//		}
 		return err.toString();
 	}
 	
@@ -201,6 +226,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 			}
 			else{
 				TilesetGroupNode g = new TilesetGroupNode(n.getName());
+				replicate.addNode(g);
 				replicate(n.getAsGroup(), g);
 			}
 		}

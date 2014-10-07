@@ -75,7 +75,7 @@ public class TilesetViewPanel extends JPanel {
 		if(handle==null){
 			return;
 		}
-		panel.setLayout(new GridLayout(handle.getWidth(), handle.getHeight()));
+		panel.setLayout(new GridLayout(handle.getHeight(), handle.getWidth()));
 		int width = 0;
 		int height = 0;
 		for(int j = 0; j < handle.getHeight(); j++){
