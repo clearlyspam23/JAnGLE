@@ -15,7 +15,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode.Type;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
-import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	/**
@@ -110,7 +109,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	}
 	
 	private boolean isImageFileValid(String s){
-		return ResourceManager.get().getImageResource(s)!=null;
+		return new BasicTilesetHandle("", s, Integer.MAX_VALUE, Integer.MAX_VALUE).isValid();
 	}
 	
 	@Override

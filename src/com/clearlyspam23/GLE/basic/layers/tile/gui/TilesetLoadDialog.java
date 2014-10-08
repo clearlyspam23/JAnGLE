@@ -18,8 +18,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.TilesetTileNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetTreeNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.tileset.TilesetLoadPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
-import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TilesetLoadDialog extends JDialog implements ActionListener{
 
@@ -52,8 +50,8 @@ public class TilesetLoadDialog extends JDialog implements ActionListener{
 			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
 		}
 		try {
-			ResourceManager.get().registerResourceType(Tileset.class);
-			ResourceManager.get().registerResourceType(TilesetHandle.class);
+//			ResourceManager.get().registerResourceType(Tileset.class);
+//			ResourceManager.get().registerResourceType(TilesetHandle.class);
 			TilesetLoadDialog dialog = new TilesetLoadDialog();
 			TilesetManager manager = new TilesetManager();
 			TilesetGroupNode root = new TilesetGroupNode("Tilesets");

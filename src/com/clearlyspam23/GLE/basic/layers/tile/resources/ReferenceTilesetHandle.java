@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.resources.Resource;
 import com.clearlyspam23.GLE.resources.ResourceLoader;
-import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoader<BasicTilesetHandle>{
 	
@@ -15,6 +15,11 @@ public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoa
 	 */
 	private static final long serialVersionUID = 1L;
 	private String tilesetFile;
+	private transient Resource<BasicTilesetHandle> tilesetResource = new Resource<BasicTilesetHandle>(this);
+	
+	public ReferenceTilesetHandle(String tilesetFile){
+		this.setTilesetFile(tilesetFile);
+	}
 
 	@Override
 	public BasicTilesetHandle loadResource(File file) throws IOException {
@@ -91,8 +96,22 @@ public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoa
 		return getTilesetFileHandle().getTileYSpacing();
 	}
 	
+	public boolean isTilesetHandleValid(){
+		try{
+			return tilesetResource.getData()!=null;
+		}
+		catch(IOException e){
+			return false;
+		}
+	}
+	
 	private BasicTilesetHandle getTilesetFileHandle(){
-		return ResourceManager.get().getResource(tilesetFile, BasicTilesetHandle.class, this);
+		try{
+			return tilesetResource.getData();
+		}
+		catch(IOException e){
+			return null;
+		}
 	}
 
 	@Override
@@ -103,6 +122,15 @@ public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoa
 	@Override
 	public BasicTilesetHandle cloneAsBasic() {
 		return getTilesetFileHandle().cloneAsBasic();
+	}
+
+	public String getTilesetFile() {
+		return tilesetFile;
+	}
+
+	public void setTilesetFile(String tilesetFile) {
+		this.tilesetFile = tilesetFile;
+		tilesetResource.setBackingFile(new File(tilesetFile));
 	}
 
 }

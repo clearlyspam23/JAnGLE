@@ -5,18 +5,14 @@ import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
 import com.clearlyspam23.GLE.level.LayerDefinition;
-import com.clearlyspam23.GLE.resources.ResourceManager;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
 	private TilesetEditorData editorData;
 	
 	public TileLayerDefinition(){
-		ResourceManager.get().registerResourceType(Tileset.class);
-		ResourceManager.get().registerResourceType(TilesetHandle.class);
 		editorData = new TilesetEditorData();
 	}
 

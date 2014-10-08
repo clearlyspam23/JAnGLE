@@ -3,8 +3,11 @@ package com.clearlyspam23.GLE.GUI.util;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,13 +19,15 @@ import com.clearlyspam23.GLE.util.FloatDocumentFilter;
 import com.clearlyspam23.GLE.util.IntegerDocumentFilter;
 import com.clearlyspam23.GLE.util.Vector2;
 
-public class VectorComponent extends JPanel {
+public class VectorComponent extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField textField1;
 	private JTextField textField2;
+	
+	private ArrayList<ActionListener> actionListeners = new ArrayList<ActionListener>();
 	
 	private static final DecimalFormat format = new DecimalFormat("#.####");
 	
@@ -48,6 +53,7 @@ public class VectorComponent extends JPanel {
 		setLayout(gridBagLayout);
 		
 		textField1 = new JTextField();
+		textField1.addActionListener(this);
 		PlainDocument doc = new PlainDocument();
 		doc.setDocumentFilter(filter);
 		textField1.setDocument(doc);
@@ -68,6 +74,7 @@ public class VectorComponent extends JPanel {
 		add(label, gbc_label);
 		
 		textField2 = new JTextField();
+		textField2.addActionListener(this);
 		doc = new PlainDocument();
 		doc.setDocumentFilter(filter);
 		textField2.setDocument(doc);
@@ -138,6 +145,21 @@ public class VectorComponent extends JPanel {
 		super.setEnabled(enabled);
 		textField1.setEnabled(enabled);
 		textField2.setEnabled(enabled);
+	}
+	
+	public void addActionListener(ActionListener listener){
+		actionListeners.add(listener);
+	}
+	
+	public void removeActionListener(ActionListener listener){
+		actionListeners.remove(listener);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		for(ActionListener l : actionListeners){
+			l.actionPerformed(arg0);
+		}
 	}
 
 }

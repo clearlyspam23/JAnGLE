@@ -20,14 +20,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.resources.BasicTilesetHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.resources.Tileset;
-import com.clearlyspam23.GLE.resources.ResourceManager;
-import javax.swing.border.EmptyBorder;
 
 public class TilesetEditPanel extends JPanel {
 	
@@ -51,8 +49,8 @@ public class TilesetEditPanel extends JPanel {
 				| IllegalAccessException | UnsupportedLookAndFeelException e1) {
 			//honestly, if this doesnt work, whatever we'll use default. should fail silently.
 		}
-		ResourceManager.get().registerResourceType(Tileset.class);
-		ResourceManager.get().registerResourceType(TilesetHandle.class);
+//		ResourceManager.get().registerResourceType(Tileset.class);
+//		ResourceManager.get().registerResourceType(TilesetHandle.class);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -92,6 +90,8 @@ public class TilesetEditPanel extends JPanel {
 		add(scrollPane_1, BorderLayout.CENTER);
 		
 		tilesetGridPanel = new TilesetViewPanel();
+		tilesetGridPanel.toggleButtonSelection(false);
+		tilesetGridPanel.toggleBorders(true);
 		
 		scrollPane_1.setViewportView(tilesetGridPanel);
 		
@@ -170,6 +170,14 @@ public class TilesetEditPanel extends JPanel {
 		panel_2.add(browseButton, gbc_browseButton);
 		
 		tileSizeComponent = new VectorComponent(false);
+		tileSizeComponent.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateTilesetView();
+			}
+			
+		});
 		GridBagConstraints gbc_tileSizeComponent = new GridBagConstraints();
 		gbc_tileSizeComponent.insets = new Insets(0, 0, 5, 5);
 		gbc_tileSizeComponent.fill = GridBagConstraints.BOTH;
@@ -186,6 +194,14 @@ public class TilesetEditPanel extends JPanel {
 		panel_2.add(lblTileSpacing, gbc_lblTileSpacing);
 		
 		tileSpaceComponent = new VectorComponent(false);
+		tileSpaceComponent.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateTilesetView();
+			}
+			
+		});
 		GridBagConstraints gbc_tileSpaceComponent = new GridBagConstraints();
 		gbc_tileSpaceComponent.insets = new Insets(0, 0, 5, 5);
 		gbc_tileSpaceComponent.fill = GridBagConstraints.BOTH;

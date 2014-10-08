@@ -8,10 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
-import com.clearlyspam23.GLE.resources.ResourceLoader;
-import com.clearlyspam23.GLE.resources.ResourceManager;
 
-public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<Tileset>{
+public class BasicTilesetHandle extends TilesetHandle{
 	
 	/**
 	 * 
@@ -23,6 +21,7 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	private int tileYSpacing;
 	private String name;
 	private String imageFile;
+	private transient Image[][] tileset;
 	
 	public BasicTilesetHandle(){
 		
@@ -30,10 +29,6 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	
 	public BasicTilesetHandle(String name){
 		this.name = name;
-	}
-	
-	public Image[][] getTileset() {
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileset();
 	}
 	
 	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight){
@@ -47,25 +42,77 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 		this.tileHeight = tileHeight;
 		this.tileXSpacing = xSpacing;
 		this.tileYSpacing = ySpacing;
+		checkLoad();
 	}
-
-	@Override
-	public Tileset loadResource(File file) throws IOException {
+	
+	private void checkLoad(){
+		if(imageFile!=null&&tileset==null){
+			reloadTileset();
+		}
+	}
+	
+	private void reloadTileset(){
 		Image[][] tiles = null;
 		try {
-			BufferedImage temp  = ImageIO.read(file);
-			tiles = new Image[temp.getWidth()/getTileWidth()][temp.getHeight()/getTileHeight()];
+			BufferedImage temp  = ImageIO.read(new File(imageFile));
+			tiles = new Image[(temp.getWidth()+getTileXSpacing())/(getTileWidth()+getTileXSpacing())]
+					[(temp.getHeight()+getTileYSpacing())/(getTileHeight()+getTileYSpacing())];
 			for(int i = 0; i < tiles.length; i++)
 			{
 				for(int j = 0; j < tiles[i].length; j++)
 				{
-					tiles[i][j] = temp.getSubimage(getTileWidth()*i, getTileHeight()*j, getTileWidth(), getTileHeight());
+					tiles[i][j] = temp.getSubimage((getTileWidth()+getTileXSpacing())*i, (getTileHeight()+getTileYSpacing())*j, getTileWidth(), getTileHeight());
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return new Tileset(tiles);
+		tileset = tiles;
+	}
+	
+	public Image[][] getTileset() {
+		checkLoad();
+		return tileset;
+	}
+	
+	public Image getTileAt(int x, int y){
+		checkLoad();
+		return tileset[x][y];
+	}
+	
+	public Image getTileByIndex(int index){
+		checkLoad();
+		return getTileAt(index%tileset.length, index/tileset.length);
+	}
+	
+	public int getXFromIndex(int index){
+		checkLoad();
+		return index%tileset.length;
+	}
+	
+	public int getYFromIndex(int index){
+		checkLoad();
+		return index/tileset.length;
+	}
+	
+	public boolean isValidLocation(int x, int y){
+		checkLoad();
+		return x>=0&&x<tileset.length&&y>=0&&y<tileset[x].length;
+	}
+	
+	public int getIndex(int x, int y){
+		checkLoad();
+		return y*tileset.length+x;
+	}
+	
+	public int getWidth() {
+		checkLoad();
+		return tileset.length;
+	}
+
+	public int getHeight() {
+		checkLoad();
+		return (tileset.length>0 ? tileset[0].length : 0);
 	}
 
 	public String getName() {
@@ -81,31 +128,10 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	}
 
 	public void setFilename(String filename) {
+		boolean b = imageFile!=filename;
 		this.imageFile = filename;
-	}
-	
-	public Image getTileAt(int x, int y){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileAt(x, y);
-	}
-	
-	public Image getTileByIndex(int index){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getTileByIndex(index);
-	}
-	
-	public int getXFromIndex(int index){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getXFromIndex(index);
-	}
-	
-	public int getYFromIndex(int index){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getYFromIndex(index);
-	}
-	
-	public boolean isValidLocation(int x, int y){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).isValidLocation(x, y);
-	}
-	
-	public int getIndex(int x, int y){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getIndex(x, y);
+		if(b)
+			reloadTileset();
 	}
 
 	public int getTileWidth() {
@@ -113,7 +139,10 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	}
 
 	public void setTileWidth(int tileWidth) {
+		boolean b = tileWidth!=this.tileWidth;
 		this.tileWidth = tileWidth;
+		if(b)
+			reloadTileset();
 	}
 
 	public int getTileHeight() {
@@ -121,15 +150,10 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	}
 
 	public void setTileHeight(int tileHeight) {
+		boolean b = tileHeight!=this.tileHeight;
 		this.tileHeight = tileHeight;
-	}
-	
-	public int getWidth(){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getWidth();
-	}
-	
-	public int getHeight(){
-		return ResourceManager.get().getResource(imageFile, Tileset.class, this).getHeight();
+		if(b)
+			reloadTileset();
 	}
 
 	public int getTileXSpacing() {
@@ -137,7 +161,10 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	}
 
 	public void setTileXSpacing(int tileXSpacing) {
+		boolean b = tileXSpacing!=this.tileXSpacing;
 		this.tileXSpacing = tileXSpacing;
+		if(b)
+			reloadTileset();
 	}
 
 	public int getTileYSpacing() {
@@ -145,7 +172,10 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 	}
 
 	public void setTileYSpacing(int tileYSpacing) {
+		boolean b = tileYSpacing!=this.tileYSpacing;
 		this.tileYSpacing = tileYSpacing;
+		if(b)
+			reloadTileset();
 	}
 	
 	public String toString(){
@@ -161,7 +191,12 @@ public class BasicTilesetHandle extends TilesetHandle implements ResourceLoader<
 		out.tileYSpacing = tileYSpacing;
 		out.name = name;
 		out.imageFile = imageFile;
+		out.checkLoad();
 		return out;
+	}
+	
+	public boolean isValid(){
+		return tileset!=null;
 	}
 
 }
