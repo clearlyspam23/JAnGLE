@@ -65,7 +65,7 @@ public class BasicTilesetHandle extends TilesetHandle{
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			
 		}
 		tileset = tiles;
 	}

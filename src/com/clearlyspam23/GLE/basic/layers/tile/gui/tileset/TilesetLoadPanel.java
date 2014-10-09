@@ -2,11 +2,15 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui.tileset;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetGroupNode;
@@ -27,6 +31,10 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	
 	private TilesetTileNode currentTilesetNode;
 	
+	private final JPopupMenu tilePopUp;
+	
+	private final JPopupMenu groupPopUp;
+	
 	private static final String newLine = System.getProperty("line.separator");
 
 	/**
@@ -34,6 +42,59 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	 */
 	public TilesetLoadPanel() {
 		setLayout(new BorderLayout(0, 0));
+		tilePopUp = new JPopupMenu();
+		JMenuItem button = new JMenuItem("New Tileset");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				TilesetTileNode tileNode = new TilesetTileNode(new BasicTilesetHandle("New Tileset"));
+				for(int i = 1; !root.getTilesetsByName(tileNode.getName()).isEmpty(); i++){
+					tileNode.setName("New Tileset " + i);
+				}
+				tilesetViewPanel.insertNode(tileNode, true);
+				changeToTileset(tileNode);
+			}
+			
+		});
+		tilePopUp.add(button);
+		button = new JMenuItem("New Group");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tilesetViewPanel.insertNode(new TilesetGroupNode("New Group"));
+			}
+			
+		});
+		tilePopUp.add(button);
+		
+		groupPopUp = new JPopupMenu();
+		button = new JMenuItem("New Tileset");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				TilesetTileNode tileNode = new TilesetTileNode(new BasicTilesetHandle("New Tileset"));
+				for(int i = 1; !root.getTilesetsByName(tileNode.getName()).isEmpty(); i++){
+					tileNode.setName("New Tileset " + i);
+				}
+				tilesetViewPanel.insertNode(tileNode, true);
+				changeToTileset(tileNode);
+			}
+			
+		});
+		groupPopUp.add(button);
+		button = new JMenuItem("New Group");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				tilesetViewPanel.insertNode(new TilesetGroupNode("New Group"));
+			}
+			
+		});
+		groupPopUp.add(button);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		add(scrollPane, BorderLayout.WEST);
@@ -128,13 +189,13 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	@Override
 	public void onTilesetRightClick(TilesetTreeViewPanel panel,
 			TilesetTileNode tileNode, MouseEvent e) {
-		
+		tilePopUp.show(e.getComponent(), e.getX(), e.getY());
 	}
 
 	@Override
 	public void onGroupRightClick(TilesetTreeViewPanel panel,
 			TilesetGroupNode tileNode, MouseEvent e) {
-		
+		groupPopUp.show(e.getComponent(), e.getX(), e.getY());
 	}
 
 	@Override

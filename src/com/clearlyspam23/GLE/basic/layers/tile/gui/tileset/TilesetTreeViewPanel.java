@@ -366,17 +366,25 @@ public class TilesetTreeViewPanel extends JPanel {
 	}
 	
 	public void insertNode(TilesetTreeNode node){
-		 insertNode(node, (DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent());
+		 insertNode(node, (DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent(), false);
 	}
 	
-	public void insertNode(TilesetTreeNode node, DefaultMutableTreeNode treeNode){
+	public void insertNode(TilesetTreeNode node, boolean select){
+		insertNode(node, (DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent(), select);
+	}
+	
+	public void insertNode(TilesetTreeNode node, DefaultMutableTreeNode treeNode, boolean select){
 		TilesetTreeNode tileNode = (TilesetTreeNode) treeNode.getUserObject();
 		 int index = treeNode.getChildCount();
 		 if(tileNode.getType()!=Type.GROUP){
 			 index = treeNode.getParent().getIndex(treeNode)+1;
 			 treeNode = (DefaultMutableTreeNode) treeNode.getParent();
 		 }
-		 model.insertNodeInto(new DefaultMutableTreeNode(node, node.getType()==Type.GROUP), treeNode, index);
+		 DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(node, node.getType()==Type.GROUP);
+		 model.insertNodeInto(newNode, treeNode, index);
+		 if(select){
+			 tilesetTree.setSelectionPath(new TreePath(newNode.getPath()));
+		 }
 	}
 	
 	public TilesetTreeNode getSelectedNode(){
