@@ -28,9 +28,9 @@ public class FloatDocumentFilter extends DocumentFilter {
     {
     	String current = fb.getDocument().getText(0, fb.getDocument().getLength());
     	String total = new StringBuilder(current).replace(off, off+len, str).toString();
-    	if(NumberUtils.isNumber(total)
+    	if((NumberUtils.isNumber(total)
     			||allowsNegative&&"-".equals(str)&&(off==0||"0".equals(current))
-    			||"0".equals(current)&&(NumberUtils.isNumber(str)||".".equals(str)&&off==1))
+    			||"0".equals(current)&&(NumberUtils.isNumber(str)||".".equals(str)&&off==1))&&!(!allowsNegative&&"-".equals(str)))
     	{
     		if("-".equals(str)){
     			if("0".equals(current))

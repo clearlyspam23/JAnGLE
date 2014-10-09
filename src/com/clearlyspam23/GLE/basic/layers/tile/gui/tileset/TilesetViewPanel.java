@@ -47,6 +47,9 @@ public class TilesetViewPanel extends JPanel {
 	}
 	
 	public void toggleButtonSelection(boolean flag){
+		for(JButton button : buttons){
+			button.setFocusPainted(flag);
+		}
 		enableSelection = flag;
 	}
 	
@@ -56,6 +59,9 @@ public class TilesetViewPanel extends JPanel {
 	
 	public void toggleBorders(boolean flag){
 		enableBorder = flag;
+		for(JButton button : buttons){
+			button.setBorderPainted(flag);
+		}
 //		if(flag)
 //			for(JButton button : buttons)
 //				button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 0, false));
@@ -112,9 +118,9 @@ public class TilesetViewPanel extends JPanel {
 					
 				});
 				button.setLayout(null);
-				button.setFocusPainted(false);
-				//button.setBorder(BorderFactory.createDashedBorder(Color.BLACK, 16, 16));
-				//button.setBorderPainted(true);
+				button.setFocusPainted(enableSelection);
+				button.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				button.setBorderPainted(enableBorder);
 				button.setContentAreaFilled(false);
 				panel.add(button);
 				buttons.add(button);

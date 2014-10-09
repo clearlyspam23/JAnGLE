@@ -169,7 +169,7 @@ public class TilesetEditPanel extends JPanel {
 		gbc_browseButton.gridy = 1;
 		panel_2.add(browseButton, gbc_browseButton);
 		
-		tileSizeComponent = new VectorComponent(false);
+		tileSizeComponent = new VectorComponent(false, false);
 		tileSizeComponent.addActionListener(new ActionListener(){
 
 			@Override
@@ -193,7 +193,7 @@ public class TilesetEditPanel extends JPanel {
 		gbc_lblTileSpacing.gridy = 3;
 		panel_2.add(lblTileSpacing, gbc_lblTileSpacing);
 		
-		tileSpaceComponent = new VectorComponent(false);
+		tileSpaceComponent = new VectorComponent(false, false);
 		tileSpaceComponent.addActionListener(new ActionListener(){
 
 			@Override

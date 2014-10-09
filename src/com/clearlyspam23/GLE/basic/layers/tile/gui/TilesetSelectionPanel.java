@@ -46,6 +46,7 @@ public class TilesetSelectionPanel extends JPanel implements TilesetViewSelectio
 		
 		tilesetView = new TilesetViewPanel();
 		tilesetView.toggleButtonSelection(true);
+		tilesetView.toggleBorders(true);
 		tilesetView.addListener(this);
 		
 //		panel = new JPanel();
