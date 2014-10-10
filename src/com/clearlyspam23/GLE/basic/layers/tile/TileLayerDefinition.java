@@ -1,5 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import javax.swing.JMenu;
+
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
@@ -72,6 +74,8 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 		System.out.println("here");
 		EditorItems ans = new EditorItems(this);
 		ans.addLevelItem(new LayerGridMenuItem());
+		JMenu menu = new JMenu("Tilesets");
+		ans.addMenuItem(menu);
 		updateTilesets(template);
 		return ans;
 	}

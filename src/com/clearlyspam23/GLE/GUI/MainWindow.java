@@ -138,6 +138,8 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	
 	private JAnGLEData data;
 	
+	private JMenuBar menuBar;
+	
 	private JMenu mnFile;
 	private JMenu mnEdit;
 	private JMenu mnLevel;
@@ -167,7 +169,9 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	
 	private LevelPropertyDialog propertyDialog;
 	
+	@SuppressWarnings("rawtypes")
 	private Map<LayerDefinition, List<LayerMenuItem>> layerMenuItems = new HashMap<LayerDefinition, List<LayerMenuItem>>();
+	private List<JMenu> layerMenus = new ArrayList<JMenu>();
 	
 	private Map<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
 	
@@ -197,7 +201,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 //			System.out.println(recreate);
 //		}
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
 		mnFile = new JMenu("File");
@@ -402,11 +406,16 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 		for(LevelPanel p : levelPanelMap.getValues()){
 			p.dispose();
 		}
+		for(JMenu m : layerMenus){
+			menuBar.remove(m);
+		}
 		levelPanelMap.clear();
 		layerMenuItems.clear();
+		layerMenus.clear();
 		data.setOpenTemplate(null);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void openTemplate(Template t){
 		List<EditorItems> items = data.setOpenTemplate(t);
 		for(EditorItems i : items){
@@ -416,6 +425,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 				mi.add(item);
 				item.getMenuItem().addActionListener(new ActionListener(){
 
+					@SuppressWarnings("unchecked")
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						temp.performAction(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer());
@@ -424,8 +434,13 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 				});
 			}
 			layerMenuItems.put(i.getDef(), Collections.unmodifiableList(mi));
+			for(JMenu m : i.getMenuItems()){
+				layerMenus.add(m);
+				menuBar.add(m);
+			}
 		}
 		propertyDialog = new LevelPropertyDialog(data.getOpenTemplate());
+		menuBar.revalidate();
 	}
 	
 	private boolean loadTemplate(File f){
