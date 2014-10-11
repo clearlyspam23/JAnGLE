@@ -29,7 +29,7 @@ public class TilesetLoadDialog extends JDialog implements ActionListener{
 	
 	private TilesetManager currentManager;
 	
-	private static void recursivePrint(TilesetGroupNode node, int indent){
+	public static void recursivePrint(TilesetGroupNode node, int indent){
 		for(TilesetTreeNode n : node.getChildren()){
 			for(int i = 0; i < indent; i++)
 				System.out.print('\t');
@@ -112,6 +112,7 @@ public class TilesetLoadDialog extends JDialog implements ActionListener{
 			}
 			currentManager.setRoot(tilesetLoadPanel.getTilesets());
 		}
+		TilesetGroupNode.recursivePrint(currentManager.getRoot());
 		setVisible(false);
 	}
 	

@@ -13,6 +13,20 @@ public class TilesetGroupNode extends TilesetTreeNode{
 	
 	private String name;
 	
+	private static void recursivePrint(TilesetGroupNode node, int indent){
+		for(TilesetTreeNode n : node.getChildren()){
+			for(int i = 0; i < indent; i++)
+				System.out.print('\t');
+			System.out.println(n.getType() + " : " + n.getName());
+			if(n.getType()==TilesetTreeNode.Type.GROUP)
+				recursivePrint(n.getAsGroup(), indent+1);
+		}
+	}
+	
+	public static void recursivePrint(TilesetGroupNode node){
+		recursivePrint(node, 0);
+	}
+	
 	public TilesetGroupNode(){
 		name = "";
 	}

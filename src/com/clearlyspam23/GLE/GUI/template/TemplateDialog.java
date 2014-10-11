@@ -74,6 +74,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		}
 		try {
 			PluginManager manager = new PluginManager();
+			JAnGLEData data = new JAnGLEData(manager);
 			manager.addCoordinateSystems(new TopLeft());
 			manager.addCoordinateSystems(new BottomLeft());
 			manager.addCoordinateSystems(new CenteredDown());

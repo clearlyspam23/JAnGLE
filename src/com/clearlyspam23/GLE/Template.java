@@ -23,7 +23,8 @@ public class Template {
 	
 	//meta data
 	private String name = "";
-	private File templateFile = new File(defaultLocation);
+	private transient File templateFile = new File(defaultLocation);
+	private transient JAnGLEData data;
 	
 	//Runtime data
 	private List<ParameterMacro> runtimeCommand = new ArrayList<ParameterMacro>();
@@ -45,7 +46,12 @@ public class Template {
 	@SuppressWarnings("rawtypes")
 	private List<PropertyTemplate> activeProperties = new ArrayList<PropertyTemplate>();
 	
+	@SuppressWarnings("rawtypes")
 	private Map<LayerDefinition, Map<String, Object>> templateData = new HashMap<LayerDefinition, Map<String, Object>>();
+	
+	public Template(){
+		
+	}
 	
 	public void addParameter(ParameterMacro macro)
 	{
@@ -120,6 +126,7 @@ public class Template {
 		activeProperties.add(tmp);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setActiveProperties(List<PropertyTemplate> props){
 		activeProperties = props;
 	}
@@ -203,6 +210,7 @@ public class Template {
 		return null;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void putTemplateData(LayerDefinition def, String name, Object data){
 		if(!templateData.containsKey(def)){
 			templateData.put(def, new HashMap<String, Object>());
@@ -210,6 +218,7 @@ public class Template {
 		templateData.get(def).put(name, data);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Object getTemplateData(LayerDefinition def, String name){
 		return templateData.get(def).get(name);
 	}
@@ -222,13 +231,27 @@ public class Template {
 		this.defaultSize = defaultSize;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Map<LayerDefinition, Map<String, Object>> getTemplateData() {
 		return templateData;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setTemplateData(
 			Map<LayerDefinition, Map<String, Object>> templateData) {
 		this.templateData = templateData;
+	}
+
+	public JAnGLEData getData() {
+		return data;
+	}
+
+	public void setData(JAnGLEData data) {
+		this.data = data;
+	}
+	
+	public boolean save(){
+		return data.saveTemplate(this);
 	}
 
 }

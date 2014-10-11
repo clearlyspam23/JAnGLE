@@ -135,7 +135,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	}
 	
 	public void setToTileset(TilesetGroupNode tilesetTree){
-		root = (TilesetGroupNode) tilesetTree.cloneAsBasic();
+		root = tilesetTree.cloneAsBasic().getAsGroup();
 		currentTilesetNode = null;
 		tilesetEditPanel.setToTileset(null);
 		tilesetViewPanel.setToTilesets(root, this);

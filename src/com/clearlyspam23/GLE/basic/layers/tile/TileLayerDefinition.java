@@ -1,20 +1,27 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetLoadDialog;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
 	private TilesetEditorData editorData;
+	private TilesetLoadDialog loadDialog;
 	
 	public TileLayerDefinition(){
 		editorData = new TilesetEditorData();
+		loadDialog = new TilesetLoadDialog();
 	}
 
 	@Override
@@ -41,6 +48,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	
 	public void onTemplateCreation(Template template){
 		TilesetManager manager = new TilesetManager();
+		template.putTemplateData(this, "tilesets", manager);
 		//the below code will be moved soon
 //		BufferedImage tile = null;
 //		Image[][] tiles = null;
@@ -65,16 +73,26 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 //			return;
 //		}
 		//manager.addTilesetToRoot(new BasicTilesetHandle("test1", "images/Pipes.png", 64, 64));
-		//except for this line below
-		template.putTemplateData(this, "tilesets", manager);
 	}
 	
 	@Override
-	public EditorItems onTemplateOpen(Template template){
-		System.out.println("here");
+	public EditorItems onTemplateOpen(final Template template){
 		EditorItems ans = new EditorItems(this);
+		final TilesetManager manager = (TilesetManager) template.getTemplateData(this, "tilesets");
 		ans.addLevelItem(new LayerGridMenuItem());
 		JMenu menu = new JMenu("Tilesets");
+		JMenuItem item = new JMenuItem("Tileset Manager");
+		item.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				loadDialog.showDialog(manager);
+				updateTilesets(template);
+				template.save();
+			}
+			
+		});
+		menu.add(item);
 		ans.addMenuItem(menu);
 		updateTilesets(template);
 		return ans;

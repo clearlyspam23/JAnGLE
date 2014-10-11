@@ -417,6 +417,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 	
 	@SuppressWarnings("rawtypes")
 	private void openTemplate(Template t){
+		t.setData(data);
 		List<EditorItems> items = data.setOpenTemplate(t);
 		for(EditorItems i : items){
 			List<LayerMenuItem> mi = new ArrayList<LayerMenuItem>();

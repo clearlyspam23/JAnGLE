@@ -358,6 +358,7 @@ public class TilesetTreeViewPanel extends JPanel {
 	public void setToTilesets(TilesetGroupNode root, TilesetViewListener listener){
 		this.listener = listener;
 		top.removeAllChildren();
+		model.reload();
 		top.setUserObject(root);
 		editor.setTilesetRoot(root);
 		for(TilesetTreeNode n : root.getChildren())
