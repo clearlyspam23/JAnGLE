@@ -73,6 +73,19 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		});
 		tilePopUp.add(button);
 		
+		tilePopUp.add(button);
+		button = new JMenuItem("Remove");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(JOptionPane.showConfirmDialog(TilesetLoadPanel.this, "Are you sure you want to Remove this Tileset?", "Confirm Removal", JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION)
+					tilesetViewPanel.removeNode();
+			}
+			
+		});
+		tilePopUp.add(button);
+		
 		groupPopUp = new JPopupMenu();
 		button = new JMenuItem("New Tileset");
 		button.addActionListener(new ActionListener(){
@@ -97,6 +110,18 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				tilesetViewPanel.insertNode(new TilesetGroupNode("New Group"));
+			}
+			
+		});
+		groupPopUp.add(button);
+		
+		button = new JMenuItem("Remove");
+		button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(JOptionPane.showConfirmDialog(TilesetLoadPanel.this, "Are you sure you want to Remove this group? This will also Remove any children of this group", "Confirm Removal", JOptionPane.OK_CANCEL_OPTION)==JOptionPane.OK_OPTION)
+					tilesetViewPanel.removeNode();
 			}
 			
 		});

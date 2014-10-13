@@ -388,6 +388,15 @@ public class TilesetTreeViewPanel extends JPanel {
 		 }
 	}
 	
+	public void removeNode(){
+		removeNode((DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent());
+	}
+	
+	public void removeNode(DefaultMutableTreeNode node){
+		if(node!=top)
+			model.removeNodeFromParent(node);
+	}
+	
 	public TilesetTreeNode getSelectedNode(){
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tilesetTree.getLastSelectedPathComponent();
 		if(node!=null)
