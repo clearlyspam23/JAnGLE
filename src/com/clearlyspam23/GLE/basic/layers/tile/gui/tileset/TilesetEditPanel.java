@@ -42,6 +42,8 @@ public class TilesetEditPanel extends JPanel {
 	private TilesetViewPanel tilesetGridPanel;
 	private JButton browseButton;
 	
+	private int id = 0;
+	
 	public static void main(String[] args){
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -255,6 +257,7 @@ public class TilesetEditPanel extends JPanel {
 	
 	public void setToTileset(TilesetHandle tileset){
 		toggleFields(tileset!=null);
+		id = 0;
 		if(tileset!=null){
 			nameField.setText(tileset.getName());
 			fileNameField.setText(tileset.getFilename());
@@ -262,6 +265,7 @@ public class TilesetEditPanel extends JPanel {
 			tileSizeComponent.setYField(tileset.getTileHeight());
 			tileSpaceComponent.setXField(tileset.getTileXSpacing());
 			tileSpaceComponent.setYField(tileset.getTileYSpacing());
+			id = tileset.getID();
 		}
 		updateTilesetView();
 	}
@@ -273,7 +277,7 @@ public class TilesetEditPanel extends JPanel {
 	public BasicTilesetHandle getTileset(){
 		BasicTilesetHandle tileset = new BasicTilesetHandle(nameField.getText(), fileNameField.getText(), 
 				(int) tileSizeComponent.getVector().x, (int) tileSizeComponent.getVector().y, 
-				(int) tileSpaceComponent.getVector().x, (int) tileSpaceComponent.getVector().y);
+				(int) tileSpaceComponent.getVector().x, (int) tileSpaceComponent.getVector().y, id);
 		return tileset;
 	}
 	

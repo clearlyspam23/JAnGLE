@@ -41,6 +41,8 @@ public abstract class TilesetHandle implements Nameable, Serializable{
 
 	public abstract int getTileYSpacing();
 	
+	public abstract int getID();
+	
 	public abstract BasicTilesetHandle cloneAsBasic();
 
 }

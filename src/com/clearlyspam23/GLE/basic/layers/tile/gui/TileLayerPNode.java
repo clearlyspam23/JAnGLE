@@ -92,6 +92,7 @@ public class TileLayerPNode extends PNode implements EditAction{
 	
 	private void addPNode(int i, int j, double width, double height, double gridWidth, double gridHeight, TilePNode pnode){
 		nodeGrid[i][j] = pnode;
+		pnode.setGridLocation(i, j);
 		addChild(nodeGrid[i][j]);
 		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
 	}
@@ -135,6 +136,8 @@ public class TileLayerPNode extends PNode implements EditAction{
 			for(int j = 0; j < nodeGrid[i].length; j++){
 				TilePNode node = nodeGrid[i][j];
 				try{
+					if(node.getTileset()==null)
+						continue;
 					TilesetHandle h = manager.getTilesetByName(node.getTileset().getName());
 					if(h==null){
 						throw new NullPointerException();
@@ -142,6 +145,7 @@ public class TileLayerPNode extends PNode implements EditAction{
 					node.setTileset(h, node.getTilesetX(), node.getTilesetY());
 				}
 				catch(Exception e){
+					e.printStackTrace();
 					node.resetTileset();
 					output = false;
 				}

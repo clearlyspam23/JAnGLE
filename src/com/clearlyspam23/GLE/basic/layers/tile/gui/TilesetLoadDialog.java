@@ -100,7 +100,7 @@ public class TilesetLoadDialog extends JDialog implements ActionListener{
 	
 	public void showDialog(TilesetManager manager){
 		currentManager = manager;
-		tilesetLoadPanel.setToTileset(manager.getRoot());
+		tilesetLoadPanel.setToTileset(manager.getRoot(), manager.getLastId());
 		setVisible(true);
 	}
 

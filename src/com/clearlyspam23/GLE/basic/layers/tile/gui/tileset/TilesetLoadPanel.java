@@ -36,6 +36,8 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 	private final JPopupMenu groupPopUp;
 	
 	private static final String newLine = System.getProperty("line.separator");
+	
+	private int lastId;
 
 	/**
 	 * Create the panel.
@@ -48,7 +50,9 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TilesetTileNode tileNode = new TilesetTileNode(new BasicTilesetHandle("New Tileset"));
+				BasicTilesetHandle h = new BasicTilesetHandle("New Tileset");
+				h.setID(++lastId);
+				TilesetTileNode tileNode = new TilesetTileNode(h);
 				for(int i = 1; !root.getTilesetsByName(tileNode.getName()).isEmpty(); i++){
 					tileNode.setName("New Tileset " + i);
 				}
@@ -75,7 +79,9 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				TilesetTileNode tileNode = new TilesetTileNode(new BasicTilesetHandle("New Tileset"));
+				BasicTilesetHandle h = new BasicTilesetHandle("New Tileset");
+				h.setID(++lastId);
+				TilesetTileNode tileNode = new TilesetTileNode(h);
 				for(int i = 1; !root.getTilesetsByName(tileNode.getName()).isEmpty(); i++){
 					tileNode.setName("New Tileset " + i);
 				}
@@ -134,7 +140,8 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 		tilesetEditPanel.setToTileset(handle.getTileset());
 	}
 	
-	public void setToTileset(TilesetGroupNode tilesetTree){
+	public void setToTileset(TilesetGroupNode tilesetTree, int startId){
+		lastId = startId;
 		root = tilesetTree.cloneAsBasic().getAsGroup();
 		currentTilesetNode = null;
 		tilesetEditPanel.setToTileset(null);
@@ -282,7 +289,7 @@ public class TilesetLoadPanel extends JPanel implements TilesetViewListener{
 			if(n.getType()==Type.TILE){
 				TilesetHandle h = n.getAsTiles().getTileset();
 				replicate.addNode(new TilesetTileNode(new BasicTilesetHandle(h.getName(), h.getFilename(), h.getTileWidth(), h.getTileHeight(),
-						h.getTileXSpacing(), h.getTileYSpacing())));
+						h.getTileXSpacing(), h.getTileYSpacing(), h.getID())));
 			}
 			else{
 				TilesetGroupNode g = new TilesetGroupNode(n.getName());

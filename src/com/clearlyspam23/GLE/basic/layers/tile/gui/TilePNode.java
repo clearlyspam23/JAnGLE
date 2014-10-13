@@ -16,6 +16,8 @@ public class TilePNode extends PImage {
 	private TilesetHandle currentTileset;
 	private int tilesetX;
 	private int tilesetY;
+	private int gridX;
+	private int gridY;
 	
 	public TilePNode(){
 		tilesetX = -1;
@@ -55,6 +57,19 @@ public class TilePNode extends PImage {
 		return tilesetY;
 	}
 	
+	public void setGridLocation(int x, int y){
+		gridX = x;
+		gridY = y;
+	}
+	
+	public int getGridX(){
+		return gridX;
+	}
+	
+	public int getGridy(){
+		return gridY;
+	}
+	
 	@Override
 	public void setImage(final Image newImage)
 	{
@@ -70,6 +85,7 @@ public class TilePNode extends PImage {
 		TilePNode ans = new TilePNode(currentTileset, tilesetX, tilesetY);
 		ans.setBounds(getX(), getY(), getWidth(), getHeight());
 		ans.setImage(getImage());
+		ans.setGridLocation(gridX, gridY);
 		return ans;
 	}
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
@@ -12,7 +13,10 @@ import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetLoadDialog;
+import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.LayerDefinition;
+import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.util.Utility;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
@@ -49,30 +53,6 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	public void onTemplateCreation(Template template){
 		TilesetManager manager = new TilesetManager();
 		template.putTemplateData(this, "tilesets", manager);
-		//the below code will be moved soon
-//		BufferedImage tile = null;
-//		Image[][] tiles = null;
-//		try {
-//			File f = new File("images/Pipes.png");
-//			BufferedImage temp  = ImageIO.read(f);
-//			tile = temp.getSubimage(0, 0, 64, 64);
-//			tiles = new Image[8][8];
-//			for(int i = 0; i < tiles.length; i++)
-//			{
-//				for(int j = 0; j < tiles[i].length; j++)
-//				{
-//					tiles[i][j] = temp.getSubimage(64*i, 64*j, 64, 64);
-//				}
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		if(tile==null)
-//		{
-//			System.err.println("unable to load the image");
-//			return;
-//		}
-		//manager.addTilesetToRoot(new BasicTilesetHandle("test1", "images/Pipes.png", 64, 64));
 	}
 	
 	@Override
@@ -89,6 +69,17 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 				loadDialog.showDialog(manager);
 				updateTilesets(template);
 				template.save();
+				boolean b = true;
+				for(Level l : template.getData().getOpenLevels()){
+					for(Layer<?> layer : l.getLayers()){
+						if(layer instanceof TileLayer){
+							b = b && ((TileLayer)layer).refreshTilesets();
+						}
+					}
+				}
+				if(!b){
+					JOptionPane.showMessageDialog(template.getData().getFrame(), "Unable to reload every tile" + Utility.NEWLINE + "Some tiles have been removed");
+				}
 			}
 			
 		});

@@ -21,6 +21,8 @@ import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
 
 public class JAnGLEData {
 	
+	public static final String TEMPLATE_EXTENSION = ".jtmp";
+	
 	private final PluginManager plugins;
 	private Level currentLevel;
 	private List<Level> openLevels = new ArrayList<Level>();

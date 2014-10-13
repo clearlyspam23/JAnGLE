@@ -10,6 +10,8 @@ import com.clearlyspam23.GLE.Nameable;
 
 public class Utility {
 	
+	public static final String NEWLINE = System.getProperty("line.separator");
+	
 	public static ArrayList<String> tokenizeBySpaceAndQuote(String s)
 	{
 		//i dont know how to regex

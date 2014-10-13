@@ -133,4 +133,9 @@ public class ReferenceTilesetHandle extends TilesetHandle implements ResourceLoa
 		tilesetResource.setBackingFile(new File(tilesetFile));
 	}
 
+	@Override
+	public int getID() {
+		return getTilesetFileHandle().getID();
+	}
+
 }

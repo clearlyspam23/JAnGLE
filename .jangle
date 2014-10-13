@@ -1,4 +1,4 @@
 !!com.clearlyspam23.GLE.SaveData
-currentLevel: C:\Users\clear_000\Documents\TheOutput.json
-openLevels: ['C:\Users\clear_000\Documents\TheOutput.json']
-openTemplate: D:\Programming\Java\Playground\GenericGameEditor\TheTemplate.jant
+currentLevel: C:\Users\clear_000\Documents\JAnGLETest\TestLevel.json
+openLevels: ['C:\Users\clear_000\Documents\JAnGLETest\TestLevel.json']
+openTemplate: D:\Programming\Java\Playground\GenericGameEditor\MyTemplate.jtmp

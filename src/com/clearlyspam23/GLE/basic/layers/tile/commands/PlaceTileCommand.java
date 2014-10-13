@@ -8,13 +8,12 @@ import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 
 public class PlaceTileCommand extends PDragSequenceEventHandler {
 	
-	private TilesetEditorData data;
+	protected TilesetEditorData data;
 	
 	
 	public PlaceTileCommand(TilesetEditorData data){
@@ -51,14 +50,6 @@ public class PlaceTileCommand extends PDragSequenceEventHandler {
         	}
         }
 	}
-	
-//	public void endDrag(PInputEvent event){
-//		super.endDrag(event);
-//		PNode p = getPickedNode(event.getCanvasPosition(), event.getCamera());
-//		if(p.getParent() instanceof TileLayerPNode){
-//			((TileLayerPNode)p.getParent()).registerChange();
-//		}
-//	}
 	
 	protected void drag(PInputEvent event) {
         super.drag(event);

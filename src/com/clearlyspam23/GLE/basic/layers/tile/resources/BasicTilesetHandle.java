@@ -21,27 +21,33 @@ public class BasicTilesetHandle extends TilesetHandle{
 	private int tileYSpacing;
 	private String name;
 	private String imageFile;
+	private int id;
 	private transient Image[][] tileset;
 	
 	public BasicTilesetHandle(){
-		
+		this("", null, 0, 0, 0, 0, 0);
 	}
 	
 	public BasicTilesetHandle(String name){
-		this.name = name;
+		this(name, null, 0, 0, 0, 0, 0);
 	}
 	
 	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight){
-		this(name, filename, tileWidth, tileHeight, 0, 0);
+		this(name, filename, tileWidth, tileHeight, 0, 0, 0);
 	}
 	
 	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight, int xSpacing, int ySpacing){
+		this(name, filename, tileWidth, tileHeight, xSpacing, ySpacing, 0);
+	}
+	
+	public BasicTilesetHandle(String name, String filename, int tileWidth, int tileHeight, int xSpacing, int ySpacing, int id){
 		this.name = name;
 		this.imageFile = filename;
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.tileXSpacing = xSpacing;
 		this.tileYSpacing = ySpacing;
+		this.id = id;
 		checkLoad();
 	}
 	
@@ -191,12 +197,22 @@ public class BasicTilesetHandle extends TilesetHandle{
 		out.tileYSpacing = tileYSpacing;
 		out.name = name;
 		out.imageFile = imageFile;
+		out.id = id;
 		out.checkLoad();
 		return out;
 	}
 	
 	public boolean isValid(){
 		return tileset!=null;
+	}
+
+	@Override
+	public int getID() {
+		return id;
+	}
+	
+	public void setID(int id){
+		this.id = id;
 	}
 
 }

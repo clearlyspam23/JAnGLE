@@ -8,7 +8,6 @@ import java.awt.event.FocusEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -28,16 +27,17 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.PropertyDefinition;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
 import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.util.Utility;
-import com.clearlyspam23.GLE.GUI.util.VectorComponent;
 
 public class GeneralPanel extends TemplateSubPanel{
 
@@ -174,7 +174,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				if(defaultLocCB.isSelected()){
 					StringBuilder text = new StringBuilder(Template.defaultLocation);
 					if(nameField.getText().length()>0){
-						text.append(File.separator).append(nameField.getText()).append(".jant");
+						text.append(File.separator).append(nameField.getText()).append(JAnGLEData.TEMPLATE_EXTENSION);
 					}
 					locationField.setText(text.toString());
 				}
@@ -194,7 +194,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setDialogType(JFileChooser.SAVE_DIALOG);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (*.jant)", "jant");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (*"+JAnGLEData.TEMPLATE_EXTENSION+")", JAnGLEData.TEMPLATE_EXTENSION);
 		fc.setFileFilter(filter);
 		browseButton = new JButton("Browse");
 		browseButton.addActionListener(new ActionListener() {
@@ -203,7 +203,7 @@ public class GeneralPanel extends TemplateSubPanel{
 				int ret = fc.showSaveDialog(GeneralPanel.this);
 				if(ret==JFileChooser.APPROVE_OPTION){
 					File f = fc.getSelectedFile();
-					locationField.setText(f.getAbsolutePath()+".jant");
+					locationField.setText(f.getAbsolutePath()+JAnGLEData.TEMPLATE_EXTENSION);
 				}
 			}
 		});

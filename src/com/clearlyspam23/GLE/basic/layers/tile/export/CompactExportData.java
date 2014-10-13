@@ -5,5 +5,6 @@ public class CompactExportData{
 	
 	public int[][] tiles;
 	public String tileset;
+	public int tilesetId;
 
 }

@@ -14,6 +14,9 @@ public class TilesetManager {
 	
 	private TilesetGroupNode root = new TilesetGroupNode("Tilesets");
 	private Map<String, TilesetHandle> nameTable = new HashMap<String, TilesetHandle>();
+	private Map<Integer, TilesetHandle> idTable = new HashMap<Integer, TilesetHandle>();
+	
+	private int lastId;
 	
 	/**
 	 * this function is now only here for debugging, and will soon be removed entirely
@@ -42,6 +45,10 @@ public class TilesetManager {
 					return false;
 			return true;
 		}
+	}
+	
+	public TilesetHandle getTilesetByID(int id){
+		return idTable.get(id);
 	}
 	
 	/**
@@ -108,6 +115,9 @@ public class TilesetManager {
 		for(TilesetTreeNode n : node.getChildren()){
 			if(n.getType()==Type.TILE){
 				nameTable.put(n.getName(), n.getAsTiles().getTileset());
+				if(idTable.put(n.getAsTiles().getTileset().getID(), n.getAsTiles().getTileset())!=null)
+					System.out.println("probably a bug");
+				lastId = Math.max(lastId, n.getAsTiles().getTileset().getID());
 			}
 			else{
 				discoverNodes(n.getAsGroup());
@@ -118,7 +128,13 @@ public class TilesetManager {
 	public void setRoot(TilesetGroupNode root){
 		this.root = root;
 		nameTable.clear();
+		idTable.clear();
+		lastId = 0;
 		discoverNodes(root);
+	}
+	
+	public int getLastId(){
+		return lastId;
 	}
 
 //	public void setAllTilesets(List<TilesetHandle> allTilesets) {

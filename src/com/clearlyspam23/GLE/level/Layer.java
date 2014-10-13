@@ -12,6 +12,10 @@ import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
 public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	
+	public static int SUCCESS = 0;
+	public static int PARTIAL_SUCCESS = 1;
+	public static int FAILURE = 2;
+	
 	private final LayerDefinition def;
 	
 	public Layer(LayerDefinition def){
@@ -40,7 +44,7 @@ public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	 * the inverse operation of getExportData. Should set this grid to represent the given data.
 	 * @param data
 	 */
-	public abstract void buildFromData(T data);
+	public abstract int buildFromData(T data);
 	
 	public abstract LayerEditManager getEditManager();
 	

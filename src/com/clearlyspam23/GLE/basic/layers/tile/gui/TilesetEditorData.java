@@ -15,6 +15,7 @@ import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 
 public class TilesetEditorData extends LayerEditManager implements ChangeListener, PInputEventListener{
@@ -36,10 +37,12 @@ public class TilesetEditorData extends LayerEditManager implements ChangeListene
 	{
 		allEvents.add(new PlaceTileCommand(this));
 		allEvents.add(new EraseTileCommand(this));
+		allEvents.add(new FloodFillTileCommand(this));
 		selectionPanel = new TilesetSelectionPanel();
 		BasicEditorPanel panel = new BasicEditorPanel
 				(new BasicEditorButton("images/Pencil.png", "Pencil", "Places Tiles"), 
-				new BasicEditorButton("images/Eraser.png", "Eraser", "Removes Tiles"));
+				new BasicEditorButton("images/Eraser.png", "Eraser", "Removes Tiles"),
+				new BasicEditorButton("images/Bucket.png", "Bucket", "Fill Tiles"));
 		panel.addChangeListener(this);
 		panel.selectButton(0);
 		setMainComponent(panel, "Tile Editor");
