@@ -19,6 +19,7 @@ import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
+import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
@@ -63,6 +64,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	{
 		myFrame = frame;
 		canvas = new PSwingCanvas();
+		canvas.setDefaultRenderQuality(PPaintContext.LOW_QUALITY_RENDERING);
 		canvas.setBackground(Color.white);
 		
 		this.level = level;
