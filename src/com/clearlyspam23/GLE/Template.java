@@ -39,6 +39,7 @@ public class Template {
 	private String extension;
 	private boolean useCustomExtension = false;
 	private boolean useDefaultDirectory = true;
+	private boolean allowsRun = false;
 	private Vector2 defaultSize = new Vector2();
 	
 	//Layer data
@@ -252,6 +253,14 @@ public class Template {
 	
 	public boolean save(){
 		return data.saveTemplate(this);
+	}
+
+	public boolean allowsRun() {
+		return allowsRun;
+	}
+
+	public void setAllowsRun(boolean allowsRun) {
+		this.allowsRun = allowsRun;
 	}
 
 }

@@ -48,6 +48,9 @@ import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.level.ChangeLayerListener;
 import com.clearlyspam23.GLE.GUI.level.LevelPanel;
 import com.clearlyspam23.GLE.GUI.level.LevelPropertyDialog;
+import com.clearlyspam23.GLE.GUI.template.GeneralPanel;
+import com.clearlyspam23.GLE.GUI.template.LayerPanel;
+import com.clearlyspam23.GLE.GUI.template.PLangPanel;
 import com.clearlyspam23.GLE.GUI.template.TemplateDialog;
 import com.clearlyspam23.GLE.GUI.util.ConfirmationFileChooser;
 import com.clearlyspam23.GLE.basic.compression.NoCompression;
@@ -116,6 +119,10 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 			manager.addLayerDefinition(new TileLayerDefinition());
 			
 			final JAnGLEData data = new JAnGLEData(manager);
+			
+			manager.addTemplatePanel(new GeneralPanel(data.getPlugins()));
+			manager.addTemplatePanel(new LayerPanel(data.getPlugins()));
+			manager.addAdvancedTemplatePanel(new PLangPanel(data.getPlugins()));
 			
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {

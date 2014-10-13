@@ -13,6 +13,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -26,6 +27,8 @@ import com.clearlyspam23.GLE.GUI.template.dialog.ParameterDialog;
 import com.clearlyspam23.GLE.template.PLanguageOptions;
 import com.clearlyspam23.GLE.util.Utility;
 
+import javax.swing.JCheckBox;
+
 public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	/**
 	 * 
@@ -35,6 +38,9 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	private JTextField exeFileLoc;
 	
 	private JComboBox<String> comboBox;
+	
+	private JButton btnAdd;
+	private JButton btnDelete;
 	
 	private JList<String> list_1;
 	private DefaultListModel<String> list_1_model;
@@ -46,6 +52,9 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	private PLangSubPanel currentPanel;
 	
 	private JScrollPane scrollPane;
+	private JButton btnBrowse;
+	private JCheckBox chckbxEnable;
+	private JScrollPane scrollPane_1;
 
 	/**
 	 * Create the panel.
@@ -70,7 +79,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		label.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		JLabel label_1 = new JLabel("Language");
-		label_1.setBounds(10, 76, 69, 14);
+		label_1.setBounds(10, 113, 69, 14);
 		
 		comboBox = new JComboBox<String>();
 		comboBox.addActionListener(new ActionListener() {
@@ -81,7 +90,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		DefaultComboBoxModel<String> cm = new DefaultComboBoxModel<String>();
 		for(int i = 0; i < recognizedLanguages.size(); i++)
 			cm.addElement(recognizedLanguages.get(i).getName());
-		comboBox.setBounds(104, 73, 179, 20);
+		comboBox.setBounds(104, 110, 179, 20);
 		comboBox.setModel(cm);
 		
 		JLabel label_2 = new JLabel("Parameters");
@@ -91,17 +100,17 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		label_3.setBounds(10, 522, 69, 14);
 		
 		JLabel lblExecutableLocation = new JLabel("Game Executable");
-		lblExecutableLocation.setBounds(10, 42, 83, 14);
+		lblExecutableLocation.setBounds(10, 82, 83, 14);
 		
 		exeFileLoc = new JTextField();
-		exeFileLoc.setBounds(103, 42, 358, 20);
+		exeFileLoc.setBounds(103, 79, 358, 20);
 		exeFileLoc.setColumns(10);
 		
 		final JFileChooser fc = new JFileChooser();
 		fc.setAcceptAllFileFilterUsed(true);
-		JButton btnNewButton = new JButton("Browse");
-		btnNewButton.setBounds(471, 38, 69, 23);
-		btnNewButton.addActionListener(new ActionListener() {
+		btnBrowse = new JButton("Browse");
+		btnBrowse.setBounds(471, 78, 69, 23);
+		btnBrowse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int ret = fc.showOpenDialog(PLangPanel.this);
 				if(ret==JFileChooser.APPROVE_OPTION)
@@ -124,10 +133,10 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		add(list);
 		add(comboBox);
 		add(exeFileLoc);
-		add(btnNewButton);
+		add(btnBrowse);
 		list_1_model = new DefaultListModel<String>();
 		
-		JButton btnAdd = new JButton("Add");
+		btnAdd = new JButton("Add");
 		final ParameterDialog pdialog = new ParameterDialog(pluginManager.getRecognizedMacros());
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -149,7 +158,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		btnAdd.setBounds(293, 485, 79, 23);
 		add(btnAdd);
 		
-		JButton btnDelete = new JButton("Delete");
+		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = list_1.getSelectedIndex();
@@ -164,10 +173,10 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		add(btnDelete);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 101, 530, 249);
+		scrollPane.setBounds(10, 141, 530, 209);
 		add(scrollPane);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(104, 361, 358, 113);
 		add(scrollPane_1);
 		
@@ -177,11 +186,39 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		
 		list_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
+		chckbxEnable = new JCheckBox("Enable");
+		chckbxEnable.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		chckbxEnable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				checkEnable(chckbxEnable.isSelected());
+			}
+		});
+		chckbxEnable.setBounds(20, 27, 276, 50);
+		add(chckbxEnable);
+		
 //		scrollPanel = new JPanel();
 //		scrollPane.setViewportView(scrollPanel);
 		
-		stateChanged();
+		//stateChanged();
 
+	}
+	
+	public void checkEnable(boolean flag){
+		exeFileLoc.setEnabled(flag);
+		comboBox.setEnabled(flag);
+		btnAdd.setEnabled(flag);
+		btnDelete.setEnabled(flag);
+		list_1.setEnabled(flag);
+		scrollPane_1.setEnabled(flag);
+		btnBrowse.setEnabled(flag);
+		if(flag){
+			stateChanged();
+		}
+		else{
+			scrollPane.setViewportView(new JPanel());
+			displayInputField.setText("");
+		}
+		System.out.println("checking " + flag);
 	}
 	
 	//private int counter = 0;
@@ -231,7 +268,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		{
 			list_1_model.addElement(s);
 		}
-		stateChanged();
+		checkEnable(template.allowsRun());
 	}
 
 	@Override
@@ -241,7 +278,7 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 
 	@Override
 	public void generateTemplate(Template template) {
-		
+		template.setAllowsRun(chckbxEnable.isSelected());
 	}
 
 	@Override
@@ -255,5 +292,4 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

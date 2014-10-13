@@ -3,12 +3,13 @@ package com.clearlyspam23.GLE;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clearlyspam23.GLE.GUI.template.TemplateSubPanel;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.template.CompressionFormat;
 import com.clearlyspam23.GLE.template.CoordinateSystem;
+import com.clearlyspam23.GLE.template.LevelSerializer;
 import com.clearlyspam23.GLE.template.PLanguageOptions;
 import com.clearlyspam23.GLE.template.ParameterMacro;
-import com.clearlyspam23.GLE.template.LevelSerializer;
 
 public class PluginManager {
 	
@@ -22,6 +23,9 @@ public class PluginManager {
 	private List<LevelSerializer> recognizedSerializers = new ArrayList<LevelSerializer>();
 	@SuppressWarnings("rawtypes")
 	private List<PropertyDefinition> recognizedProperties = new ArrayList<PropertyDefinition>();
+	private List<TemplateSubPanel> templatePanels = new ArrayList<TemplateSubPanel>();
+	private List<TemplateSubPanel> advancedTemplatePanels = new ArrayList<TemplateSubPanel>();
+	
 	public List<CoordinateSystem> getRecognizedCoordinateSystems() {
 		return recognizedCoordinateSystems;
 	}
@@ -66,6 +70,18 @@ public class PluginManager {
 	}
 	public void addProperty(PropertyDefinition<?, ?> property) {
 		recognizedProperties.add(property);
+	}
+	public List<TemplateSubPanel> getTemplatePanels() {
+		return templatePanels;
+	}
+	public void addTemplatePanel(TemplateSubPanel templatePanel) {
+		templatePanels.add(templatePanel);
+	}
+	public List<TemplateSubPanel> getAdvancedTemplatePanels() {
+		return advancedTemplatePanels;
+	}
+	public void addAdvancedTemplatePanel(TemplateSubPanel advancedTemplatePanel) {
+		advancedTemplatePanels.add(advancedTemplatePanel);
 	}
 	
 	

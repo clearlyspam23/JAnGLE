@@ -98,19 +98,23 @@ public class TemplateDialog extends JDialog implements ActionListener{
 			
 			manager.addLayerDefinition(new TileLayerDefinition());
 			
-			TemplateDialog dialog = new TemplateDialog(new JAnGLEData(manager));
+			manager.addTemplatePanel(new GeneralPanel(data.getPlugins()));
+			manager.addTemplatePanel(new LayerPanel(data.getPlugins()));
+			manager.addAdvancedTemplatePanel(new PLangPanel(data.getPlugins()));
+			
+			TemplateDialog dialog = new TemplateDialog(data);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-			Template t = dialog.getTemplate();
-			TemplateSerializer serializer = new TemplateSerializer(manager);
-			if(t!=null){
-				String s = serializer.serialize(t);
-				PrintWriter w = new PrintWriter(t.getTemplateFile());
-				w.print(s);
-				w.close();
-				Template recreate = serializer.deserialize(s, t.getTemplateFile());
-				System.out.println(recreate);
-			}
+			dialog.showDialog();
+//			Template t = dialog.getTemplate();
+//			TemplateSerializer serializer = new TemplateSerializer(manager);
+//			if(t!=null){
+//				String s = serializer.serialize(t);
+//				PrintWriter w = new PrintWriter(t.getTemplateFile());
+//				w.print(s);
+//				w.close();
+//				Template recreate = serializer.deserialize(s, t.getTemplateFile());
+//				System.out.println(recreate);
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,6 +130,11 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		this.data = data;
 		
 		//this code should be moved somewhere else eventually
+		for(TemplateSubPanel p : data.getPlugins().getTemplatePanels()){
+			subPanels.add(p);
+		}
+		for(TemplateSubPanel p : data.getPlugins().getAdvancedTemplatePanels())
+			subPanels.add(p);
 		subPanels.add(new GeneralPanel(data.getPlugins()));
 		subPanels.add(new PLangPanel(data.getPlugins()));
 		subPanels.add(new LayerPanel(data.getPlugins()));
@@ -140,8 +149,16 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPanel.add(tabbedPane);
 		
-		for(TemplateSubPanel panel : subPanels)
-			tabbedPane.addTab(panel.getPanelName(), null, panel, null);
+		for(TemplateSubPanel panel : data.getPlugins().getTemplatePanels())
+			tabbedPane.addTab(panel.getPanelName(), panel);
+		JPanel aPanel = new JPanel();
+		aPanel.setLayout(new BorderLayout());
+		JTabbedPane advanced = new JTabbedPane();
+		aPanel.add(advanced, BorderLayout.CENTER);
+		for(TemplateSubPanel p : data.getPlugins().getAdvancedTemplatePanels()){
+			advanced.addTab(p.getPanelName(), p);
+		}
+		tabbedPane.addTab("Advanced", advanced);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
