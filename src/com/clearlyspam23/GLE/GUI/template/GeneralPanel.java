@@ -355,7 +355,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		Utility.setModelTo(serializerBox, possibleSerializers);
 		Utility.setModelTo(propsTypeField, possibleProperties);
 		
-		sizeComponent = new VectorComponent();
+		sizeComponent = new VectorComponent(false);
 		sizeComponent.setBounds(135, 264, 217, 20);
 		add(sizeComponent);
 		
@@ -486,7 +486,11 @@ public class GeneralPanel extends TemplateSubPanel{
 
 	@Override
 	public List<String> verify() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> out = new ArrayList<String>();
+		if(nameField.getText()==null||nameField.getText().isEmpty())
+			out.add("Name cannot be Empty");
+		if(sizeComponent.getVector().x<=0||sizeComponent.getVector().y<=0)
+			out.add("Default level size cannot be 0");
+		return out;
 	}
 }

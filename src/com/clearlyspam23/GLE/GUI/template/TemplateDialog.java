@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -40,7 +40,7 @@ import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.level.LayerTemplate;
-import com.clearlyspam23.GLE.template.serializer.TemplateSerializer;
+import com.clearlyspam23.GLE.util.Utility;
 
 public class TemplateDialog extends JDialog implements ActionListener{
 
@@ -205,6 +205,24 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		if(accepted)
 		{
 			Template template = new Template();
+			List<String> problems = new ArrayList<String>();
+			for(TemplateSubPanel p : subPanels){
+				List<String> issues = p.verify();
+				if(issues!=null&&!issues.isEmpty()){
+					for(String s : issues){
+						problems.add(p.getPanelName() + " : " + s);
+					}
+				}
+			}
+			if(!problems.isEmpty()){
+				StringBuilder b = new StringBuilder();
+				for(String s : problems)
+					b.append(s).append(Utility.NEWLINE);
+				JOptionPane.showMessageDialog(this, "Unable to save the Template for the following reasons:" + 
+					Utility.NEWLINE + Utility.NEWLINE + b.toString() + Utility.NEWLINE + 
+					"Please fix these issues before continuing");
+				return;
+			}
 			for(TemplateSubPanel p : subPanels)
 				p.generateTemplate(template);
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
