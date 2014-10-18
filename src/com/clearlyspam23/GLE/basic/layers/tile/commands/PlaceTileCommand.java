@@ -1,66 +1,42 @@
 package com.clearlyspam23.GLE.basic.layers.tile.commands;
 
-import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.piccolo2d.PCamera;
-import org.piccolo2d.PNode;
-import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
-import org.piccolo2d.util.PPickPath;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.PlaceTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.util.Pair;
 
-public class PlaceTileCommand extends PDragSequenceEventHandler {
+public class PlaceTileCommand extends TileDragCommand {
 	
-	protected TilesetEditorData data;
+	protected List<Pair<TilePNode, Tile>> replacedList;
 	
 	
 	public PlaceTileCommand(TilesetEditorData data){
-		this.data = data;
+		super(data);
 	}
 	
 	protected void setTile(TilePNode tile, PCamera cam){
-//		tile.setImage(data.getSelectedTile());
+		if(data.getSelectedTile()==null)
+			return;
+		replacedList.add(new Pair<TilePNode, Tile>(tile, tile.getTile()));
 		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 	}
-	
+
 	@Override
-	protected boolean shouldStartDragInteraction(PInputEvent event) {
-        if (super.shouldStartDragInteraction(event)) {
-            return event.isLeftMouseButton();
-        }
-        return false;
-    }
-	
-	public void mousePressed(PInputEvent event)
-	{
-		super.mousePressed(event);
-		if(event.isLeftMouseButton())
-			tryPlaceImage(event.getCanvasPosition(), event.getCamera());
+	protected void onFinish(PInputEvent event) {
+		PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
+		data.registerEditAction(action);
 	}
-	
-	protected void tryPlaceImage(Point2D pos, PCamera cam)
-	{
-		PNode p = getPickedNode(pos, cam);
-        if(p instanceof TilePNode){
-        	TilePNode tile = (TilePNode)p;
-        	if(data.getSelectedTile()!=null){
-        		setTile(tile, cam);
-        	}
-        }
-	}
-	
-	protected void drag(PInputEvent event) {
-        super.drag(event);
-        tryPlaceImage(event.getCanvasPosition(), event.getCamera());
-    }
-	
-	private PNode getPickedNode(Point2D pos, PCamera cam){
-		final PPickPath p = cam.pick(pos.getX(), pos.getY(), 1);
-		if(p==null)
-			return null;
-		return p.getPickedNode();
+
+	@Override
+	protected void onStart(PInputEvent event) {
+		replacedList = new ArrayList<Pair<TilePNode, Tile>>();
 	}
 
 }

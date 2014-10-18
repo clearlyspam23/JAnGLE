@@ -10,22 +10,22 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.clearlyspam23.GLE.ActionData;
+import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.exception.TemplateMismatchException;
 
-public class Level implements Nameable{
+public class Level implements Nameable, EditActionListener{
 	
 	private Template template;
 	@SuppressWarnings("rawtypes")
 	private List<Layer> layers = new ArrayList<Layer>();
 	private List<LevelChangeListener> listeners = new ArrayList<LevelChangeListener>();
-	private List<ActionData> undoStack = new ArrayList<ActionData>();
-	private List<ActionData> redoStack = new ArrayList<ActionData>();
-	private int lastAction;
-	private int currentAction;
+	private List<EditAction> undoStack = new ArrayList<EditAction>();
+	private List<EditAction> redoStack = new ArrayList<EditAction>();
+	private int editCount;
 	private double width;
 	private double height;
 	private LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>();
@@ -108,28 +108,56 @@ public class Level implements Nameable{
 	}
 	
 	public boolean needsSave(){
-		return currentAction!=lastAction;
+		return editCount!=0;
 	}
 	
-	public void addAction(ActionData data){
+	@Override
+	public void actionMade(EditAction data){
 		undoStack.add(data);
 		redoStack.clear();
+		editCount++;
 	}
 	
 	public boolean canUndo(){
 		return !undoStack.isEmpty();
 	}
 	
-	public ActionData undoAction(){
-		return undoStack.remove(undoStack.size()-1);
+	public boolean undoAction(){
+		if(canUndo()){
+			EditAction e = undoStack.remove(undoStack.size()-1);
+			e.undoAction();
+			redoStack.add(e);
+			editCount++;
+			return true;
+		}
+		return false;
+	}
+	
+	public EditAction getTopUndo(){
+		return undoStack.get(undoStack.size()-1);
 	}
 	
 	public boolean canRedo(){
 		return !redoStack.isEmpty();
 	}
 	
-	public ActionData redoAction(){
-		return redoStack.remove(redoStack.size()-1);
+	public boolean redoAction(){
+		if(canRedo()){
+			EditAction e = redoStack.remove(redoStack.size()-1);
+			e.doAction();
+			undoStack.add(e);
+			editCount--;
+			return true;
+		}
+		return false;
+	}
+	
+	public EditAction getTopRedo(){
+		return redoStack.get(redoStack.size()-1);
+	}
+	
+	public void acknowledgeSave(){
+		editCount = 0;
 	}
 	
 	public void setDimensions(double width, double height){

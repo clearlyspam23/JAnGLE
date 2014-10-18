@@ -4,11 +4,11 @@ import com.clearlyspam23.GLE.level.Layer;
 
 public class ActionData {
 	
-	public final Object data;
-	public final String name;
-	public final Layer layer;
+	public Object data;
+	public String name;
+	public Layer layer;
 	
-	public ActionData(String name, Layer layer, Object data){
+	public ActionData(String name, Object data){
 		this.name = name;
 		this.layer = layer;
 		this.data = data;

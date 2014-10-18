@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.ActionData;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
@@ -143,6 +144,21 @@ public class TileLayer extends Layer<Object> {
 	
 	public PNode getOverlayGUI(){
 		return grid;
+	}
+	
+	public boolean isSameAction(ActionData current, ActionData previous){
+		if((current.data instanceof CompactExportData[])&&(previous.data instanceof CompactExportData[])){
+			CompactExportData[] data1 = (CompactExportData[]) current.data;
+			CompactExportData[] data2 = (CompactExportData[]) previous.data;
+			if(data1.length!=data2.length)
+				return false;
+			for(int i = 0; i < data1.length; i++){
+				if(!data1[i].equals(data2[i]))
+					return false;
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean refreshTilesets(){

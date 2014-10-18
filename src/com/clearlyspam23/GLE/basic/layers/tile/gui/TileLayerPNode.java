@@ -5,11 +5,10 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
-public class TileLayerPNode extends PNode implements EditAction{
+public class TileLayerPNode extends PNode{
 
 	/**
 	 * 
@@ -153,10 +152,4 @@ public class TileLayerPNode extends PNode implements EditAction{
 		}
 		return output;
 	}
-
-	@Override
-	public String getDescription() {
-		return "Tile Layer";
-	}
-
 }

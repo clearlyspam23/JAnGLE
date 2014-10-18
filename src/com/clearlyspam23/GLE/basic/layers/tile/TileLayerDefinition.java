@@ -92,7 +92,6 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	public void updateTilesets(Template template){
 		editorData.clearTilesets();
 		for(TilesetHandle t : ((TilesetManager) template.getTemplateData(this, "tilesets")).getAllTilesets()){
-			System.out.println(t);
 			editorData.addTileset(t);
 		}
 	}

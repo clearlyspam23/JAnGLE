@@ -48,17 +48,8 @@ public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	
 	public abstract LayerEditManager getEditManager();
 	
-	public ActionData getActionData(){
-		return new ActionData(getName(), this, getExportData());
-	}
-	
 	public Class<?> getExportDataClass(){
 		return getExportData().getClass();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void setToActionData(ActionData data){
-		this.buildFromData((T) data.data);
 	}
 	
 	public List<JMenuItem> getMenuItems(){

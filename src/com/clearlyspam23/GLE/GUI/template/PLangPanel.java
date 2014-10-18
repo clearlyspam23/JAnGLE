@@ -218,7 +218,6 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 			scrollPane.setViewportView(new JPanel());
 			displayInputField.setText("");
 		}
-		System.out.println("checking " + flag);
 	}
 	
 	//private int counter = 0;

@@ -4,6 +4,7 @@ import java.awt.Image;
 
 import org.piccolo2d.nodes.PImage;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TilePNode extends PImage {
@@ -87,6 +88,10 @@ public class TilePNode extends PImage {
 		ans.setImage(getImage());
 		ans.setGridLocation(gridX, gridY);
 		return ans;
+	}
+	
+	public Tile getTile(){
+		return new Tile(currentTileset, gridX, gridY);
 	}
 
 }

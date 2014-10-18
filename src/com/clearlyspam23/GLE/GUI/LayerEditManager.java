@@ -9,6 +9,7 @@ import javax.swing.Icon;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
+import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.Nameable;
 
 public abstract class LayerEditManager implements PInputEventListener, Nameable{
@@ -32,8 +33,8 @@ public abstract class LayerEditManager implements PInputEventListener, Nameable{
 		}
 	}
 	private List<ComponentData> subComponents = new ArrayList<ComponentData>();
-//	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
 	private List<PInputEventListener> eventListeners = new ArrayList<PInputEventListener>();
+	private final List<EditActionListener> editListeners = new ArrayList<EditActionListener>();
 
 	public List<PInputEventListener> getEventListeners() {
 		return eventListeners;
@@ -72,6 +73,20 @@ public abstract class LayerEditManager implements PInputEventListener, Nameable{
 	
 	public void addSubComponents(Component subComponent, String name, Icon icon) {
 		subComponents.add(new ComponentData(subComponent, name, icon));
+	}
+	
+	public final void addEditListener(EditActionListener listener){
+		editListeners.add(listener);
+	}
+	
+	public final void removeEditListener(EditActionListener listener){
+		editListeners.remove(listener);
+	}
+	
+	public void registerEditAction(EditAction event){
+		for(EditActionListener l : editListeners){
+			l.actionMade(event);
+		}
 	}
 
 }

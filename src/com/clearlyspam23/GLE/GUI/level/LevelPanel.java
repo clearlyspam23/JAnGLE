@@ -21,6 +21,8 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 import org.piccolo2d.util.PPaintContext;
 
+import com.clearlyspam23.GLE.EditAction;
+import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
 import com.clearlyspam23.GLE.level.Layer;
@@ -59,6 +61,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private static final Color backgroundColor = new Color(200, 200, 240);
 	
 	private PNode overlayNode;
+	
+	@SuppressWarnings("rawtypes")
+	private Layer currentLayer;
 	
 	public LevelPanel(Level level, Frame frame, Map<LayerEditManager, JDialog> editDialogs)
 	{
@@ -127,8 +132,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		Dimension d = getSize();
 		double width = level.getWidth();
 		double height = level.getHeight();
-		System.out.println(d);
-		System.out.println(width + ", " + height);
 		if(width/d.width>height/d.height){
 			//the bigger ratio is horizontal
 			double w = d.width*3/4;
@@ -151,15 +154,14 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	public void changeLayer(int index){
 		Layer old = null;
 		if(selectedIndex>=0){
-			old = level.getLayers().get(selectedIndex);
 			LayerEditManager editor = editors.get(selectedIndex);
 			LayerEditManager nextEditor = editors.get(index);
+			editor.removeEditListener(level);
 			canvas.removeInputEventListener(editor);
 			if(isShowing()&&!editor.equals(nextEditor))
 				editDialogs.get(editor).setVisible(false);
 		}
 //		base.removeAllChildren();
-		System.out.println("is pickable = " + base.getPickable());
 		//setup currentLayer
 		selectedIndex = index;
 		for(int i = 0; i < layers.size(); i++){
@@ -188,15 +190,16 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 //				node.setChildrenPickable(false);
 //			}
 		}
-		Layer active = level.getLayers().get(selectedIndex);
+		currentLayer = level.getLayers().get(selectedIndex);
 		if(overlayNode!=null)
 			base.removeChild(overlayNode);
-		overlayNode = active.getOverlayGUI();
+		overlayNode = currentLayer.getOverlayGUI();
 		if(overlayNode!=null)
 			base.addChild(overlayNode);
 		LayerEditManager editor = editors.get(selectedIndex);
 //		for(PInputEventListener l : currentLayer.getListeners()){
 		canvas.addInputEventListener(editor);
+		editor.addEditListener(level);
 //			currentListeners.add(l);
 //			canvas.addInputEventListener(l);
 //		}
@@ -251,7 +254,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 //		canvas.getCamera().setViewBounds(new Rectangle2D.Double(x, y, canvas.getWidth(), canvas.getHeight()));
 //		canvas.getCamera().scaleAboutPoint(scale, x, y);
 //		canvas.getCamera().centerBoundsOnPoint(x, y);
-		System.out.println(canvas.getCamera().getViewScale());
 		currWidth = canvas.getWidth();
 		currHeight = canvas.getHeight();
 		if(initialResize){

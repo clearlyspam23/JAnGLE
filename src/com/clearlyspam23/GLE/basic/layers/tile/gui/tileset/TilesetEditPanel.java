@@ -142,7 +142,6 @@ public class TilesetEditPanel extends JPanel {
 		fileNameField = new JTextField();
 		fileNameField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("action");
 				updateTilesetView();
 			}
 		});

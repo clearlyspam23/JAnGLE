@@ -338,7 +338,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 						data.setCurrentLevel(levelPanelMap.getReverse(panel));
 						if(panel!=null)
 							onLayerChange(old, panel.getCurrentLayer());
-						System.out.println("changed current level");
 					}
 				}
 			}
@@ -520,7 +519,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 			saveLevel(level);
 			for(int i = 0; i < tabbedPane.getTabCount(); i++){
 				Component comp = tabbedPane.getComponentAt(i);
-				System.out.println("index : " + tabbedPane.getTitleAt(i) + " : " + comp);
 				if(comp instanceof LevelPanel){
 					System.out.println("new title : " + ((LevelPanel)comp).getLevelName());
 					tabbedPane.setTitleAt(i, ((LevelPanel)comp).getLevelName());

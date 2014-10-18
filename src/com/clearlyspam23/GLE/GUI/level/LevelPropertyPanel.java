@@ -76,7 +76,6 @@ public class LevelPropertyPanel extends JPanel{
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = y;
-		System.out.println(y);
 		add(lblNewLabel, gbc_lblNewLabel);
 		
 		Component component = t.getEditorComponent();
