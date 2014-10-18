@@ -6,7 +6,6 @@ import javax.swing.JMenuItem;
 
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.ActionData;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
@@ -16,8 +15,10 @@ public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	public static int PARTIAL_SUCCESS = 1;
 	public static int FAILURE = 2;
 	
+	@SuppressWarnings("rawtypes")
 	private final LayerDefinition def;
 	
+	@SuppressWarnings("rawtypes")
 	public Layer(LayerDefinition def){
 		this.def = def;
 	}
@@ -56,6 +57,7 @@ public abstract class Layer<T> implements Nameable, LevelChangeListener{
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public LayerDefinition getDefinition() {
 		return def;
 	}

@@ -45,10 +45,13 @@ public class PLangPanel extends TemplateSubPanel implements ChangeListener{
 	private JList<String> list_1;
 	private DefaultListModel<String> list_1_model;
 	
+	@SuppressWarnings("rawtypes")
 	private List<PLanguageOptions> recognizedLanguages;
 	
+	@SuppressWarnings("rawtypes")
 	private PLangSubPanel[] panels;
 	
+	@SuppressWarnings("rawtypes")
 	private PLangSubPanel currentPanel;
 	
 	private JScrollPane scrollPane;

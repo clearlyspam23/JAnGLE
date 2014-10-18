@@ -21,6 +21,7 @@ public abstract class LayerTemplate implements Nameable{
 		this.definition = def;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public abstract Layer createLayer();
 	
 	public String getName()
@@ -38,6 +39,7 @@ public abstract class LayerTemplate implements Nameable{
 		return definition;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setDefinition(LayerDefinition def){
 		this.definition = def;
 	}

@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.clearlyspam23.GLE.Property;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.util.VectorComponent;
@@ -24,14 +23,16 @@ public class LevelPropertyPanel extends JPanel{
 	
 	private HashMap<String, Component> properties = new HashMap<String, Component>();
 	
+	@SuppressWarnings("rawtypes")
 	private HashMap<String, PropertyTemplate> templates = new HashMap<String, PropertyTemplate>();
 	
 	private VectorComponent dimensions;
 	
-	private Template template;
+//	private Template template;
 
+	@SuppressWarnings("rawtypes")
 	public LevelPropertyPanel(Template template) {
-		this.template = template;
+//		this.template = template;
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0};
@@ -69,6 +70,7 @@ public class LevelPropertyPanel extends JPanel{
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void addProperty(PropertyTemplate t, int y){
 		JLabel lblNewLabel = new JLabel(t.getName());
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -89,7 +91,7 @@ public class LevelPropertyPanel extends JPanel{
 		properties.put(t.getName(), component);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	public void setToLevel(Level level){
 		dimensions.setXField(level.getWidth());
 		dimensions.setYField(level.getHeight());
@@ -99,6 +101,7 @@ public class LevelPropertyPanel extends JPanel{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setLevelTo(Level level){
 		level.setDimensions(dimensions.getXField(), dimensions.getYField());
 		for(Entry<String, Component> e : properties.entrySet()){

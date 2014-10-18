@@ -10,6 +10,10 @@ import javax.swing.event.ChangeListener;
 
 public abstract class SubPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private List<ChangeListener> listeners = new ArrayList<ChangeListener>();
 
 	public SubPanel() {

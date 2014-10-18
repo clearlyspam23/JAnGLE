@@ -341,6 +341,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addChangeListener(new ChangeListener() {
+			@SuppressWarnings("rawtypes")
 			public void stateChanged(ChangeEvent arg0) {
 				if(tabbedPane.getSelectedIndex()>=0){
 					Component c = tabbedPane.getComponent(tabbedPane.getSelectedIndex());
@@ -536,7 +537,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		for(int i = 0; i < tabbedPane.getTabCount(); i++){
 			Component comp = tabbedPane.getComponentAt(i);
 			if(comp instanceof LevelPanel){
-				System.out.println("new title : " + ((LevelPanel)comp).getLevelName());
 				tabbedPane.setTitleAt(i, ((LevelPanel)comp).getLevelName());
 			}
 		}
@@ -549,7 +549,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 			File ans = new File(FilenameUtils.removeExtension(f.getPath())+extension);
 			level.setSaveFile(ans);
 			saveLevel(level);
-			checkNames();
 		}
 	}
 	
@@ -561,6 +560,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		if(!data.saveLevel(level)){
 			//TODO display an error here.
 		}
+		checkNames();
 	}
 	
 	private boolean showOpenTemplateDialog(){
@@ -612,6 +612,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		mntmRedo.setEnabled(l.canRedo());
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void onLayerChange(Layer oldLayer, Layer newLayer) {
 		if(oldLayer!=null&&layerMenuItems.containsKey(oldLayer.getDefinition())){

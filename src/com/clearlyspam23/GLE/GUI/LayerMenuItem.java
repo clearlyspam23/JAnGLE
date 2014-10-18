@@ -4,6 +4,7 @@ import javax.swing.JMenuItem;
 
 import com.clearlyspam23.GLE.level.Layer;
 
+@SuppressWarnings("rawtypes")
 public abstract class LayerMenuItem <T extends Layer, E extends JMenuItem>{
 	
 	private final E menuItem;
@@ -15,11 +16,6 @@ public abstract class LayerMenuItem <T extends Layer, E extends JMenuItem>{
 	public final E getMenuItem(){
 		return menuItem;
 	}
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 //	public LayerMenuItem(String name){
 //		super(name);

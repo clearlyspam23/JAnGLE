@@ -18,10 +18,8 @@ import org.piccolo2d.PNode;
 import org.piccolo2d.event.PInputEventFilter;
 import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
-import org.piccolo2d.util.PBounds;
 import org.piccolo2d.util.PPaintContext;
 
-import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
 import com.clearlyspam23.GLE.level.EditAction;
@@ -42,8 +40,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	private LayerSelectionDialog dialog;
 	
-	private double currWidth;
-	private double currHeight;
+//	private double currWidth;
+//	private double currHeight;
 	
 	private int selectedIndex = -1;
 	
@@ -65,6 +63,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	@SuppressWarnings("rawtypes")
 	private Layer currentLayer;
 	
+	@SuppressWarnings("rawtypes")
 	public LevelPanel(Level level, Frame frame, Map<LayerEditManager, JDialog> editDialogs)
 	{
 		myFrame = frame;
@@ -145,12 +144,14 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		return level.getName() + (level.needsSave() ? " *" : "");
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Layer getCurrentLayer(){
 		if(selectedIndex>=0)
 			return level.getLayers().get(selectedIndex);
 		return null;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void changeLayer(int index){
 		Layer old = null;
 		if(selectedIndex>=0){
@@ -239,25 +240,25 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		PBounds bounds = canvas.getCamera().getViewBounds();
-		double x;
-		double y;
-		if(currWidth<=0)
-			x = level.getWidth()/2-canvas.getWidth()/2;
-		else
-			x = bounds.x - (canvas.getWidth()-currWidth)/2;
-		if(currHeight<=0)
-			y = level.getHeight()/2 - canvas.getHeight()/2;
-		else
-			y = bounds.y - (canvas.getHeight()-currHeight)/2;
+//		PBounds bounds = canvas.getCamera().getViewBounds();
+//		double x;
+//		double y;
+//		if(currWidth<=0)
+//			x = level.getWidth()/2-canvas.getWidth()/2;
+//		else
+//			x = bounds.x - (canvas.getWidth()-currWidth)/2;
+//		if(currHeight<=0)
+//			y = level.getHeight()/2 - canvas.getHeight()/2;
+//		else
+//			y = bounds.y - (canvas.getHeight()-currHeight)/2;
 //		double scale = canvas.getCamera().getViewScale();
 //		canvas.getCamera().setViewBounds(new Rectangle2D.Double(x, y, canvas.getWidth(), canvas.getHeight()));
 //		canvas.getCamera().scaleAboutPoint(scale, x, y);
 //		canvas.getCamera().centerBoundsOnPoint(x, y);
-		currWidth = canvas.getWidth();
-		currHeight = canvas.getHeight();
+//		currWidth = canvas.getWidth();
+//		currHeight = canvas.getHeight();
 		if(initialResize){
-			double scaling = calculateStartingScale();
+//			double scaling = calculateStartingScale();
 			canvas.getCamera().scaleView(calculateStartingScale());
 			initialResize = false;
 		}
@@ -275,6 +276,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		dialog.setVisible(true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Layer> getLayers() {
 		return level.getLayers();
@@ -291,6 +293,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		listeners.add(l);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private float calculateRatio(double width, double height){
 		float min = Float.MAX_VALUE;
 		for(Layer l : level.getLayers()){

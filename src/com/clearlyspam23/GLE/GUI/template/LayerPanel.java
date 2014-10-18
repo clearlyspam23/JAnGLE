@@ -53,6 +53,7 @@ public class LayerPanel extends TemplateSubPanel{
 	/**
 	 * Create the panel.
 	 */
+	@SuppressWarnings("rawtypes")
 	public LayerPanel(PluginManager pluginManager) {
 		super(pluginManager);
 		setLayout(null);

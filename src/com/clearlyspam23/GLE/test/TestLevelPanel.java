@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.test;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -42,34 +42,7 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 	
 	public TestLevelPanel()
 	{
-//		final double gridSpacing = 10;
-        
-        
 		canvas = new PSwingCanvas();
-		
-//		BufferedImage tile = null;
-//		BufferedImage[] tiles = null;
-//		try {
-//			File f = new File("images/testboxes.png");
-//			BufferedImage temp  = ImageIO.read(f);
-//			tile = temp.getSubimage(0, 0, 64, 64);
-//			tiles = new BufferedImage[4];
-//			for(int i = 0; i < tiles.length; i++)
-//			{
-//				tiles[i] = temp.getSubimage(64*i, 0, 64, 64);
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		if(tile==null)
-//		{
-//			System.err.println("unable to load the image");
-//			return;
-//		}
-		
-		
-		
-		
 		setLayout(new BorderLayout());
 		
 		Template t = new Template();

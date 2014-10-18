@@ -435,7 +435,7 @@ public class GeneralPanel extends TemplateSubPanel{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void checkPropsList(){
 		boolean shouldBeEnabled = propsList.getSelectedIndex()>=0;
 		if(currentProp!=null){

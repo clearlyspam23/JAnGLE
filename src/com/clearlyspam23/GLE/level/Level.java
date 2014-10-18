@@ -81,6 +81,7 @@ public class Level implements Nameable, EditActionListener{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setToData(LevelData data) throws TemplateMismatchException{
 		setDimensions(data.width, data.height);
 		for(int i = 0; i < layers.size(); i++){
@@ -192,12 +193,14 @@ public class Level implements Nameable, EditActionListener{
 		this.template = template;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void addLayer(Layer l)
 	{
 		layers.add(l);
 		listeners.add(l);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List<Layer> getLayers()
 	{
 		return Collections.unmodifiableList(layers);

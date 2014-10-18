@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;

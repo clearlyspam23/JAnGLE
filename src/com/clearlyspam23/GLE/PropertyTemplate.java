@@ -32,6 +32,7 @@ public abstract class PropertyTemplate<T extends Component, E> implements Nameab
 		return definition;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public final void setDefinition(PropertyDefinition def){
 		definition = def;
 	}

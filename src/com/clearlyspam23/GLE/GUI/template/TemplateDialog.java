@@ -199,6 +199,7 @@ public class TemplateDialog extends JDialog implements ActionListener{
 		showDialog(new Template());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		accepted = "OK".equals(e.getActionCommand());

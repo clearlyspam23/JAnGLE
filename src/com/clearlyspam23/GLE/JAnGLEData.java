@@ -73,6 +73,7 @@ public class JAnGLEData {
 		return openTemplate;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List<EditorItems> setOpenTemplate(Template template) {
 		if(openTemplate!=null){
 			Set<LayerDefinition> seen = new HashSet<LayerDefinition>();
@@ -144,6 +145,7 @@ public class JAnGLEData {
 		} catch (IOException e) {
 			return false;
 		}
+		level.acknowledgeSave();
 		return true;
 	}
 

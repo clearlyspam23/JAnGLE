@@ -6,6 +6,7 @@ public interface LayerContainer {
 	
 	public void changeLayer(int index);
 	
+	@SuppressWarnings("rawtypes")
 	public Iterable<Layer> getLayers();
 
 }
