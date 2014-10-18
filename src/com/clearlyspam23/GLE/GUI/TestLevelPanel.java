@@ -82,7 +82,7 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 		level = new Level(t);
 		level.setDimensions(320, 320);
 		Layer layer = template.createLayer();
-		layer.onResize(level.getWidth(), level.getHeight());
+		layer.onResize(level, level.getWidth(), level.getHeight());
 		level.addLayer(layer);
 		
 		add(canvas, BorderLayout.CENTER);

@@ -1,7 +1,10 @@
 package com.clearlyspam23.GLE.level;
 
+
 public interface LevelChangeListener {
 	
-	public void onResize(double width, double height);
+	public void onResize(Level level, double width, double height);
+	
+	public void actionApplied(Level level, EditAction e);
 
 }

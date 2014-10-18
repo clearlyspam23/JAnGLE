@@ -9,8 +9,8 @@ import javax.swing.Icon;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.Nameable;
+import com.clearlyspam23.GLE.level.EditAction;
 
 public abstract class LayerEditManager implements PInputEventListener, Nameable{
 	

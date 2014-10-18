@@ -12,7 +12,9 @@ import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
+import com.clearlyspam23.GLE.level.Level;
 
 public class TileLayer extends Layer<Object> {
 	
@@ -108,7 +110,7 @@ public class TileLayer extends Layer<Object> {
 	}
 
 	@Override
-	public void onResize(double x, double y) {
+	public void onResize(Level level, double x, double y) {
 		tiles.resize(x, y);
 		grid.resize(x, y);
 	}
@@ -163,6 +165,11 @@ public class TileLayer extends Layer<Object> {
 	
 	public boolean refreshTilesets(){
 		return tiles.refreshNodes(getTilesetManager());
+	}
+
+	@Override
+	public void actionApplied(Level level, EditAction e) {
+		// intentionally empty
 	}
 
 }

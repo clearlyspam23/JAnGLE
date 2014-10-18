@@ -69,12 +69,14 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
+import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.level.Level;
+import com.clearlyspam23.GLE.level.LevelChangeListener;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 
-public class MainWindow extends JFrame implements ChangeLayerListener{
+public class MainWindow extends JFrame implements ChangeLayerListener, LevelChangeListener{
 
 	/**
 	 * 
@@ -296,10 +298,24 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 		menuBar.add(mnEdit);
 		
 		mntmUndo = new JMenuItem("Undo");
+		mntmUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(data.getCurrentLevel()!=null){
+					data.getCurrentLevel().undoAction();
+				}
+			}
+		});
 		mntmUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmUndo);
 		
 		mntmRedo = new JMenuItem("Redo");
+		mntmRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(data.getCurrentLevel()!=null){
+					data.getCurrentLevel().redoAction();
+				}
+			}
+		});
 		mntmRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmRedo);
 		
@@ -330,12 +346,18 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 					Component c = tabbedPane.getComponent(tabbedPane.getSelectedIndex());
 					if(c instanceof LevelPanel){
 						Layer old = null;
+						if(data.getCurrentLevel()!=null)
+							data.getCurrentLevel().removeChangeListener(MainWindow.this);
 						LevelPanel current = levelPanelMap.getNormal(data.getCurrentLevel());
 						if(current!=null){
 							old = current.getCurrentLayer();
 						}
 						LevelPanel panel = (LevelPanel)c;
 						data.setCurrentLevel(levelPanelMap.getReverse(panel));
+						if(data.getCurrentLevel()!=null){
+							data.getCurrentLevel().addChangeListener(MainWindow.this);
+							checkUndoRedo(data.getCurrentLevel());
+						}
 						if(panel!=null)
 							onLayerChange(old, panel.getCurrentLayer());
 					}
@@ -510,6 +532,16 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 		}
 	}
 	
+	private void checkNames(){
+		for(int i = 0; i < tabbedPane.getTabCount(); i++){
+			Component comp = tabbedPane.getComponentAt(i);
+			if(comp instanceof LevelPanel){
+				System.out.println("new title : " + ((LevelPanel)comp).getLevelName());
+				tabbedPane.setTitleAt(i, ((LevelPanel)comp).getLevelName());
+			}
+		}
+	}
+	
 	private void saveLevelAs(Level level){
 		if(showSaveLevelDialog(level.getName())){
 			File f = fc.getSelectedFile();
@@ -517,13 +549,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 			File ans = new File(FilenameUtils.removeExtension(f.getPath())+extension);
 			level.setSaveFile(ans);
 			saveLevel(level);
-			for(int i = 0; i < tabbedPane.getTabCount(); i++){
-				Component comp = tabbedPane.getComponentAt(i);
-				if(comp instanceof LevelPanel){
-					System.out.println("new title : " + ((LevelPanel)comp).getLevelName());
-					tabbedPane.setTitleAt(i, ((LevelPanel)comp).getLevelName());
-				}
-			}
+			checkNames();
 		}
 	}
 	
@@ -580,6 +606,11 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 		mntmSaveLevelAs.setEnabled(hasData&&data.getCurrentLevel()!=null);
 		mntmProperties.setEnabled(hasData&&data.getCurrentLevel()!=null);
 	}
+	
+	private void checkUndoRedo(Level l){
+		mntmUndo.setEnabled(l.canUndo());
+		mntmRedo.setEnabled(l.canRedo());
+	}
 
 	@Override
 	public void onLayerChange(Layer oldLayer, Layer newLayer) {
@@ -595,5 +626,17 @@ public class MainWindow extends JFrame implements ChangeLayerListener{
 				i.onShow(newLayer);
 			}
 		}
+	}
+
+	@Override
+	public void onResize(Level level, double width, double height) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionApplied(Level level, EditAction e) {
+		checkUndoRedo(level);
+		checkNames();
 	}
 }

@@ -2,9 +2,9 @@ package com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions;
 
 import java.util.List;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
+import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.util.Pair;
 
 public class EraseTileAction implements EditAction {

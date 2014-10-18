@@ -2,9 +2,9 @@ package com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions;
 
 import java.util.List;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
+import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.util.Pair;
 
 public class PlaceTileAction implements EditAction{
@@ -20,7 +20,10 @@ public class PlaceTileAction implements EditAction{
 	@Override
 	public void undoAction() {
 		for(Pair<TilePNode, Tile> p : nodes){
-			p.first.setTileset(p.second.tileset, p.second.tileX, p.second.tileY);
+			if(p.second.tileset==null||p.second.tileX<0||p.second.tileY<0)
+				p.first.resetTileset();
+			else
+				p.first.setTileset(p.second.tileset, p.second.tileX, p.second.tileY);
 		}
 	}
 

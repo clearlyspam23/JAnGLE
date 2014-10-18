@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
@@ -87,7 +86,7 @@ public class Level implements Nameable, EditActionListener{
 		for(int i = 0; i < layers.size(); i++){
 			try{
 				Layer l = layers.get(i);
-				l.onResize(width, height);
+				l.onResize(this, width, height);
 				l.buildFromData(data.layers[i].data);
 			}
 			catch(Exception e){
@@ -116,6 +115,9 @@ public class Level implements Nameable, EditActionListener{
 		undoStack.add(data);
 		redoStack.clear();
 		editCount++;
+		for(LevelChangeListener l : listeners){
+			l.actionApplied(this, data);
+		}
 	}
 	
 	public boolean canUndo(){
@@ -127,7 +129,10 @@ public class Level implements Nameable, EditActionListener{
 			EditAction e = undoStack.remove(undoStack.size()-1);
 			e.undoAction();
 			redoStack.add(e);
-			editCount++;
+			editCount--;
+			for(LevelChangeListener l : listeners){
+				l.actionApplied(this, e);
+			}
 			return true;
 		}
 		return false;
@@ -146,7 +151,10 @@ public class Level implements Nameable, EditActionListener{
 			EditAction e = redoStack.remove(redoStack.size()-1);
 			e.doAction();
 			undoStack.add(e);
-			editCount--;
+			editCount++;
+			for(LevelChangeListener l : listeners){
+				l.actionApplied(this, e);
+			}
 			return true;
 		}
 		return false;
@@ -164,7 +172,7 @@ public class Level implements Nameable, EditActionListener{
 		this.width = width;
 		this.height = height;
 		for(LevelChangeListener l : listeners){
-			l.onResize(width, height);
+			l.onResize(this, width, height);
 		}
 	}
 	
@@ -232,6 +240,10 @@ public class Level implements Nameable, EditActionListener{
 	
 	public void addChangeListener(LevelChangeListener listener){
 		listeners.add(listener);
+	}
+	
+	public void removeChangeListener(LevelChangeListener listener){
+		listeners.remove(listener);
 	}
 
 }

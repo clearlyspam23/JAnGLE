@@ -21,10 +21,10 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PBounds;
 import org.piccolo2d.util.PPaintContext;
 
-import com.clearlyspam23.GLE.EditAction;
 import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
+import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
@@ -142,7 +142,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	}
 	
 	public String getLevelName(){
-		return level.getName();
+		return level.getName() + (level.needsSave() ? " *" : "");
 	}
 	
 	public Layer getCurrentLayer(){
@@ -302,9 +302,15 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	}
 
 	@Override
-	public void onResize(double width, double height) {
+	public void onResize(Level level, double width, double height) {
 		background.setBounds(0, 0, level.getWidth(), level.getHeight());
 		outline.resize(width, height, calculateRatio(width, height));
+	}
+
+	@Override
+	public void actionApplied(Level level, EditAction e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
