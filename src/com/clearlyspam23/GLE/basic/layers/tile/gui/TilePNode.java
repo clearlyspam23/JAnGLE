@@ -91,7 +91,7 @@ public class TilePNode extends PImage {
 	}
 	
 	public Tile getTile(){
-		return new Tile(currentTileset, gridX, gridY);
+		return new Tile(currentTileset, tilesetX, tilesetY);
 	}
 
 }

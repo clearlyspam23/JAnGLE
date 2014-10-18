@@ -15,5 +15,22 @@ public class Tile {
 		this.tileX = tileX;
 		this.tileY = tileY;
 	}
+	
+	public boolean equals(Object o){
+		if(!(o instanceof Tile))
+			return false;
+		return equals((Tile)o);
+	}
+	
+	public boolean equals(Tile tile){
+		return equals(tile.tileset, tile.tileX, tile.tileY);
+	}
+	
+	public boolean equals(TilesetHandle tileset, int tileX, int tileY){
+		if(this.tileset==null){
+			return tileset==null;
+		}
+		return this.tileset.equals(tileset)&&this.tileX==tileX&&this.tileY==tileY;
+	}
 
 }

@@ -8,7 +8,6 @@ import org.piccolo2d.event.PInputEvent;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.EraseTileAction;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.PlaceTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.util.Pair;
@@ -25,11 +24,21 @@ public class EraseTileCommand extends TileDragCommand {
 		replacedList.add(new Pair<TilePNode, Tile>(tile, tile.getTile()));
 		tile.resetTileset();
 	}
+	
+	private boolean aChangeExists(){
+		for(Pair<TilePNode, Tile> p : replacedList){
+			if(p.second.tileset!=null)
+				return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected void onFinish(PInputEvent event) {
-		EraseTileAction action = new EraseTileAction(replacedList);
-		data.registerEditAction(action);
+		if(aChangeExists()){
+			EraseTileAction action = new EraseTileAction(replacedList);
+			data.registerEditAction(action);
+		}
 	}
 
 	@Override

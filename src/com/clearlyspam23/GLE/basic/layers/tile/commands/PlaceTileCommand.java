@@ -27,11 +27,21 @@ public class PlaceTileCommand extends TileDragCommand {
 		replacedList.add(new Pair<TilePNode, Tile>(tile, tile.getTile()));
 		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 	}
+	
+	private boolean aChangeExists(){
+		for(Pair<TilePNode, Tile> p : replacedList){
+			if(!p.second.equals(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+				return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected void onFinish(PInputEvent event) {
-		PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
-		data.registerEditAction(action);
+		if(aChangeExists()){
+			PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
+			data.registerEditAction(action);
+		}
 	}
 
 	@Override

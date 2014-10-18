@@ -29,6 +29,14 @@ public class FloodFillTileCommand extends TileDragCommand {
 //		tile.invalidatePaint();
 	}
 	
+	private boolean aChangeExists(){
+		for(Pair<TilePNode, Tile> p : replacedList){
+			if(!p.second.equals(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+				return true;
+		}
+		return false;
+	}
+	
 	private boolean isSameTile(TilesetHandle handle1, int x1, int y1, TilesetHandle handle2, int x2, int y2){
 		return handle1==handle2&&x1==x2&&y1==y2;
 	}
@@ -54,8 +62,10 @@ public class FloodFillTileCommand extends TileDragCommand {
 
 	@Override
 	protected void onFinish(PInputEvent event) {
-		PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
-		data.registerEditAction(action);
+		if(aChangeExists()){
+			PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
+			data.registerEditAction(action);
+		}
 	}
 
 	@Override
