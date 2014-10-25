@@ -133,65 +133,6 @@ public class TilesetViewPanel extends JPanel {
 		panel.setPreferredSize(new Dimension(width, height));
 	}
 	
-//	private void setToTileset(TilesetHandle tileset){
-//	currentTileset = tileset;
-//	selectedX = -1;
-//	selectedY = -1;
-//	panel.removeAll();
-//	buttons.clear();
-//	panel.setLayout(new GridLayout(tileset.getWidth(), tileset.getHeight()));
-//	int width = 0;
-//	int height = 0;
-//	for(int j = 0; j < tileset.getHeight(); j++){
-//		int tempWidth = 0;
-//		int tempHeight = 0;
-//		for(int i = 0; i < tileset.getWidth(); i++){
-//			final int x = i;
-//			final int y = j;
-//			ImageIcon ico = new StretchIcon(tileset.getTileAt(i, j), true);
-//			JButton button = new JButton(ico){
-//				private static final long serialVersionUID = 1L;
-//				public void setSelected(boolean flag){
-//					super.setSelected(flag);
-//					if(flag){
-//						setBorderPainted(true);
-//					}
-//					else {
-//						setBorderPainted(false);
-//					}
-//				}
-//				
-//			};
-//			button.addActionListener(new ActionListener(){
-//
-//				@Override
-//				public void actionPerformed(ActionEvent arg0) {
-//					for(JButton b : buttons)
-//						b.setSelected(false);
-//					((JButton)arg0.getSource()).setSelected(true);
-//					selectedX = x;
-//					selectedY = y;
-//				}
-//				
-//			});
-//			button.setLayout(null);
-//			button.setBorderPainted(false);
-//			button.setContentAreaFilled(false);
-//			panel.add(button);
-//			buttons.add(button);
-//			tempWidth+=tileset.getTileAt(i, j).getWidth(null);
-//			tempHeight = Math.max(tempHeight, tileset.getTileAt(i, j).getHeight(null));
-//		}
-//		width = Math.max(tempWidth, width);
-//		height+=tempHeight;
-//	}
-//	panel.setPreferredSize(new Dimension(width, height));
-//	if(tileset.getWidth()>0)
-//	{
-//		((JButton)panel.getComponent(0)).doClick();
-//	}
-//}
-	
 	public void selectTile(int x, int y){
 		selectTile(x, y, null);
 	}

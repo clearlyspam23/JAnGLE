@@ -159,8 +159,11 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			LayerEditManager nextEditor = editors.get(index);
 			editor.removeEditListener(level);
 			canvas.removeInputEventListener(editor);
-			if(isShowing()&&!editor.equals(nextEditor))
+			if(isShowing()&&!editor.equals(nextEditor)){
 				editDialogs.get(editor).setVisible(false);
+				editor.onInActive();
+				nextEditor.onActive();
+			}
 		}
 //		base.removeAllChildren();
 		//setup currentLayer
@@ -220,7 +223,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
+		System.out.println("hidden");
 		LayerEditManager manager = editors.get(selectedIndex);
+		manager.onInActive();
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(false);
 		}
@@ -269,7 +274,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		if(!isShowing())
 			//lol wut?
 			return;
+		System.out.println("showing");
 		LayerEditManager manager = editors.get(selectedIndex);
+		manager.onActive();
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(true);
 		}

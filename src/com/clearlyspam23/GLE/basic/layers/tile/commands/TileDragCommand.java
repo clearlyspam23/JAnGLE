@@ -24,6 +24,24 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 		this.data = data;
 	}
 	
+	@Override
+	protected void startDrag(PInputEvent event){
+		super.startDrag(event);
+		if(event.isLeftMouseButton()){
+			onStart(event);
+			tryPlaceImage(event.getCanvasPosition(), event.getCamera());
+		}
+	}
+	
+	@Override
+	protected void endDrag(PInputEvent event){
+		super.endDrag(event);
+		if(event.isLeftMouseButton()){
+			onFinish(event);
+			visited.clear();
+		}
+	}
+	
 	protected abstract void setTile(TilePNode tile, PCamera cam);
 	
 	protected abstract void onFinish(PInputEvent event);
@@ -37,23 +55,6 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
         }
         return false;
     }
-	
-	public void mousePressed(PInputEvent event)
-	{
-		super.mousePressed(event);
-		if(event.isLeftMouseButton()){
-			onStart(event);
-			tryPlaceImage(event.getCanvasPosition(), event.getCamera());
-		}
-	}
-	
-	public void mouseReleased(PInputEvent event){
-		super.mouseReleased(event);
-		if(event.isLeftMouseButton()){
-			onFinish(event);
-			visited.clear();
-		}
-	}
 	
 	protected void tryPlaceImage(Point2D pos, PCamera cam)
 	{

@@ -88,5 +88,13 @@ public abstract class LayerEditManager implements PInputEventListener, Nameable{
 			l.actionMade(event);
 		}
 	}
+	
+	public void onActive(){
+		System.out.println("active");
+	}
+	
+	public void onInActive(){
+		System.out.println("InActive");
+	}
 
 }

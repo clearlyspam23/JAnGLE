@@ -157,10 +157,6 @@ public class TilesetSelectionPanel extends JPanel implements TilesetViewSelectio
 			return currentTileset.getTileAt(selectedX, selectedY);
 		return null;
 	}
-	
-//	public JPanel getPanel(){
-//		return panel;
-//	}
 
 	public void clearTilesets() {
 		tilesets.clear();
