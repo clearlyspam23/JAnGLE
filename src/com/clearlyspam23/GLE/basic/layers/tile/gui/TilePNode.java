@@ -20,6 +20,8 @@ public class TilePNode extends PImage {
 	private int gridX;
 	private int gridY;
 	
+	private boolean silentlyIgnoreInput;
+	
 	public TilePNode(){
 		tilesetX = -1;
 		tilesetY = -1;
@@ -31,6 +33,8 @@ public class TilePNode extends PImage {
 	
 	public void setTileset(TilesetHandle set, int x, int y)
 	{
+		if(silentlyIgnoreInput)
+			return;
 		currentTileset = set;
 		tilesetX = x;
 		tilesetY = y;
@@ -39,6 +43,8 @@ public class TilePNode extends PImage {
 	}
 	
 	public void resetTileset(){
+		if(silentlyIgnoreInput)
+			return;
 		currentTileset = null;
 		tilesetX = -1;
 		tilesetY = -1;
@@ -92,6 +98,14 @@ public class TilePNode extends PImage {
 	
 	public Tile getTile(){
 		return new Tile(currentTileset, tilesetX, tilesetY);
+	}
+
+	public boolean isSilentlyIgnoringInput() {
+		return silentlyIgnoreInput;
+	}
+
+	public void silentlyIgnoreInput(boolean silentlyIgnoreInput) {
+		this.silentlyIgnoreInput = silentlyIgnoreInput;
 	}
 
 }

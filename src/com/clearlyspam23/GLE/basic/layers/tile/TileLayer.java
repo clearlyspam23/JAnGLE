@@ -8,7 +8,7 @@ import org.piccolo2d.PNode;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 import com.clearlyspam23.GLE.level.EditAction;
@@ -19,8 +19,8 @@ public class TileLayer extends Layer<Object> {
 	
 	private TileLayerTemplate template;
 	
-	private PNode base;
-	private TileLayerPNode tiles;
+	private BasePNode base;
+//	private TileLayerPNode tiles;
 	private AxisAlignedRectGridNode grid;
 	private TilesetEditorData data;
 	
@@ -28,20 +28,18 @@ public class TileLayer extends Layer<Object> {
 	{
 		super(template.getDefinition());
 		this.template = template;
-		base = new PNode();
+		base = new BasePNode(template);
 		data = ((TileLayerDefinition)template.getDefinition()).getEditorData();
-		tiles = new TileLayerPNode(template.getGridWidth(), template.getGridHeight());
-		base.addChild(tiles);
 		grid = new AxisAlignedRectGridNode(template.getGridWidth(), template.getGridHeight());
 		grid.setTransparency(0);
 	}
 
 	@Override
 	public Object getExportData() {
-		if(tiles==null)
+		if(base==null||base.getTiles()==null)
 			return new CompactExportData[0];
 		Map<TilesetHandle, CompactExportData> dataMap = new HashMap<TilesetHandle, CompactExportData>();
-		TilePNode[][] grid = tiles.getNodeGrid();
+		TilePNode[][] grid = base.getTiles().getNodeGrid();
 		for(int i = 0; i < grid.length; i++){
 			for(int j = 0; j < grid[i].length; j++){
 				if(grid[i][j]==null||grid[i][j].getTileset()==null)
@@ -93,10 +91,10 @@ public class TileLayer extends Layer<Object> {
 			for(int i = 0; i < d.tiles.length; i++){
 				for(int j = 0; j < d.tiles[i].length; j++){
 					if(d.tiles[i][j]<0){
-						tiles.getNodeGrid()[j][i].resetTileset();
+						base.getTiles().getNodeGrid()[j][i].resetTileset();
 					}
 					else{
-						tiles.getNodeGrid()[j][i].setTileset(ts, ts.getXFromIndex(d.tiles[i][j]), ts.getYFromIndex(d.tiles[i][j]));
+						base.getTiles().getNodeGrid()[j][i].setTileset(ts, ts.getXFromIndex(d.tiles[i][j]), ts.getYFromIndex(d.tiles[i][j]));
 					}
 				}
 			}
@@ -110,7 +108,7 @@ public class TileLayer extends Layer<Object> {
 
 	@Override
 	public void onResize(Level level, double x, double y) {
-		tiles.resize(x, y);
+		base.resize(x, y);
 		grid.resize(x, y);
 	}
 	
@@ -148,7 +146,7 @@ public class TileLayer extends Layer<Object> {
 	}
 	
 	public boolean refreshTilesets(){
-		return tiles.refreshNodes(getTilesetManager());
+		return base.refreshTilesets(getTilesetManager());
 	}
 
 	@Override

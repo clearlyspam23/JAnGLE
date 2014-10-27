@@ -21,6 +21,7 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
+import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
 import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
 import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
@@ -47,7 +48,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	private PNode base;
 	private PNode background;
-	private OutlineBoxNode outline;
+	private FixedWidthOutlineBoxNode outline;
 	
 	private List<PNode> layers = new ArrayList<PNode>();
 	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
@@ -77,7 +78,9 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		background.setPaint(backgroundColor);
 		background.setBounds(0, 0, level.getWidth(), level.getHeight());
 		
-		outline = new OutlineBoxNode(level.getWidth(), level.getHeight(), calculateRatio(level.getWidth(), level.getHeight()));
+		base = new PNode();
+		
+		outline = new FixedWidthOutlineBoxNode(level.getWidth(), level.getHeight(), 8, canvas.getCamera());
 		outline.setPickable(false);
 		outline.setChildrenPickable(false);
 //		
@@ -94,7 +97,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		
 		add(canvas, BorderLayout.CENTER);
 		
-		base = new PNode();
 		canvas.getLayer().addChild(base);
 		base.addChild(background);
 		
@@ -134,9 +136,11 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		if(width/d.width>height/d.height){
 			//the bigger ratio is horizontal
 			double w = d.width*3/4;
+			System.out.println(w/width);
 			return w/width;
 		}
 		double h = d.height*3/4;
+		System.out.println(h/height);
 		return h/height;
 	}
 	
@@ -314,7 +318,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	@Override
 	public void onResize(Level level, double width, double height) {
 		background.setBounds(0, 0, level.getWidth(), level.getHeight());
-		outline.resize(width, height, calculateRatio(width, height));
+		outline.resize(width, height);
 	}
 
 	@Override

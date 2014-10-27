@@ -13,6 +13,7 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
@@ -30,6 +31,10 @@ public class TilesetEditorData extends LayerEditManager implements ChangeListene
 	private List<PInputEventListener> allEvents = new ArrayList<PInputEventListener>();
 	
 	private TilesetSelectionPanel selectionPanel;
+	
+	private Tile[][] cutSelection;
+	
+	
 	
 //	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
 	
@@ -115,6 +120,14 @@ public class TilesetEditorData extends LayerEditManager implements ChangeListene
 	@Override
 	public String getName() {
 		return "Tile Layer";
+	}
+
+	public Tile[][] getCutSelection() {
+		return cutSelection;
+	}
+
+	public void setCutSelection(Tile[][] cutSelection) {
+		this.cutSelection = cutSelection;
 	}
 
 }

@@ -10,12 +10,15 @@ import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
 
 public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	
 	protected TilesetEditorData data;
+	
+	private TileLayerPNode currentNode;
 	
 	protected Set<TilePNode> visited = new HashSet<TilePNode>();
 	
@@ -37,6 +40,7 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	protected void endDrag(PInputEvent event){
 		super.endDrag(event);
 		if(event.isLeftMouseButton()){
+			currentNode = null;
 			onFinish(event);
 			visited.clear();
 		}
@@ -61,7 +65,9 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 		PNode p = getPickedNode(pos, cam);
         if(p instanceof TilePNode){
         	TilePNode tile = (TilePNode)p;
-        	if(!visited.contains(tile)){
+        	if(currentNode == null)
+        		currentNode = (TileLayerPNode) tile.getParent();
+        	if(!visited.contains(tile)&&currentNode.equals(tile.getParent())){
         		visited.add(tile);
         		setTile(tile, cam);
         	}
