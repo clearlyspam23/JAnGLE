@@ -155,18 +155,19 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		return null;
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void changeLayer(int index){
 		Layer old = null;
 		if(selectedIndex>=0){
+			old = level.getLayers().get(selectedIndex);
 			LayerEditManager editor = editors.get(selectedIndex);
 			LayerEditManager nextEditor = editors.get(index);
 			editor.removeEditListener(level);
 			canvas.removeInputEventListener(editor);
 			if(isShowing()&&!editor.equals(nextEditor)){
 				editDialogs.get(editor).setVisible(false);
-				editor.onInActive();
-				nextEditor.onActive();
+				editor.onInActive(old);
+				nextEditor.onActive(level.getLayers().get(index));
 			}
 		}
 //		base.removeAllChildren();
@@ -225,11 +226,12 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
 		System.out.println("hidden");
 		LayerEditManager manager = editors.get(selectedIndex);
-		manager.onInActive();
+		manager.onInActive(level.getLayers().get(selectedIndex));
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(false);
 		}
@@ -273,6 +275,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void componentShown(ComponentEvent arg0) {
 		if(!isShowing())
@@ -280,7 +283,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			return;
 		System.out.println("showing");
 		LayerEditManager manager = editors.get(selectedIndex);
-		manager.onActive();
+		manager.onActive(level.getLayers().get(selectedIndex));
 		if(editDialogs.containsKey(manager)){
 			editDialogs.get(manager).setVisible(true);
 		}

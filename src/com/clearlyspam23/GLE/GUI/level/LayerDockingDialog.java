@@ -11,11 +11,12 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable;
 import bibliothek.gui.dock.common.intern.DefaultCDockable.Permissions;
 import bibliothek.gui.dock.util.DirectWindowProvider;
 
+import com.clearlyspam23.GLE.GUI.ComponentData;
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 
 public class LayerDockingDialog extends JDialog{
 	
-	public LayerDockingDialog(Frame frame, String layerName, LayerEditManager manager){
+	public LayerDockingDialog(Frame frame, String layerName, LayerEditManager<?> manager){
 		super(frame, layerName);
 		control = new CControl(new DirectWindowProvider(this));
 		
@@ -32,11 +33,11 @@ public class LayerDockingDialog extends JDialog{
         
         CGrid grid = new CGrid( control );
         int i = 0;
-        LayerEditManager.ComponentData main = manager.getMainComponent();
+        ComponentData main = manager.getMainComponent();
         DefaultSingleCDockable dockable = new DefaultSingleCDockable(Integer.toString(i++), main.icon, main.name, null, Permissions.MAX);
         dockable.add(main.component);
         grid.add(0, 0, 1, 1, dockable);
-        for(LayerEditManager.ComponentData c : manager.getSubComponents()){
+        for(ComponentData c : manager.getSubComponents()){
         	dockable = new DefaultSingleCDockable(Integer.toString(i++), main.icon, main.name, null, Permissions.MAX_EXT_STACK);
             dockable.add(c.component);
             grid.add(0, 1, 1, 1, dockable);

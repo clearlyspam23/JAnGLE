@@ -13,6 +13,9 @@ public class BasePNode extends PNode {
 	private static final long serialVersionUID = 1L;
 	private TileLayerPNode tiles;
 	
+	private TileBox selection;
+	private PNode selectionNode;
+	
 	public BasePNode(TileLayerTemplate template){
 		tiles = new TileLayerPNode(template.getGridWidth(), template.getGridHeight());
 		addChild(tiles);
@@ -28,6 +31,34 @@ public class BasePNode extends PNode {
 	
 	public void resize(double x, double y){
 		tiles.resize(x, y);
+	}
+
+	public TileBox getSelection() {
+		return selection;
+	}
+
+	public void setSelection(TileBox selection) {
+		if(selectionNode!=null)
+			selectionNode.removeFromParent();
+		if(this.selection!=null){
+			this.selection.lostSelection();
+		}
+		
+		this.selection = selection;
+		if(selection!=null){
+			selectionNode = selection.getPNode();
+			addChild(selectionNode);
+		}
+		else
+			selectionNode = null;
+	}
+	
+	public boolean canCut(){
+		return selection!=null&&selection.canCut();
+	}
+	
+	public boolean canCopy(){
+		return selection!=null&&selection.canCopy();
 	}
 
 }

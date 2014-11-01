@@ -11,27 +11,13 @@ import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.level.Layer;
 
-public abstract class LayerEditManager implements PInputEventListener, Nameable{
+@SuppressWarnings("rawtypes")
+public abstract class LayerEditManager <T extends Layer> implements PInputEventListener, Nameable{
 	
 	private ComponentData mainComponent;
 	
-	public static class ComponentData{
-		public Component component;
-		public String name;
-		public Icon icon;
-		
-		public ComponentData(Component component, String name){
-			this.component = component;
-			this.name = name;
-		}
-		
-		public ComponentData(Component component, String name, Icon icon){
-			this.component = component;
-			this.name = name;
-			this.icon = icon;
-		}
-	}
 	private List<ComponentData> subComponents = new ArrayList<ComponentData>();
 	private List<PInputEventListener> eventListeners = new ArrayList<PInputEventListener>();
 	private final List<EditActionListener> editListeners = new ArrayList<EditActionListener>();
@@ -89,12 +75,12 @@ public abstract class LayerEditManager implements PInputEventListener, Nameable{
 		}
 	}
 	
-	public void onActive(){
-		System.out.println("active");
+	public void onActive(T layer){
+		
 	}
 	
-	public void onInActive(){
-		System.out.println("InActive");
+	public void onInActive(T layer){
+		
 	}
 
 }
