@@ -39,11 +39,18 @@ public class OutlineBoxNode extends PNode{
 		resize(width, height, strokeWidth);
 	}
 	
+	public boolean setBounds(double x, double y, double width, double height){
+		if(super.setBounds(x, y, width, height)){
+			rect.setRect(0, 0, width, height);
+			return true;
+		}
+		return false;
+	}
+	
 	public void resize(double width, double height, float strokeWidth){
 		this.strokeWidth = strokeWidth;
 		this.setBounds(0, 0, width, height);
 		stroke = new BasicStroke(strokeWidth);
-		rect.setRect(0, 0, width, height);
 	}
 
 }

@@ -15,8 +15,14 @@ public class FixedWidthOutlineBoxNode extends PNode {
 	private static final long serialVersionUID = 1L;
 	private Stroke stroke;
 	private Rectangle2D rect;
+	private Color color;
 	
 	public FixedWidthOutlineBoxNode(double width, double height, float strokeWidth, PCamera camera){
+		this(width, height, strokeWidth, camera, Color.BLACK);
+	}
+	
+	public FixedWidthOutlineBoxNode(double width, double height, float strokeWidth, PCamera camera, Color color){
+		this.color = color;
 		stroke = new FixedWidthStroke(strokeWidth, camera);
 		rect = new Rectangle2D.Double(0, 0, width, height);
 		setBounds(0, 0, width, height);
@@ -25,13 +31,21 @@ public class FixedWidthOutlineBoxNode extends PNode {
 	protected void paint(PPaintContext paintContext) {
 
         Graphics2D g2 = paintContext.getGraphics();
-        g2.setPaint(Color.BLACK);
+        g2.setPaint(color);
         g2.setBackground(new Color(0, 0, 0, 0));
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setStroke(stroke);
         g2.draw(rect);
     }
+	
+	public void setColor(Color color){
+		this.color = color;
+	}
+	
+	public Color getColor(){
+		return color;
+	}
 	
 	public boolean setBounds(final double x, final double y, final double width, final double height){
 		if(super.setBounds(x, y, width, height)){
