@@ -15,5 +15,7 @@ public interface TileBox {
 	public void onCut();
 	
 	public PNode getPNode();
+	
+	public void onAdd(PNode node);
 
 }
