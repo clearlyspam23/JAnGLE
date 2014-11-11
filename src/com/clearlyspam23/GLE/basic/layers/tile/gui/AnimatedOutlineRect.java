@@ -6,8 +6,12 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
+import javax.swing.SwingUtilities;
+
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
+import org.piccolo2d.activities.PActivity;
+import org.piccolo2d.extras.PFrame;
 import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.util.FixedWidthStroke;
@@ -19,18 +23,52 @@ public class AnimatedOutlineRect extends PNode {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private FixedWidthStroke[] strokes = new FixedWidthStroke[6];
-	private int state;
+	private FixedWidthStroke[] strokes = new FixedWidthStroke[12];
+	private int state = 0;
 	private Line2D gridLine = new Line2D.Double();
+	private AnimationActivity activity = new AnimationActivity();
+	
+	public static void main(String[] args){
+		SwingUtilities.invokeLater(new Runnable() {
+			 
+            @Override
+            public void run() {
+                PFrame frame = new PFrame();
+                AnimatedOutlineRect rect = new AnimatedOutlineRect(frame.getCanvas().getCamera());
+                rect.setBounds(0, 0, 200, 200);
+                frame.getCanvas().getLayer().addChild(rect);
+                frame.getCanvas().getRoot().addActivity(rect.getAnimationActivity());
+            }
+        });
+	}
+	
+	private class AnimationActivity extends PActivity{
+
+		public AnimationActivity() {
+			super(-1, 100);
+		}
+		
+		protected void activityStep(long elapsedTime) {
+            super.activityStep(elapsedTime);
+                            
+            incrementState();
+            repaint();
+    }
+		
+	}
 	
 	public AnimatedOutlineRect(PCamera camera){
-		for(int i =0 ; i > strokes.length; i++){
+		for(int i =0 ; i < strokes.length; i++){
 			strokes[i] = new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{6, 6}, i, camera);
 		}
 	}
 	
 	public void incrementState(){
 		state = (state+1)%strokes.length;
+	}
+	
+	public PActivity getAnimationActivity(){
+		return activity;
 	}
 	
 	protected void paint(PPaintContext paintContext) {
