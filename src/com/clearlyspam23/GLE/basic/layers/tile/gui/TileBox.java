@@ -2,6 +2,8 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+
 public interface TileBox {
 	
 	public void lostSelection();
@@ -10,9 +12,9 @@ public interface TileBox {
 	
 	public boolean canCut();
 	
-	public void onCopy();
+	public Tile[][] onCopy();
 	
-	public void onCut();
+	public Tile[][] onCut();
 	
 	public PNode getPNode();
 	

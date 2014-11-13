@@ -82,11 +82,11 @@ public class AnimatedOutlineRect extends PNode {
         
         gridLine.setLine(getX(), getY(), getX()+getWidth(), getY());
         g2.draw(gridLine);
-        gridLine.setLine(getX(), getY(), getX(), getY()+getHeight());
-        g2.draw(gridLine);
         gridLine.setLine(getX()+getWidth(), getY(), getX()+getWidth(), getY()+getHeight());
         g2.draw(gridLine);
-        gridLine.setLine(getX(), getY()+getHeight(), getX()+getWidth(), getY()+getHeight());
+        gridLine.setLine(getX()+getWidth(), getY()+getHeight(), getX(), getY()+getHeight());
+        g2.draw(gridLine);
+        gridLine.setLine(getX(), getY()+getHeight(), getX(), getY());
         g2.draw(gridLine);
 
         g2.setStroke(new BasicStroke(0));
