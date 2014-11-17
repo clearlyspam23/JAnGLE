@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
@@ -27,6 +28,14 @@ public class TileLayerPNode extends PNode{
 		this.gridWidth = gridWidth;
 		this.gridHeight = gridHeight;
 		nodeGrid = new TilePNode[0][0];
+	}
+	
+	public double getGridWidth(){
+		return gridWidth;
+	}
+	
+	public double getGridHeight(){
+		return gridHeight;
 	}
 	
 	public void resize(double width, double height){
@@ -98,6 +107,17 @@ public class TileLayerPNode extends PNode{
 	
 	public TilePNode[][] getNodeGrid(){
 		return nodeGrid;
+	}
+	
+	public Tile[][] getTiles(){
+		Tile[][] ans = new Tile[nodeGrid.length][];
+		for(int i = 0; i < nodeGrid.length; i++){
+			ans[i] = new Tile[nodeGrid[i].length];
+			for(int j = 0; j < nodeGrid[i].length; j++){
+				ans[i][j] = nodeGrid[i][j].getTile();
+			}
+		}
+		return ans;
 	}
 	
 	/**
