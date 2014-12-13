@@ -23,6 +23,15 @@ public class AnimatedOutlineRect extends PNode {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public static final int RIGHT = 1;
+	public static final int LEFT = 2;
+	public static final int TOP = 4;
+	public static final int BOTTOM = 8;
+	public static final int ALL = RIGHT + LEFT + TOP + BOTTOM;
+	public static final int NONE = 0;
+	
+	private int drawMask;
+	
 	private FixedWidthStroke[] strokes = new FixedWidthStroke[12];
 	private int state = 0;
 	private Line2D gridLine = new Line2D.Double();
@@ -34,10 +43,14 @@ public class AnimatedOutlineRect extends PNode {
             @Override
             public void run() {
                 PFrame frame = new PFrame();
-                AnimatedOutlineRect rect = new AnimatedOutlineRect(frame.getCanvas().getCamera());
+                AnimatedOutlineRect rect = new AnimatedOutlineRect(frame.getCanvas().getCamera(), LEFT+RIGHT+TOP);
+                AnimatedOutlineRect botRect = new AnimatedOutlineRect(frame.getCanvas().getCamera(), LEFT+RIGHT+BOTTOM);
                 rect.setBounds(0, 0, 200, 200);
+                botRect.setBounds(0, 200, 200, 200);
                 frame.getCanvas().getLayer().addChild(rect);
                 frame.getCanvas().getRoot().addActivity(rect.getAnimationActivity());
+                frame.getCanvas().getLayer().addChild(botRect);
+                frame.getCanvas().getRoot().addActivity(botRect.getAnimationActivity());
             }
         });
 	}
@@ -58,9 +71,58 @@ public class AnimatedOutlineRect extends PNode {
 	}
 	
 	public AnimatedOutlineRect(PCamera camera){
+		this(camera, ALL);
+	}
+	
+	public AnimatedOutlineRect(PCamera camera, int drawOptions){
 		for(int i =0 ; i < strokes.length; i++){
 			strokes[i] = new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{6, 6}, i, camera);
 		}
+		drawMask = drawOptions;
+	}
+	
+	public void setDrawRight(boolean flag){
+		drawMask&=~RIGHT;
+		if(flag)
+			drawMask|=RIGHT;
+	}
+	
+	public boolean isDrawingRight(){
+		return (drawMask&RIGHT)==RIGHT;
+	}
+	
+	public void setDrawLeft(boolean flag){
+		drawMask&=~LEFT;
+		if(flag)
+			drawMask|=LEFT;
+	}
+	
+	public boolean isDrawingLeft(){
+		return (drawMask&LEFT)==LEFT;
+	}
+	
+	public void setDrawTop(boolean flag){
+		drawMask&=~TOP;
+		if(flag)
+			drawMask|=TOP;
+	}
+	
+	public boolean isDrawingTop(){
+		return (drawMask&TOP)==TOP;
+	}
+	
+	public void setDrawBottom(boolean flag){
+		drawMask&=~BOTTOM;
+		if(flag)
+			drawMask|=BOTTOM;
+	}
+	
+	public boolean isDrawingBottom(){
+		return (drawMask&BOTTOM)==BOTTOM;
+	}
+	
+	public void setDrawMask(int mask){
+		drawMask = mask;
 	}
 	
 	public void incrementState(){
@@ -80,15 +142,22 @@ public class AnimatedOutlineRect extends PNode {
         g2.setStroke(strokes[state]);
         g2.setPaint(Color.BLACK);
         
-        gridLine.setLine(getX(), getY(), getX()+getWidth(), getY());
-        g2.draw(gridLine);
-        gridLine.setLine(getX()+getWidth(), getY(), getX()+getWidth(), getY()+getHeight());
-        g2.draw(gridLine);
-        gridLine.setLine(getX()+getWidth(), getY()+getHeight(), getX(), getY()+getHeight());
-        g2.draw(gridLine);
-        gridLine.setLine(getX(), getY()+getHeight(), getX(), getY());
-        g2.draw(gridLine);
-
+        if(isDrawingTop()){
+        	gridLine.setLine(getX(), getY(), getX()+getWidth(), getY());
+            g2.draw(gridLine);
+        }
+        if(isDrawingRight()){
+        	gridLine.setLine(getX()+getWidth(), getY(), getX()+getWidth(), getY()+getHeight());
+            g2.draw(gridLine);
+        }
+        if(isDrawingBottom()){
+        	gridLine.setLine(getX()+getWidth(), getY()+getHeight(), getX(), getY()+getHeight());
+            g2.draw(gridLine);
+        }
+        if(isDrawingLeft()){
+        	 gridLine.setLine(getX(), getY()+getHeight(), getX(), getY());
+        	 g2.draw(gridLine);
+        }
         g2.setStroke(new BasicStroke(0));
     }
 

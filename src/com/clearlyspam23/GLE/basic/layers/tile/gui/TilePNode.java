@@ -42,6 +42,10 @@ public class TilePNode extends PImage {
 			setImage(currentTileset.getTileAt(tilesetX, tilesetY));
 	}
 	
+	public void setTileset(Tile tile){
+		setTileset(tile.tileset, tile.tileX, tile.tileY);
+	}
+	
 	public void resetTileset(){
 		if(silentlyIgnoreInput)
 			return;
