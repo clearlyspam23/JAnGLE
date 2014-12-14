@@ -1,9 +1,12 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
+import java.util.List;
+
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
 public class SelectionTileBox implements TileBox {
 	
@@ -23,6 +26,29 @@ public class SelectionTileBox implements TileBox {
 			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight());
 			this.camera = camera;
 			this.lowerLayer = lowerLayer;
+		}
+		
+		public void setToTiles(List<TileLocation> locations){
+			int lowestX = Integer.MAX_VALUE;
+			int lowestY = Integer.MAX_VALUE;
+			int highestX = 0;
+			int highestY = 0;
+			for(TileLocation l : locations){
+				lowestX = Math.min(lowestX, l.gridX);
+				lowestY = Math.min(lowestY, l.gridY);
+				highestX = Math.max(highestX, l.gridX);
+				highestY = Math.max(highestY, l.gridY);
+			}
+			
+		}
+		
+		public void onNodeAdd(TilePNode node){
+			
+		}
+		
+		@Override
+		public void onChange(TilePNode changedNode, Tile previous, Tile next) {
+			
 		}
 		
 	}

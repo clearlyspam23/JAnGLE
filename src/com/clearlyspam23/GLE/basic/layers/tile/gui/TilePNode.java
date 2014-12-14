@@ -1,6 +1,8 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.piccolo2d.nodes.PImage;
 
@@ -8,6 +10,11 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TilePNode extends PImage {
+	
+	public static interface TileChangeListener{
+		
+		public void onChange(TilePNode changedNode, Tile previous, Tile next);
+	}
 
 	/**
 	 * 
@@ -22,6 +29,8 @@ public class TilePNode extends PImage {
 	
 	private boolean silentlyIgnoreInput;
 	
+	private List<TileChangeListener> listeners = new ArrayList<TileChangeListener>();
+	
 	public TilePNode(){
 		tilesetX = -1;
 		tilesetY = -1;
@@ -35,11 +44,23 @@ public class TilePNode extends PImage {
 	{
 		if(silentlyIgnoreInput)
 			return;
+		Tile prev = getTile();
 		currentTileset = set;
 		tilesetX = x;
 		tilesetY = y;
 		if(currentTileset!=null&&currentTileset.isValidLocation(tilesetX, tilesetY))
 			setImage(currentTileset.getTileAt(tilesetX, tilesetY));
+		Tile curr = getTile();
+		if(!prev.equals(curr))
+			for(TileChangeListener l : listeners)
+				l.onChange(this, prev, curr);
+	}
+	
+	public void setTilesetHard(TilesetHandle set, int x, int y){
+		boolean b = silentlyIgnoreInput;
+		silentlyIgnoreInput  = false;
+		setTileset(set, x, y);
+		silentlyIgnoreInput = b;
 	}
 	
 	public void setTileset(Tile tile){
@@ -49,11 +70,23 @@ public class TilePNode extends PImage {
 	public void resetTileset(){
 		if(silentlyIgnoreInput)
 			return;
+		Tile prev = getTile();
 		currentTileset = null;
 		tilesetX = -1;
 		tilesetY = -1;
 		setImage((Image)null);
 		invalidatePaint();
+		Tile curr = getTile();
+		if(!prev.equals(curr))
+			for(TileChangeListener l : listeners)
+				l.onChange(this, prev, curr);
+	}
+	
+	public void resetTilesetHard(){
+		boolean b = silentlyIgnoreInput;
+		silentlyIgnoreInput  = false;
+		resetTilesetHard();
+		silentlyIgnoreInput = b;
 	}
 
 	public TilesetHandle getTileset() {
@@ -110,6 +143,14 @@ public class TilePNode extends PImage {
 
 	public void silentlyIgnoreInput(boolean silentlyIgnoreInput) {
 		this.silentlyIgnoreInput = silentlyIgnoreInput;
+	}
+	
+	public void addChangeListener(TileChangeListener l){
+		listeners.add(l);
+	}
+	
+	public void removeChangeListener(TileChangeListener l){
+		listeners.remove(l);
 	}
 
 }

@@ -9,7 +9,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
-public class TileLayerPNode extends PNode{
+public class TileLayerPNode extends PNode implements TilePNode.TileChangeListener{
 
 	/**
 	 * 
@@ -99,10 +99,12 @@ public class TileLayerPNode extends PNode{
 	}
 	
 	private void addPNode(int i, int j, double width, double height, double gridWidth, double gridHeight, TilePNode pnode){
+		pnode.addChangeListener(this);
 		nodeGrid[i][j] = pnode;
 		pnode.setGridLocation(i, j);
 		addChild(nodeGrid[i][j]);
 		nodeGrid[i][j].setBounds(gridWidth*i, gridHeight*j, width, height);
+		onNodeAdd(pnode);
 	}
 	
 	public TilePNode[][] getNodeGrid(){
@@ -171,5 +173,14 @@ public class TileLayerPNode extends PNode{
 			}
 		}
 		return output;
+	}
+
+	@Override
+	public void onChange(TilePNode changedNode, Tile previous, Tile next) {
+		
+	}
+	
+	public void onNodeAdd(TilePNode node) {
+		
 	}
 }
