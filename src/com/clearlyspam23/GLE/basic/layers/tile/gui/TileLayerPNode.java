@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
@@ -23,6 +24,8 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	private double gridWidth;
 	private double gridHeight;
 	
+	private TileLocation gridOffset = new TileLocation();
+	
 	public TileLayerPNode(double gridWidth, double gridHeight)
 	{
 		this.gridWidth = gridWidth;
@@ -38,9 +41,11 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		return gridHeight;
 	}
 	
-	public void resize(double width, double height){
+	@Override
+	public boolean setBounds(double x, double y, double width, double height){
 		this.removeAllChildren();
-		setBounds(0, 0, width, height);
+		if(!super.setBounds(x, y, width, height))
+			return false;
 		double rowsd = width/gridWidth;
 		double columnsd = height/gridHeight;
 		int rows = (int) rowsd;
@@ -73,18 +78,12 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 					addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
 			}
 		}
+		return true;
 	}
 	
-//	private TileLayerPNode(TileLayerPNode base){
-//		
-//		nodeGrid = new TilePNode[base.nodeGrid.length][base.nodeGrid.length>0 ? base.nodeGrid[0].length : 0];
-//		for(int i = 0; i < base.nodeGrid.length; i++){
-//			for(int j = 0; j < base.nodeGrid.length; j++){
-//				nodeGrid[i][j] = base.nodeGrid[i][j].getCopy();
-//				addChild(nodeGrid[i][j]);
-//			}
-//		}
-//	}
+	public void resize(double width, double height){
+		setBounds(0, 0, width, height);
+	}
 	
 	private void addNewPNode(int i, int j, double width, double height){
 		addNewPNode(i, j, width, height, width, height);
@@ -111,10 +110,18 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		return nodeGrid;
 	}
 	
-	public Tile[][] getTiles(){
-		Tile[][] ans = new Tile[nodeGrid.length][];
+	public TilePNode getNodeAt(int x, int y){
+		return nodeGrid[x-gridOffset.gridX][y-gridOffset.gridY];
+	}
+	
+	public TilePNode getNodeAt(TileLocation location){
+		return getNodeAt(location.gridX, location.gridY);
+	}
+	
+	public TileData[][] getTiles(){
+		TileData[][] ans = new TileData[nodeGrid.length][];
 		for(int i = 0; i < nodeGrid.length; i++){
-			ans[i] = new Tile[nodeGrid[i].length];
+			ans[i] = new TileData[nodeGrid[i].length];
 			for(int j = 0; j < nodeGrid[i].length; j++){
 				ans[i][j] = nodeGrid[i][j].getTile();
 			}
@@ -174,13 +181,49 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		}
 		return output;
 	}
+	
+	public void setGridOffset(int x, int y){
+		gridOffset.set(x, y);
+	}
+	
+	public void setGridOffset(TileLocation loc){
+		setGridOffset(loc.gridX, loc.gridY);
+	}
+	
+	public void setGridOffsetX(int x){
+		setGridOffset(x, gridOffset.gridY);
+	}
+	
+	public void setGridOffsetY(int y){
+		setGridOffset(gridOffset.gridX, y);
+	}
+	
+	public int getGridOffsetX(){
+		return gridOffset.gridX;
+	}
+	
+	public int getGridOffsetY(){
+		return gridOffset.gridY;
+	}
+	
+	public TileLocation getGridOffset(){
+		return gridOffset.copy();
+	}
+	
+	public void clearAllTiles(){
+		for(TilePNode[] p : nodeGrid){
+			for(TilePNode t : p){
+				t.resetTilesetHard();
+			}
+		}
+	}
 
 	@Override
-	public void onChange(TilePNode changedNode, Tile previous, Tile next) {
+	public void onChange(TilePNode changedNode, TileData previous, TileData next) {
 		
 	}
 	
-	public void onNodeAdd(TilePNode node) {
+	protected void onNodeAdd(TilePNode node) {
 		
 	}
 }

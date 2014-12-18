@@ -7,13 +7,15 @@ import java.util.List;
 import org.piccolo2d.nodes.PImage;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 
 public class TilePNode extends PImage {
 	
 	public static interface TileChangeListener{
 		
-		public void onChange(TilePNode changedNode, Tile previous, Tile next);
+		public void onChange(TilePNode changedNode, TileData previous, TileData next);
 	}
 
 	/**
@@ -21,36 +23,47 @@ public class TilePNode extends PImage {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private TilesetHandle currentTileset;
-	private int tilesetX;
-	private int tilesetY;
-	private int gridX;
-	private int gridY;
+	private Tile tile;
+	
+//	private TilesetHandle currentTileset;
+//	private int tilesetX;
+//	private int tilesetY;
+//	private int gridX;
+//	private int gridY;
+//	
+//	private TileLocation offset;
 	
 	private boolean silentlyIgnoreInput;
 	
 	private List<TileChangeListener> listeners = new ArrayList<TileChangeListener>();
 	
 	public TilePNode(){
-		tilesetX = -1;
-		tilesetY = -1;
+		this(null, -1, -1, new TileLocation());
 	}
 	
 	public TilePNode(TilesetHandle set, int x, int y){
-		setTileset(set, x, y);
+		this(set, x, y, new TileLocation());
+	}
+	
+	public TilePNode(TilesetHandle set, int x, int y, TileLocation offset){
+		this(new Tile(set, x, y, new TileLocation(), offset));
+	}
+	
+	public TilePNode(Tile t){
+		tile = t;
+		if(tile.isValid())
+			setImage(tile.getTileImage());
 	}
 	
 	public void setTileset(TilesetHandle set, int x, int y)
 	{
 		if(silentlyIgnoreInput)
 			return;
-		Tile prev = getTile();
-		currentTileset = set;
-		tilesetX = x;
-		tilesetY = y;
-		if(currentTileset!=null&&currentTileset.isValidLocation(tilesetX, tilesetY))
-			setImage(currentTileset.getTileAt(tilesetX, tilesetY));
-		Tile curr = getTile();
+		TileData prev = getTile();
+		tile.setTileset(set, x, y);
+		if(tile.isValid())
+			setImage(tile.getTileImage());
+		TileData curr = getTile();
 		if(!prev.equals(curr))
 			for(TileChangeListener l : listeners)
 				l.onChange(this, prev, curr);
@@ -63,20 +76,18 @@ public class TilePNode extends PImage {
 		silentlyIgnoreInput = b;
 	}
 	
-	public void setTileset(Tile tile){
+	public void setTileset(TileData tile){
 		setTileset(tile.tileset, tile.tileX, tile.tileY);
 	}
 	
 	public void resetTileset(){
 		if(silentlyIgnoreInput)
 			return;
-		Tile prev = getTile();
-		currentTileset = null;
-		tilesetX = -1;
-		tilesetY = -1;
+		TileData prev = getTile();
+		tile.resetTileset();
 		setImage((Image)null);
 		invalidatePaint();
-		Tile curr = getTile();
+		TileData curr = getTile();
 		if(!prev.equals(curr))
 			for(TileChangeListener l : listeners)
 				l.onChange(this, prev, curr);
@@ -90,28 +101,35 @@ public class TilePNode extends PImage {
 	}
 
 	public TilesetHandle getTileset() {
-		return currentTileset;
+		return tile.tileset;
 	}
 
 	public int getTilesetX() {
-		return tilesetX;
+		return tile.tileX;
 	}
 
 	public int getTilesetY() {
-		return tilesetY;
+		return tile.tileY;
 	}
 	
 	public void setGridLocation(int x, int y){
-		gridX = x;
-		gridY = y;
+		tile.relativeLocation.set(x, y);
 	}
 	
 	public int getGridX(){
-		return gridX;
+		return tile.getLocation().gridX;
 	}
 	
 	public int getGridy(){
-		return gridY;
+		return tile.getLocation().gridY;
+	}
+	
+	public int getRawGridX(){
+		return tile.relativeLocation.gridX;
+	}
+	
+	public int getRawGridy(){
+		return tile.relativeLocation.gridY;
 	}
 	
 	@Override
@@ -126,15 +144,13 @@ public class TilePNode extends PImage {
 	}
 	
 	public TilePNode getCopy(){
-		TilePNode ans = new TilePNode(currentTileset, tilesetX, tilesetY);
+		TilePNode ans = new TilePNode(tile.copyTile());
 		ans.setBounds(getX(), getY(), getWidth(), getHeight());
-		ans.setImage(getImage());
-		ans.setGridLocation(gridX, gridY);
 		return ans;
 	}
 	
-	public Tile getTile(){
-		return new Tile(currentTileset, tilesetX, tilesetY);
+	public TileData getTile(){
+		return tile.copyTileData();
 	}
 
 	public boolean isSilentlyIgnoringInput() {

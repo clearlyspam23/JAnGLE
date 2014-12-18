@@ -2,7 +2,7 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 
 public interface TileBox {
 	
@@ -12,9 +12,9 @@ public interface TileBox {
 	
 	public boolean canCut();
 	
-	public Tile[][] onCopy();
+	public TileData[][] onCopy();
 	
-	public Tile[][] onCut();
+	public TileData[][] onCut();
 	
 	public PNode getPNode();
 	

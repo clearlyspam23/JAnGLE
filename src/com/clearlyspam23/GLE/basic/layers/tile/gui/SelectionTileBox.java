@@ -5,7 +5,7 @@ import java.util.List;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
 
-import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
 public class SelectionTileBox implements TileBox {
@@ -29,6 +29,9 @@ public class SelectionTileBox implements TileBox {
 		}
 		
 		public void setToTiles(List<TileLocation> locations){
+			if(locations.isEmpty())
+				return;
+			clearAllTiles();
 			int lowestX = Integer.MAX_VALUE;
 			int lowestY = Integer.MAX_VALUE;
 			int highestX = 0;
@@ -39,15 +42,23 @@ public class SelectionTileBox implements TileBox {
 				highestX = Math.max(highestX, l.gridX);
 				highestY = Math.max(highestY, l.gridY);
 			}
-			
+			double startX = lowestX*getGridWidth();
+			double startY = lowestY*getGridHeight();
+			double width = Math.min(lowerLayer.getWidth()-startX, (highestX-lowestX+1)*getGridWidth());
+			double height = Math.min(lowerLayer.getHeight()-startY, (highestY-lowestY+1)*getGridHeight());
+			this.setBounds(startX, startY, width, height);
+			this.setGridOffset(lowestX, lowestY);
+			for(TileLocation l : locations){
+				
+			}
 		}
 		
-		public void onNodeAdd(TilePNode node){
+		protected void onNodeAdd(TilePNode node){
 			
 		}
 		
 		@Override
-		public void onChange(TilePNode changedNode, Tile previous, Tile next) {
+		public void onChange(TilePNode changedNode, TileData previous, TileData next) {
 			
 		}
 		
@@ -76,13 +87,13 @@ public class SelectionTileBox implements TileBox {
 	}
 
 	@Override
-	public Tile[][] onCopy() {
+	public TileData[][] onCopy() {
 		return null;
 
 	}
 
 	@Override
-	public Tile[][] onCut() {
+	public TileData[][] onCut() {
 		return null;
 	}
 

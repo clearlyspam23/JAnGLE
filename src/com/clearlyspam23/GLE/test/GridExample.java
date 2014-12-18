@@ -137,6 +137,7 @@ public class GridExample extends PFrame {
 //        gridLayer.setPickable(false);
         base.addChild(n);
         base.addChild(n2);
+        base.setBounds(0, 0, 180, 180);
         //getCanvas().getLayer().addChild(base);
 //        getCanvas().getLayer().addChild(n);
 //        getCanvas().getLayer().addChild(n2);

@@ -6,7 +6,7 @@ import java.util.List;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.event.PInputEvent;
 
-import com.clearlyspam23.GLE.basic.layers.tile.Tile;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.PlaceTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
@@ -16,7 +16,7 @@ import com.clearlyspam23.GLE.util.Pair;
 
 public class FloodFillTileCommand extends TileDragCommand {
 	
-	protected List<Pair<TilePNode, Tile>> replacedList;
+	protected List<Pair<TilePNode, TileData>> replacedList;
 	
 	
 	public FloodFillTileCommand(TilesetEditorData data){
@@ -30,7 +30,7 @@ public class FloodFillTileCommand extends TileDragCommand {
 	}
 	
 	private boolean aChangeExists(){
-		for(Pair<TilePNode, Tile> p : replacedList){
+		for(Pair<TilePNode, TileData> p : replacedList){
 			if(!p.second.equals(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
 				return true;
 		}
@@ -46,7 +46,7 @@ public class FloodFillTileCommand extends TileDragCommand {
 			return;
 		if(!isSameTile(target, targetX, targetY, node.getTileset(), node.getTilesetX(), node.getTilesetY()))
 			return;
-		replacedList.add(new Pair<TilePNode, Tile>(node, node.getTile()));
+		replacedList.add(new Pair<TilePNode, TileData>(node, node.getTile()));
 		node.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 		int x = node.getGridX();
 		int y = node.getGridy();
@@ -63,14 +63,14 @@ public class FloodFillTileCommand extends TileDragCommand {
 	@Override
 	protected void onFinish(PInputEvent event) {
 		if(aChangeExists()){
-			PlaceTileAction action = new PlaceTileAction(replacedList, new Tile(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
+			PlaceTileAction action = new PlaceTileAction(replacedList, new TileData(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
 			data.registerEditAction(action);
 		}
 	}
 
 	@Override
 	protected void onStart(PInputEvent event) {
-		replacedList = new ArrayList<Pair<TilePNode, Tile>>();
+		replacedList = new ArrayList<Pair<TilePNode, TileData>>();
 	}
 
 }

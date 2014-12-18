@@ -13,5 +13,14 @@ public class TileLocation {
 		this.gridX = gridX;
 		this.gridY = gridY;
 	}
+	
+	public TileLocation copy(){
+		return new TileLocation(gridX, gridY);
+	}
+	
+	public void set(int x, int y){
+		gridX = x;
+		gridY = y;
+	}
 
 }
