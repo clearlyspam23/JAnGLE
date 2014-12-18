@@ -217,6 +217,22 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 			}
 		}
 	}
+	
+	public void silentlyIgnoreInput(boolean flag){
+		for(TilePNode[] p : nodeGrid){
+			for(TilePNode t : p){
+				t.silentlyIgnoreInput(flag);
+			}
+		}
+	}
+	
+	public void setTilesPickable(boolean flag){
+		for(TilePNode[] p : nodeGrid){
+			for(TilePNode t : p){
+				t.setPickable(flag);
+			}
+		}
+	}
 
 	@Override
 	public void onChange(TilePNode changedNode, TileData previous, TileData next) {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
@@ -28,15 +29,18 @@ public class SelectionTileBox implements TileBox {
 			this.lowerLayer = lowerLayer;
 		}
 		
-		public void setToTiles(List<TileLocation> locations){
-			if(locations.isEmpty())
+		public void setToTiles(List<Tile> tiles){
+			if(tiles.isEmpty())
 				return;
 			clearAllTiles();
+			silentlyIgnoreInput(true);
+			setTilesPickable(false);
 			int lowestX = Integer.MAX_VALUE;
 			int lowestY = Integer.MAX_VALUE;
 			int highestX = 0;
 			int highestY = 0;
-			for(TileLocation l : locations){
+			for(Tile t : tiles){
+				TileLocation l = t.getLocation();
 				lowestX = Math.min(lowestX, l.gridX);
 				lowestY = Math.min(lowestY, l.gridY);
 				highestX = Math.max(highestX, l.gridX);
@@ -48,8 +52,11 @@ public class SelectionTileBox implements TileBox {
 			double height = Math.min(lowerLayer.getHeight()-startY, (highestY-lowestY+1)*getGridHeight());
 			this.setBounds(startX, startY, width, height);
 			this.setGridOffset(lowestX, lowestY);
-			for(TileLocation l : locations){
-				
+			for(Tile t : tiles){
+				TilePNode node = getNodeAt(t.getLocation());
+				node.silentlyIgnoreInput(false);
+				node.setPickable(true);
+				node.setTileset(t);
 			}
 		}
 		

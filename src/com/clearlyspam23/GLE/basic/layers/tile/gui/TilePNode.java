@@ -50,7 +50,7 @@ public class TilePNode extends PImage {
 	}
 	
 	public TilePNode(Tile t){
-		tile = t;
+		tile = t.copyTile();
 		if(tile.isValid())
 			setImage(tile.getTileImage());
 	}
