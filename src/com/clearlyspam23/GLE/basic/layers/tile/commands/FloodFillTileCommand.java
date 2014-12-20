@@ -46,7 +46,7 @@ public class FloodFillTileCommand extends TileDragCommand {
 			return;
 		if(!isSameTile(target, targetX, targetY, node.getTileset(), node.getTilesetX(), node.getTilesetY()))
 			return;
-		replacedList.add(new Pair<TilePNode, TileData>(node, node.getTile()));
+		replacedList.add(new Pair<TilePNode, TileData>(node, node.getTileData()));
 		node.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 		int x = node.getGridX();
 		int y = node.getGridy();

@@ -59,11 +59,11 @@ public class TilePNode extends PImage {
 	{
 		if(silentlyIgnoreInput)
 			return;
-		TileData prev = getTile();
+		TileData prev = getTileData();
 		tile.setTileset(set, x, y);
 		if(tile.isValid())
 			setImage(tile.getTileImage());
-		TileData curr = getTile();
+		TileData curr = getTileData();
 		if(!prev.equals(curr))
 			for(TileChangeListener l : listeners)
 				l.onChange(this, prev, curr);
@@ -83,11 +83,11 @@ public class TilePNode extends PImage {
 	public void resetTileset(){
 		if(silentlyIgnoreInput)
 			return;
-		TileData prev = getTile();
+		TileData prev = getTileData();
 		tile.resetTileset();
 		setImage((Image)null);
 		invalidatePaint();
-		TileData curr = getTile();
+		TileData curr = getTileData();
 		if(!prev.equals(curr))
 			for(TileChangeListener l : listeners)
 				l.onChange(this, prev, curr);
@@ -149,8 +149,12 @@ public class TilePNode extends PImage {
 		return ans;
 	}
 	
-	public TileData getTile(){
+	public TileData getTileData(){
 		return tile.copyTileData();
+	}
+	
+	public Tile getTile(){
+		return tile.copyTile();
 	}
 
 	public boolean isSilentlyIgnoringInput() {

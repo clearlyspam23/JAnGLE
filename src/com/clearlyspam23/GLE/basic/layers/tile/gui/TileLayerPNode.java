@@ -123,7 +123,7 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		for(int i = 0; i < nodeGrid.length; i++){
 			ans[i] = new TileData[nodeGrid[i].length];
 			for(int j = 0; j < nodeGrid[i].length; j++){
-				ans[i][j] = nodeGrid[i][j].getTile();
+				ans[i][j] = nodeGrid[i][j].getTileData();
 			}
 		}
 		return ans;

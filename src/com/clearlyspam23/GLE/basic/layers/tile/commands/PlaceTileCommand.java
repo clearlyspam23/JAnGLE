@@ -24,7 +24,7 @@ public class PlaceTileCommand extends TileDragCommand {
 	protected void setTile(TilePNode tile, PCamera cam){
 		if(data.getSelectedTile()==null)
 			return;
-		replacedList.add(new Pair<TilePNode, TileData>(tile, tile.getTile()));
+		replacedList.add(new Pair<TilePNode, TileData>(tile, tile.getTileData()));
 		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 	}
 	

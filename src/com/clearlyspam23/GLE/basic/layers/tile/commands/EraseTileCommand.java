@@ -21,7 +21,7 @@ public class EraseTileCommand extends TileDragCommand {
 	}
 	
 	protected void setTile(TilePNode tile, PCamera cam){
-		replacedList.add(new Pair<TilePNode, TileData>(tile, tile.getTile()));
+		replacedList.add(new Pair<TilePNode, TileData>(tile, tile.getTileData()));
 		tile.resetTileset();
 	}
 	

@@ -29,8 +29,8 @@ public class SelectionTileBox implements TileBox {
 			this.lowerLayer = lowerLayer;
 		}
 		
-		public void setToTiles(List<Tile> tiles){
-			if(tiles.isEmpty())
+		public void setToTiles(List<TileLocation> locations){
+			if(locations.isEmpty())
 				return;
 			clearAllTiles();
 			silentlyIgnoreInput(true);
@@ -39,8 +39,7 @@ public class SelectionTileBox implements TileBox {
 			int lowestY = Integer.MAX_VALUE;
 			int highestX = 0;
 			int highestY = 0;
-			for(Tile t : tiles){
-				TileLocation l = t.getLocation();
+			for(TileLocation l : locations){
 				lowestX = Math.min(lowestX, l.gridX);
 				lowestY = Math.min(lowestY, l.gridY);
 				highestX = Math.max(highestX, l.gridX);
@@ -52,11 +51,39 @@ public class SelectionTileBox implements TileBox {
 			double height = Math.min(lowerLayer.getHeight()-startY, (highestY-lowestY+1)*getGridHeight());
 			this.setBounds(startX, startY, width, height);
 			this.setGridOffset(lowestX, lowestY);
-			for(Tile t : tiles){
+			for(TileLocation l : locations){
+				TilePNode p = lowerLayer.getNodeAt(l);
+				Tile t = p.getTile();
 				TilePNode node = getNodeAt(t.getLocation());
 				node.silentlyIgnoreInput(false);
 				node.setPickable(true);
 				node.setTileset(t);
+			}
+		}
+		
+		public void setToBox(TileLocation bottomLeft, TileLocation topRight){
+			setToBox(bottomLeft.gridX, bottomLeft.gridY, topRight.gridX-bottomLeft.gridX + 1, topRight.gridY-bottomLeft.gridY + 1);
+		}
+		
+		public void setToBox(int x, int y, int width, int height){
+			if(width<=0||height<=0)
+				return;
+			clearAllTiles();
+			setTilesPickable(true);
+			silentlyIgnoreInput(false);
+			double startX = x*getGridWidth();
+			double startY = y*getGridHeight();
+			double w = Math.min(lowerLayer.getWidth()-x, (width)*getGridWidth());
+			double h = Math.min(lowerLayer.getHeight()-y, (height)*getGridHeight());
+			this.setBounds(startX, startY, w, h);
+			this.setGridOffset(x, y);
+			for(int i = 0; i < width; i++){
+				for(int j = 0; j < height; j++){
+					TilePNode p = lowerLayer.getNodeAt(i+x, j+y);
+					Tile t = p.getTile();
+					TilePNode node = getNodeAt(t.getLocation());
+					node.setTileset(t);
+				}
 			}
 		}
 		
