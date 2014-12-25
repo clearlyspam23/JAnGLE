@@ -198,17 +198,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		
 		final TemplateDialog dialog = new TemplateDialog(data);
 		dialog.setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
-//		dialog.setVisible(true);
-//		Template t = dialog.getTemplate();
-//		TemplateSerializer serializer = new TemplateSerializer(manager);
-//		if(t!=null){
-//			String s = serializer.serialize(t);
-//			PrintWriter w = new PrintWriter(t.getTemplateFile());
-//			w.print(s);
-//			w.close();
-//			Template recreate = serializer.deserialize(s, t.getTemplateFile());
-//			System.out.println(recreate);
-//		}
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -508,17 +497,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	private void openLevels(){
 		if(showOpenLevelDialog()){
 			openLevels(fc.getSelectedFiles());
-//			for(File f : fc.getSelectedFiles()){
-//				try{
-//					openLevel(data.openLevel(f));
-//				}
-//				catch(IOException e){
-//					JOptionPane.showMessageDialog(this, "Unable to Open Level " + f.getAbsolutePath() + " : Access Might Be Denied", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
-//				}
-//				catch(Exception e){
-//					JOptionPane.showMessageDialog(this, "Unable to Deserialize " + f.getAbsolutePath() + " : A Mismatching Template Might Be Open", "Error Opening Level", JOptionPane.ERROR_MESSAGE);
-//				}
-//			}
 		}
 	}
 	
@@ -566,7 +544,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	private boolean showOpenTemplateDialog(){
 		fc.setDialogType(JFileChooser.OPEN_DIALOG);
 		fc.setCurrentDirectory(new File(Template.defaultLocation));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (*.jant)", "jant");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("JAnGLE Templates (* " + JAnGLEData.TEMPLATE_EXTENSION + ")", JAnGLEData.TEMPLATE_EXTENSION);
 		fc.setFileFilter(filter);
 		fc.setMultiSelectionEnabled(false);
 		int ret = fc.showOpenDialog(MainWindow.this);

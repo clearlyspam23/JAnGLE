@@ -22,7 +22,6 @@ import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
-import com.clearlyspam23.GLE.GUI.util.OutlineBoxNode;
 import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
@@ -52,7 +51,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	private List<PNode> layers = new ArrayList<PNode>();
 	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
-	
 	private Map<LayerEditManager, JDialog> editDialogs;
 	
 	private List<ChangeLayerListener> listeners = new ArrayList<ChangeLayerListener>();
@@ -158,6 +156,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void changeLayer(int index){
 		Layer old = null;
+		//if the old layer exists, inform it that it is no longer active
 		if(selectedIndex>=0){
 			old = level.getLayers().get(selectedIndex);
 			LayerEditManager editor = editors.get(selectedIndex);
@@ -170,8 +169,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 				nextEditor.onActive(level.getLayers().get(index));
 			}
 		}
-//		base.removeAllChildren();
-		//setup currentLayer
+		//set the current index, and have the all of the other nodes become unpickable
 		selectedIndex = index;
 		for(int i = 0; i < layers.size(); i++){
 			PNode node = layers.get(i);
@@ -183,35 +181,19 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 				node.setPickable(false);
 				node.setChildrenPickable(false);
 			}
-//			if(i<selectedIndex){
-//				node.setTransparency(1);
-//				node.setPickable(false);
-//				node.setChildrenPickable(false);
-//			}
-//			else if(i==selectedIndex){
-//				node.setTransparency(1);
-//				node.setPickable(true);
-//				node.setChildrenPickable(true);
-//			}
-//			else{
-//				node.setTransparency(1f);
-//				node.setPickable(false);
-//				node.setChildrenPickable(false);
-//			}
 		}
 		currentLayer = level.getLayers().get(selectedIndex);
+		//if there was an overlay, remove it
 		if(overlayNode!=null)
 			base.removeChild(overlayNode);
+		//if the new layer has an overlay, show it
 		overlayNode = currentLayer.getOverlayGUI();
 		if(overlayNode!=null)
 			base.addChild(overlayNode);
+		//get the edit manager for this layer
 		LayerEditManager editor = editors.get(selectedIndex);
-//		for(PInputEventListener l : currentLayer.getListeners()){
 		canvas.addInputEventListener(editor);
 		editor.addEditListener(level);
-//			currentListeners.add(l);
-//			canvas.addInputEventListener(l);
-//		}
 		if(!editDialogs.containsKey(editor)){
 			LayerDockingDialog dialog = new LayerDockingDialog(myFrame, editor.getName(), editor);
 			dialog.setSize(300, 800);
@@ -219,8 +201,6 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 		if(isShowing())
 			editDialogs.get(editor).setVisible(true);
-//			for(LayerEditorDialog d : currentLayer.getEditors(getFrame())){
-//				d.setVisible(true);
 		for(ChangeLayerListener l : listeners){
 			l.onLayerChange(old, level.getLayers().get(selectedIndex));
 		}

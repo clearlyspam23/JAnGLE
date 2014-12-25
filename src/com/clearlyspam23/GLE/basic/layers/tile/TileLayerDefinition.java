@@ -100,4 +100,10 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 		return editorData;
 	}
 
+	@Override
+	public TileLayerTemplate buildDefault() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

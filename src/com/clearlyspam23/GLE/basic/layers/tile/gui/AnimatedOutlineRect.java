@@ -48,14 +48,14 @@ public class AnimatedOutlineRect extends PNode {
                 rect.setBounds(0, 0, 200, 200);
                 botRect.setBounds(0, 200, 200, 200);
                 frame.getCanvas().getLayer().addChild(rect);
-                frame.getCanvas().getRoot().addActivity(rect.getAnimationActivity());
+                rect.getRoot().addActivity(rect.getAnimationActivity());
                 frame.getCanvas().getLayer().addChild(botRect);
-                frame.getCanvas().getRoot().addActivity(botRect.getAnimationActivity());
+                rect.getRoot().getRoot().addActivity(botRect.getAnimationActivity());
             }
         });
 	}
 	
-	private class AnimationActivity extends PActivity{
+	public class AnimationActivity extends PActivity{
 
 		public AnimationActivity() {
 			super(-1, 100);
@@ -129,7 +129,7 @@ public class AnimatedOutlineRect extends PNode {
 		state = (state+1)%strokes.length;
 	}
 	
-	public PActivity getAnimationActivity(){
+	public AnimationActivity getAnimationActivity(){
 		return activity;
 	}
 	

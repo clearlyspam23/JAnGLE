@@ -18,6 +18,12 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 	public abstract E buildFromEditorGUI(T gui);
 	
 	/**
+	 * method to build a default LayerTemplate for this layer, used for editing without "templates"
+	 * @return a Default LayerTemplate
+	 */
+	public abstract E buildDefault();
+	
+	/**
 	 * essentially the inverse method to buildFromEditorGUI, this method should take a gui and a template,
 	 * and set the gui to reflect the template
 	 * @param gui

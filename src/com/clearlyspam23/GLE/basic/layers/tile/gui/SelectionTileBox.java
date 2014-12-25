@@ -1,9 +1,11 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
+import org.piccolo2d.activities.PActivity;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
@@ -22,6 +24,7 @@ public class SelectionTileBox implements TileBox {
 		private TileLayerPNode lowerLayer;
 		
 		private PCamera camera;
+		private List<AnimatedOutlineRect> boundingRect = new ArrayList<AnimatedOutlineRect>();
 
 		public SelectionPNode(PCamera camera, TileLayerPNode lowerLayer) {
 			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight());
