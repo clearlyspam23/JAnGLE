@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.test;
+package com.clearlyspam23.GLE.debug;
 
 import java.awt.Color;
 import java.awt.Component;

@@ -1,19 +1,20 @@
-package com.clearlyspam23.GLE.test;
+package com.clearlyspam23.GLE.debug;
 
 import java.awt.Color;
 
 import javax.swing.JPanel;
 
-import bibliothek.gui.dock.DefaultDockable;
+import bibliothek.gui.dock.common.DefaultSingleCDockable;
 
-public class ColorDockable extends DefaultDockable{
-	private JPanel panel;
+public class ColorSingleCDockable extends DefaultSingleCDockable{
+	private JPanel panel = new JPanel();
 	
-	public ColorDockable( String title, Color color ){
+	public ColorSingleCDockable( String title, Color color ){
 		this( title, color, 1.0f );
 	}
 	
-	public ColorDockable( String title, Color color, float brightness ){
+	public ColorSingleCDockable( String title, Color color, float brightness ){
+		super( title );
 		setTitleText( title );
 
 		if( brightness != 1.0 ){
@@ -29,13 +30,10 @@ public class ColorDockable extends DefaultDockable{
 	}
 	
 	public void setColor( Color color ){
-		if( panel == null ){
-			panel = new JPanel();
-			panel.setOpaque( true );
-			add( panel );
-		}
-		
+		panel = new JPanel();
+		panel.setOpaque( true );
 		panel.setBackground( color );
+		add( panel );
 		setTitleIcon( new ColorIcon( color ) );
 	}
 	
