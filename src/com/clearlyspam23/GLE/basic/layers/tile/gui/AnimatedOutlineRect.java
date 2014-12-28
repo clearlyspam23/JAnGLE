@@ -9,14 +9,14 @@ import java.awt.geom.Line2D;
 import javax.swing.SwingUtilities;
 
 import org.piccolo2d.PCamera;
-import org.piccolo2d.PNode;
 import org.piccolo2d.activities.PActivity;
 import org.piccolo2d.extras.PFrame;
 import org.piccolo2d.util.PPaintContext;
 
+import com.clearlyspam23.GLE.GUI.util.AnimatedPNode;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthStroke;
 
-public class AnimatedOutlineRect extends PNode {
+public class AnimatedOutlineRect extends AnimatedPNode {
 
 	/**
 	 * 
@@ -28,6 +28,8 @@ public class AnimatedOutlineRect extends PNode {
 	public static final int TOP = 4;
 	public static final int BOTTOM = 8;
 	public static final int ALL = RIGHT + LEFT + TOP + BOTTOM;
+	public static final int LEFT_AND_RIGHT = LEFT | RIGHT;
+	public static final int TOP_AND_BOTTOM = TOP | BOTTOM;
 	public static final int NONE = 0;
 	
 	private int drawMask;
@@ -48,9 +50,7 @@ public class AnimatedOutlineRect extends PNode {
                 rect.setBounds(0, 0, 200, 200);
                 botRect.setBounds(0, 200, 200, 200);
                 frame.getCanvas().getLayer().addChild(rect);
-                rect.getRoot().addActivity(rect.getAnimationActivity());
                 frame.getCanvas().getLayer().addChild(botRect);
-                rect.getRoot().getRoot().addActivity(botRect.getAnimationActivity());
             }
         });
 	}
@@ -129,10 +129,6 @@ public class AnimatedOutlineRect extends PNode {
 		state = (state+1)%strokes.length;
 	}
 	
-	public AnimationActivity getAnimationActivity(){
-		return activity;
-	}
-	
 	protected void paint(PPaintContext paintContext) {
 
         Graphics2D g2 = paintContext.getGraphics();
@@ -160,5 +156,10 @@ public class AnimatedOutlineRect extends PNode {
         }
         g2.setStroke(new BasicStroke(0));
     }
+
+	@Override
+	public PActivity getActivity() {
+		return activity;
+	}
 
 }

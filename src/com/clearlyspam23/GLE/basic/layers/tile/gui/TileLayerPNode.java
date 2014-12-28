@@ -17,6 +17,9 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	public static final String PROPERTY_GRID_DIMENSIONS = "GRID";
+	public static final String PROPERTY_LAYER_DIMENSIONS = "LAYER";
+	
 	private TilePNode[][] nodeGrid;
 	
 	private static final double epsilon = 1e-4;

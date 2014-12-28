@@ -2,11 +2,20 @@ package com.clearlyspam23.GLE.GUI.util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 import org.piccolo2d.PNode;
+import org.piccolo2d.PRoot;
 import org.piccolo2d.activities.PActivity;
 
 public abstract class AnimatedPNode extends PNode implements PropertyChangeListener{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private ArrayList<PNode> parentsList = new ArrayList<PNode>();
+	private PRoot lastRoot;
 	
 	public AnimatedPNode() {
 		super();
@@ -21,20 +30,19 @@ public abstract class AnimatedPNode extends PNode implements PropertyChangeListe
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		if(arg0.getOldValue() instanceof PNode){
-			PNode node = ((PNode)arg0.getOldValue());
-			if(node.getRoot()!=null)
-				node.getRoot().getActivityScheduler().removeActivity(getActivity());
+		if(lastRoot!=getRoot()){
+			PActivity act = getActivity();
+			if(lastRoot!=null&&lastRoot.getActivityScheduler().getActivitiesReference().contains(act))
+				lastRoot.getActivityScheduler().removeActivity(act);
+			lastRoot = getRoot();
+			if(lastRoot!=null)
+				lastRoot.addActivity(act);
 		}
-		if(arg0.getNewValue() instanceof PNode){
-			PNode node = ((PNode)arg0.getNewValue());
-			if(node.getRoot()!=null){
-				node.getRoot().addActivity(getActivity());
-				if(arg0.getSource()!=this&&arg0.getSource() instanceof PNode)
-					((PNode)arg0.getSource()).removePropertyChangeListener(PROPERTY_PARENT, this);
-			}
-			else
-				node.addPropertyChangeListener(PROPERTY_PARENT, this);
+		for(PNode parent : parentsList)
+			parent.removePropertyChangeListener(PROPERTY_PARENT, this);
+		parentsList.clear();
+		for(PNode node = getParent(); node != null; node = node.getParent()){
+			node.addPropertyChangeListener(PROPERTY_PARENT, this);
 		}
 	}
 	

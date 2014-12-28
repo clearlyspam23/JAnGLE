@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
-import org.piccolo2d.activities.PActivity;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
@@ -96,16 +95,89 @@ public class SelectionTileBox implements TileBox {
 		
 		@Override
 		public void onChange(TilePNode changedNode, TileData previous, TileData next) {
-			
+			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridy()).setTileset(next);
+		}
+		
+		public List<AnimatedOutlineRect> calculateBoundingRect(){
+			boundingRect.clear();
+			TilePNode[][] grid = getNodeGrid();
+			int[][] sideGrid = new int[grid.length][];
+			for(int i = 0; i < grid.length; i++){
+				sideGrid[i] = new int[grid[i].length];
+				for(int j = 0; j < grid[i].length; j++){
+					sideGrid[i][j] = AnimatedOutlineRect.NONE;
+					if(grid[i][j]==null)
+						continue;
+					//perform edge detection, if any edges are detected, create an animated node
+					if(i-1<0||grid[i-1][j]==null)
+						sideGrid[i][j]|=AnimatedOutlineRect.LEFT;
+					if(i+1>=grid.length||grid[i+1][j]==null)
+						sideGrid[i][j]|=AnimatedOutlineRect.RIGHT;
+					if(j-1<0||grid[i][j-1]==null)
+						sideGrid[i][j]|=AnimatedOutlineRect.TOP;
+					if(j+1>=grid[i].length||grid[i][j+1]==null)
+						sideGrid[i][j]|=AnimatedOutlineRect.BOTTOM;
+				}
+			}
+			//try to build the largest Rectangles possible
+			//this is an optimization, and can be removed if buggy
+			for(int i = 0; i < sideGrid.length; i++){
+				for(int j = 0; j < sideGrid[i].length; j++){
+					if(sideGrid[i][j]!=AnimatedOutlineRect.NONE){
+						//grab as much of the matching sides as we can
+						//this should go down and grab nodes with the same left and right as us
+						//after that, grab as much of the top and bottom as we can
+						//go around in a circle to try and ensure that we're grabbing what we actually can
+						int leftHeight = 1;
+						int rightHeight = 1;
+						int topWidth = 1;
+						int bottomWidth = 1;
+						for(; leftHeight + j < sideGrid[i].length && 
+								(sideGrid[i][leftHeight+j]&AnimatedOutlineRect.LEFT_AND_RIGHT)==(sideGrid[i][j]&AnimatedOutlineRect.LEFT_AND_RIGHT)
+								&&sideGrid[i][leftHeight+j]!=AnimatedOutlineRect.NONE; leftHeight++)
+						{}
+						for(; topWidth + i < sideGrid.length && 
+								(sideGrid[i + topWidth][j]&AnimatedOutlineRect.TOP_AND_BOTTOM)==(sideGrid[i][j]&AnimatedOutlineRect.TOP_AND_BOTTOM)
+										&&sideGrid[i+topWidth][j]!=AnimatedOutlineRect.NONE; topWidth++)
+						{}
+						for(; rightHeight + j < sideGrid[i].length && 
+								(sideGrid[i+topWidth-1][rightHeight+j]&AnimatedOutlineRect.LEFT_AND_RIGHT)==(sideGrid[i+topWidth-1][j]&AnimatedOutlineRect.LEFT_AND_RIGHT)
+										&&sideGrid[i+topWidth-1][rightHeight+j]!=AnimatedOutlineRect.NONE; rightHeight++)
+						{}
+						for(; bottomWidth + i < sideGrid.length && 
+								(sideGrid[i + bottomWidth][j+leftHeight-1]&AnimatedOutlineRect.TOP_AND_BOTTOM)==(sideGrid[i][j+leftHeight-1]&AnimatedOutlineRect.TOP_AND_BOTTOM)
+										&&sideGrid[i + bottomWidth][j+leftHeight-1]!=AnimatedOutlineRect.NONE; bottomWidth++)
+						{}
+						int width = Math.min(topWidth, bottomWidth);
+						int height = Math.min(leftHeight, rightHeight);
+						int value = sideGrid[i][j]&(AnimatedOutlineRect.LEFT|AnimatedOutlineRect.TOP);
+						value|=(sideGrid[i+width-1][j]&AnimatedOutlineRect.RIGHT);
+						value|=(sideGrid[i][j+height-1]&AnimatedOutlineRect.BOTTOM);
+						AnimatedOutlineRect rect = new AnimatedOutlineRect(camera, value);
+						rect.setBounds(grid[i][j].getBounds().getBounds2D());
+						boundingRect.add(rect);
+						for(int k = 0; k < width; k++){
+							sideGrid[i+k][j] = 0;
+							sideGrid[i+k][j+height-1] = 0;
+						}
+						for(int k = 0; k < height; k++){
+							sideGrid[i][j+k] = 0;
+							sideGrid[i+width-1][k] = 0;
+						}
+					}
+				}
+			}
+			return boundingRect;
 		}
 		
 	}
 	
 	private SelectionPNode selectionNode;
+	private PNode overlayNode = new PNode();
 	
 	public SelectionTileBox(PCamera camera, TileLayerPNode node){
 		selectionNode = new SelectionPNode(camera, node);
-		
+		node.addChild(selectionNode);
 	}
 
 	@Override
@@ -146,6 +218,12 @@ public class SelectionTileBox implements TileBox {
 	
 	public void expandToTile(int x, int y){
 		
+	}
+
+	@Override
+	public PNode getOverlayNode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

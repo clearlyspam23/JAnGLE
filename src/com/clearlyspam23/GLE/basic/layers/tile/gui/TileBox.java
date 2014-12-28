@@ -18,6 +18,8 @@ public interface TileBox {
 	
 	public PNode getPNode();
 	
+	public PNode getOverlayNode();
+	
 	public void onAdd(PNode node);
 
 }
