@@ -17,7 +17,7 @@ public class BasePNode extends PNode {
 	private PNode selectionNode;
 	
 	public BasePNode(TileLayerTemplate template){
-		tiles = new TileLayerPNode(template.getGridWidth(), template.getGridHeight());
+		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight());
 		addChild(tiles);
 	}
 

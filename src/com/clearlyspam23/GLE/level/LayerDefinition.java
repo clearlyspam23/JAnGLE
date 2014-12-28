@@ -40,7 +40,7 @@ public abstract class LayerDefinition<T extends SubPanel, E extends LayerTemplat
 	 * @param template the template being opened
 	 * @return an EditorItems object describing the various GUIs employed by this type of layer, or null if there are no GUI elements
 	 */
-	public EditorItems onTemplateOpen(Template template){
+	public EditorItems<? extends Layer<?>> onTemplateOpen(Template template){
 		return null;
 	}
 	

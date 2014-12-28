@@ -50,7 +50,7 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 		TileLayerDefinition def = new TileLayerDefinition();
 		
 		TileLayerTemplate template = new TileLayerTemplate(def);
-		template.setGridDimensions(32, 32);
+		template.setDefaultGridDimensions(32, 32);
 		
 		level = new Level(t);
 		level.setDimensions(320, 320);

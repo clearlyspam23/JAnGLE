@@ -41,13 +41,24 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		return gridHeight;
 	}
 	
+	public void setGridDimensions(double width, double height){
+		gridWidth = width;
+		gridHeight = height;
+		refreshNodes();
+	}
+	
 	@Override
 	public boolean setBounds(double x, double y, double width, double height){
 		this.removeAllChildren();
 		if(!super.setBounds(x, y, width, height))
 			return false;
-		double rowsd = width/gridWidth;
-		double columnsd = height/gridHeight;
+		refreshNodes();
+		return true;
+	}
+	
+	private void refreshNodes(){
+		double rowsd = getWidth()/gridWidth;
+		double columnsd = getHeight()/gridHeight;
 		int rows = (int) rowsd;
 		int columns = (int) columnsd;
 		TilePNode[][] oldNodeGrid = nodeGrid;
@@ -78,11 +89,10 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 					addNewPNode(i, columns, gridWidth, remainder, gridWidth, gridHeight);
 			}
 		}
-		return true;
 	}
 	
 	public void resize(double width, double height){
-		setBounds(0, 0, width, height);
+		setBounds(getX(), getY(), width, height);
 	}
 	
 	private void addNewPNode(int i, int j, double width, double height){

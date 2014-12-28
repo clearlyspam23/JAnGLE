@@ -30,7 +30,7 @@ public class TileLayer extends Layer<Object> {
 		this.template = template;
 		base = new BasePNode(template);
 		data = ((TileLayerDefinition)template.getDefinition()).getEditorData();
-		grid = new AxisAlignedRectGridNode(template.getGridWidth(), template.getGridHeight());
+		grid = new AxisAlignedRectGridNode(template.getDefaultGridWidth(), template.getDefaultGridHeight());
 		grid.setTransparency(0);
 	}
 
@@ -138,7 +138,7 @@ public class TileLayer extends Layer<Object> {
 	}
 	
 	public float minBorderWidth(){
-		return (float) (Math.min(template.getGridWidth(), template.getGridHeight())/10);
+		return (float) (Math.min(template.getDefaultGridWidth(), template.getDefaultGridHeight())/10);
 	}
 	
 	public PNode getOverlayGUI(){

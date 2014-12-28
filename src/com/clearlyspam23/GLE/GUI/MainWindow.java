@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,10 +178,31 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	private LevelPropertyDialog propertyDialog;
 	
 	@SuppressWarnings("rawtypes")
-	private Map<LayerDefinition, List<LayerMenuItem>> layerMenuItems = new HashMap<LayerDefinition, List<LayerMenuItem>>();
+	private Map<LayerDefinition, EditorItems> layerMenuItems = new HashMap<LayerDefinition, EditorItems>();
 	private List<JMenu> layerMenus = new ArrayList<JMenu>();
 	
+	@SuppressWarnings("rawtypes")
 	private Map<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
+	@SuppressWarnings("rawtypes")
+	private List<LayerMenuItem> activeItems;
+	
+	private class LayerButtonAction implements ActionListener{
+		
+		@SuppressWarnings("rawtypes")
+		final LayerMenuItem item;
+		
+		@SuppressWarnings("rawtypes")
+		LayerButtonAction(LayerMenuItem item){
+			this.item = item;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			item.performAction(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer());
+		}
+		
+	}
 	
 //	private List<LayerMenuItem> currentLayerItems;
 
@@ -438,22 +458,9 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		t.setData(data);
 		List<EditorItems> items = data.setOpenTemplate(t);
 		for(EditorItems i : items){
-			List<LayerMenuItem> mi = new ArrayList<LayerMenuItem>();
-			for(LayerMenuItem item : i.getLevelItems()){
-				final LayerMenuItem temp = item;
-				mi.add(item);
-				item.getMenuItem().addActionListener(new ActionListener(){
-
-					@SuppressWarnings("unchecked")
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						temp.performAction(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer());
-					}
-					
-				});
-			}
-			layerMenuItems.put(i.getDef(), Collections.unmodifiableList(mi));
-			for(JMenu m : i.getMenuItems()){
+			layerMenuItems.put(i.getDef(), i);
+			for(Object o : i.getMenuItems(t)){
+				JMenu m = (JMenu) o;
 				layerMenus.add(m);
 				menuBar.add(m);
 			}
@@ -593,15 +600,21 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void onLayerChange(Layer oldLayer, Layer newLayer) {
-		if(oldLayer!=null&&layerMenuItems.containsKey(oldLayer.getDefinition())){
-			for(LayerMenuItem i : layerMenuItems.get(oldLayer.getDefinition())){
+		if(oldLayer!=null&&activeItems!=null){
+			for(LayerMenuItem i : activeItems){
 				mnLayer.remove(i.getMenuItem());
+				for(ActionListener l : i.getMenuItem().getActionListeners()){
+					if(l instanceof LayerButtonAction)
+						i.getMenuItem().removeActionListener(l);
+				}
 				i.onHide(oldLayer);
 			}
 		}
 		if(newLayer!=null&&layerMenuItems.containsKey(newLayer.getDefinition())){
-			for(LayerMenuItem i : layerMenuItems.get(newLayer.getDefinition())){
+			activeItems = layerMenuItems.get(newLayer.getDefinition()).getLayerItems(newLayer);
+			for(LayerMenuItem i : activeItems){
 				mnLayer.add(i.getMenuItem());
+				i.getMenuItem().addActionListener(new LayerButtonAction(i));
 				i.onShow(newLayer);
 			}
 		}

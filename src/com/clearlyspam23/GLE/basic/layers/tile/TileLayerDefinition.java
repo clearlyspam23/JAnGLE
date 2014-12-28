@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.GUI.DefaultEditorItems;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
@@ -36,7 +37,15 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	@Override
 	public TileLayerTemplate buildFromEditorGUI(TileLayerGUIOptions gui) {
 		TileLayerTemplate t = new TileLayerTemplate(this);
-		t.setGridDimensions(gui.getGridDimensions());
+		t.setDefaultGridDimensions(gui.getGridDimensions());
+		return t;
+	}
+	
+	@Override
+	public TileLayerTemplate buildDefault() {
+		TileLayerTemplate t = new TileLayerTemplate(this);
+		t.setDefaultGridDimensions(32, 32);
+		t.allowGridResizing(true);
 		return t;
 	}
 
@@ -47,7 +56,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 
 	@Override
 	public void setEditorGUITo(TileLayerGUIOptions gui, TileLayerTemplate template) {
-		gui.setGridDimensions(template.getGridDimensions());
+		gui.setGridDimensions(template.getDefaultGridDimensions());
 	}
 	
 	public void onTemplateCreation(Template template){
@@ -56,10 +65,10 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 	}
 	
 	@Override
-	public EditorItems onTemplateOpen(final Template template){
-		EditorItems ans = new EditorItems(this);
+	public EditorItems<TileLayer> onTemplateOpen(final Template template){
+		DefaultEditorItems<TileLayer> ans = new DefaultEditorItems<TileLayer>(this);
 		final TilesetManager manager = (TilesetManager) template.getTemplateData(this, "tilesets");
-		ans.addLevelItem(new LayerGridMenuItem());
+		ans.addLayerItem(new LayerGridMenuItem());
 		JMenu menu = new JMenu("Tilesets");
 		JMenuItem item = new JMenuItem("Tileset Manager");
 		item.addActionListener(new ActionListener(){
@@ -98,12 +107,6 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 
 	public TilesetEditorData getEditorData() {
 		return editorData;
-	}
-
-	@Override
-	public TileLayerTemplate buildDefault() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
