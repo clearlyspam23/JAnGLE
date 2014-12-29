@@ -15,6 +15,7 @@ import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.exception.TemplateMismatchException;
+import com.clearlyspam23.GLE.util.Vector2;
 
 public class Level implements Nameable, EditActionListener{
 	
@@ -25,8 +26,7 @@ public class Level implements Nameable, EditActionListener{
 	private List<EditAction> undoStack = new ArrayList<EditAction>();
 	private List<EditAction> redoStack = new ArrayList<EditAction>();
 	private int editCount;
-	private double width;
-	private double height;
+	private Vector2 dimensions = new Vector2();
 	private LinkedHashMap<String, Object> properties = new LinkedHashMap<String, Object>();
 	private File saveFile;
 	
@@ -87,7 +87,7 @@ public class Level implements Nameable, EditActionListener{
 		for(int i = 0; i < layers.size(); i++){
 			try{
 				Layer l = layers.get(i);
-				l.onResize(this, width, height);
+				l.onResize(this, dimensions.x, dimensions.y);
 				l.buildFromData(data.layers[i].data);
 			}
 			catch(Exception e){
@@ -170,19 +170,22 @@ public class Level implements Nameable, EditActionListener{
 	}
 	
 	public void setDimensions(double width, double height){
-		this.width = width;
-		this.height = height;
+		dimensions.set(width, height);
 		for(LevelChangeListener l : listeners){
 			l.onResize(this, width, height);
 		}
 	}
 	
 	public double getWidth(){
-		return width;
+		return dimensions.x;
 	}
 	
 	public double getHeight(){
-		return height;
+		return dimensions.y;
+	}
+	
+	public Vector2 getDimensions(){
+		return dimensions.copy();
 	}
 
 	public Template getTemplate() {
@@ -208,8 +211,8 @@ public class Level implements Nameable, EditActionListener{
 	
 	public LevelData generateLevelData(){
 		LevelData data = new LevelData();
-		data.width = width;
-		data.height = height;
+		data.width = dimensions.x;
+		data.height = dimensions.y;
 		data.layers = new LayerData[layers.size()];
 		for(int i = 0; i < layers.size(); i++){
 			data.layers[i] = new LayerData(layers.get(i).getName(), layers.get(i).getExportData());
