@@ -23,5 +23,19 @@ public class Vector2 {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Vector2 copy(){
+		return new Vector2(x, y);
+	}
+	
+	public boolean equals(Object o){
+		if(!(o instanceof Vector2))
+			return false;
+		return equals((Vector2)o);
+	}
+	
+	public boolean equals(Vector2 other){
+		return x==other.x&&y==other.y;
+	}
 
 }

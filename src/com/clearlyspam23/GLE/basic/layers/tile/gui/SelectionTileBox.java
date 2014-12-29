@@ -12,6 +12,10 @@ import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
 public class SelectionTileBox implements TileBox {
 	
+	public static void main(String[] args){
+		
+	}
+	
 	/**
 	 * this class needs to hold a reference to both a box above the current tile layer, and the nodes below that box
 	 * in order to allow saving when regions are selected, this box will leave nodes below it unchanged, until they are moved by this box
@@ -26,7 +30,7 @@ public class SelectionTileBox implements TileBox {
 		private List<AnimatedOutlineRect> boundingRect = new ArrayList<AnimatedOutlineRect>();
 
 		public SelectionPNode(PCamera camera, TileLayerPNode lowerLayer) {
-			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight());
+			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight(), lowerLayer.getLayer());
 			this.camera = camera;
 			this.lowerLayer = lowerLayer;
 		}
@@ -95,7 +99,7 @@ public class SelectionTileBox implements TileBox {
 		
 		@Override
 		public void onChange(TilePNode changedNode, TileData previous, TileData next) {
-			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridy()).setTileset(next);
+			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridY()).setTileset(next);
 		}
 		
 		public List<AnimatedOutlineRect> calculateBoundingRect(){

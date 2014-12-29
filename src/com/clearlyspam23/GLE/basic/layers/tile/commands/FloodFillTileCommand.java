@@ -49,7 +49,7 @@ public class FloodFillTileCommand extends TileDragCommand {
 		replacedList.add(new Pair<TilePNode, TileData>(node, node.getTileData()));
 		node.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
 		int x = node.getGridX();
-		int y = node.getGridy();
+		int y = node.getGridY();
 		if(x-1>=0)
 			floodFill(grid[x-1][y], target, targetX, targetY, grid);
 		if(x+1<grid.length)

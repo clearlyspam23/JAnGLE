@@ -120,7 +120,7 @@ public class TilePNode extends PImage {
 		return tile.getLocation().gridX;
 	}
 	
-	public int getGridy(){
+	public int getGridY(){
 		return tile.getLocation().gridY;
 	}
 	
@@ -171,6 +171,10 @@ public class TilePNode extends PImage {
 	
 	public void removeChangeListener(TileChangeListener l){
 		listeners.remove(l);
+	}
+	
+	public TileLayerPNode getTilePNodeLayer(){
+		return (TileLayerPNode) getParent();
 	}
 
 }

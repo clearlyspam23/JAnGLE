@@ -6,9 +6,11 @@ import java.util.Map;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
+import com.clearlyspam23.GLE.util.Vector2;
 
 public class TileLayerPNode extends PNode implements TilePNode.TileChangeListener{
 
@@ -17,49 +19,62 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final String PROPERTY_GRID_DIMENSIONS = "GRID";
-	public static final String PROPERTY_LAYER_DIMENSIONS = "LAYER";
+	public static final String PROPERTY_GRID_DIMENSIONS = "gridDimensions";
 	
 	private TilePNode[][] nodeGrid;
 	
 	private static final double epsilon = 1e-4;
 	
-	private double gridWidth;
-	private double gridHeight;
+	private Vector2 gridDimensions = new Vector2();
 	
 	private TileLocation gridOffset = new TileLocation();
 	
-	public TileLayerPNode(double gridWidth, double gridHeight)
+	private TileLayer layer;
+	
+	public TileLayerPNode(double gridWidth, double gridHeight){
+		this(gridWidth, gridHeight, null);
+	}
+	
+	public TileLayerPNode(double gridWidth, double gridHeight, TileLayer layer)
 	{
-		this.gridWidth = gridWidth;
-		this.gridHeight = gridHeight;
+		this.setLayer(layer);
+		gridDimensions.set(gridWidth, gridHeight);
 		nodeGrid = new TilePNode[0][0];
 	}
 	
 	public double getGridWidth(){
-		return gridWidth;
+		return gridDimensions.x;
 	}
 	
 	public double getGridHeight(){
-		return gridHeight;
+		return gridDimensions.y;
+	}
+	
+	public Vector2 getGridDimensions(){
+		return gridDimensions.copy();
 	}
 	
 	public void setGridDimensions(double width, double height){
-		gridWidth = width;
-		gridHeight = height;
-		refreshNodes();
+		Vector2 old = gridDimensions.copy();
+		gridDimensions.set(width, height);
+		if(!old.equals(gridDimensions)){
+			refreshNodes();
+			firePropertyChange(0, PROPERTY_GRID_DIMENSIONS, old, gridDimensions.copy());
+		}
 	}
 	
 	@Override
 	public boolean setBounds(double x, double y, double width, double height){
-		this.removeAllChildren();
 		if(!super.setBounds(x, y, width, height))
 			return false;
+		this.removeAllChildren();
 		refreshNodes();
 		return true;
 	}
 	
 	private void refreshNodes(){
+		double gridWidth = gridDimensions.x;
+		double gridHeight = gridDimensions.y;
 		double rowsd = getWidth()/gridWidth;
 		double columnsd = getHeight()/gridHeight;
 		int rows = (int) rowsd;
@@ -254,5 +269,13 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	
 	protected void onNodeAdd(TilePNode node) {
 		
+	}
+
+	public TileLayer getLayer() {
+		return layer;
+	}
+
+	public void setLayer(TileLayer layer) {
+		this.layer = layer;
 	}
 }

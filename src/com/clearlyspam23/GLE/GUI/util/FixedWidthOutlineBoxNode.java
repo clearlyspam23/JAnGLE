@@ -17,6 +17,14 @@ public class FixedWidthOutlineBoxNode extends PNode {
 	private Rectangle2D rect;
 	private Color color;
 	
+	public FixedWidthOutlineBoxNode(float strokeWidth, PCamera camera){
+		this(0, 0, strokeWidth, camera, Color.BLACK);
+	}
+	
+	public FixedWidthOutlineBoxNode(float strokeWidth, PCamera camera, Color strokeColor){
+		this(0, 0, strokeWidth, camera, strokeColor);
+	}
+	
 	public FixedWidthOutlineBoxNode(double width, double height, float strokeWidth, PCamera camera){
 		this(width, height, strokeWidth, camera, Color.BLACK);
 	}
@@ -49,7 +57,7 @@ public class FixedWidthOutlineBoxNode extends PNode {
 	
 	public boolean setBounds(final double x, final double y, final double width, final double height){
 		if(super.setBounds(x, y, width, height)){
-			rect.setRect(0, 0, width, height);
+			rect.setRect(x, y, width, height);
 			return true;
 		}
 		return false;

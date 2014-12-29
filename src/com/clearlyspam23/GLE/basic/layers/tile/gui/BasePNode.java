@@ -2,6 +2,7 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
 
@@ -16,8 +17,8 @@ public class BasePNode extends PNode {
 	private TileBox selection;
 	private PNode selectionNode;
 	
-	public BasePNode(TileLayerTemplate template){
-		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight());
+	public BasePNode(TileLayerTemplate template, TileLayer layer){
+		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight(), layer);
 		addChild(tiles);
 	}
 

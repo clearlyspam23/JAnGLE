@@ -21,6 +21,7 @@ public class TileLayer extends Layer<Object> {
 	
 	private BasePNode base;
 //	private TileLayerPNode tiles;
+	private PNode overlay = new PNode();
 	private AxisAlignedRectGridNode grid;
 	private TilesetEditorData data;
 	
@@ -28,10 +29,11 @@ public class TileLayer extends Layer<Object> {
 	{
 		super(template.getDefinition());
 		this.template = template;
-		base = new BasePNode(template);
+		base = new BasePNode(template, this);
 		data = ((TileLayerDefinition)template.getDefinition()).getEditorData();
 		grid = new AxisAlignedRectGridNode(template.getDefaultGridWidth(), template.getDefaultGridHeight());
 		grid.setTransparency(0);
+		overlay.addChild(grid);
 	}
 
 	@Override
@@ -142,7 +144,7 @@ public class TileLayer extends Layer<Object> {
 	}
 	
 	public PNode getOverlayGUI(){
-		return grid;
+		return overlay;
 	}
 	
 	public boolean refreshTilesets(){
