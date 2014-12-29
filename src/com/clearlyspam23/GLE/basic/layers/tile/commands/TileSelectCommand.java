@@ -11,16 +11,16 @@ import org.piccolo2d.util.PPickPath;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 
 public class TileSelectCommand extends PDragSequenceEventHandler {
 	
-	protected TilesetEditorData data;
+	protected TileLayerEditManager data;
 	protected TilePNode startNode;
 	
 	protected FixedWidthOutlineBoxNode outlineBoxNode;
 	
-	public TileSelectCommand(TilesetEditorData data){
+	public TileSelectCommand(TileLayerEditManager data){
 		this.data = data;
 	}
 	

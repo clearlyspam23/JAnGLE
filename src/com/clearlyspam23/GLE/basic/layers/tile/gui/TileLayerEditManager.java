@@ -21,7 +21,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.TileSelectCommand;
 
-public class TilesetEditorData extends LayerEditManager<TileLayer> implements ChangeListener, PInputEventListener{
+public class TileLayerEditManager extends LayerEditManager<TileLayer> implements ChangeListener, PInputEventListener{
 	
 //	private Tileset currentTileset;
 //	
@@ -40,7 +40,7 @@ public class TilesetEditorData extends LayerEditManager<TileLayer> implements Ch
 	
 //	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
 	
-	public TilesetEditorData()
+	public TileLayerEditManager()
 	{
 		allEvents.add(new PlaceTileCommand(this));
 		allEvents.add(new EraseTileCommand(this));

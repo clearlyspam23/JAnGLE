@@ -3,15 +3,15 @@ package com.clearlyspam23.GLE.basic.layers.tile;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 
 public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, TileLayerTemplate> {
 	
-	private TilesetEditorData editorData;
+	private TileLayerEditManager editorData;
 	
 	public TileLayerDefinition(){
-		editorData = new TilesetEditorData();
+		editorData = new TileLayerEditManager();
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class TileLayerDefinition extends LayerDefinition<TileLayerGUIOptions, Ti
 		}
 	}
 
-	public TilesetEditorData getEditorData() {
+	public TileLayerEditManager getEditorData() {
 		return editorData;
 	}
 

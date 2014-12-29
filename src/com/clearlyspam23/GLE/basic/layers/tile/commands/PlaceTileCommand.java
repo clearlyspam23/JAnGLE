@@ -9,7 +9,7 @@ import org.piccolo2d.event.PInputEvent;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.PlaceTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.util.Pair;
 
 public class PlaceTileCommand extends TileDragCommand {
@@ -17,7 +17,7 @@ public class PlaceTileCommand extends TileDragCommand {
 	protected List<Pair<TilePNode, TileData>> replacedList;
 	
 	
-	public PlaceTileCommand(TilesetEditorData data){
+	public PlaceTileCommand(TileLayerEditManager data){
 		super(data);
 	}
 	

@@ -12,18 +12,18 @@ import org.piccolo2d.util.PPickPath;
 
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 
 public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	
-	protected TilesetEditorData data;
+	protected TileLayerEditManager data;
 	
 	private TileLayerPNode currentNode;
 	
 	protected Set<TilePNode> visited = new HashSet<TilePNode>();
 	
 	
-	public TileDragCommand(TilesetEditorData data){
+	public TileDragCommand(TileLayerEditManager data){
 		this.data = data;
 	}
 	

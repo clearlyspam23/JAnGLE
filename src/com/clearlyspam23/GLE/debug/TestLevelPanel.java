@@ -20,7 +20,7 @@ import org.piccolo2d.util.PBounds;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerDefinition;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetEditorData;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 
@@ -71,7 +71,7 @@ public class TestLevelPanel extends JPanel implements ComponentListener{
 		
 		Layer<?> currentLayer = level.getLayers().get(level.getLayers().size()-1);
 		
-		TilesetEditorData data = new TilesetEditorData();
+		TileLayerEditManager data = new TileLayerEditManager();
 //		data.setCurrentTileset(new Tileset(new Image[][]{{tile}}));
 //		data.setSelectedIndex(0, 0);
 //		for(PInputEventListener l : currentLayer.getListeners())
