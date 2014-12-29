@@ -185,6 +185,10 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	private Map<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
 	@SuppressWarnings("rawtypes")
 	private List<LayerMenuItem> activeItems;
+	private JSeparator separator_1;
+	private JMenuItem mntmCut;
+	private JMenuItem mntmCopy;
+	private JMenuItem mntmPaste;
 	
 	private class LayerButtonAction implements ActionListener{
 		
@@ -327,6 +331,24 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		});
 		mntmRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmRedo);
+		
+		separator_1 = new JSeparator();
+		mnEdit.add(separator_1);
+		
+		mntmCut = new JMenuItem("Cut");
+		mntmCut.setEnabled(false);
+		mntmCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+		mnEdit.add(mntmCut);
+		
+		mntmCopy = new JMenuItem("Copy");
+		mntmCopy.setEnabled(false);
+		mntmCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
+		mnEdit.add(mntmCopy);
+		
+		mntmPaste = new JMenuItem("Paste");
+		mntmPaste.setEnabled(false);
+		mntmPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
+		mnEdit.add(mntmPaste);
 		
 		mnLevel = new JMenu("Level");
 		menuBar.add(mnLevel);
