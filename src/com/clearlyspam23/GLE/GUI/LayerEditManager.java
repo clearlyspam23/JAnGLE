@@ -21,6 +21,10 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 	private List<ComponentData> subComponents = new ArrayList<ComponentData>();
 	private List<PInputEventListener> eventListeners = new ArrayList<PInputEventListener>();
 	private final List<EditActionListener> editListeners = new ArrayList<EditActionListener>();
+	
+	private boolean canCut;
+	private boolean canCopy;
+	private boolean canPaste;
 
 	public List<PInputEventListener> getEventListeners() {
 		return eventListeners;
@@ -80,6 +84,54 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 	}
 	
 	public void onInActive(T layer){
+		
+	}
+
+	public boolean canCut() {
+		return canCut;
+	}
+
+	public void toggleCanCut(boolean canCut) {
+		boolean flag = this.canCut!=canCut;
+		this.canCut = canCut;
+		if(flag)
+			for(EditActionListener l : editListeners)
+				l.cutAvailabilityChange(canCut);
+	}
+	
+	public void onCut(){
+		
+	}
+
+	public boolean canCopy() {
+		return canCopy;
+	}
+
+	public void toggleCanCopy(boolean canCopy) {
+		boolean flag = this.canCopy!=canCopy;
+		this.canCopy = canCopy;
+		if(flag)
+			for(EditActionListener l : editListeners)
+				l.copyAvailabilityChange(canCopy);
+	}
+	
+	public void onCopy(){
+		
+	}
+
+	public boolean canPaste() {
+		return canPaste;
+	}
+
+	public void toggleCanPaste(boolean canPaste) {
+		boolean flag = this.canPaste!=canPaste;
+		this.canPaste = canPaste;
+		if(flag)
+			for(EditActionListener l : editListeners)
+				l.pasteAvailabilityChange(canPaste);
+	}
+	
+	public void onPaste(){
 		
 	}
 

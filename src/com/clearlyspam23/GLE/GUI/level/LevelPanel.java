@@ -22,7 +22,6 @@ import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
-import com.clearlyspam23.GLE.level.EditAction;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
@@ -50,8 +49,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private FixedWidthOutlineBoxNode outline;
 	
 	private List<PNode> layers = new ArrayList<PNode>();
-	private List<LayerEditManager> editors = new ArrayList<LayerEditManager>();
-	private Map<LayerEditManager, JDialog> editDialogs;
+	private List<LayerEditManager<?>> editors = new ArrayList<LayerEditManager<?>>();
+	private Map<LayerEditManager<?>, JDialog> editDialogs;
 	
 	private List<ChangeLayerListener> listeners = new ArrayList<ChangeLayerListener>();
 	
@@ -63,7 +62,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private Layer currentLayer;
 	
 	@SuppressWarnings("rawtypes")
-	public LevelPanel(Level level, Frame frame, Map<LayerEditManager, JDialog> editDialogs)
+	public LevelPanel(Level level, Frame frame, Map<LayerEditManager<?>, JDialog> editDialogs)
 	{
 		myFrame = frame;
 		canvas = new PSwingCanvas();
@@ -153,6 +152,12 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		return null;
 	}
 	
+	public LayerEditManager<?> getCurrentEditManager(){
+		if(selectedIndex>=0)
+			return editors.get(selectedIndex);
+		return null;
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void changeLayer(int index){
 		Layer old = null;
@@ -206,7 +211,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
 		System.out.println("hidden");
@@ -255,7 +260,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void componentShown(ComponentEvent arg0) {
 		if(!isShowing())
@@ -287,27 +292,21 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		listeners.add(l);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private float calculateRatio(double width, double height){
-		float min = Float.MAX_VALUE;
-		for(Layer l : level.getLayers()){
-			float f = l.minBorderWidth();
-			if(f>=0)
-				min = Math.min(min, f);
-		}
-		return Math.min(min, (float) Math.min(width, height)/120f);
-	}
+//	@SuppressWarnings("rawtypes")
+//	private float calculateRatio(double width, double height){
+//		float min = Float.MAX_VALUE;
+//		for(Layer l : level.getLayers()){
+//			float f = l.minBorderWidth();
+//			if(f>=0)
+//				min = Math.min(min, f);
+//		}
+//		return Math.min(min, (float) Math.min(width, height)/120f);
+//	}
 
 	@Override
 	public void onResize(Level level, double width, double height) {
 		background.setBounds(0, 0, level.getWidth(), level.getHeight());
 		outline.resize(width, height);
-	}
-
-	@Override
-	public void actionApplied(Level level, EditAction e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

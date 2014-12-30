@@ -23,6 +23,7 @@ public class Level implements Nameable, EditActionListener{
 	@SuppressWarnings("rawtypes")
 	private List<Layer> layers = new ArrayList<Layer>();
 	private List<LevelChangeListener> listeners = new ArrayList<LevelChangeListener>();
+	private List<EditActionListener> editListeners = new ArrayList<EditActionListener>();
 	private List<EditAction> undoStack = new ArrayList<EditAction>();
 	private List<EditAction> redoStack = new ArrayList<EditAction>();
 	private int editCount;
@@ -116,8 +117,8 @@ public class Level implements Nameable, EditActionListener{
 		undoStack.add(data);
 		redoStack.clear();
 		editCount++;
-		for(LevelChangeListener l : listeners){
-			l.actionApplied(this, data);
+		for(EditActionListener l : editListeners){
+			l.actionMade(data);
 		}
 	}
 	
@@ -131,8 +132,8 @@ public class Level implements Nameable, EditActionListener{
 			e.undoAction();
 			redoStack.add(e);
 			editCount--;
-			for(LevelChangeListener l : listeners){
-				l.actionApplied(this, e);
+			for(EditActionListener l : editListeners){
+				l.actionMade(e);
 			}
 			return true;
 		}
@@ -153,8 +154,8 @@ public class Level implements Nameable, EditActionListener{
 			e.doAction();
 			undoStack.add(e);
 			editCount++;
-			for(LevelChangeListener l : listeners){
-				l.actionApplied(this, e);
+			for(EditActionListener l : editListeners){
+				l.actionMade(e);
 			}
 			return true;
 		}
@@ -250,6 +251,32 @@ public class Level implements Nameable, EditActionListener{
 	
 	public void removeChangeListener(LevelChangeListener listener){
 		listeners.remove(listener);
+	}
+	
+	public void addEditActionListener(EditActionListener listener){
+		editListeners.add(listener);
+	}
+	
+	public void removeEditActionListener(EditActionListener listener){
+		editListeners.remove(listener);
+	}
+
+	@Override
+	public void cutAvailabilityChange(boolean isAvailable) {
+		for(EditActionListener l : editListeners)
+			l.cutAvailabilityChange(isAvailable);
+	}
+
+	@Override
+	public void copyAvailabilityChange(boolean isAvailable) {
+		for(EditActionListener l : editListeners)
+			l.copyAvailabilityChange(isAvailable);
+	}
+
+	@Override
+	public void pasteAvailabilityChange(boolean isAvailable) {
+		for(EditActionListener l : editListeners)
+			l.pasteAvailabilityChange(isAvailable);
 	}
 
 }

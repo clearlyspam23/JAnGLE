@@ -9,9 +9,8 @@ import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
-import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 
@@ -124,7 +123,7 @@ public class TileLayer extends Layer<Object> {
 	}
 
 	@Override
-	public LayerEditManager getEditManager() {
+	public LayerEditManager<TileLayer> getEditManager() {
 		return data;
 	}
 	
@@ -149,11 +148,6 @@ public class TileLayer extends Layer<Object> {
 	
 	public boolean refreshTilesets(){
 		return base.refreshTilesets(getTilesetManager());
-	}
-
-	@Override
-	public void actionApplied(Level level, EditAction e) {
-		// intentionally empty
 	}
 
 }

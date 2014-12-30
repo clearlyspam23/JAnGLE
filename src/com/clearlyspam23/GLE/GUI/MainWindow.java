@@ -75,7 +75,7 @@ import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 
-public class MainWindow extends JFrame implements ChangeLayerListener, LevelChangeListener{
+public class MainWindow extends JFrame implements ChangeLayerListener, LevelChangeListener, EditActionListener{
 
 	/**
 	 * 
@@ -181,8 +181,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	private Map<LayerDefinition, EditorItems> layerMenuItems = new HashMap<LayerDefinition, EditorItems>();
 	private List<JMenu> layerMenus = new ArrayList<JMenu>();
 	
-	@SuppressWarnings("rawtypes")
-	private Map<LayerEditManager, JDialog> editDialogs = new HashMap<LayerEditManager, JDialog>();
+	private Map<LayerEditManager<?>, JDialog> editDialogs = new HashMap<LayerEditManager<?>, JDialog>();
 	@SuppressWarnings("rawtypes")
 	private List<LayerMenuItem> activeItems;
 	private JSeparator separator_1;
@@ -378,8 +377,10 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 					Component c = tabbedPane.getComponent(tabbedPane.getSelectedIndex());
 					if(c instanceof LevelPanel){
 						Layer old = null;
-						if(data.getCurrentLevel()!=null)
-							data.getCurrentLevel().removeChangeListener(MainWindow.this);
+						if(data.getCurrentLevel()!=null){
+								data.getCurrentLevel().removeChangeListener(MainWindow.this);
+								data.getCurrentLevel().removeEditActionListener(MainWindow.this);
+							}
 						LevelPanel current = levelPanelMap.getNormal(data.getCurrentLevel());
 						if(current!=null){
 							old = current.getCurrentLayer();
@@ -388,7 +389,9 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 						data.setCurrentLevel(levelPanelMap.getReverse(panel));
 						if(data.getCurrentLevel()!=null){
 							data.getCurrentLevel().addChangeListener(MainWindow.this);
+							data.getCurrentLevel().addEditActionListener(MainWindow.this);
 							checkUndoRedo(data.getCurrentLevel());
+							checkCutCopyPaste(data.getCurrentLevel());
 						}
 						if(panel!=null)
 							onLayerChange(old, panel.getCurrentLayer());
@@ -618,6 +621,13 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		mntmUndo.setEnabled(l.canUndo());
 		mntmRedo.setEnabled(l.canRedo());
 	}
+	
+	private void checkCutCopyPaste(Level l){
+		LayerEditManager<?> e = this.levelPanelMap.getNormal(l).getCurrentEditManager();
+		mntmCut.setEnabled(e.canCut());
+		mntmCopy.setEnabled(e.canCopy());
+		mntmPaste.setEnabled(e.canPaste());
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -639,6 +649,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 				i.getMenuItem().addActionListener(new LayerButtonAction(i));
 				i.onShow(newLayer);
 			}
+			checkCutCopyPaste(data.getCurrentLevel());
 		}
 	}
 
@@ -648,9 +659,30 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		
 	}
 
+//	@Override
+//	public void actionApplied(Level level, EditAction e) {
+//		checkUndoRedo(level);
+//		checkNames();
+//	}
+
 	@Override
-	public void actionApplied(Level level, EditAction e) {
-		checkUndoRedo(level);
+	public void actionMade(EditAction action) {
+		checkUndoRedo(data.getCurrentLevel());
 		checkNames();
+	}
+
+	@Override
+	public void cutAvailabilityChange(boolean isAvailable) {
+		checkCutCopyPaste(data.getCurrentLevel());
+	}
+
+	@Override
+	public void copyAvailabilityChange(boolean isAvailable) {
+		checkCutCopyPaste(data.getCurrentLevel());
+	}
+
+	@Override
+	public void pasteAvailabilityChange(boolean isAvailable) {
+		checkCutCopyPaste(data.getCurrentLevel());
 	}
 }
