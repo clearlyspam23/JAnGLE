@@ -14,7 +14,7 @@ public class BasePNode extends PNode {
 	private static final long serialVersionUID = 1L;
 	private TileLayerPNode tiles;
 	
-	private TileBox selection;
+	private TileSelection selection;
 	
 	public BasePNode(TileLayerTemplate template, TileLayer layer){
 		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight(), layer);
@@ -33,11 +33,11 @@ public class BasePNode extends PNode {
 		tiles.resize(x, y);
 	}
 
-	public TileBox getSelection() {
+	public TileSelection getSelection() {
 		return selection;
 	}
 
-	public void setSelection(TileBox selection) {
+	public void setSelection(TileSelection selection) {
 		if(this.selection!=null){
 			this.selection.onRemove();
 		}

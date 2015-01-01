@@ -8,7 +8,7 @@ import org.piccolo2d.PNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
-public class ImmovableTileBox implements TileBox{
+public class ImmovableTileSelection implements TileSelection{
 	
 	private PNode overlayNode = new PNode();
 	
@@ -18,7 +18,7 @@ public class ImmovableTileBox implements TileBox{
 	private TileLocation offset;
 	private TileLayerPNode tileLayer;
 	
-	public ImmovableTileBox(List<Tile> locations, TileLayerPNode layer){
+	public ImmovableTileSelection(List<Tile> locations, TileLayerPNode layer){
 		tileLayer = layer;
 		tileLayer.silentlyIgnoreInput(true);
 		int minX = Integer.MAX_VALUE;

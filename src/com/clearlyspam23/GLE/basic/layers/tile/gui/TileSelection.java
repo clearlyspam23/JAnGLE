@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 
-public interface TileBox {
+public interface TileSelection {
 	
 	public List<Tile> onCopy();
 	

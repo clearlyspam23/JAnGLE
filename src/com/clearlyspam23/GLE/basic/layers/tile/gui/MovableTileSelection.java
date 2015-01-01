@@ -10,7 +10,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
-public class SelectionTileBox implements TileBox{
+public class MovableTileSelection implements TileSelection{
 	
 	/**
 	 * this class needs to hold a reference to both a box above the current tile layer, and the nodes below that box
@@ -175,7 +175,7 @@ public class SelectionTileBox implements TileBox{
 	private SelectionPNode selectionNode;
 	private PNode overlayNode = new PNode();
 	
-	public SelectionTileBox(PCamera camera, TileLayerPNode node){
+	public MovableTileSelection(PCamera camera, TileLayerPNode node){
 		selectionNode = new SelectionPNode(camera, node);
 		node.addChild(selectionNode);
 	}
