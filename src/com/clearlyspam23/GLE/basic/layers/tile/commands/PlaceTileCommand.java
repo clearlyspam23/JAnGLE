@@ -45,8 +45,9 @@ public class PlaceTileCommand extends TileDragCommand {
 	}
 
 	@Override
-	protected void onStart(PInputEvent event) {
+	protected boolean onStart(PInputEvent event) {
 		replacedList = new ArrayList<Pair<TilePNode, TileData>>();
+		return true;
 	}
 
 }

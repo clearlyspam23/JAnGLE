@@ -15,7 +15,6 @@ public class BasePNode extends PNode {
 	private TileLayerPNode tiles;
 	
 	private TileBox selection;
-	private PNode selectionNode;
 	
 	public BasePNode(TileLayerTemplate template, TileLayer layer){
 		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight(), layer);
@@ -39,27 +38,18 @@ public class BasePNode extends PNode {
 	}
 
 	public void setSelection(TileBox selection) {
-		if(selectionNode!=null)
-			selectionNode.removeFromParent();
 		if(this.selection!=null){
-			this.selection.lostSelection();
+			this.selection.onRemove();
 		}
-		
 		this.selection = selection;
-		if(selection!=null){
-			selectionNode = selection.getPNode();
-			addChild(selectionNode);
-		}
-		else
-			selectionNode = null;
 	}
 	
 	public boolean canCut(){
-		return selection!=null&&selection.canCut();
+		return selection!=null;
 	}
 	
 	public boolean canCopy(){
-		return selection!=null&&selection.canCopy();
+		return selection!=null;
 	}
 
 }

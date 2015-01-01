@@ -1,25 +1,19 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
-import org.piccolo2d.PNode;
+import java.util.List;
 
-import com.clearlyspam23.GLE.basic.layers.tile.TileData;
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 
 public interface TileBox {
 	
-	public void lostSelection();
+	public List<Tile> onCopy();
 	
-	public boolean canCopy();
+	public List<Tile> onCut();
 	
-	public boolean canCut();
+	public int getTileWidth();
 	
-	public TileData[][] onCopy();
+	public int getTileHeight();
 	
-	public TileData[][] onCut();
-	
-	public PNode getPNode();
-	
-	public PNode getOverlayNode();
-	
-	public void onAdd(PNode node);
+	public void onRemove();
 
 }

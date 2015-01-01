@@ -41,6 +41,10 @@ public class TileData {
 		this.tileY = tileY;
 	}
 	
+	public void setTileset(TileData data){
+		setTileset(data.tileset, data.tileX, data.tileY);
+	}
+	
 	public void resetTileset(){
 		setTileset(null, -1, -1);
 	}

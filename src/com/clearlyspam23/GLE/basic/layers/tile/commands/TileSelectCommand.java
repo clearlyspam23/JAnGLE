@@ -29,6 +29,10 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 		if(event.isLeftMouseButton()&&!event.isAltDown()&&!event.isControlDown()&&event.getClickCount()==2){
 			System.out.println("should select a bunch");
 		}
+		else if(event.isRightMouseButton()){
+			outlineBoxNode.removeFromParent();
+			outlineBoxNode = null;
+		}
 	}
 	
 	@Override

@@ -146,6 +146,15 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		return getNodeAt(location.gridX, location.gridY);
 	}
 	
+	public boolean isValidLocation(int x, int y){
+		return (x-gridOffset.gridX)>=0&&(x-gridOffset.gridX)<nodeGrid.length&&
+				(y-gridOffset.gridY)>=0&&(y-gridOffset.gridY)<nodeGrid[x].length;
+	}
+	
+	public boolean isValidLocation(TileLocation location){
+		return isValidLocation(location.gridX, location.gridY);
+	}
+	
 	public TileData[][] getTiles(){
 		TileData[][] ans = new TileData[nodeGrid.length][];
 		for(int i = 0; i < nodeGrid.length; i++){
@@ -246,6 +255,11 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		}
 	}
 	
+	/**
+	 * toggles the silentlyIgnoreInput flag for all nodes in this layer
+	 * this makes it so that any nodes in question will ignore attempts to change their tile
+	 * @param flag whether or not all nodes should silently ignore input
+	 */
 	public void silentlyIgnoreInput(boolean flag){
 		for(TilePNode[] p : nodeGrid){
 			for(TilePNode t : p){

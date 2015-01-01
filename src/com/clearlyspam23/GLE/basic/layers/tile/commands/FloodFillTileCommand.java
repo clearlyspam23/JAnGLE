@@ -42,12 +42,14 @@ public class FloodFillTileCommand extends TileDragCommand {
 	}
 	
 	private void floodFill(TilePNode node, TilesetHandle target, int targetX, int targetY, TilePNode[][] grid){
-		if(isSameTile(target, targetX, targetY, data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
-			return;
+//		if(isSameTile(target, targetX, targetY, data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+//			return;
 		if(!isSameTile(target, targetX, targetY, node.getTileset(), node.getTilesetX(), node.getTilesetY()))
 			return;
-		replacedList.add(new Pair<TilePNode, TileData>(node, node.getTileData()));
-		node.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
+		Pair<TilePNode, TileData> pair = new Pair<TilePNode, TileData>(node, node.getTileData());
+		if(!node.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+			return;
+		replacedList.add(pair);
 		int x = node.getGridX();
 		int y = node.getGridY();
 		if(x-1>=0)
@@ -69,8 +71,9 @@ public class FloodFillTileCommand extends TileDragCommand {
 	}
 
 	@Override
-	protected void onStart(PInputEvent event) {
+	protected boolean onStart(PInputEvent event) {
 		replacedList = new ArrayList<Pair<TilePNode, TileData>>();
+		return true;
 	}
 
 }

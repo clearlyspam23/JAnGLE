@@ -10,11 +10,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
-public class SelectionTileBox implements TileBox {
-	
-	public static void main(String[] args){
-		
-	}
+public class SelectionTileBox implements TileBox{
 	
 	/**
 	 * this class needs to hold a reference to both a box above the current tile layer, and the nodes below that box
@@ -185,49 +181,33 @@ public class SelectionTileBox implements TileBox {
 	}
 
 	@Override
-	public void lostSelection() {
-		
-	}
-
-	@Override
-	public boolean canCopy() {
-		return true;
-	}
-
-	@Override
-	public boolean canCut() {
-		return true;
-	}
-
-	@Override
-	public TileData[][] onCopy() {
-		return null;
-
-	}
-
-	@Override
-	public TileData[][] onCut() {
-		return null;
-	}
-
-	@Override
-	public PNode getPNode() {
-		return null;
-	}
-
-	@Override
-	public void onAdd(PNode node) {
-		
-	}
-	
-	public void expandToTile(int x, int y){
-		
-	}
-
-	@Override
-	public PNode getOverlayNode() {
+	public List<Tile> onCopy() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Tile> onCut() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getTileWidth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTileHeight() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void onRemove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

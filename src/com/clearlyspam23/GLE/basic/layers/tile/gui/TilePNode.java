@@ -55,49 +55,56 @@ public class TilePNode extends PImage {
 			setImage(tile.getTileImage());
 	}
 	
-	public void setTileset(TilesetHandle set, int x, int y)
+	public boolean setTileset(TilesetHandle set, int x, int y)
 	{
 		if(silentlyIgnoreInput)
-			return;
+			return false;
 		TileData prev = getTileData();
-		tile.setTileset(set, x, y);
-		if(tile.isValid())
-			setImage(tile.getTileImage());
-		TileData curr = getTileData();
-		if(!prev.equals(curr))
+		TileData curr = new TileData(set, x, y);
+		if(!prev.equals(curr)){
+			tile.setTileset(set, x, y);
+			if(tile.isValid())
+				setImage(tile.getTileImage());
 			for(TileChangeListener l : listeners)
 				l.onChange(this, prev, curr);
+			return true;
+		}
+		return false;
 	}
 	
-	public void setTilesetHard(TilesetHandle set, int x, int y){
+	public boolean setTilesetHard(TilesetHandle set, int x, int y){
 		boolean b = silentlyIgnoreInput;
 		silentlyIgnoreInput  = false;
-		setTileset(set, x, y);
+		boolean out = setTileset(set, x, y);
 		silentlyIgnoreInput = b;
+		return out;
 	}
 	
-	public void setTileset(TileData tile){
-		setTileset(tile.tileset, tile.tileX, tile.tileY);
+	public boolean setTileset(TileData tile){
+		return setTileset(tile.tileset, tile.tileX, tile.tileY);
 	}
 	
-	public void resetTileset(){
+	public boolean resetTileset(){
 		if(silentlyIgnoreInput)
-			return;
+			return false;
 		TileData prev = getTileData();
-		tile.resetTileset();
-		setImage((Image)null);
-		invalidatePaint();
-		TileData curr = getTileData();
-		if(!prev.equals(curr))
+		if(prev!=new TileData()){
+			tile.resetTileset();
+			setImage((Image)null);
+			invalidatePaint();
 			for(TileChangeListener l : listeners)
-				l.onChange(this, prev, curr);
+				l.onChange(this, prev, getTileData());
+			return true;
+		}
+		return false;
 	}
 	
-	public void resetTilesetHard(){
+	public boolean resetTilesetHard(){
 		boolean b = silentlyIgnoreInput;
 		silentlyIgnoreInput  = false;
-		resetTilesetHard();
+		boolean out = resetTilesetHard();
 		silentlyIgnoreInput = b;
+		return out;
 	}
 
 	public TilesetHandle getTileset() {

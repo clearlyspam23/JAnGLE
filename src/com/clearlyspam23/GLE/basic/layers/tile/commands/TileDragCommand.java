@@ -22,6 +22,8 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	
 	protected Set<TilePNode> visited = new HashSet<TilePNode>();
 	
+	private boolean shouldRun;
+	
 	
 	public TileDragCommand(TileLayerEditManager data){
 		this.data = data;
@@ -31,7 +33,7 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	protected void startDrag(PInputEvent event){
 		super.startDrag(event);
 		if(event.isLeftMouseButton()){
-			onStart(event);
+			shouldRun = onStart(event);
 			tryPlaceImage(event.getCanvasPosition(), event.getCamera());
 		}
 	}
@@ -50,7 +52,7 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	
 	protected abstract void onFinish(PInputEvent event);
 	
-	protected abstract void onStart(PInputEvent event);
+	protected abstract boolean onStart(PInputEvent event);
 	
 	@Override
 	protected boolean shouldStartDragInteraction(PInputEvent event) {
@@ -63,7 +65,7 @@ public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	protected void tryPlaceImage(Point2D pos, PCamera cam)
 	{
 		PNode p = getPickedNode(pos, cam);
-        if(p instanceof TilePNode){
+        if(shouldRun&&p instanceof TilePNode){
         	TilePNode tile = (TilePNode)p;
         	if(currentNode == null)
         		currentNode = (TileLayerPNode) tile.getParent();
