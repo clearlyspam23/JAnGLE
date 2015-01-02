@@ -6,6 +6,7 @@ import java.util.List;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.GUI.util.AnimatedOutlineRectNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
@@ -23,7 +24,7 @@ public class MovableTileSelection implements TileSelection{
 		private TileLayerPNode lowerLayer;
 		
 		private PCamera camera;
-		private List<AnimatedOutlineRect> boundingRect = new ArrayList<AnimatedOutlineRect>();
+		private List<AnimatedOutlineRectNode> boundingRect = new ArrayList<AnimatedOutlineRectNode>();
 
 		public SelectionPNode(PCamera camera, TileLayerPNode lowerLayer) {
 			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight(), lowerLayer.getLayer());
@@ -98,32 +99,32 @@ public class MovableTileSelection implements TileSelection{
 			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridY()).setTileset(next);
 		}
 		
-		public List<AnimatedOutlineRect> calculateBoundingRect(){
+		public List<AnimatedOutlineRectNode> calculateBoundingRect(){
 			boundingRect.clear();
 			TilePNode[][] grid = getNodeGrid();
 			int[][] sideGrid = new int[grid.length][];
 			for(int i = 0; i < grid.length; i++){
 				sideGrid[i] = new int[grid[i].length];
 				for(int j = 0; j < grid[i].length; j++){
-					sideGrid[i][j] = AnimatedOutlineRect.NONE;
+					sideGrid[i][j] = AnimatedOutlineRectNode.NONE;
 					if(grid[i][j]==null)
 						continue;
 					//perform edge detection, if any edges are detected, create an animated node
 					if(i-1<0||grid[i-1][j]==null)
-						sideGrid[i][j]|=AnimatedOutlineRect.LEFT;
+						sideGrid[i][j]|=AnimatedOutlineRectNode.LEFT;
 					if(i+1>=grid.length||grid[i+1][j]==null)
-						sideGrid[i][j]|=AnimatedOutlineRect.RIGHT;
+						sideGrid[i][j]|=AnimatedOutlineRectNode.RIGHT;
 					if(j-1<0||grid[i][j-1]==null)
-						sideGrid[i][j]|=AnimatedOutlineRect.TOP;
+						sideGrid[i][j]|=AnimatedOutlineRectNode.TOP;
 					if(j+1>=grid[i].length||grid[i][j+1]==null)
-						sideGrid[i][j]|=AnimatedOutlineRect.BOTTOM;
+						sideGrid[i][j]|=AnimatedOutlineRectNode.BOTTOM;
 				}
 			}
 			//try to build the largest Rectangles possible
 			//this is an optimization, and can be removed if buggy
 			for(int i = 0; i < sideGrid.length; i++){
 				for(int j = 0; j < sideGrid[i].length; j++){
-					if(sideGrid[i][j]!=AnimatedOutlineRect.NONE){
+					if(sideGrid[i][j]!=AnimatedOutlineRectNode.NONE){
 						//grab as much of the matching sides as we can
 						//this should go down and grab nodes with the same left and right as us
 						//after that, grab as much of the top and bottom as we can
@@ -133,27 +134,27 @@ public class MovableTileSelection implements TileSelection{
 						int topWidth = 1;
 						int bottomWidth = 1;
 						for(; leftHeight + j < sideGrid[i].length && 
-								(sideGrid[i][leftHeight+j]&AnimatedOutlineRect.LEFT_AND_RIGHT)==(sideGrid[i][j]&AnimatedOutlineRect.LEFT_AND_RIGHT)
-								&&sideGrid[i][leftHeight+j]!=AnimatedOutlineRect.NONE; leftHeight++)
+								(sideGrid[i][leftHeight+j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)==(sideGrid[i][j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)
+								&&sideGrid[i][leftHeight+j]!=AnimatedOutlineRectNode.NONE; leftHeight++)
 						{}
 						for(; topWidth + i < sideGrid.length && 
-								(sideGrid[i + topWidth][j]&AnimatedOutlineRect.TOP_AND_BOTTOM)==(sideGrid[i][j]&AnimatedOutlineRect.TOP_AND_BOTTOM)
-										&&sideGrid[i+topWidth][j]!=AnimatedOutlineRect.NONE; topWidth++)
+								(sideGrid[i + topWidth][j]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)==(sideGrid[i][j]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)
+										&&sideGrid[i+topWidth][j]!=AnimatedOutlineRectNode.NONE; topWidth++)
 						{}
 						for(; rightHeight + j < sideGrid[i].length && 
-								(sideGrid[i+topWidth-1][rightHeight+j]&AnimatedOutlineRect.LEFT_AND_RIGHT)==(sideGrid[i+topWidth-1][j]&AnimatedOutlineRect.LEFT_AND_RIGHT)
-										&&sideGrid[i+topWidth-1][rightHeight+j]!=AnimatedOutlineRect.NONE; rightHeight++)
+								(sideGrid[i+topWidth-1][rightHeight+j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)==(sideGrid[i+topWidth-1][j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)
+										&&sideGrid[i+topWidth-1][rightHeight+j]!=AnimatedOutlineRectNode.NONE; rightHeight++)
 						{}
 						for(; bottomWidth + i < sideGrid.length && 
-								(sideGrid[i + bottomWidth][j+leftHeight-1]&AnimatedOutlineRect.TOP_AND_BOTTOM)==(sideGrid[i][j+leftHeight-1]&AnimatedOutlineRect.TOP_AND_BOTTOM)
-										&&sideGrid[i + bottomWidth][j+leftHeight-1]!=AnimatedOutlineRect.NONE; bottomWidth++)
+								(sideGrid[i + bottomWidth][j+leftHeight-1]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)==(sideGrid[i][j+leftHeight-1]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)
+										&&sideGrid[i + bottomWidth][j+leftHeight-1]!=AnimatedOutlineRectNode.NONE; bottomWidth++)
 						{}
 						int width = Math.min(topWidth, bottomWidth);
 						int height = Math.min(leftHeight, rightHeight);
-						int value = sideGrid[i][j]&(AnimatedOutlineRect.LEFT|AnimatedOutlineRect.TOP);
-						value|=(sideGrid[i+width-1][j]&AnimatedOutlineRect.RIGHT);
-						value|=(sideGrid[i][j+height-1]&AnimatedOutlineRect.BOTTOM);
-						AnimatedOutlineRect rect = new AnimatedOutlineRect(camera, value);
+						int value = sideGrid[i][j]&(AnimatedOutlineRectNode.LEFT|AnimatedOutlineRectNode.TOP);
+						value|=(sideGrid[i+width-1][j]&AnimatedOutlineRectNode.RIGHT);
+						value|=(sideGrid[i][j+height-1]&AnimatedOutlineRectNode.BOTTOM);
+						AnimatedOutlineRectNode rect = new AnimatedOutlineRectNode(camera, value);
 						rect.setBounds(grid[i][j].getBounds().getBounds2D());
 						boundingRect.add(rect);
 						for(int k = 0; k < width; k++){

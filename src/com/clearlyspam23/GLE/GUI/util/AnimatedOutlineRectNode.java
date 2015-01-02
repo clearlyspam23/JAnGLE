@@ -1,8 +1,9 @@
-package com.clearlyspam23.GLE.basic.layers.tile.gui;
+package com.clearlyspam23.GLE.GUI.util;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 
@@ -13,10 +14,7 @@ import org.piccolo2d.activities.PActivity;
 import org.piccolo2d.extras.PFrame;
 import org.piccolo2d.util.PPaintContext;
 
-import com.clearlyspam23.GLE.GUI.util.AnimatedPNode;
-import com.clearlyspam23.GLE.GUI.util.FixedWidthStroke;
-
-public class AnimatedOutlineRect extends AnimatedPNode {
+public class AnimatedOutlineRectNode extends AnimatedPNode {
 
 	/**
 	 * 
@@ -37,6 +35,7 @@ public class AnimatedOutlineRect extends AnimatedPNode {
 	private FixedWidthStroke[] strokes = new FixedWidthStroke[12];
 	private int state = 0;
 	private Line2D gridLine = new Line2D.Double();
+	private Color color;
 	private AnimationActivity activity = new AnimationActivity();
 	
 	public static void main(String[] args){
@@ -45,8 +44,8 @@ public class AnimatedOutlineRect extends AnimatedPNode {
             @Override
             public void run() {
                 PFrame frame = new PFrame();
-                AnimatedOutlineRect rect = new AnimatedOutlineRect(frame.getCanvas().getCamera(), LEFT+RIGHT+TOP);
-                AnimatedOutlineRect botRect = new AnimatedOutlineRect(frame.getCanvas().getCamera(), LEFT+RIGHT+BOTTOM);
+                AnimatedOutlineRectNode rect = new AnimatedOutlineRectNode(frame.getCanvas().getCamera(), LEFT+RIGHT+TOP, Color.RED);
+                AnimatedOutlineRectNode botRect = new AnimatedOutlineRectNode(frame.getCanvas().getCamera(), LEFT+RIGHT+BOTTOM);
                 rect.setBounds(0, 0, 200, 200);
                 botRect.setBounds(0, 200, 200, 200);
                 frame.getCanvas().getLayer().addChild(rect);
@@ -70,11 +69,20 @@ public class AnimatedOutlineRect extends AnimatedPNode {
 		
 	}
 	
-	public AnimatedOutlineRect(PCamera camera){
-		this(camera, ALL);
+	public AnimatedOutlineRectNode(PCamera camera){
+		this(camera, ALL, Color.BLACK);
 	}
 	
-	public AnimatedOutlineRect(PCamera camera, int drawOptions){
+	public AnimatedOutlineRectNode(PCamera camera, int drawOptions){
+		this(camera, drawOptions, Color.BLACK);
+	}
+	
+	public AnimatedOutlineRectNode(PCamera camera, Color color){
+		this(camera, ALL, Color.BLACK);
+	}
+	
+	public AnimatedOutlineRectNode(PCamera camera, int drawOptions, Color color){
+		this.color = color;
 		for(int i =0 ; i < strokes.length; i++){
 			strokes[i] = new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{6, 6}, i, camera);
 		}
@@ -132,11 +140,13 @@ public class AnimatedOutlineRect extends AnimatedPNode {
 	protected void paint(PPaintContext paintContext) {
 
         Graphics2D g2 = paintContext.getGraphics();
+        
         g2.setBackground(new Color(0, 0, 0, 0));
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setStroke(strokes[state]);
-        g2.setPaint(Color.BLACK);
+        Paint p = g2.getPaint();
+        g2.setPaint(color);
         
         if(isDrawingTop()){
         	gridLine.setLine(getX(), getY(), getX()+getWidth(), getY());
@@ -155,6 +165,7 @@ public class AnimatedOutlineRect extends AnimatedPNode {
         	 g2.draw(gridLine);
         }
         g2.setStroke(new BasicStroke(0));
+        g2.setPaint(p);
     }
 
 	@Override

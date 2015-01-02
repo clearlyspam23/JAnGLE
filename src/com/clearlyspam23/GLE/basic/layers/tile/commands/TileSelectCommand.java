@@ -8,7 +8,7 @@ import org.piccolo2d.event.PDragSequenceEventHandler;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
-import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
+import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
@@ -18,7 +18,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	protected TileLayerEditManager data;
 	protected TilePNode startNode;
 	
-	protected FixedWidthOutlineBoxNode outlineBoxNode;
+	protected FixedWidthOutlineRectNode outlineBoxNode;
 	
 	public TileSelectCommand(TileLayerEditManager data){
 		this.data = data;
@@ -75,7 +75,8 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
         	if(currentNode!=null){
         		TileLayerPNode parent = (TileLayerPNode) currentNode.getParent();
         		if(outlineBoxNode == null){
-                	outlineBoxNode = new FixedWidthOutlineBoxNode(startNode.getWidth(), startNode.getHeight(), 1, event.getCamera());
+                	outlineBoxNode = new FixedWidthOutlineRectNode(1, event.getCamera());
+                	outlineBoxNode.setBounds(0, 0, startNode.getWidth(), startNode.getHeight());
                 	outlineBoxNode.setPickable(false);
                 	parent.getLayer().getOverlayGUI().addChild(outlineBoxNode);
                 }

@@ -21,7 +21,7 @@ import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PPaintContext;
 
 import com.clearlyspam23.GLE.GUI.LayerEditManager;
-import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineBoxNode;
+import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
@@ -46,7 +46,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	
 	private PNode base;
 	private PNode background;
-	private FixedWidthOutlineBoxNode outline;
+	private FixedWidthOutlineRectNode outline;
 	
 	private List<PNode> layers = new ArrayList<PNode>();
 	private List<LayerEditManager<?>> editors = new ArrayList<LayerEditManager<?>>();
@@ -77,7 +77,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		
 		base = new PNode();
 		
-		outline = new FixedWidthOutlineBoxNode(level.getWidth(), level.getHeight(), 8, canvas.getCamera());
+		outline = new FixedWidthOutlineRectNode(8, canvas.getCamera());
+		outline.setBounds(0, 0, level.getWidth(), level.getHeight());
 		outline.setPickable(false);
 		outline.setChildrenPickable(false);
 //		
