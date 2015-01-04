@@ -211,4 +211,10 @@ public class MovableTileSelection implements TileSelection{
 		
 	}
 
+	@Override
+	public boolean isNodeInSelection(TilePNode node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -22,5 +22,25 @@ public class TileLocation {
 		gridX = x;
 		gridY = y;
 	}
+	
+	public boolean equals(Object o){
+		if(o instanceof TileLocation)
+			return equals((TileLocation) o );
+		return false;
+	}
+	
+	public boolean equals(TileLocation location){
+		return gridX==location.gridX&&gridY==location.gridY;
+	}
+	
+	/**
+	 * convenience method for checking if this object equals new TileLocation (location.gridX + offset.gridX, location.gridY + offset.gridY)
+	 * @param location the location to check against
+	 * @param offset the location's offset
+	 * @return if this object is equal to new TileLocation (location.gridX + offset.gridX, location.gridY + offset.gridY)
+	 */
+	public boolean equals(TileLocation location, TileLocation offset){
+		return gridX==location.gridX+offset.gridX&&gridY==location.gridY+offset.gridY;
+	}
 
 }

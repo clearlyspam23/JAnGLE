@@ -169,7 +169,7 @@ public class AnimatedOutlineRectNode extends AnimatedPNode {
     }
 
 	@Override
-	public PActivity getActivity() {
+	public PActivity getAnimationActivity() {
 		return activity;
 	}
 

@@ -15,5 +15,7 @@ public interface TileSelection {
 	public int getTileHeight();
 	
 	public void onRemove();
+	
+	public boolean isNodeInSelection(TilePNode node);
 
 }
