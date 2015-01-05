@@ -47,6 +47,9 @@ public class ImmovableTileSelection implements TileSelection{
 		}
 		width = maxX-minX+1;
 		height = maxY-minY+1;
+		outlineRect = calculateBoundingRect();
+		for(FixedWidthOutlineRectNode n : outlineRect)
+			overlayNode.addChild(n);
 	}
 
 	public List<Tile> onCopy() {
@@ -83,7 +86,7 @@ public class ImmovableTileSelection implements TileSelection{
 		tileLayer.silentlyIgnoreInput(false);
 	}
 	
-	public List<FixedWidthOutlineRectNode> calculateBoundingRect(){
+	private List<FixedWidthOutlineRectNode> calculateBoundingRect(){
 		List<FixedWidthOutlineRectNode> boundingRect = new ArrayList<FixedWidthOutlineRectNode>();
 		boundingRect.clear();
 		int[][] sideGrid = new int[width][height];
@@ -158,55 +161,9 @@ public class ImmovableTileSelection implements TileSelection{
 		}
 		return boundingRect;
 	}
-	
-//	public void setOffset(int newX, int newY){
-//		List<TileLocation> list = new ArrayList<TileLocation>();
-//		for(Tile t : selectedLocations){
-//			TileLocation loc = t.getLocation();
-//			if(tileLayer.isValidLocation(loc)){
-//				TilePNode node = tileLayer.getNodeAt(loc);
-//				t.setTileset(node.getTileData());
-//				node.resetTileset();
-//				node.silentlyIgnoreInput(true);
-//				list.add(loc);
-//			}
-//		}
-//		offset.gridX=newX;
-//		offset.gridY=newY;
-//		for(Tile t : selectedLocations){
-//			TileLocation loc = t.getLocation();
-//			if(tileLayer.isValidLocation(loc)){
-//				TilePNode node = tileLayer.getNodeAt(loc);
-//				node.silentlyIgnoreInput(false);
-//				node.setTileset(t);
-//			}
-//		}
-//	}
-//	
-//	public void move(int deltaX, int deltaY){
-//		
-//	}
-//	
-//	public void move(TileLocation offset){
-//		move(offset.gridX, offset.gridY);
-//	}
-//	
-//	public boolean pruneInvalidTiles(){
-//		for(Iterator<Tile> it = selectedLocations.iterator(); it.hasNext();){
-//			Tile t = it.next();
-//			if(!tileLayer.isValidLocation(t.getLocation()))
-//				it.remove();
-//		}
-//		return !selectedLocations.isEmpty();
-//	}
-	
-//	public void moveTo(TileLocation location){
-//		
-//	}
 
 	public PNode getOverlayNode() {
-		// TODO Auto-generated method stub
-		return null;
+		return overlayNode;
 	}
 
 	@Override

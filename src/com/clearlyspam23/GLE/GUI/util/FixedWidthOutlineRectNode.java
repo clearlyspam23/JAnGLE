@@ -61,21 +61,15 @@ public class FixedWidthOutlineRectNode extends PNode {
 	}
 	
 	public FixedWidthOutlineRectNode(float strokeWidth, PCamera camera, Color strokeColor, int drawMask){
-		this.drawMask = drawMask;
-		this.color = strokeColor;
-		stroke = new FixedWidthStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, camera);
+		this(new FixedWidthStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, camera), strokeColor, drawMask);
 	}
 	
-//	public FixedWidthOutlineRectNode(double width, double height, float strokeWidth, PCamera camera){
-//		this(width, height, strokeWidth, camera, Color.BLACK);
-//	}
-//	
-//	public FixedWidthOutlineRectNode(double width, double height, float strokeWidth, PCamera camera, Color color){
-//		this.color = color;
-//		stroke = new FixedWidthStroke(strokeWidth, camera);
-//		setBounds(0, 0, width, height);
-//	}
-//	
+	public FixedWidthOutlineRectNode(FixedWidthStroke stroke, Color strokeColor, int drawMask){
+		this.drawMask = drawMask;
+		this.color = strokeColor;
+		this.stroke = stroke;
+	}
+	
 	protected void paint(PPaintContext paintContext) {
 		
 		Graphics2D g2 = paintContext.getGraphics();
@@ -105,14 +99,6 @@ public class FixedWidthOutlineRectNode extends PNode {
         }
         g2.setStroke(new BasicStroke(0));
         g2.setPaint(p);
-
-//        Graphics2D g2 = paintContext.getGraphics();
-//        g2.setPaint(color);
-//        g2.setBackground(new Color(0, 0, 0, 0));
-//        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//
-//        g2.setStroke(stroke);
-//        g2.draw(rect);
     }
 	
 	public void setDrawRight(boolean flag){
@@ -167,16 +153,16 @@ public class FixedWidthOutlineRectNode extends PNode {
 		return color;
 	}
 	
-//	public boolean setBounds(final double x, final double y, final double width, final double height){
-//		if(super.setBounds(x, y, width, height)){
-//			rect.setRect(x, y, width, height);
-//			return true;
-//		}
-//		return false;
-//	}
-	
 	public void resize(double width, double height){
 		this.setBounds(0, 0, width, height);
+	}
+	
+	public FixedWidthStroke getStroke(){
+		return stroke;
+	}
+	
+	public void setStroke(FixedWidthStroke stroke){
+		this.stroke = stroke;
 	}
 
 }

@@ -18,6 +18,7 @@ public class PAnimation implements PropertyChangeListener {
 	
 	public PAnimation(PNode node, Animatable animatable){
 		this.watch = node;
+		this.animatable = animatable;
 	}
 
 	@Override
