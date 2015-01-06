@@ -31,12 +31,15 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	
 	private TileLayer layer;
 	
+	private BasePNode base;
+	
 	public TileLayerPNode(double gridWidth, double gridHeight){
-		this(gridWidth, gridHeight, null);
+		this(gridWidth, gridHeight, null, null);
 	}
 	
-	public TileLayerPNode(double gridWidth, double gridHeight, TileLayer layer)
+	public TileLayerPNode(double gridWidth, double gridHeight, TileLayer layer, BasePNode base)
 	{
+		this.setBase(base);
 		this.setLayer(layer);
 		gridDimensions.set(gridWidth, gridHeight);
 		nodeGrid = new TilePNode[0][0];
@@ -291,5 +294,13 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 
 	public void setLayer(TileLayer layer) {
 		this.layer = layer;
+	}
+
+	public BasePNode getBase() {
+		return base;
+	}
+
+	public void setBase(BasePNode base) {
+		this.base = base;
 	}
 }

@@ -14,10 +14,14 @@ public class BasePNode extends PNode {
 	private static final long serialVersionUID = 1L;
 	private TileLayerPNode tiles;
 	
+	private PNode selectionNode;
 	private TileSelection selection;
+	private PNode overlayNode;
+	private TileLayer layer;
 	
 	public BasePNode(TileLayerTemplate template, TileLayer layer){
-		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight(), layer);
+		this.layer = layer;
+		tiles = new TileLayerPNode(template.getDefaultGridWidth(), template.getDefaultGridHeight(), layer, this);
 		addChild(tiles);
 	}
 
@@ -39,9 +43,27 @@ public class BasePNode extends PNode {
 
 	public void setSelection(TileSelection selection) {
 		if(this.selection!=null){
+			this.selection.onAnchor();
 			this.selection.onRemove();
+			if(selectionNode!=null)
+				removeChild(selectionNode);
+			if(overlayNode!=null)
+				layer.getOverlayGUI().removeChild(overlayNode);
 		}
 		this.selection = selection;
+		if(selection!=null){
+			selectionNode = selection.getSelectionNode();
+			if(selectionNode!=null)
+				addChild(selectionNode);
+			overlayNode = selection.getOverlayNode();
+			if(overlayNode!=null)
+				layer.getOverlayGUI().addChild(overlayNode);
+		}
+	}
+	
+	public void clearSelection(){
+		setSelection(null);
+		//for everyone not comfortable with passing in nulls
 	}
 	
 	public boolean canCut(){

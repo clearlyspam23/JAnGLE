@@ -1,6 +1,8 @@
 package com.clearlyspam23.GLE.basic.layers.tile.commands;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PNode;
@@ -9,14 +11,18 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.ImmovableTileSelection;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 
 public class TileSelectCommand extends PDragSequenceEventHandler {
 	
 	protected TileLayerEditManager data;
 	protected TilePNode startNode;
+	protected TilePNode lastNode;
 	
 	protected FixedWidthOutlineRectNode outlineBoxNode;
 	
@@ -30,8 +36,14 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 			System.out.println("should select a bunch");
 		}
 		else if(event.isRightMouseButton()){
-			outlineBoxNode.removeFromParent();
-			outlineBoxNode = null;
+			TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+			if(node!=null){
+				BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
+				if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
+					base.clearSelection();
+				}
+				
+			}
 		}
 	}
 	
@@ -52,27 +64,49 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	
 	protected void startDrag(PInputEvent event){
 		super.startDrag(event);
-		System.out.println("start drag");
-		startNode = tryGrabNode(event.getCanvasPosition(), event.getCamera());
-		if(outlineBoxNode!=null){
-			outlineBoxNode.removeFromParent();
-			outlineBoxNode = null;
+		lastNode = startNode = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+		if(startNode!=null){
+			startNode.getTilePNodeLayer().getBase().clearSelection();
 		}
+		
 	}
 	
 	
 	@Override
 	protected void endDrag(PInputEvent event){
 		super.endDrag(event);
-		System.out.println("end drag");
+		if(startNode!=null&&lastNode!=null&&outlineBoxNode!=null){
+			int startX = Math.min(startNode.getGridX(), lastNode.getGridX());
+			int startY = Math.min(startNode.getGridY(), lastNode.getGridY());
+			int endX = Math.max(startNode.getGridX(), lastNode.getGridX());
+			int endY = Math.max(startNode.getGridY(), lastNode.getGridY());
+			int width = endX - startX + 1;
+			int height = endY - startY + 1;
+			TileLayerPNode parent = startNode.getTilePNodeLayer();
+			List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
+			for(int i = 0; i < width; i++){
+				for(int j = 0; j < height; j++){
+					System.out.println(i+startX + ", " + (j+startY));
+					selectedLocations.add(new TileLocation(i+startX, j+startY));
+				}
+			}
+			ImmovableTileSelection selection = new ImmovableTileSelection(selectedLocations, parent, event.getCamera());
+			parent.getBase().setSelection(selection);
+		}
 		startNode = null;
+		lastNode = null;
+		if(outlineBoxNode!=null){
+			outlineBoxNode.removeFromParent();
+			outlineBoxNode = null;
+		}
 	}
 	
 	protected void drag(PInputEvent event) {
         super.drag(event);
         if(startNode!=null){
         	TilePNode currentNode = tryGrabNode(event.getCanvasPosition(), event.getCamera());
-        	if(currentNode!=null){
+        	if(currentNode!=null&&currentNode.getParent()==startNode.getParent()){
+        		lastNode = currentNode;
         		TileLayerPNode parent = (TileLayerPNode) currentNode.getParent();
         		if(outlineBoxNode == null){
                 	outlineBoxNode = new FixedWidthOutlineRectNode(1, event.getCamera());
@@ -91,7 +125,6 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
         		if(outlineBoxNode.setBounds(x, y, width, height)){
         			outlineBoxNode.repaint();
             		parent.repaint();
-            		System.out.println("Repaint");
         		}
         	}
         }

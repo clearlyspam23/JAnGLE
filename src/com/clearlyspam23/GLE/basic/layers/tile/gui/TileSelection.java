@@ -2,6 +2,8 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.util.List;
 
+import org.piccolo2d.PNode;
+
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 
 public interface TileSelection {
@@ -10,11 +12,19 @@ public interface TileSelection {
 	
 	public List<Tile> onCut();
 	
+	public void onClear();
+	
 	public int getTileWidth();
 	
 	public int getTileHeight();
 	
 	public void onRemove();
+	
+	public void onAnchor();
+	
+	public PNode getSelectionNode();
+	
+	public PNode getOverlayNode();
 	
 	public boolean isNodeInSelection(TilePNode node);
 

@@ -1,21 +1,19 @@
 package com.clearlyspam23.GLE;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.yaml.snakeyaml.Yaml;
-
 import com.clearlyspam23.GLE.level.Level;
+import com.thoughtworks.xstream.XStream;
 
 public class LastRunInfo {
 	
 	private static final File DEFAULT_LAST_RUN = new File(".jangle");
 	
-	private Yaml yaml = new Yaml();
+	private XStream xstream = new XStream();
 	private File output;
 	private SaveData lastData;
 	
@@ -43,7 +41,7 @@ public class LastRunInfo {
 		lastData = new SaveData(openTemplate, list, currentLevel);
 		try {
 			FileWriter writer = new FileWriter(output);
-			yaml.dump(lastData, writer);
+			xstream.toXML(lastData, writer);
 			writer.close();
 		} catch (IOException e) {
 		}
@@ -52,9 +50,9 @@ public class LastRunInfo {
 	public boolean load(){
 		try {
 			FileReader reader = new FileReader(output);
-			lastData = (SaveData) yaml.load(reader);
+			lastData = (SaveData) xstream.fromXML(reader);
 			return true;
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			//subtly fail, this means that this is our first time running, probably shouldnt error
 		}
 		return false;

@@ -27,7 +27,7 @@ public class MovableTileSelection implements TileSelection{
 		private List<AnimatedOutlineRectNode> boundingRect = new ArrayList<AnimatedOutlineRectNode>();
 
 		public SelectionPNode(PCamera camera, TileLayerPNode lowerLayer) {
-			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight(), lowerLayer.getLayer());
+			super(lowerLayer.getGridWidth(), lowerLayer.getGridHeight(), lowerLayer.getLayer(), lowerLayer.getBase());
 			this.camera = camera;
 			this.lowerLayer = lowerLayer;
 		}
@@ -215,6 +215,30 @@ public class MovableTileSelection implements TileSelection{
 	public boolean isNodeInSelection(TilePNode node) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void onAnchor() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PNode getSelectionNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PNode getOverlayNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void onClear() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -24,7 +24,7 @@ public class ImmovableTileSelection implements TileSelection{
 	private TileLayerPNode tileLayer;
 	private PCamera camera;
 	
-	public ImmovableTileSelection(List<Tile> locations, TileLayerPNode layer, PCamera camera){
+	public ImmovableTileSelection(List<TileLocation> locations, TileLayerPNode layer, PCamera camera){
 		this.camera = camera;
 		tileLayer = layer;
 		tileLayer.silentlyIgnoreInput(true);
@@ -32,8 +32,7 @@ public class ImmovableTileSelection implements TileSelection{
 		int maxX = 0;
 		int minY = Integer.MAX_VALUE;
 		int maxY = 0;
-		for(Tile t : locations){
-			TileLocation loc = t.getLocation();
+		for(TileLocation loc : locations){
 			tileLayer.getNodeAt(loc).silentlyIgnoreInput(false);
 			minX = Math.min(minX, loc.gridX);
 			maxX = Math.max(maxX, loc.gridX);
@@ -41,8 +40,7 @@ public class ImmovableTileSelection implements TileSelection{
 			maxY = Math.max(maxY, loc.gridY);
 		}
 		offset = new TileLocation(minX, minY);
-		for(Tile t : locations){
-			TileLocation loc = t.getLocation();
+		for(TileLocation loc : locations){
 			selectedLocations.add(new TileLocation(loc.gridX - offset.gridX, loc.gridY - offset.gridY));
 		}
 		width = maxX-minX+1;
@@ -65,13 +63,18 @@ public class ImmovableTileSelection implements TileSelection{
 	
 	public List<Tile> onCut() {
 		List<Tile> answer = onCopy();
+		onClear();
+		return answer;
+	}
+	
+	@Override
+	public void onClear() {
 		for(TileLocation t : selectedLocations){
 			if(tileLayer.isValidLocation(t.gridX+offset.gridX, t.gridY+offset.gridY)){
 				tileLayer.getNodeAt(t.gridX+offset.gridX, t.gridY+offset.gridY).resetTileset();
 			}
 		}
 		selectedLocations.clear();
-		return answer;
 	}
 	
 	public int getTileWidth(){
@@ -100,7 +103,7 @@ public class ImmovableTileSelection implements TileSelection{
 				sideGrid[i][j] = AnimatedOutlineRectNode.NONE;
 				if(grid[i][j]==null)
 					continue;
-				//perform edge detection, if any edges are detected, create an animated node
+				//perform edge detection, if any edges are detected, create a node
 				if(i-1<0||grid[i-1][j]==null)
 					sideGrid[i][j]|=AnimatedOutlineRectNode.LEFT;
 				if(i+1>=grid.length||grid[i+1][j]==null)
@@ -146,7 +149,9 @@ public class ImmovableTileSelection implements TileSelection{
 					value|=(sideGrid[i+width-1][j]&AnimatedOutlineRectNode.RIGHT);
 					value|=(sideGrid[i][j+height-1]&AnimatedOutlineRectNode.BOTTOM);
 					FixedWidthOutlineRectNode rect = new FixedWidthOutlineRectNode(1, camera, Color.YELLOW, value);
-					rect.setBounds(tileLayer.getNodeGrid()[i][j].getBounds().getBounds2D());
+					rect.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
+							Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
+							Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
 					boundingRect.add(rect);
 					for(int k = 0; k < width; k++){
 						sideGrid[i+k][j] = 0;
@@ -174,6 +179,18 @@ public class ImmovableTileSelection implements TileSelection{
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onAnchor() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PNode getSelectionNode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
