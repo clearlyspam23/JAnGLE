@@ -21,7 +21,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.TileSelectCommand;
 
-public class TileLayerEditManager extends LayerEditManager<TileLayer> implements ChangeListener, PInputEventListener{
+public class TileLayerEditManager extends LayerEditManager<TileLayer> implements ChangeListener, PInputEventListener, TileLayerSelectionListener{
 	
 //	private Tileset currentTileset;
 //	
@@ -35,10 +35,6 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	private TilesetSelectionPanel selectionPanel;
 	
 	private TileData[][] cutSelection;
-	
-	
-	
-//	private List<LayerEditorDialog> dialogs = new ArrayList<LayerEditorDialog>();
 	
 	public TileLayerEditManager()
 	{
@@ -58,38 +54,16 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 		addSubComponents(selectionPanel, "Tileset");
 	}
 	
-//	public void buildDialogs(Frame frame){
-//		getDialogs().clear();
-//		dialog = new TileEditorDialog(frame);
-//		dialog.getPanel().addChangeListener(this);
-//		dialog.getPanel().selectButton(0);
-//		dialog.getTilesetSelectionPanel().addAllTilesets(tempTilesetStorage);
-//		getDialogs().add(dialog);
-//		tempTilesetStorage.clear();
-//	}
-	
-//	public List<LayerEditorDialog> getEditorDialogs(Frame f){
-//		if(getDialogs().isEmpty()||!f.equals(getDialogs().get(0).getParent()))
-//			buildDialogs(f);
-//		return dialogs;
-//	}
-	
 	public TilesetHandle getCurrentTileset() {
 		return selectionPanel.getCurrentTileset();
 	}
-//	public void setCurrentTileset(Tileset currentTileset) {
-//		dialog.getTilesetSelectionPanel().set
-//	}
+
 	public int getSelectedX() {
 		return selectionPanel.getSelectedX();
 	}
 	public int getSelectedY(){
 		return selectionPanel.getSelectedY();
 	}
-//	public void setSelectedIndex(int selectedX, int selectedY){
-//		this.selectedX = selectedX;
-//		this.selectedY = selectedY;
-//	}
 	
 	public void addTileset(TilesetHandle t){
 		selectionPanel.addTileset(t);
@@ -98,10 +72,6 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public void clearTilesets(){
 		selectionPanel.clearTilesets();
 	}
-	
-//	public void addAllTilesets(){
-//		
-//	}
 	
 	public Image getSelectedTile(){
 		return selectionPanel.getSelectedTile();
@@ -132,6 +102,34 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 
 	public void setCutSelection(TileData[][] cutSelection) {
 		this.cutSelection = cutSelection;
+	}
+	
+	public void onActive(TileLayer layer){
+		layer.addSelectionListener(this);
+		checkCopyCut(layer);
+	}
+	
+	public void onLayerChange(TileLayer oldLayer, TileLayer newLayer){
+		oldLayer.removeSelectionListener(this);
+		newLayer.addSelectionListener(this);
+		checkCopyCut(newLayer);
+	}
+	
+	public void onInActive(TileLayer layer){
+		layer.removeSelectionListener(this);
+	}
+	
+	private void checkCopyCut(TileLayer layer){
+		if(layer.canCopy()!=canCopy())
+			toggleCanCopy(layer.canCopy());
+		if(layer.canCut()!=canCut())
+			toggleCanCut(layer.canCut());
+	}
+
+	@Override
+	public void selectionChange(TileLayer layer, TileSelection oldSelection,
+			TileSelection newSelection) {
+		checkCopyCut(layer);
 	}
 
 }

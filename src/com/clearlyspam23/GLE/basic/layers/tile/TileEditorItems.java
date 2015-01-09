@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.GUI.LayerMenuItem;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.LayerGridMenuItem;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.GridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetLoadDialog;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
@@ -23,12 +23,12 @@ public class TileEditorItems extends EditorItems<TileLayer> {
 	
 	private TilesetLoadDialog loadDialog;
 	
-	private LayerGridMenuItem gridItem;
+	private GridMenuItem gridItem;
 
 	public TileEditorItems(TileLayerDefinition def) {
 		super(def);
 		loadDialog = new TilesetLoadDialog();
-		gridItem = new LayerGridMenuItem();
+		gridItem = new GridMenuItem();
 	}
 
 	@Override

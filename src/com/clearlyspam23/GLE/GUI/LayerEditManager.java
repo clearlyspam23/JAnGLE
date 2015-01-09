@@ -83,6 +83,10 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 		
 	}
 	
+	public void onLayerChange(T oldLayer, T newLayer){
+		
+	}
+	
 	public void onInActive(T layer){
 		
 	}

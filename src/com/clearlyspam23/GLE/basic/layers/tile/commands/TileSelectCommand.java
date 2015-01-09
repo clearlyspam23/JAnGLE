@@ -40,7 +40,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 			if(node!=null){
 				BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
 				if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
-					base.clearSelection();
+					base.anchorSelection();
 				}
 				
 			}
@@ -66,7 +66,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 		super.startDrag(event);
 		lastNode = startNode = tryGrabNode(event.getCanvasPosition(), event.getCamera());
 		if(startNode!=null){
-			startNode.getTilePNodeLayer().getBase().clearSelection();
+			startNode.getTilePNodeLayer().getBase().anchorSelection();
 		}
 		
 	}

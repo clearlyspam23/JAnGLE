@@ -6,9 +6,9 @@ import com.clearlyspam23.GLE.GUI.LayerMenuItem;
 import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 
-public class LayerGridMenuItem extends LayerMenuItem<TileLayer, JCheckBoxMenuItem> {
+public class GridMenuItem extends LayerMenuItem<TileLayer, JCheckBoxMenuItem> {
 
-	public LayerGridMenuItem() {
+	public GridMenuItem() {
 		super(new JCheckBoxMenuItem("Show Grid"));
 	}
 

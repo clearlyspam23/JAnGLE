@@ -50,6 +50,7 @@ public class BasePNode extends PNode {
 			if(overlayNode!=null)
 				layer.getOverlayGUI().removeChild(overlayNode);
 		}
+		TileSelection oldSelection = this.selection;
 		this.selection = selection;
 		if(selection!=null){
 			selectionNode = selection.getSelectionNode();
@@ -59,6 +60,15 @@ public class BasePNode extends PNode {
 			if(overlayNode!=null)
 				layer.getOverlayGUI().addChild(overlayNode);
 		}
+		layer.selectionChanged(oldSelection, selection);
+	}
+	
+	public boolean canCopy(){
+		return hasSelection();
+	}
+	
+	public boolean canCut(){
+		return hasSelection();
 	}
 	
 	public void clearSelection(){
@@ -66,11 +76,14 @@ public class BasePNode extends PNode {
 		//for everyone not comfortable with passing in nulls
 	}
 	
-	public boolean canCut(){
-		return selection!=null;
+	public void anchorSelection(){
+		if(selection!=null){
+			selection.onAnchor();
+			selection.onRemove();
+		}
 	}
 	
-	public boolean canCopy(){
+	public boolean hasSelection(){
 		return selection!=null;
 	}
 

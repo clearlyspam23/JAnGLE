@@ -148,10 +148,11 @@ public class ImmovableTileSelection implements TileSelection{
 					int value = sideGrid[i][j]&(AnimatedOutlineRectNode.LEFT|AnimatedOutlineRectNode.TOP);
 					value|=(sideGrid[i+width-1][j]&AnimatedOutlineRectNode.RIGHT);
 					value|=(sideGrid[i][j+height-1]&AnimatedOutlineRectNode.BOTTOM);
-					FixedWidthOutlineRectNode rect = new FixedWidthOutlineRectNode(1, camera, Color.YELLOW, value);
+					FixedWidthOutlineRectNode rect = new FixedWidthOutlineRectNode(2, camera, Color.YELLOW, value);
 					rect.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
 							Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
 							Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
+					rect.setPickable(false);
 					boundingRect.add(rect);
 					for(int k = 0; k < width; k++){
 						sideGrid[i+k][j] = 0;

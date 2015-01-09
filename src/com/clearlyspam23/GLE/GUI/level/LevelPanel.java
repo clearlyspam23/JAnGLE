@@ -169,10 +169,15 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			LayerEditManager nextEditor = editors.get(index);
 			editor.removeEditListener(level);
 			canvas.removeInputEventListener(editor);
-			if(isShowing()&&!editor.equals(nextEditor)){
-				editDialogs.get(editor).setVisible(false);
-				editor.onInActive(old);
-				nextEditor.onActive(level.getLayers().get(index));
+			if(isShowing()){
+				if(!editor.equals(nextEditor)){
+					editDialogs.get(editor).setVisible(false);
+					editor.onInActive(old);
+					nextEditor.onActive(level.getLayers().get(index));
+				}
+				else{
+					editor.onLayerChange(old, level.getLayers().get(index));
+				}
 			}
 		}
 		//set the current index, and have the all of the other nodes become unpickable
