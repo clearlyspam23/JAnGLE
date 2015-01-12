@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.commands;
+package com.clearlyspam23.GLE.basic.layers.tile.edit;
 
 import java.awt.geom.Point2D;
 import java.util.HashSet;
@@ -12,7 +12,6 @@ import org.piccolo2d.util.PPickPath;
 
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 
 public abstract class TileDragCommand extends PDragSequenceEventHandler {
 	

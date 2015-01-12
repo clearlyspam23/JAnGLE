@@ -8,10 +8,10 @@ import java.util.Map;
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.GUI.util.AxisAlignedRectGridNode;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.TileLayerEditManager;
 import com.clearlyspam23.GLE.basic.layers.tile.export.CompactExportData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileSelection;
 import com.clearlyspam23.GLE.edit.LayerEditManager;

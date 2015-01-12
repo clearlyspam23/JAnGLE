@@ -1,8 +1,8 @@
 package com.clearlyspam23.GLE.basic.layers.tile;
 
 import com.clearlyspam23.GLE.Template;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.TileLayerEditManager;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerGUIOptions;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.edit.EditorItems;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 

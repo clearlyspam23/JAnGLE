@@ -335,16 +335,37 @@ public class MainWindow extends JFrame implements LayerChangeListener, LevelChan
 		mnEdit.add(separator_1);
 		
 		mntmCut = new JMenuItem("Cut");
+		mntmCut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
+					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onCut();
+				}
+			}
+		});
 		mntmCut.setEnabled(false);
 		mntmCut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmCut);
 		
 		mntmCopy = new JMenuItem("Copy");
+		mntmCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
+					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onCopy();
+				}
+			}
+		});
 		mntmCopy.setEnabled(false);
 		mntmCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmCopy);
 		
 		mntmPaste = new JMenuItem("Paste");
+		mntmCut.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
+					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onPaste();
+				}
+			}
+		});
 		mntmPaste.setEnabled(false);
 		mntmPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmPaste);

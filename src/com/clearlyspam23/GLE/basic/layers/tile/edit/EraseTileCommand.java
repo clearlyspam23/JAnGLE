@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.commands;
+package com.clearlyspam23.GLE.basic.layers.tile.edit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,30 +7,26 @@ import org.piccolo2d.PCamera;
 import org.piccolo2d.event.PInputEvent;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions.PlaceTileAction;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.EraseTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerEditManager;
 import com.clearlyspam23.GLE.util.Pair;
 
-public class PlaceTileCommand extends TileDragCommand {
+public class EraseTileCommand extends TileDragCommand {
 	
 	protected List<Pair<TilePNode, TileData>> replacedList;
-	
-	
-	public PlaceTileCommand(TileLayerEditManager data){
+
+	public EraseTileCommand(TileLayerEditManager data) {
 		super(data);
 	}
 	
 	protected void setTile(TilePNode tile, PCamera cam){
-		if(data.getSelectedTile()==null)
-			return;
 		replacedList.add(new Pair<TilePNode, TileData>(tile, tile.getTileData()));
-		tile.setTileset(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY());
+		tile.resetTileset();
 	}
 	
 	private boolean aChangeExists(){
 		for(Pair<TilePNode, TileData> p : replacedList){
-			if(!p.second.equals(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+			if(p.second.tileset!=null)
 				return true;
 		}
 		return false;
@@ -39,7 +35,7 @@ public class PlaceTileCommand extends TileDragCommand {
 	@Override
 	protected void onFinish(PInputEvent event) {
 		if(aChangeExists()){
-			PlaceTileAction action = new PlaceTileAction(replacedList, new TileData(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()));
+			EraseTileAction action = new EraseTileAction(replacedList);
 			data.registerEditAction(action);
 		}
 	}

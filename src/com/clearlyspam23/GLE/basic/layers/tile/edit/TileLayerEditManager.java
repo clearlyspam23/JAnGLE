@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.gui;
+package com.clearlyspam23.GLE.basic.layers.tile.edit;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -15,10 +15,9 @@ import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
-import com.clearlyspam23.GLE.basic.layers.tile.commands.TileSelectCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TileSelection;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetSelectionPanel;
 import com.clearlyspam23.GLE.edit.LayerEditManager;
 import com.clearlyspam23.GLE.edit.LayerMenuItem;
 

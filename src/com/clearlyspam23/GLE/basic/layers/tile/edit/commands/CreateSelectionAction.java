@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.commands.EditActions;
+package com.clearlyspam23.GLE.basic.layers.tile.edit.commands;
 
 import com.clearlyspam23.GLE.edit.EditAction;
 
