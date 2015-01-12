@@ -1,7 +1,7 @@
 package com.clearlyspam23.GLE.level;
 
-import com.clearlyspam23.GLE.GUI.EditorItems;
 import com.clearlyspam23.GLE.GUI.SubPanel;
+import com.clearlyspam23.GLE.edit.EditorItems;
 import com.clearlyspam23.GLE.level.LayerTemplate;
 import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.Template;

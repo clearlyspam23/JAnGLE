@@ -44,7 +44,7 @@ import com.clearlyspam23.GLE.JAnGLEData;
 import com.clearlyspam23.GLE.LastRunInfo;
 import com.clearlyspam23.GLE.PluginManager;
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.GUI.level.ChangeLayerListener;
+import com.clearlyspam23.GLE.GUI.level.LayerChangeListener;
 import com.clearlyspam23.GLE.GUI.level.LevelPanel;
 import com.clearlyspam23.GLE.GUI.level.LevelPropertyDialog;
 import com.clearlyspam23.GLE.GUI.template.GeneralPanel;
@@ -68,14 +68,16 @@ import com.clearlyspam23.GLE.basic.parameters.WorkingDirectoryMacro;
 import com.clearlyspam23.GLE.basic.properties.IntPropertyDefinition;
 import com.clearlyspam23.GLE.basic.properties.VectorPropertyDefinition;
 import com.clearlyspam23.GLE.basic.serializers.JsonSerializer;
-import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.edit.EditAction;
+import com.clearlyspam23.GLE.edit.EditorItems;
+import com.clearlyspam23.GLE.edit.LayerEditManager;
+import com.clearlyspam23.GLE.edit.LayerMenuItem;
 import com.clearlyspam23.GLE.level.Layer;
-import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
 import com.clearlyspam23.GLE.util.TwoWayMap;
 
-public class MainWindow extends JFrame implements ChangeLayerListener, LevelChangeListener, EditActionListener{
+public class MainWindow extends JFrame implements LayerChangeListener, LevelChangeListener, EditActionListener{
 
 	/**
 	 * 
@@ -177,8 +179,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 	
 	private LevelPropertyDialog propertyDialog;
 	
-	@SuppressWarnings("rawtypes")
-	private Map<LayerDefinition, EditorItems> layerMenuItems = new HashMap<LayerDefinition, EditorItems>();
 	private List<JMenu> layerMenus = new ArrayList<JMenu>();
 	
 	private Map<LayerEditManager<?>, JDialog> editDialogs = new HashMap<LayerEditManager<?>, JDialog>();
@@ -394,7 +394,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 							checkCutCopyPaste(data.getCurrentLevel());
 						}
 						if(panel!=null)
-							onLayerChange(old, panel.getCurrentLayer());
+							onLayerChange(old, panel.getCurrentLayer(), panel);
 					}
 				}
 			}
@@ -463,7 +463,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 			}
 		}
 		if(levelPanelMap.getNormal(data.getCurrentLevel())!=null)
-			onLayerChange(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer(), null);
+			onLayerChange(levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentLayer(), null, levelPanelMap.getNormal(data.getCurrentLevel()));
 		data.closeAllLevels();
 		tabbedPane.removeAll();
 		for(LevelPanel p : levelPanelMap.getValues()){
@@ -473,7 +473,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 			menuBar.remove(m);
 		}
 		levelPanelMap.clear();
-		layerMenuItems.clear();
 		layerMenus.clear();
 		data.setOpenTemplate(null);
 	}
@@ -483,7 +482,6 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 		t.setData(data);
 		List<EditorItems> items = data.setOpenTemplate(t);
 		for(EditorItems i : items){
-			layerMenuItems.put(i.getDef(), i);
 			for(Object o : i.getMenuItems(t)){
 				JMenu m = (JMenu) o;
 				layerMenus.add(m);
@@ -631,7 +629,7 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void onLayerChange(Layer oldLayer, Layer newLayer) {
+	public void onLayerChange(Layer oldLayer, Layer newLayer, LevelPanel source) {
 		if(oldLayer!=null&&activeItems!=null){
 			for(LayerMenuItem i : activeItems){
 				mnLayer.remove(i.getMenuItem());
@@ -642,8 +640,9 @@ public class MainWindow extends JFrame implements ChangeLayerListener, LevelChan
 				i.onHide(oldLayer);
 			}
 		}
-		if(newLayer!=null&&layerMenuItems.containsKey(newLayer.getDefinition())){
-			activeItems = layerMenuItems.get(newLayer.getDefinition()).getLayerItems(newLayer);
+		if(newLayer!=null&&source.getCurrentEditManager()!=null){
+			LayerEditManager manager = source.getCurrentEditManager();
+			activeItems = manager.getLayerItems(newLayer);
 			for(LayerMenuItem i : activeItems){
 				mnLayer.add(i.getMenuItem());
 				i.getMenuItem().addActionListener(new LayerButtonAction(i));

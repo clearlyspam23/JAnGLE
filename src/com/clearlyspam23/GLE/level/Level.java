@@ -14,6 +14,7 @@ import com.clearlyspam23.GLE.Nameable;
 import com.clearlyspam23.GLE.PropertyTemplate;
 import com.clearlyspam23.GLE.Template;
 import com.clearlyspam23.GLE.GUI.EditActionListener;
+import com.clearlyspam23.GLE.edit.EditAction;
 import com.clearlyspam23.GLE.exception.TemplateMismatchException;
 import com.clearlyspam23.GLE.util.Vector2;
 

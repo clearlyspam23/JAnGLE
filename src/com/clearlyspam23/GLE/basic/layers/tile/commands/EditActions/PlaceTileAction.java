@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.edit.EditAction;
 import com.clearlyspam23.GLE.util.Pair;
 
 public class PlaceTileAction implements EditAction{

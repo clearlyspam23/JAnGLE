@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.edit;
 
 import java.awt.Button;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import com.clearlyspam23.GLE.level.LayerDefinition;
 
 public class DefaultEditorItems<T extends Layer<?>> extends EditorItems<T>{
 	
-	private List<LayerMenuItem<T, ?>> layerItems = new ArrayList<LayerMenuItem<T, ?>>();
 	private List<JMenu> menuItems = new ArrayList<JMenu>();
 	private List<Button> buttonBarItems = new ArrayList<Button>();
 	
@@ -21,17 +20,6 @@ public class DefaultEditorItems<T extends Layer<?>> extends EditorItems<T>{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public List<LayerMenuItem<T, ?>> getLayerItems(T layer) {
-		return layerItems;
-	}
-	public DefaultEditorItems<T> addLayerItems(List<LayerMenuItem<T, ?>> levelItems) {
-		this.layerItems.addAll(levelItems);
-		return this;
-	}
-	public DefaultEditorItems<T> addLayerItem(LayerMenuItem<T, ?> item){
-		this.layerItems.add(item);
-		return this;
-	}
 	public List<JMenu> getMenuItems(Template template) {
 		return menuItems;
 	}

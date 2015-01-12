@@ -20,8 +20,8 @@ import org.piccolo2d.event.PMouseWheelZoomEventHandler;
 import org.piccolo2d.extras.pswing.PSwingCanvas;
 import org.piccolo2d.util.PPaintContext;
 
-import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
+import com.clearlyspam23.GLE.edit.LayerEditManager;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.level.LevelChangeListener;
@@ -52,7 +52,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 	private List<LayerEditManager<?>> editors = new ArrayList<LayerEditManager<?>>();
 	private Map<LayerEditManager<?>, JDialog> editDialogs;
 	
-	private List<ChangeLayerListener> listeners = new ArrayList<ChangeLayerListener>();
+	private List<LayerChangeListener> listeners = new ArrayList<LayerChangeListener>();
 	
 	private static final Color backgroundColor = new Color(200, 200, 240);
 	
@@ -212,8 +212,8 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 		if(isShowing())
 			editDialogs.get(editor).setVisible(true);
-		for(ChangeLayerListener l : listeners){
-			l.onLayerChange(old, level.getLayers().get(selectedIndex));
+		for(LayerChangeListener l : listeners){
+			l.onLayerChange(old, level.getLayers().get(selectedIndex), this);
 		}
 	}
 
@@ -294,7 +294,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		}
 	}
 	
-	public void addChangeLayerListener(ChangeLayerListener l){
+	public void addChangeLayerListener(LayerChangeListener l){
 		listeners.add(l);
 	}
 	

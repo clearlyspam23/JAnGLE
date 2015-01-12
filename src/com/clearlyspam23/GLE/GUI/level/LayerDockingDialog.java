@@ -12,7 +12,7 @@ import bibliothek.gui.dock.common.intern.DefaultCDockable.Permissions;
 import bibliothek.gui.dock.util.DirectWindowProvider;
 
 import com.clearlyspam23.GLE.GUI.ComponentData;
-import com.clearlyspam23.GLE.GUI.LayerEditManager;
+import com.clearlyspam23.GLE.edit.LayerEditManager;
 
 public class LayerDockingDialog extends JDialog{
 	

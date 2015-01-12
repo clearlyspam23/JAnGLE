@@ -1,6 +1,6 @@
 package com.clearlyspam23.GLE.GUI;
 
-import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.edit.EditAction;
 
 public interface EditActionListener {
 	

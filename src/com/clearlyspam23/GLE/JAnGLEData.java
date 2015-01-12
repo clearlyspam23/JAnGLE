@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.clearlyspam23.GLE.GUI.EditorItems;
+import com.clearlyspam23.GLE.edit.EditorItems;
 import com.clearlyspam23.GLE.level.LayerDefinition;
 import com.clearlyspam23.GLE.level.LayerTemplate;
 import com.clearlyspam23.GLE.level.Level;

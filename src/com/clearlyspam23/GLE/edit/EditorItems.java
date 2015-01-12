@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.edit;
 
 import java.awt.Button;
 import java.util.List;
@@ -24,8 +24,6 @@ public abstract class EditorItems<T extends Layer<?>> {
 	public void setDef(LayerDefinition<?, ?> def) {
 		this.def = def;
 	}
-	
-	public abstract List<LayerMenuItem<T, ?>> getLayerItems(T layer);
 	
 	public abstract List<JMenu> getMenuItems(Template template);
 	

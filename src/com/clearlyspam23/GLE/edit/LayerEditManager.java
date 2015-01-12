@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.GUI;
+package com.clearlyspam23.GLE.edit;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -10,7 +10,8 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.Nameable;
-import com.clearlyspam23.GLE.level.EditAction;
+import com.clearlyspam23.GLE.GUI.ComponentData;
+import com.clearlyspam23.GLE.GUI.EditActionListener;
 import com.clearlyspam23.GLE.level.Layer;
 
 @SuppressWarnings("rawtypes")
@@ -138,5 +139,7 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 	public void onPaste(){
 		
 	}
+	
+	public abstract List<LayerMenuItem<T, ?>> getLayerItems(T layer);
 
 }

@@ -2,8 +2,8 @@ package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import javax.swing.JMenuItem;
 
-import com.clearlyspam23.GLE.GUI.LayerMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
+import com.clearlyspam23.GLE.edit.LayerMenuItem;
 
 public class AnchorMenuItem extends LayerMenuItem<TileLayer, JMenuItem> {
 

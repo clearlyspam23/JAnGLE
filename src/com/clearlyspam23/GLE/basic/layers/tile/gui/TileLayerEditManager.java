@@ -10,7 +10,6 @@ import javax.swing.event.ChangeListener;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
 
-import com.clearlyspam23.GLE.GUI.LayerEditManager;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
@@ -20,6 +19,8 @@ import com.clearlyspam23.GLE.basic.layers.tile.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.commands.TileSelectCommand;
+import com.clearlyspam23.GLE.edit.LayerEditManager;
+import com.clearlyspam23.GLE.edit.LayerMenuItem;
 
 public class TileLayerEditManager extends LayerEditManager<TileLayer> implements ChangeListener, PInputEventListener, TileLayerSelectionListener{
 	
@@ -30,6 +31,8 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	
 	private PInputEventListener currentEvent;
 	
+	private GridMenuItem gridItem;
+	
 	private List<PInputEventListener> allEvents = new ArrayList<PInputEventListener>();
 	
 	private TilesetSelectionPanel selectionPanel;
@@ -38,6 +41,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	
 	public TileLayerEditManager()
 	{
+		gridItem = new GridMenuItem();
 		allEvents.add(new PlaceTileCommand(this));
 		allEvents.add(new EraseTileCommand(this));
 		allEvents.add(new FloodFillTileCommand(this));
@@ -130,6 +134,13 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public void selectionChange(TileLayer layer, TileSelection oldSelection,
 			TileSelection newSelection) {
 		checkCopyCut(layer);
+	}
+	
+	@Override
+	public List<LayerMenuItem<TileLayer, ?>> getLayerItems(TileLayer layer) {
+		List<LayerMenuItem<TileLayer, ?>> items = new ArrayList<LayerMenuItem<TileLayer, ?>>();
+		items.add(gridItem);
+		return items;
 	}
 
 }

@@ -11,10 +11,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.GUI.EditorItems;
-import com.clearlyspam23.GLE.GUI.LayerMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.GridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetLoadDialog;
+import com.clearlyspam23.GLE.edit.EditorItems;
+import com.clearlyspam23.GLE.edit.LayerMenuItem;
 import com.clearlyspam23.GLE.level.Layer;
 import com.clearlyspam23.GLE.level.Level;
 import com.clearlyspam23.GLE.util.Utility;
@@ -23,19 +23,11 @@ public class TileEditorItems extends EditorItems<TileLayer> {
 	
 	private TilesetLoadDialog loadDialog;
 	
-	private GridMenuItem gridItem;
+	
 
 	public TileEditorItems(TileLayerDefinition def) {
 		super(def);
 		loadDialog = new TilesetLoadDialog();
-		gridItem = new GridMenuItem();
-	}
-
-	@Override
-	public List<LayerMenuItem<TileLayer, ?>> getLayerItems(TileLayer layer) {
-		List<LayerMenuItem<TileLayer, ?>> items = new ArrayList<LayerMenuItem<TileLayer, ?>>();
-		items.add(gridItem);
-		return items;
 	}
 
 	@Override

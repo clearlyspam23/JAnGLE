@@ -1,13 +1,9 @@
 package com.clearlyspam23.GLE.level;
 
-import java.util.List;
-
-import javax.swing.JMenuItem;
-
 import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.Nameable;
-import com.clearlyspam23.GLE.GUI.LayerEditManager;
+import com.clearlyspam23.GLE.edit.LayerEditManager;
 
 public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	
@@ -47,14 +43,10 @@ public abstract class Layer<T> implements Nameable, LevelChangeListener{
 	 */
 	public abstract int buildFromData(T data);
 	
-	public abstract LayerEditManager getEditManager();
+	public abstract LayerEditManager<?> getEditManager();
 	
 	public Class<?> getExportDataClass(){
 		return getExportData().getClass();
-	}
-	
-	public List<JMenuItem> getMenuItems(){
-		return null;
 	}
 
 	@SuppressWarnings("rawtypes")

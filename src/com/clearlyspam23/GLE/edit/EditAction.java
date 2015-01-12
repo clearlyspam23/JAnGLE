@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.level;
+package com.clearlyspam23.GLE.edit;
 
 public interface EditAction {
 	
