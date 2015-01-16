@@ -12,6 +12,7 @@ import org.piccolo2d.event.PInputEventListener;
 
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
@@ -36,7 +37,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	
 	private TilesetSelectionPanel selectionPanel;
 	
-	private TileData[][] cutSelection;
+	private List<Tile> cutSelection;
 	
 	public TileLayerEditManager()
 	{
@@ -99,11 +100,11 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 		return "Tile Layer";
 	}
 
-	public TileData[][] getCutSelection() {
+	public List<Tile> getCutSelection() {
 		return cutSelection;
 	}
 
-	public void setCutSelection(TileData[][] cutSelection) {
+	public void setCutSelection(List<Tile> cutSelection) {
 		this.cutSelection = cutSelection;
 	}
 	
@@ -127,6 +128,12 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 			toggleCanCopy(layer.canCopy());
 		if(layer.canCut()!=canCut())
 			toggleCanCut(layer.canCut());
+	}
+	
+	public void onCopy(TileLayer currentLayer){
+		cutSelection = currentLayer.getBase().getSelection().onCopy();
+		if(canPaste()!=(cutSelection!=null))
+			toggleCanPaste(cutSelection!=null);
 	}
 
 	@Override

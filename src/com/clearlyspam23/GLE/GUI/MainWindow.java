@@ -336,9 +336,12 @@ public class MainWindow extends JFrame implements LayerChangeListener, LevelChan
 		
 		mntmCut = new JMenuItem("Cut");
 		mntmCut.addActionListener(new ActionListener() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent arg0) {
-				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
-					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onCut();
+				LevelPanel p = levelPanelMap.getNormal(data.getCurrentLevel());
+				if(data.getCurrentLevel()!=null&&p.getCurrentEditManager()!=null){
+					LayerEditManager edit = p.getCurrentEditManager();
+					edit.onCut(p.getCurrentLayer());
 				}
 			}
 		});
@@ -348,9 +351,12 @@ public class MainWindow extends JFrame implements LayerChangeListener, LevelChan
 		
 		mntmCopy = new JMenuItem("Copy");
 		mntmCopy.addActionListener(new ActionListener() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent arg0) {
-				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
-					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onCopy();
+				LevelPanel p = levelPanelMap.getNormal(data.getCurrentLevel());
+				if(data.getCurrentLevel()!=null&&p.getCurrentEditManager()!=null){
+					LayerEditManager edit = p.getCurrentEditManager();
+					edit.onCopy(p.getCurrentLayer());
 				}
 			}
 		});
@@ -359,10 +365,13 @@ public class MainWindow extends JFrame implements LayerChangeListener, LevelChan
 		mnEdit.add(mntmCopy);
 		
 		mntmPaste = new JMenuItem("Paste");
-		mntmCut.addActionListener(new ActionListener() {
+		mntmPaste.addActionListener(new ActionListener() {
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public void actionPerformed(ActionEvent arg0) {
-				if(data.getCurrentLevel()!=null&&levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager()!=null){
-					levelPanelMap.getNormal(data.getCurrentLevel()).getCurrentEditManager().onPaste();
+				LevelPanel p = levelPanelMap.getNormal(data.getCurrentLevel());
+				if(data.getCurrentLevel()!=null&&p.getCurrentEditManager()!=null){
+					LayerEditManager edit = p.getCurrentEditManager();
+					edit.onPaste(p.getCurrentLayer());
 				}
 			}
 		});

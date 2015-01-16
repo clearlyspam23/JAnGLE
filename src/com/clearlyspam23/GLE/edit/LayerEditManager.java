@@ -104,7 +104,7 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 				l.cutAvailabilityChange(canCut);
 	}
 	
-	public void onCut(){
+	public void onCut(T currentLayer){
 		
 	}
 
@@ -120,7 +120,7 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 				l.copyAvailabilityChange(canCopy);
 	}
 	
-	public void onCopy(){
+	public void onCopy(T currentLayer){
 		
 	}
 
@@ -136,7 +136,7 @@ public abstract class LayerEditManager <T extends Layer> implements PInputEventL
 				l.pasteAvailabilityChange(canPaste);
 	}
 	
-	public void onPaste(){
+	public void onPaste(T currentLayer){
 		
 	}
 	
