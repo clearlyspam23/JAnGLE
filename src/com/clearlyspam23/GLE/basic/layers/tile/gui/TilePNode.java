@@ -57,19 +57,40 @@ public class TilePNode extends PImage {
 	
 	public boolean setTileset(TilesetHandle set, int x, int y)
 	{
-		if(silentlyIgnoreInput)
+		return setTileset(new TileData(set, x, y));
+//		if(silentlyIgnoreInput)
+//			return false;
+//		TileData prev = getTileData();
+//		TileData curr = new TileData(set, x, y);
+//		if(!prev.equals(curr)){
+//			tile.setTileset(set, x, y);
+//			if(tile.isValid())
+//				setImage(tile.getTileImage());
+//			for(TileChangeListener l : listeners)
+//				l.onChange(this, prev, curr);
+//			return true;
+//		}
+//		return false;
+	}
+	
+	public boolean setTileset(TileData data){
+		if(!couldSet(data))
 			return false;
 		TileData prev = getTileData();
-		TileData curr = new TileData(set, x, y);
-		if(!prev.equals(curr)){
-			tile.setTileset(set, x, y);
-			if(tile.isValid())
-				setImage(tile.getTileImage());
-			for(TileChangeListener l : listeners)
-				l.onChange(this, prev, curr);
-			return true;
-		}
-		return false;
+		tile.setTileset(data);
+		if(tile.isValid())
+			setImage(tile.getTileImage());
+		for(TileChangeListener l : listeners)
+			l.onChange(this, prev, data);
+		return true;
+	}
+	
+	public boolean couldSet(TilesetHandle set, int x, int y){
+		return couldSet(new TileData(set, x, y));
+	}
+	
+	public boolean couldSet(TileData data){
+		return !silentlyIgnoreInput&&!getTileData().equals(data);
 	}
 	
 	public boolean setTilesetHard(TilesetHandle set, int x, int y){
@@ -78,10 +99,6 @@ public class TilePNode extends PImage {
 		boolean out = setTileset(set, x, y);
 		silentlyIgnoreInput = b;
 		return out;
-	}
-	
-	public boolean setTileset(TileData tile){
-		return setTileset(tile.tileset, tile.tileX, tile.tileY);
 	}
 	
 	public boolean resetTileset(){

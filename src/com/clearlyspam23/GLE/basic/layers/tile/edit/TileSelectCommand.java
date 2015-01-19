@@ -12,11 +12,13 @@ import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.util.PPickPath;
 
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
+import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.ImmovableTileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
+import com.clearlyspam23.GLE.util.Pair;
 
 public class TileSelectCommand extends PDragSequenceEventHandler {
 	
@@ -32,10 +34,42 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 		this.data = data;
 	}
 	
+	private void floodSelect(TilePNode node, TileData target, TilePNode[][] grid, List<TileLocation> out){
+		if(!target.equals(node.getTileData()))
+			return;
+		Pair<TilePNode, TileData> pair = new Pair<TilePNode, TileData>(node, node.getTileData());
+		if(!node.couldSet(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+			return;
+		out.add(pair.first.getTileLocation());
+		int x = node.getGridX();
+		int y = node.getGridY();
+		if(x-1>=0)
+			floodSelect(grid[x-1][y], target, grid, out);
+		if(x+1<grid.length)
+			floodSelect(grid[x+1][y], target, grid, out);
+		if(y-1>=0)
+			floodSelect(grid[x][y-1], target, grid, out);
+		if(y+1<grid[x].length)
+			floodSelect(grid[x][y+1], target, grid, out);
+	}
+	
+	private void selectSimilar(PInputEvent event, TilePNode node){
+		TileLayerPNode parent = node.getTilePNodeLayer();
+		List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
+		floodSelect(node, new TileData(), node.getTilePNodeLayer().getNodeGrid(), selectedLocations);
+		if(!selectedLocations.isEmpty()){
+			ImmovableTileSelection selection = new ImmovableTileSelection(selectedLocations, parent, event.getCamera());
+			parent.getBase().setSelection(selection);
+		}
+	}
+	
 	public void mouseClicked(PInputEvent event){
 		super.mouseClicked(event);
 		if(event.isLeftMouseButton()&&!event.isAltDown()&&!event.isControlDown()&&event.getClickCount()==2){
-			System.out.println("should select a bunch");
+			TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+			if(node!=null){
+				//selectSimilar(event, node);
+			}
 		}
 		else if(event.isRightMouseButton()){
 			TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
