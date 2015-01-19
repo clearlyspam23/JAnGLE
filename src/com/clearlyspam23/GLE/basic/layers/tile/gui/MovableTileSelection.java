@@ -8,7 +8,6 @@ import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.GUI.util.AnimatedOutlineRectNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
-import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
 public class MovableTileSelection implements TileSelection{
@@ -21,6 +20,11 @@ public class MovableTileSelection implements TileSelection{
 	 */
 	public class SelectionPNode extends TileLayerPNode{
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		private TileLayerPNode lowerLayer;
 		
 		private PCamera camera;
@@ -64,40 +68,40 @@ public class MovableTileSelection implements TileSelection{
 			}
 		}
 		
-		public void setToBox(TileLocation bottomLeft, TileLocation topRight){
-			setToBox(bottomLeft.gridX, bottomLeft.gridY, topRight.gridX-bottomLeft.gridX + 1, topRight.gridY-bottomLeft.gridY + 1);
-		}
+//		public void setToBox(TileLocation bottomLeft, TileLocation topRight){
+//			setToBox(bottomLeft.gridX, bottomLeft.gridY, topRight.gridX-bottomLeft.gridX + 1, topRight.gridY-bottomLeft.gridY + 1);
+//		}
+//		
+//		public void setToBox(int x, int y, int width, int height){
+//			if(width<=0||height<=0)
+//				return;
+//			clearAllTiles();
+//			setTilesPickable(true);
+//			silentlyIgnoreInput(false);
+//			double startX = x*getGridWidth();
+//			double startY = y*getGridHeight();
+//			double w = Math.min(lowerLayer.getWidth()-x, (width)*getGridWidth());
+//			double h = Math.min(lowerLayer.getHeight()-y, (height)*getGridHeight());
+//			this.setBounds(startX, startY, w, h);
+//			this.setGridOffset(x, y);
+//			for(int i = 0; i < width; i++){
+//				for(int j = 0; j < height; j++){
+//					TilePNode p = lowerLayer.getNodeAt(i+x, j+y);
+//					Tile t = p.getTile();
+//					TilePNode node = getNodeAt(t.getLocation());
+//					node.setTileset(t);
+//				}
+//			}
+//		}
 		
-		public void setToBox(int x, int y, int width, int height){
-			if(width<=0||height<=0)
-				return;
-			clearAllTiles();
-			setTilesPickable(true);
-			silentlyIgnoreInput(false);
-			double startX = x*getGridWidth();
-			double startY = y*getGridHeight();
-			double w = Math.min(lowerLayer.getWidth()-x, (width)*getGridWidth());
-			double h = Math.min(lowerLayer.getHeight()-y, (height)*getGridHeight());
-			this.setBounds(startX, startY, w, h);
-			this.setGridOffset(x, y);
-			for(int i = 0; i < width; i++){
-				for(int j = 0; j < height; j++){
-					TilePNode p = lowerLayer.getNodeAt(i+x, j+y);
-					Tile t = p.getTile();
-					TilePNode node = getNodeAt(t.getLocation());
-					node.setTileset(t);
-				}
-			}
-		}
+//		protected void onNodeAdd(TilePNode node){
+//			
+//		}
 		
-		protected void onNodeAdd(TilePNode node){
-			
-		}
-		
-		@Override
-		public void onChange(TilePNode changedNode, TileData previous, TileData next) {
-			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridY()).setTileset(next);
-		}
+//		@Override
+//		public void onChange(TilePNode changedNode, TileData previous, TileData next) {
+//			lowerLayer.getNodeAt(changedNode.getGridX(), changedNode.getGridY()).setTileset(next);
+//		}
 		
 		public List<AnimatedOutlineRectNode> calculateBoundingRect(){
 			boundingRect.clear();
@@ -237,6 +241,18 @@ public class MovableTileSelection implements TileSelection{
 
 	@Override
 	public void onClear() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeFromSelection(List<TileLocation> toRemove) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addToSelection(List<TileLocation> toAdd) {
 		// TODO Auto-generated method stub
 		
 	}

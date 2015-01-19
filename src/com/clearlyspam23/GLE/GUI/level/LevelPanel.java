@@ -105,7 +105,7 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 			editors.add(l.getEditManager());
 			base.addChild(node);
 		}
-		base.addChild(outline);
+		canvas.getLayer().addChild(outline);
 		//need some way to determine currentLayer, for now this will have to do
 		changeLayer(level.getLayers().size()-1);
 		

@@ -131,6 +131,10 @@ public class TilePNode extends PImage {
 		return tile.getLocation().gridY;
 	}
 	
+	public TileLocation getTileLocation(){
+		return tile.getLocation();
+	}
+	
 	public int getRawGridX(){
 		return tile.relativeLocation.gridX;
 	}

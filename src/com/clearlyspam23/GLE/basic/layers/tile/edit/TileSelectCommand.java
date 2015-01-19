@@ -2,6 +2,7 @@ package com.clearlyspam23.GLE.basic.layers.tile.edit;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.piccolo2d.PCamera;
@@ -25,6 +26,8 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	
 	protected FixedWidthOutlineRectNode outlineBoxNode;
 	
+	private TilePNode grabbed;
+	
 	public TileSelectCommand(TileLayerEditManager data){
 		this.data = data;
 	}
@@ -40,8 +43,37 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 				BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
 				if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
 					base.anchorSelection();
+					base.clearSelection();
 				}
 				
+			}
+		}
+	}
+	
+	public void mousePressed(PInputEvent event){
+		super.mousePressed(event);
+		grabbed = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+	}
+	
+	public void mouseReleased(PInputEvent event){
+		super.mouseReleased(event);
+		if(grabbed==tryGrabNode(event.getCanvasPosition(), event.getCamera())){
+			if(event.isLeftMouseButton()&&event.isControlDown()){
+				TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+				if(node!=null){
+					BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
+					if(base.getSelection()!=null){
+						if(base.getSelection().isNodeInSelection(node)){
+							base.getSelection().removeFromSelection(Arrays.asList(node.getTileLocation()));
+							System.out.println("removing");
+						}
+						else{
+							base.getSelection().addToSelection(Arrays.asList(node.getTileLocation()));
+							System.out.println("adding");
+						}
+					}
+					
+				}
 			}
 		}
 	}
@@ -49,7 +81,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	@Override
 	protected boolean shouldStartDragInteraction(PInputEvent event) {
         if (super.shouldStartDragInteraction(event)) {
-            return event.isLeftMouseButton()&&event.getClickCount()==1;
+            return event.isLeftMouseButton()&&!event.isAltDown()&&!event.isControlDown()&&event.getClickCount()==1;
         }
         return false;
     }
@@ -91,6 +123,17 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 			}
 			ImmovableTileSelection selection = new ImmovableTileSelection(selectedLocations, parent, event.getCamera());
 			parent.getBase().setSelection(selection);
+		}
+		else{
+			TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
+			if(node!=null){
+				BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
+				if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
+					base.anchorSelection();
+					base.clearSelection();
+				}
+				
+			}
 		}
 		startNode = null;
 		lastNode = null;

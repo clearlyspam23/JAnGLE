@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
 import java.awt.Color;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,24 +10,34 @@ import org.piccolo2d.PNode;
 
 import com.clearlyspam23.GLE.GUI.util.AnimatedOutlineRectNode;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
+import com.clearlyspam23.GLE.GUI.util.FixedWidthStroke;
+import com.clearlyspam23.GLE.GUI.util.LineNode;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 
 public class ImmovableTileSelection implements TileSelection{
 	
 	private PNode overlayNode = new PNode();
+	private LineNode linesNode;
 	
 	private List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
-	private List<FixedWidthOutlineRectNode> outlineRect;
+//	private List<FixedWidthOutlineRectNode> outlineRect;
 	private int width;
 	private int height;
 	private TileLocation offset;
 	private TileLayerPNode tileLayer;
-	private PCamera camera;
 	
 	public ImmovableTileSelection(List<TileLocation> locations, TileLayerPNode layer, PCamera camera){
-		this.camera = camera;
 		tileLayer = layer;
+		linesNode = new LineNode(new FixedWidthStroke(2, camera));
+		linesNode.setPaint(Color.YELLOW);
+		linesNode.setPickable(false);
+		overlayNode.addChild(linesNode);
+		recalculateTiles(locations);
+	}
+	
+	private void recalculateTiles(List<TileLocation> locations){
+		selectedLocations.clear();
 		tileLayer.silentlyIgnoreInput(true);
 		int minX = Integer.MAX_VALUE;
 		int maxX = 0;
@@ -45,9 +56,13 @@ public class ImmovableTileSelection implements TileSelection{
 		}
 		width = maxX-minX+1;
 		height = maxY-minY+1;
-		outlineRect = calculateBoundingRect();
-		for(FixedWidthOutlineRectNode n : outlineRect)
-			overlayNode.addChild(n);
+		if(selectedLocations.isEmpty()){
+			if(tileLayer.getBase().getSelection()==this){
+				tileLayer.getBase().clearSelection();
+			}
+			return;
+		}
+		calculateBoundingRect();
 	}
 
 	public List<Tile> onCopy() {
@@ -89,7 +104,7 @@ public class ImmovableTileSelection implements TileSelection{
 		tileLayer.silentlyIgnoreInput(false);
 	}
 	
-	private List<FixedWidthOutlineRectNode> calculateBoundingRect(){
+	private void calculateBoundingRect(){
 		List<FixedWidthOutlineRectNode> boundingRect = new ArrayList<FixedWidthOutlineRectNode>();
 		boundingRect.clear();
 		int[][] sideGrid = new int[width][height];
@@ -116,56 +131,43 @@ public class ImmovableTileSelection implements TileSelection{
 		}
 		//try to build the largest Rectangles possible
 		//this is an optimization, and can be removed if buggy
+		List<Line2D> lines = new ArrayList<Line2D>();
 		for(int i = 0; i < sideGrid.length; i++){
 			for(int j = 0; j < sideGrid[i].length; j++){
-				if(sideGrid[i][j]!=AnimatedOutlineRectNode.NONE){
-					//grab as much of the matching sides as we can
-					//this should go down and grab nodes with the same left and right as us
-					//after that, grab as much of the top and bottom as we can
-					//go around in a circle to try and ensure that we're grabbing what we actually can
-					int leftHeight = 1;
-					int rightHeight = 1;
-					int topWidth = 1;
-					int bottomWidth = 1;
-					for(; leftHeight + j < sideGrid[i].length && 
-							(sideGrid[i][leftHeight+j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)==(sideGrid[i][j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)
-							&&sideGrid[i][leftHeight+j]!=AnimatedOutlineRectNode.NONE; leftHeight++)
-					{}
-					for(; topWidth + i < sideGrid.length && 
-							(sideGrid[i + topWidth][j]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)==(sideGrid[i][j]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)
-									&&sideGrid[i+topWidth][j]!=AnimatedOutlineRectNode.NONE; topWidth++)
-					{}
-					for(; rightHeight + j < sideGrid[i].length && 
-							(sideGrid[i+topWidth-1][rightHeight+j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)==(sideGrid[i+topWidth-1][j]&AnimatedOutlineRectNode.LEFT_AND_RIGHT)
-									&&sideGrid[i+topWidth-1][rightHeight+j]!=AnimatedOutlineRectNode.NONE; rightHeight++)
-					{}
-					for(; bottomWidth + i < sideGrid.length && 
-							(sideGrid[i + bottomWidth][j+leftHeight-1]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)==(sideGrid[i][j+leftHeight-1]&AnimatedOutlineRectNode.TOP_AND_BOTTOM)
-									&&sideGrid[i + bottomWidth][j+leftHeight-1]!=AnimatedOutlineRectNode.NONE; bottomWidth++)
-					{}
-					int width = Math.min(topWidth, bottomWidth);
-					int height = Math.min(leftHeight, rightHeight);
-					int value = sideGrid[i][j]&(AnimatedOutlineRectNode.LEFT|AnimatedOutlineRectNode.TOP);
-					value|=(sideGrid[i+width-1][j]&AnimatedOutlineRectNode.RIGHT);
-					value|=(sideGrid[i][j+height-1]&AnimatedOutlineRectNode.BOTTOM);
-					FixedWidthOutlineRectNode rect = new FixedWidthOutlineRectNode(2, camera, Color.YELLOW, value);
-					rect.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
-							Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
-							Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
-					rect.setPickable(false);
-					boundingRect.add(rect);
-					for(int k = 0; k < width; k++){
-						sideGrid[i+k][j] = 0;
-						sideGrid[i+k][j+height-1] = 0;
+				if((sideGrid[i][j]&AnimatedOutlineRectNode.LEFT)==AnimatedOutlineRectNode.LEFT){
+					int k = 0;
+					for(; k + j < sideGrid[i].length&&(sideGrid[i][k+j]&AnimatedOutlineRectNode.LEFT)==AnimatedOutlineRectNode.LEFT; k++){
+						sideGrid[i][j+k] &=~AnimatedOutlineRectNode.LEFT;
 					}
-					for(int k = 0; k < height; k++){
-						sideGrid[i][j+k] = 0;
-						sideGrid[i+width-1][k] = 0;
+					lines.add(new Line2D.Double(i, j, i, j+k));
+				}
+				if((sideGrid[i][j]&AnimatedOutlineRectNode.RIGHT)==AnimatedOutlineRectNode.RIGHT){
+					int k = 0;
+					for(; k + j < sideGrid[i].length&&(sideGrid[i][k+j]&AnimatedOutlineRectNode.RIGHT)==AnimatedOutlineRectNode.RIGHT; k++){
+						sideGrid[i][j+k] &=~AnimatedOutlineRectNode.RIGHT;
 					}
+					lines.add(new Line2D.Double(i+1, j, i+1, j+k));
+				}
+				if((sideGrid[i][j]&AnimatedOutlineRectNode.TOP)==AnimatedOutlineRectNode.TOP){
+					int k = 0;
+					for(; k + i < sideGrid.length&&(sideGrid[i+k][j]&AnimatedOutlineRectNode.TOP)==AnimatedOutlineRectNode.TOP; k++){
+						sideGrid[i+k][j] &=~AnimatedOutlineRectNode.TOP;
+					}
+					lines.add(new Line2D.Double(i, j, i+k, j));
+				}
+				if((sideGrid[i][j]&AnimatedOutlineRectNode.BOTTOM)==AnimatedOutlineRectNode.BOTTOM){
+					int k = 0;
+					for(; k + i < sideGrid.length&&(sideGrid[i+k][j]&AnimatedOutlineRectNode.BOTTOM)==AnimatedOutlineRectNode.BOTTOM; k++){
+						sideGrid[i+k][j] &=~AnimatedOutlineRectNode.BOTTOM;
+					}
+					lines.add(new Line2D.Double(i, j+1, i+k, j+1));
 				}
 			}
 		}
-		return boundingRect;
+		linesNode.setLines(lines);
+		linesNode.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
+				Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
+				Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
 	}
 
 	public PNode getOverlayNode() {
@@ -192,6 +194,26 @@ public class ImmovableTileSelection implements TileSelection{
 	public PNode getSelectionNode() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void removeFromSelection(List<TileLocation> toRemove) {
+		for(TileLocation l : toRemove){
+			selectedLocations.remove(new TileLocation(l.gridX - offset.gridX, l.gridY - offset.gridY));
+		}
+		for(TileLocation l : selectedLocations){
+			l.set(l.gridX+offset.gridX, l.gridY+offset.gridY);
+		}
+		recalculateTiles(new ArrayList<TileLocation>(selectedLocations));
+	}
+
+	@Override
+	public void addToSelection(List<TileLocation> toAdd) {
+		for(TileLocation l : selectedLocations){
+			l.set(l.gridX+offset.gridX, l.gridY+offset.gridY);
+		}
+		selectedLocations.addAll(toAdd);
+		recalculateTiles(new ArrayList<TileLocation>(selectedLocations));
 	}
 
 }
