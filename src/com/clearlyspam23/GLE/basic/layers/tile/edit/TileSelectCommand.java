@@ -18,7 +18,6 @@ import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.ImmovableTileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
-import com.clearlyspam23.GLE.util.Pair;
 
 public class TileSelectCommand extends PDragSequenceEventHandler {
 	
@@ -35,12 +34,11 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	}
 	
 	private void floodSelect(TilePNode node, TileData target, TilePNode[][] grid, List<TileLocation> out){
-		if(!target.equals(node.getTileData()))
+		if(!target.equals(node.getTileData())||out.contains(node.getTileLocation()))
 			return;
-		Pair<TilePNode, TileData> pair = new Pair<TilePNode, TileData>(node, node.getTileData());
-		if(!node.couldSet(data.getCurrentTileset(), data.getSelectedX(), data.getSelectedY()))
+		if(node.isSilentlyIgnoringInput())
 			return;
-		out.add(pair.first.getTileLocation());
+		out.add(node.getTileLocation());
 		int x = node.getGridX();
 		int y = node.getGridY();
 		if(x-1>=0)
@@ -54,12 +52,14 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	}
 	
 	private void selectSimilar(PInputEvent event, TilePNode node){
-		TileLayerPNode parent = node.getTilePNodeLayer();
-		List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
-		floodSelect(node, new TileData(), node.getTilePNodeLayer().getNodeGrid(), selectedLocations);
-		if(!selectedLocations.isEmpty()){
-			ImmovableTileSelection selection = new ImmovableTileSelection(selectedLocations, parent, event.getCamera());
-			parent.getBase().setSelection(selection);
+		if(!node.getTileData().equals(new TileData())){
+			TileLayerPNode parent = node.getTilePNodeLayer();
+			List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
+			floodSelect(node, node.getTileData(), node.getTilePNodeLayer().getNodeGrid(), selectedLocations);
+			if(!selectedLocations.isEmpty()){
+				ImmovableTileSelection selection = new ImmovableTileSelection(selectedLocations, parent, event.getCamera());
+				parent.getBase().setSelection(selection);
+			}
 		}
 	}
 	
@@ -68,7 +68,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 		if(event.isLeftMouseButton()&&!event.isAltDown()&&!event.isControlDown()&&event.getClickCount()==2){
 			TilePNode node = tryGrabNode(event.getCanvasPosition(), event.getCamera());
 			if(node!=null){
-				//selectSimilar(event, node);
+				selectSimilar(event, node);
 			}
 		}
 		else if(event.isRightMouseButton()){

@@ -13,7 +13,6 @@ import org.piccolo2d.event.PInputEventListener;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
-import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
