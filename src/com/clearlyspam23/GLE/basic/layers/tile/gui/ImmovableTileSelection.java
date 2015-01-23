@@ -129,8 +129,7 @@ public class ImmovableTileSelection implements TileSelection{
 					sideGrid[i][j]|=AnimatedOutlineRectNode.BOTTOM;
 			}
 		}
-		//try to build the largest Rectangles possible
-		//this is an optimization, and can be removed if buggy
+		//try to build the largest lines possible
 		List<Line2D> lines = new ArrayList<Line2D>();
 		for(int i = 0; i < sideGrid.length; i++){
 			for(int j = 0; j < sideGrid[i].length; j++){

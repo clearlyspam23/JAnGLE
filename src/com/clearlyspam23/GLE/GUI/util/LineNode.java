@@ -53,6 +53,14 @@ public class LineNode extends PNode {
 		setLines(lines);
 	}
 	
+	public Stroke getStroke(){
+		return stroke;
+	}
+	
+	public void setStroke(Stroke stroke){
+		this.stroke = stroke;
+	}
+	
 	public void setLines(List<Line2D> lines){
 		this.lines.clear();
 		if(lines==null||lines.isEmpty())

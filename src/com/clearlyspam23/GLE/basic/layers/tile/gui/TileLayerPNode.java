@@ -154,6 +154,14 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 				(y-gridOffset.gridY)>=0&&(y-gridOffset.gridY)<nodeGrid[x].length;
 	}
 	
+	public int getNodeGridWidth(){
+		return nodeGrid.length;
+	}
+	
+	public int getNodeGridHeight(){
+		return nodeGrid.length > 0 ? nodeGrid[0].length : 0;
+	}
+	
 	public boolean isValidLocation(TileLocation location){
 		return isValidLocation(location.gridX, location.gridY);
 	}

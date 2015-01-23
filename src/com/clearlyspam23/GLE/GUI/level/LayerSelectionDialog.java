@@ -62,13 +62,20 @@ public class LayerSelectionDialog extends JDialog{
 		list.addListSelectionListener(new ListSelectionListener(){
 			@Override
 			public void valueChanged(ListSelectionEvent arg0) {
-				if(!arg0.getValueIsAdjusting())
+				if(!arg0.getValueIsAdjusting()&&list.getSelectedIndex()>=0)
 					container.changeLayer(list.getSelectedIndex());
 			}
 		});
 		scrollPane.setViewportView(list);
 		list.setSelection(layers.size()-1);
 		add(list);
+	}
+	
+	public void setToLevelPanel(LevelPanel panel){
+		list.removeAll();
+//		for(int i = 0; i < layers.size(); i++){
+//			list.addPanel(makePanel(layers.get(i), nodes.get(i)));
+//		}
 	}
 	
 	@SuppressWarnings("rawtypes")

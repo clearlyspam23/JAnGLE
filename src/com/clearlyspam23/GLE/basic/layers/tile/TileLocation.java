@@ -42,5 +42,10 @@ public class TileLocation {
 	public boolean equals(TileLocation location, TileLocation offset){
 		return gridX==location.gridX+offset.gridX&&gridY==location.gridY+offset.gridY;
 	}
+	
+	public int hashCode(){
+		return gridX+23*gridY;
+		
+	}
 
 }

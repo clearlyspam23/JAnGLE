@@ -153,6 +153,10 @@ public class LevelPanel extends JPanel implements ComponentListener, LayerContai
 		return null;
 	}
 	
+	public int getCurrentLayerIndex(){
+		return selectedIndex;
+	}
+	
 	public LayerEditManager<?> getCurrentEditManager(){
 		if(selectedIndex>=0)
 			return editors.get(selectedIndex);
