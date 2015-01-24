@@ -51,8 +51,6 @@ public class MovableTileSelection implements TileSelection, Animatable{
 				return;
 			}
 			clearAllTiles();
-			silentlyIgnoreInput(true);
-			setTilesPickable(false);
 			int lowestX = Integer.MAX_VALUE;
 			int lowestY = Integer.MAX_VALUE;
 			int highestX = 0;
@@ -63,11 +61,11 @@ public class MovableTileSelection implements TileSelection, Animatable{
 				highestX = Math.max(highestX, t.relativeLocation.gridX);
 				highestY = Math.max(highestY, t.relativeLocation.gridY);
 			}
-			double startX = lowestX*getGridWidth();
-			double startY = lowestY*getGridHeight();
-			double width = Math.min(lowerLayer.getWidth()-startX, (highestX-lowestX+1)*getGridWidth());
-			double height = Math.min(lowerLayer.getHeight()-startY, (highestY-lowestY+1)*getGridHeight());
+			double width = Math.min(lowerLayer.getWidth(), (highestX-lowestX+1)*getGridWidth());
+			double height = Math.min(lowerLayer.getHeight(), (highestY-lowestY+1)*getGridHeight());
 			this.setBounds(getX(), getY(), width, height);
+			silentlyIgnoreInput(true);
+			setTilesPickable(false);
 			for(Tile t : tiles){
 				if(!isValidLocation(t.relativeLocation.gridX-lowestX, t.relativeLocation.gridY-lowestY))
 					continue;
@@ -88,16 +86,16 @@ public class MovableTileSelection implements TileSelection, Animatable{
 				sideGrid[i] = new int[grid[i].length];
 				for(int j = 0; j < grid[i].length; j++){
 					sideGrid[i][j] = AnimatedOutlineRectNode.NONE;
-					if(grid[i][j]==null)
+					if(!grid[i][j].getTileData().isValid())
 						continue;
 					//perform edge detection, if any edges are detected, create a node
-					if(i-1<0||grid[i-1][j]==null)
+					if(i-1<0||!grid[i-1][j].getTileData().isValid())
 						sideGrid[i][j]|=AnimatedOutlineRectNode.LEFT;
-					if(i+1>=grid.length||grid[i+1][j]==null)
+					if(i+1>=grid.length||!grid[i+1][j].getTileData().isValid())
 						sideGrid[i][j]|=AnimatedOutlineRectNode.RIGHT;
-					if(j-1<0||grid[i][j-1]==null)
+					if(j-1<0||!grid[i][j-1].getTileData().isValid())
 						sideGrid[i][j]|=AnimatedOutlineRectNode.TOP;
-					if(j+1>=grid[i].length||grid[i][j+1]==null)
+					if(j+1>=grid[i].length||!grid[i][j+1].getTileData().isValid())
 						sideGrid[i][j]|=AnimatedOutlineRectNode.BOTTOM;
 				}
 			}
@@ -153,7 +151,8 @@ public class MovableTileSelection implements TileSelection, Animatable{
 			double y = location.gridY*getGridHeight();
 			double width = Math.min(getNodeGridWidth()*getGridWidth(), lowerLayer.getWidth()-x);
 			double height = Math.min(getNodeGridHeight()*getGridHeight(), lowerLayer.getHeight()-y);
-			this.setBounds(x, y, width, height);
+			this.setBounds(0, 0, width, height);
+			this.setOffset(x, y);
 			linesNode.setBounds(x, y, width, height);
 		}
 		
@@ -188,7 +187,9 @@ public class MovableTileSelection implements TileSelection, Animatable{
 		for(int i =0 ; i < strokes.length; i++){
 			strokes[i] = new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{6, 6}, i, camera);
 		}
+		lowerLayer.silentlyIgnoreInput(true);
 		linesNode = new LineNode(strokes[currentStroke]);
+		linesNode.setPickable(false);
 		overlayNode.addChild(linesNode);
 		selectionNode = new SelectionPNode(lowerLayer);
 		selectionNode.setToTiles(tiles);
@@ -235,7 +236,7 @@ public class MovableTileSelection implements TileSelection, Animatable{
 
 	@Override
 	public void onRemove() {
-		
+		selectionNode.lowerLayer.silentlyIgnoreInput(false);
 	}
 
 	@Override
@@ -247,8 +248,10 @@ public class MovableTileSelection implements TileSelection, Animatable{
 	public void onAnchor() {
 		for(TilePNode[] ap : selectionNode.getNodeGrid()){
 			for(TilePNode p : ap){
-				if(!p.isSilentlyIgnoringInput())
-					selectionNode.getLowerLayer().getNodeAt(p.getTileLocation()).setTileset(p.getTileData());
+				if(!p.isSilentlyIgnoringInput()){
+					System.out.println(p.getTileLocation());
+					selectionNode.getLowerLayer().getNodeAt(p.getTileLocation()).setTilesetHard(p.getTileData());
+				}
 			}
 		}
 	}

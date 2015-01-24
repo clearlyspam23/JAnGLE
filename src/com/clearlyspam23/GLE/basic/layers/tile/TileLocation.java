@@ -47,5 +47,9 @@ public class TileLocation {
 		return gridX+23*gridY;
 		
 	}
+	
+	public String toString(){
+		return "< " + gridX + ", " + gridY + " >";
+	}
 
 }

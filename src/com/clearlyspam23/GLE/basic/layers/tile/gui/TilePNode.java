@@ -55,6 +55,10 @@ public class TilePNode extends PImage {
 			setImage(tile.getTileImage());
 	}
 	
+	public void setTileOffsetReference(TileLocation offset){
+		tile.offset = offset;
+	}
+	
 	public boolean setTileset(TilesetHandle set, int x, int y)
 	{
 		return setTileset(new TileData(set, x, y));
@@ -99,6 +103,10 @@ public class TilePNode extends PImage {
 		boolean out = setTileset(set, x, y);
 		silentlyIgnoreInput = b;
 		return out;
+	}
+	
+	public boolean setTilesetHard(TileData data){
+		return setTilesetHard(data.tileset, data.tileX, data.tileY);
 	}
 	
 	public boolean resetTileset(){

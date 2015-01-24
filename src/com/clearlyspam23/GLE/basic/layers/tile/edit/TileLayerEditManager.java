@@ -8,18 +8,22 @@ import java.util.List;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.piccolo2d.PInputManager;
 import org.piccolo2d.event.PInputEvent;
 import org.piccolo2d.event.PInputEventListener;
+import org.piccolo2d.util.PBounds;
 
 import com.clearlyspam23.GLE.GUI.util.BasicEditorButton;
 import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
+import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.TileSelectCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.gui.MovableTileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetSelectionPanel;
@@ -42,6 +46,8 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	private TilesetSelectionPanel selectionPanel;
 	
 	private List<Tile> cutSelection;
+	private int selectionWidth;
+	private int selectionHeight;
 	
 	public TileLayerEditManager()
 	{
@@ -103,14 +109,6 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public String getName() {
 		return "Tile Layer";
 	}
-
-	public List<Tile> getCutSelection() {
-		return cutSelection;
-	}
-
-	public void setCutSelection(List<Tile> cutSelection) {
-		this.cutSelection = cutSelection;
-	}
 	
 	public void onActive(TileLayer layer){
 		layer.addSelectionListener(this);
@@ -135,20 +133,34 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	}
 	
 	public void onCopy(TileLayer currentLayer){
+		selectionWidth = currentLayer.getBase().getSelection().getTileWidth();
+		selectionHeight = currentLayer.getBase().getSelection().getTileHeight();
 		cutSelection = currentLayer.getBase().getSelection().onCopy();
 		if(canPaste()!=(cutSelection!=null))
 			toggleCanPaste(cutSelection!=null);
 	}
 	
 	public void onCut(TileLayer currentLayer){
+		selectionWidth = currentLayer.getBase().getSelection().getTileWidth();
+		selectionHeight = currentLayer.getBase().getSelection().getTileHeight();
 		cutSelection = currentLayer.getBase().getSelection().onCut();
+		currentLayer.getBase().clearSelection();
 		if(canPaste()!=(cutSelection!=null))
 			toggleCanPaste(cutSelection!=null);
 	}
 	
 	public void onPaste(TileLayer currentLayer){
-		Point2D p = currentLayer.getBase().getRoot().getDefaultInputManager().getCurrentCanvasPosition();
-		System.out.println(p);
+		PInputManager inputManager = currentLayer.getBase().getRoot().getDefaultInputManager();
+		Point2D p = (Point2D) inputManager.getCurrentCanvasPosition().clone();
+		PBounds globalBounds = inputManager.getMouseOver().getBottomCamera().getGlobalBounds();
+		if(!globalBounds.contains(p))
+			p = new Point2D.Double(globalBounds.width/2+globalBounds.x, globalBounds.height/2+globalBounds.y);
+		p = inputManager.getMouseOver().getBottomCamera().localToView(p);
+		TileLocation l = new TileLocation((int) (p.getX()/currentLayer.getBase().getTiles().getGridWidth()), (int) (p.getY()/currentLayer.getBase().getTiles().getGridHeight()));
+		l.gridX-=selectionWidth/2;
+		l.gridY-=selectionHeight/2;
+		MovableTileSelection selection = new MovableTileSelection(inputManager.getMouseOver().getBottomCamera(), currentLayer.getBase().getTiles(), cutSelection, l);
+		currentLayer.getBase().setSelection(selection);
 	}
 
 	@Override

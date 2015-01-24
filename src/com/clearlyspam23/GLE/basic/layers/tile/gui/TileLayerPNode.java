@@ -33,6 +33,8 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	
 	private BasePNode base;
 	
+	private boolean silentlyIgnoringInput = false;
+	
 	public TileLayerPNode(double gridWidth, double gridHeight){
 		this(gridWidth, gridHeight, null, null);
 	}
@@ -129,6 +131,8 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	}
 	
 	private void addPNode(int i, int j, double width, double height, double gridWidth, double gridHeight, TilePNode pnode){
+		pnode.silentlyIgnoreInput(silentlyIgnoringInput);
+		pnode.setTileOffsetReference(this.gridOffset);
 		pnode.addChangeListener(this);
 		nodeGrid[i][j] = pnode;
 		pnode.setGridLocation(i, j);
@@ -149,9 +153,17 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 		return getNodeAt(location.gridX, location.gridY);
 	}
 	
+	public TilePNode getNodeAtRaw(int x, int y){
+		return nodeGrid[x][y];
+	}
+	
+	public TilePNode getNodeAtRaw(TileLocation location){
+		return getNodeAtRaw(location.gridX, location.gridY);
+	}
+	
 	public boolean isValidLocation(int x, int y){
 		return (x-gridOffset.gridX)>=0&&(x-gridOffset.gridX)<nodeGrid.length&&
-				(y-gridOffset.gridY)>=0&&(y-gridOffset.gridY)<nodeGrid[x].length;
+				(y-gridOffset.gridY)>=0&&(y-gridOffset.gridY)<nodeGrid[x-gridOffset.gridX].length;
 	}
 	
 	public int getNodeGridWidth(){
@@ -272,6 +284,7 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	 * @param flag whether or not all nodes should silently ignore input
 	 */
 	public void silentlyIgnoreInput(boolean flag){
+		silentlyIgnoringInput = flag;
 		for(TilePNode[] p : nodeGrid){
 			for(TilePNode t : p){
 				t.silentlyIgnoreInput(flag);
