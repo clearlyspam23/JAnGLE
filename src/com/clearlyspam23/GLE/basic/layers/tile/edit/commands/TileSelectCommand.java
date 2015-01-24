@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.edit;
+package com.clearlyspam23.GLE.basic.layers.tile.edit.commands;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ import org.piccolo2d.util.PPickPath;
 import com.clearlyspam23.GLE.GUI.util.FixedWidthOutlineRectNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.TileLayerEditManager;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.BasePNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.ImmovableTileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;

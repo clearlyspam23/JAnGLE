@@ -1,6 +1,7 @@
 package com.clearlyspam23.GLE.basic.layers.tile.edit;
 
 import java.awt.Image;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,10 @@ import com.clearlyspam23.GLE.GUI.util.BasicEditorPanel;
 import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.EraseTileCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.FloodFillTileCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.PlaceTileCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.TileSelectCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetSelectionPanel;
@@ -133,6 +138,17 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 		cutSelection = currentLayer.getBase().getSelection().onCopy();
 		if(canPaste()!=(cutSelection!=null))
 			toggleCanPaste(cutSelection!=null);
+	}
+	
+	public void onCut(TileLayer currentLayer){
+		cutSelection = currentLayer.getBase().getSelection().onCut();
+		if(canPaste()!=(cutSelection!=null))
+			toggleCanPaste(cutSelection!=null);
+	}
+	
+	public void onPaste(TileLayer currentLayer){
+		Point2D p = currentLayer.getBase().getRoot().getDefaultInputManager().getCurrentCanvasPosition();
+		System.out.println(p);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class MovableTileSelection implements TileSelection, Animatable{
 	/**
 	 * this class needs to hold a reference to both a box above the current tile layer, and the nodes below that box
 	 * in order to allow saving when regions are selected, this box will leave nodes below it unchanged, until they are moved by this box
-	 * @author john
+	 * @author clearlyspam23
 	 *
 	 */
 	public class SelectionPNode extends TileLayerPNode{
@@ -69,6 +69,8 @@ public class MovableTileSelection implements TileSelection, Animatable{
 			double height = Math.min(lowerLayer.getHeight()-startY, (highestY-lowestY+1)*getGridHeight());
 			this.setBounds(getX(), getY(), width, height);
 			for(Tile t : tiles){
+				if(!isValidLocation(t.relativeLocation.gridX-lowestX, t.relativeLocation.gridY-lowestY))
+					continue;
 				TilePNode node = getNodeAt(t.relativeLocation.gridX-lowestX, t.relativeLocation.gridY-lowestY);
 				node.silentlyIgnoreInput(false);
 				node.setPickable(true);

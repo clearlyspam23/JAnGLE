@@ -376,7 +376,7 @@ public class MainWindow extends JFrame implements LayerChangeListener, LevelChan
 			}
 		});
 		mntmPaste.setEnabled(false);
-		mntmPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
+		mntmPaste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		mnEdit.add(mntmPaste);
 		
 		mnLevel = new JMenu("Level");

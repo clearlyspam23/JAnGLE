@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.edit;
+package com.clearlyspam23.GLE.basic.layers.tile.edit.commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,8 @@ import org.piccolo2d.PCamera;
 import org.piccolo2d.event.PInputEvent;
 
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
-import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.PlaceTileAction;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.TileLayerEditManager;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.actions.PlaceTileAction;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerPNode;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilePNode;
 import com.clearlyspam23.GLE.util.Pair;
