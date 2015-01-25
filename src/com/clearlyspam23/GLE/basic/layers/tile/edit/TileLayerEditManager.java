@@ -19,6 +19,7 @@ import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetHandle;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.actions.CutSelectionAction;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.PlaceTileCommand;
@@ -143,8 +144,11 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public void onCut(TileLayer currentLayer){
 		selectionWidth = currentLayer.getBase().getSelection().getTileWidth();
 		selectionHeight = currentLayer.getBase().getSelection().getTileHeight();
-		cutSelection = currentLayer.getBase().getSelection().onCut();
+		cutSelection = currentLayer.getBase().getSelection().onCopy();
+		TileSelection selection = currentLayer.getBase().getSelection();
+		selection.onClear();
 		currentLayer.getBase().clearSelection();
+		this.registerEditAction(new CutSelectionAction(cutSelection, selection, currentLayer.getBase()));
 		if(canPaste()!=(cutSelection!=null))
 			toggleCanPaste(cutSelection!=null);
 	}
@@ -160,7 +164,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 		l.gridX-=selectionWidth/2;
 		l.gridY-=selectionHeight/2;
 		MovableTileSelection selection = new MovableTileSelection(inputManager.getMouseOver().getBottomCamera(), currentLayer.getBase().getTiles(), cutSelection, l);
-		currentLayer.getBase().setSelection(selection);
+		currentLayer.getBase().setSelectionWithAction(selection, this);
 	}
 
 	@Override

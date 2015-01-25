@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.piccolo2d.PNode;
 
+import com.clearlyspam23.GLE.basic.layers.tile.Tile;
 import com.clearlyspam23.GLE.basic.layers.tile.TileData;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLocation;
@@ -176,6 +177,18 @@ public class TileLayerPNode extends PNode implements TilePNode.TileChangeListene
 	
 	public boolean isValidLocation(TileLocation location){
 		return isValidLocation(location.gridX, location.gridY);
+	}
+	
+	public void setTile(Tile t){
+		getNodeAt(t.getLocation()).setTileset(t);
+	}
+	
+	public void setTileHard(Tile t){
+		getNodeAt(t.getLocation()).setTilesetHard(t);
+	}
+	
+	public Tile getTile(TileLocation location){
+		return getNodeAt(location).getTile();
 	}
 	
 	public TileData[][] getTiles(){

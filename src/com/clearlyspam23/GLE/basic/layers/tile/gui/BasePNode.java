@@ -5,6 +5,9 @@ import org.piccolo2d.PNode;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayer;
 import com.clearlyspam23.GLE.basic.layers.tile.TileLayerTemplate;
 import com.clearlyspam23.GLE.basic.layers.tile.TilesetManager;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.TileLayerEditManager;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.actions.AnchorSelectionAction;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.actions.CreateSelectionAction;
 
 public class BasePNode extends PNode {
 	
@@ -40,16 +43,37 @@ public class BasePNode extends PNode {
 	public TileSelection getSelection() {
 		return selection;
 	}
-
-	public void setSelection(TileSelection selection) {
-		if(this.selection!=null){
-			this.selection.onAnchor();
-			this.selection.onRemove();
+	
+	public TileSelection clearSelectionWithoutAnchor(){
+		TileSelection oldSelection = selection;
+		if(selection!=null){
+			selection.onRemove();
 			if(selectionNode!=null)
 				removeChild(selectionNode);
 			if(overlayNode!=null)
 				layer.getOverlayGUI().removeChild(overlayNode);
+			selection = null;
+			layer.selectionChanged(oldSelection, selection);
 		}
+		return oldSelection;
+	}
+	
+	public TileSelection clearSelection(){
+		TileSelection oldSelection = selection;
+		if(selection!=null){
+			selection.onAnchor();
+			selection.onRemove();
+			if(selectionNode!=null)
+				removeChild(selectionNode);
+			if(overlayNode!=null)
+				layer.getOverlayGUI().removeChild(overlayNode);
+			selection = null;
+			layer.selectionChanged(oldSelection, selection);
+		}
+		return oldSelection;
+	}
+	
+	public void setSelection(TileSelection selection){
 		TileSelection oldSelection = this.selection;
 		this.selection = selection;
 		if(selection!=null){
@@ -59,8 +83,28 @@ public class BasePNode extends PNode {
 			overlayNode = selection.getOverlayNode();
 			if(overlayNode!=null)
 				layer.getOverlayGUI().addChild(overlayNode);
+			
 		}
 		layer.selectionChanged(oldSelection, selection);
+	}
+
+	public void setSelectionWithAction(TileSelection selection, TileLayerEditManager editor) {
+//		if(this.selection!=null){
+//			this.selection.onAnchor();
+//			this.selection.onRemove();
+//			if(selectionNode!=null)
+//				removeChild(selectionNode);
+//			if(overlayNode!=null)
+//				layer.getOverlayGUI().removeChild(overlayNode);
+//		}
+		TileSelection oldSelection = clearSelection();
+		if(oldSelection!=null){
+			editor.registerEditAction(new AnchorSelectionAction(oldSelection, this));
+		}
+		setSelection(selection);
+		if(selection!=null){
+			editor.registerEditAction(new CreateSelectionAction(selection, this));
+		}
 	}
 	
 	public boolean canCopy(){
@@ -71,8 +115,8 @@ public class BasePNode extends PNode {
 		return hasSelection();
 	}
 	
-	public void clearSelection(){
-		setSelection(null);
+	public void clearSelectionWithAction(TileLayerEditManager editor){
+		setSelectionWithAction(null, editor);
 		//for everyone not comfortable with passing in nulls
 	}
 	

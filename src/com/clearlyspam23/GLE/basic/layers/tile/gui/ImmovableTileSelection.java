@@ -70,17 +70,17 @@ public class ImmovableTileSelection implements TileSelection{
 		for(TileLocation loc : selectedLocations){
 			if(tileLayer.isValidLocation(loc.gridX+offset.gridX, loc.gridY+offset.gridY)){
 				answer.add(new Tile(tileLayer.getNodeAt(loc.gridX+offset.gridX, loc.gridY+offset.gridY).getTileData(),
-						loc.gridX, loc.gridY));
+						loc, offset));
 			}
 		}
 		return answer;
 	}
 	
-	public List<Tile> onCut() {
-		List<Tile> answer = onCopy();
-		onClear();
-		return answer;
-	}
+//	public List<Tile> onCut() {
+//		List<Tile> answer = onCopy();
+//		onClear();
+//		return answer;
+//	}
 	
 	@Override
 	public void onClear() {
@@ -89,7 +89,6 @@ public class ImmovableTileSelection implements TileSelection{
 				tileLayer.getNodeAt(t.gridX+offset.gridX, t.gridY+offset.gridY).resetTileset();
 			}
 		}
-		selectedLocations.clear();
 	}
 	
 	public int getTileWidth(){
@@ -102,6 +101,10 @@ public class ImmovableTileSelection implements TileSelection{
 	
 	public void onRemove(){
 		tileLayer.silentlyIgnoreInput(false);
+	}
+	
+	public int getTileCount(){
+		return selectedLocations.size();
 	}
 	
 	private void calculateBoundingRect(){
@@ -167,6 +170,7 @@ public class ImmovableTileSelection implements TileSelection{
 		linesNode.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
 				Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
 				Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
+		linesNode.repaint();
 	}
 
 	public PNode getOverlayNode() {
@@ -186,16 +190,13 @@ public class ImmovableTileSelection implements TileSelection{
 	@Override
 	public void onAnchor() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public PNode getSelectionNode() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void removeFromSelection(List<TileLocation> toRemove) {
 		for(TileLocation l : toRemove){
 			selectedLocations.remove(new TileLocation(l.gridX - offset.gridX, l.gridY - offset.gridY));
@@ -206,13 +207,32 @@ public class ImmovableTileSelection implements TileSelection{
 		recalculateTiles(new ArrayList<TileLocation>(selectedLocations));
 	}
 
-	@Override
 	public void addToSelection(List<TileLocation> toAdd) {
 		for(TileLocation l : selectedLocations){
 			l.set(l.gridX+offset.gridX, l.gridY+offset.gridY);
 		}
 		selectedLocations.addAll(toAdd);
 		recalculateTiles(new ArrayList<TileLocation>(selectedLocations));
+	}
+
+	@Override
+	public void setToTiles(List<Tile> tiles) {
+		selectedLocations.clear();
+		tileLayer.silentlyIgnoreInput(true);
+		if(!tiles.isEmpty())
+			offset = tiles.get(0).offset.copy();
+		for(Tile t : tiles){
+			tileLayer.getNodeAt(t.getLocation()).silentlyIgnoreInput(false);
+			tileLayer.setTile(t);
+			selectedLocations.add(t.relativeLocation.copy());
+		}
+		calculateBoundingRect();
+	}
+
+	@Override
+	public void onLift() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

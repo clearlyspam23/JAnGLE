@@ -44,12 +44,6 @@ public class MovableTileSelection implements TileSelection, Animatable{
 		}
 		
 		public void setToTiles(List<Tile> tiles){
-			if(tiles.isEmpty()){
-				if(getBase().getSelection()==this){
-					getBase().clearSelection();
-				}
-				return;
-			}
 			clearAllTiles();
 			int lowestX = Integer.MAX_VALUE;
 			int lowestY = Integer.MAX_VALUE;
@@ -183,6 +177,8 @@ public class MovableTileSelection implements TileSelection, Animatable{
 	private SelectionPNode selectionNode;
 	private PNode overlayNode = new PNode();
 	
+	private List<Tile> lowerAnchored = new ArrayList<Tile>();
+	
 	public MovableTileSelection(PCamera camera, TileLayerPNode lowerLayer, List<Tile> tiles, TileLocation location){
 		for(int i =0 ; i < strokes.length; i++){
 			strokes[i] = new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{6, 6}, i, camera);
@@ -214,17 +210,6 @@ public class MovableTileSelection implements TileSelection, Animatable{
 	}
 
 	@Override
-	public List<Tile> onCut() {
-		List<Tile> tiles = onCopy();
-		for(TilePNode[] ap : selectionNode.getNodeGrid()){
-			for(TilePNode p : ap){
-				p.resetTileset();
-			}
-		}
-		return tiles;
-	}
-
-	@Override
 	public int getTileWidth() {
 		return selectionNode.getNodeGrid().length;
 	}
@@ -246,13 +231,23 @@ public class MovableTileSelection implements TileSelection, Animatable{
 
 	@Override
 	public void onAnchor() {
+		lowerAnchored.clear();
 		for(TilePNode[] ap : selectionNode.getNodeGrid()){
 			for(TilePNode p : ap){
 				if(!p.isSilentlyIgnoringInput()){
+					lowerAnchored.add(selectionNode.getLowerLayer().getNodeAt(p.getTileLocation()).getTile());
 					System.out.println(p.getTileLocation());
 					selectionNode.getLowerLayer().getNodeAt(p.getTileLocation()).setTilesetHard(p.getTileData());
 				}
 			}
+		}
+	}
+	
+	@Override
+	public void onLift() {
+		for(Tile t : lowerAnchored){
+			System.out.println(t.getLocation());
+			selectionNode.lowerLayer.setTile(t);
 		}
 	}
 
@@ -268,23 +263,40 @@ public class MovableTileSelection implements TileSelection, Animatable{
 
 	@Override
 	public void onClear() {
-		
-	}
-
-	@Override
-	public void removeFromSelection(List<TileLocation> toRemove) {
-		//intentionally left blank
-		
-	}
-
-	@Override
-	public void addToSelection(List<TileLocation> toAdd) {
-		//intentionally left blank
+		for(TilePNode[] ap : selectionNode.getNodeGrid()){
+			for(TilePNode p : ap){
+				p.resetTileset();
+			}
+		}
 	}
 
 	@Override
 	public PActivity getAnimationActivity() {
 		return animationActivity;
+	}
+	
+	public TileLocation getOffset(){
+		return selectionNode.getGridOffset().copy();
+	}
+
+	@Override
+	public int getTileCount() {
+		int count = 0;
+		for(TilePNode[] ap : selectionNode.getNodeGrid()){
+			for(TilePNode p : ap){
+				if(!p.isSilentlyIgnoringInput()){
+					count++;
+				}
+			}
+		}
+		return count;
+	}
+
+	@Override
+	public void setToTiles(List<Tile> tiles) {
+		for(Tile t : tiles){
+			selectionNode.setTile(t);
+		}
 	}
 
 }

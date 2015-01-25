@@ -23,6 +23,10 @@ public class TileLocation {
 		gridY = y;
 	}
 	
+	public void set(TileLocation other){
+		set(other.gridX, other.gridY);
+	}
+	
 	public boolean equals(Object o){
 		if(o instanceof TileLocation)
 			return equals((TileLocation) o );

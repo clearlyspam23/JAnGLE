@@ -25,6 +25,10 @@ public class Tile extends TileData{
 		this(tileset, tileX, tileY, new TileLocation(gridX, gridY), offset);
 	}
 	
+	public Tile(TileData data, TileLocation relativeLoc, TileLocation offset){
+		this(data.tileset, data.tileX, data.tileY, relativeLoc, offset);
+	}
+	
 	/**
 	 * creates a new Tile, with position relative to the given offset
 	 * @param tileset the tilesethandle to use for this tile's image

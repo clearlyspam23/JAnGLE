@@ -78,6 +78,8 @@ public class TilePNode extends PImage {
 	}
 	
 	public boolean setTileset(TileData data){
+		if(!data.isValid())
+			return resetTileset();
 		if(!couldSet(data))
 			return false;
 		TileData prev = getTileData();
