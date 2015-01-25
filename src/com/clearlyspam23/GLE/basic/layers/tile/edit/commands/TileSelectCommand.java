@@ -74,7 +74,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 	}
 	
 	private void anchorSelection(BasePNode base){
-		base.clearSelectionWithAction(data);
+		base.anchorSelectionWithAction(data);
 	}
 	
 	private void selectSimilar(PInputEvent event, TilePNode node){
@@ -103,7 +103,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 			if(node!=null){
 				BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
 				if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
-					base.clearSelectionWithAction(data);
+					base.anchorSelectionWithAction(data);
 				}
 				
 			}
@@ -170,7 +170,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 				state = MOVING;
 			}
 			else{
-				base.clearSelectionWithAction(data);
+				base.anchorSelectionWithAction(data);
 				state = SELECTING;
 			}
 		}
@@ -204,8 +204,7 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
 				if(node!=null){
 					BasePNode base = ((TileLayerPNode) node.getParent()).getBase();
 					if(base.getSelection()!=null&&!base.getSelection().isNodeInSelection(node)){
-						base.anchorSelection();
-						base.clearSelectionWithAction(data);
+						base.anchorSelectionWithAction(data);
 					}
 					
 				}
@@ -254,8 +253,10 @@ public class TileSelectCommand extends PDragSequenceEventHandler {
         		}
         	}
         	else if(state==MOVING){
-        		if(currentNode!=null)
+        		if(currentNode!=null){
         			movingSelection.setToOffset(new TileLocation(currentNode.getGridX()-relativeLocation.gridX, currentNode.getGridY()-relativeLocation.gridY));
+        			currentNode.getTilePNodeLayer().getBase().repaint();
+        		}
     		}
         }
     }

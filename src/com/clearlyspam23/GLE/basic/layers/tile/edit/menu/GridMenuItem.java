@@ -1,4 +1,4 @@
-package com.clearlyspam23.GLE.basic.layers.tile.edit;
+package com.clearlyspam23.GLE.basic.layers.tile.edit.menu;
 
 import javax.swing.JCheckBoxMenuItem;
 

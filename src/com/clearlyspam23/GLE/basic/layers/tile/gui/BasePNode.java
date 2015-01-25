@@ -44,7 +44,7 @@ public class BasePNode extends PNode {
 		return selection;
 	}
 	
-	public TileSelection clearSelectionWithoutAnchor(){
+	public TileSelection removeSelection(){
 		TileSelection oldSelection = selection;
 		if(selection!=null){
 			selection.onRemove();
@@ -58,7 +58,7 @@ public class BasePNode extends PNode {
 		return oldSelection;
 	}
 	
-	public TileSelection clearSelection(){
+	public TileSelection anchorSelection(){
 		TileSelection oldSelection = selection;
 		if(selection!=null){
 			selection.onAnchor();
@@ -89,15 +89,7 @@ public class BasePNode extends PNode {
 	}
 
 	public void setSelectionWithAction(TileSelection selection, TileLayerEditManager editor) {
-//		if(this.selection!=null){
-//			this.selection.onAnchor();
-//			this.selection.onRemove();
-//			if(selectionNode!=null)
-//				removeChild(selectionNode);
-//			if(overlayNode!=null)
-//				layer.getOverlayGUI().removeChild(overlayNode);
-//		}
-		TileSelection oldSelection = clearSelection();
+		TileSelection oldSelection = anchorSelection();
 		if(oldSelection!=null){
 			editor.registerEditAction(new AnchorSelectionAction(oldSelection, this));
 		}
@@ -107,24 +99,16 @@ public class BasePNode extends PNode {
 		}
 	}
 	
+	public void anchorSelectionWithAction(TileLayerEditManager editor){
+		setSelectionWithAction(null, editor);
+	}
+	
 	public boolean canCopy(){
 		return hasSelection();
 	}
 	
 	public boolean canCut(){
 		return hasSelection();
-	}
-	
-	public void clearSelectionWithAction(TileLayerEditManager editor){
-		setSelectionWithAction(null, editor);
-		//for everyone not comfortable with passing in nulls
-	}
-	
-	public void anchorSelection(){
-		if(selection!=null){
-			selection.onAnchor();
-			selection.onRemove();
-		}
 	}
 	
 	public boolean hasSelection(){

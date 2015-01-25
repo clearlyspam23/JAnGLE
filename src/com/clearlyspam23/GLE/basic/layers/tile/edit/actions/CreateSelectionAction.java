@@ -16,7 +16,7 @@ public class CreateSelectionAction implements EditAction {
 
 	@Override
 	public void undoAction() {
-		base.clearSelectionWithoutAnchor();
+		base.removeSelection();
 	}
 
 	@Override

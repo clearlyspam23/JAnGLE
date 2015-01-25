@@ -11,7 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import com.clearlyspam23.GLE.Template;
-import com.clearlyspam23.GLE.basic.layers.tile.edit.GridMenuItem;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.menu.GridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TilesetLoadDialog;
 import com.clearlyspam23.GLE.edit.EditorItems;
 import com.clearlyspam23.GLE.edit.LayerMenuItem;

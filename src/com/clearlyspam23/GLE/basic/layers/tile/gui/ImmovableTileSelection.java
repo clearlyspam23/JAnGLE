@@ -1,5 +1,6 @@
 package com.clearlyspam23.GLE.basic.layers.tile.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class ImmovableTileSelection implements TileSelection{
 	
 	private PNode overlayNode = new PNode();
 	private LineNode linesNode;
+	private LineNode linesNode2;
 	
 	private List<TileLocation> selectedLocations = new ArrayList<TileLocation>();
 //	private List<FixedWidthOutlineRectNode> outlineRect;
@@ -32,7 +34,11 @@ public class ImmovableTileSelection implements TileSelection{
 		linesNode = new LineNode(new FixedWidthStroke(2, camera));
 		linesNode.setPaint(Color.YELLOW);
 		linesNode.setPickable(false);
+		linesNode2 = new LineNode(new FixedWidthStroke(2, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[]{3, 6}, 0, camera));
+		linesNode2.setPaint(Color.BLACK);
+		linesNode2.setPickable(false);
 		overlayNode.addChild(linesNode);
+		overlayNode.addChild(linesNode2);
 		recalculateTiles(locations);
 	}
 	
@@ -58,7 +64,7 @@ public class ImmovableTileSelection implements TileSelection{
 		height = maxY-minY+1;
 		if(selectedLocations.isEmpty()){
 			if(tileLayer.getBase().getSelection()==this){
-				tileLayer.getBase().clearSelection();
+				tileLayer.getBase().anchorSelection();
 			}
 			return;
 		}
@@ -167,10 +173,15 @@ public class ImmovableTileSelection implements TileSelection{
 			}
 		}
 		linesNode.setLines(lines);
+		linesNode2.setLines(lines);
 		linesNode.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
 				Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
 				Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
+		linesNode2.setBounds(tileLayer.getGridWidth()*offset.gridX, tileLayer.getGridHeight()*offset.gridY, 
+				Math.min(tileLayer.getGridWidth()*width, tileLayer.getWidth()-tileLayer.getGridWidth()*offset.gridX),
+				Math.min(tileLayer.getGridHeight()*height, tileLayer.getHeight()-tileLayer.getGridHeight()*offset.gridY));
 		linesNode.repaint();
+		linesNode2.repaint();
 	}
 
 	public PNode getOverlayNode() {

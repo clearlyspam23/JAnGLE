@@ -160,10 +160,6 @@ public class TileLayer extends Layer<Object>{
 		return base.refreshTilesets(getTilesetManager());
 	}
 	
-	public void anchor(){
-		base.anchorSelection();
-	}
-	
 	public void selectionChanged(TileSelection old, TileSelection current){
 		for(TileLayerSelectionListener l : selectionListeners){
 			l.selectionChange(this, old, current);

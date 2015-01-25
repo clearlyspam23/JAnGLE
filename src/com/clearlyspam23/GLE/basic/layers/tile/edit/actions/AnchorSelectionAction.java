@@ -22,7 +22,7 @@ public class AnchorSelectionAction implements EditAction {
 
 	@Override
 	public void doAction() {
-		base.clearSelection();
+		base.anchorSelection();
 	}
 
 	@Override

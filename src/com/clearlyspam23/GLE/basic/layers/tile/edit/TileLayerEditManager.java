@@ -24,6 +24,8 @@ import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.EraseTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.FloodFillTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.PlaceTileCommand;
 import com.clearlyspam23.GLE.basic.layers.tile.edit.commands.TileSelectCommand;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.menu.AnchorMenuItem;
+import com.clearlyspam23.GLE.basic.layers.tile.edit.menu.GridMenuItem;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.MovableTileSelection;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileLayerSelectionListener;
 import com.clearlyspam23.GLE.basic.layers.tile.gui.TileSelection;
@@ -41,6 +43,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	private PInputEventListener currentEvent;
 	
 	private GridMenuItem gridItem;
+	private AnchorMenuItem anchorItem;
 	
 	private List<PInputEventListener> allEvents = new ArrayList<PInputEventListener>();
 	
@@ -53,6 +56,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public TileLayerEditManager()
 	{
 		gridItem = new GridMenuItem();
+		anchorItem = new AnchorMenuItem(this);
 		allEvents.add(new PlaceTileCommand(this));
 		allEvents.add(new EraseTileCommand(this));
 		allEvents.add(new FloodFillTileCommand(this));
@@ -147,7 +151,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 		cutSelection = currentLayer.getBase().getSelection().onCopy();
 		TileSelection selection = currentLayer.getBase().getSelection();
 		selection.onClear();
-		currentLayer.getBase().clearSelection();
+		currentLayer.getBase().anchorSelection();
 		this.registerEditAction(new CutSelectionAction(cutSelection, selection, currentLayer.getBase()));
 		if(canPaste()!=(cutSelection!=null))
 			toggleCanPaste(cutSelection!=null);
@@ -177,6 +181,7 @@ public class TileLayerEditManager extends LayerEditManager<TileLayer> implements
 	public List<LayerMenuItem<TileLayer, ?>> getLayerItems(TileLayer layer) {
 		List<LayerMenuItem<TileLayer, ?>> items = new ArrayList<LayerMenuItem<TileLayer, ?>>();
 		items.add(gridItem);
+		items.add(anchorItem);
 		return items;
 	}
 
