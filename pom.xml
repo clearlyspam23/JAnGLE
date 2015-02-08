@@ -6,7 +6,6 @@
   <name>JAnGLE</name>
   <description>Just Another Generic Level Editor</description>
   <build>
-    <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
