@@ -1,0 +1,7 @@
+.entity-node {
+	-fx-opacity: 1;
+}
+
+.entity-node:disabled {
+	-fx-opacity: 0.3;
+}
