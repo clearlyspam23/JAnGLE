@@ -5,3 +5,9 @@
 .entity-node:disabled {
 	-fx-opacity: 0.3;
 }
+
+.resize-rect {
+	-fx-fill: white;
+	-fx-stroke: black;
+	-fx-stroke-width: 1.75;
+}

@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import com.clearlyspam23.jangle.entity.gui.EntityNode;
 import com.clearlyspam23.jangle.entity.gui.handler.EntityMoveHandler;
+import com.clearlyspam23.jangle.entity.gui.handler.EntityResizeHandler;
 
 public class PlaygroundRunner extends Application {
 
@@ -30,11 +31,13 @@ public class PlaygroundRunner extends Application {
         subscene.widthProperty().bind(scene.widthProperty());
         root.getChildren().add(subscene);
         EntityNode entity = new EntityNode(200, 200, 260, 180, image);
-        entity.setCursor(Cursor.MOVE);
+        entity.setCursor(Cursor.OPEN_HAND);
         entity.addEntityHandler(new EntityMoveHandler());
+        entity.addEntityHandler(new EntityResizeHandler());
         sceneRoot.getChildren().add(entity);
-        scene.getStylesheets().add(
-                this.getClass().getClassLoader().getResource("Default.css").toExternalForm());
+        String url = this.getClass().getClassLoader().getResource("Default.css").toExternalForm();
+        System.out.println(url);
+        scene.getStylesheets().add(url);
         primaryStage.show();
     }
 
