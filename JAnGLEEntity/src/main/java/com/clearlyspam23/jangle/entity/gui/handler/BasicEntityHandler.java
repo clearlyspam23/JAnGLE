@@ -1,8 +1,12 @@
-package com.clearlyspam23.jangle.entity.gui;
+package com.clearlyspam23.jangle.entity.gui.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.clearlyspam23.jangle.entity.gui.EntityHandler;
+import com.clearlyspam23.jangle.entity.gui.EntityNode;
+import com.clearlyspam23.jangle.util.XFormNode;
 
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -17,9 +21,10 @@ public abstract class BasicEntityHandler implements EventHandler<MouseEvent>, En
         mouseEvents = Arrays.asList(events);
     }
 
-    public void registerToEntityNode(EntityNode node) {
+    @Override
+    public void register(EntityNode node, XFormNode overlay) {
         for (EventType<MouseEvent> me : mouseEvents) {
-            node.getEntityRectangle().addEventHandler(me, this);
+            node.addEventHandler(me, this);
         }
     }
 

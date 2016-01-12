@@ -26,5 +26,10 @@
   		<scope>system</scope>
   		<systemPath>${project.basedir}/libs/dockfx-0.1b.jar</systemPath>
   	</dependency>
+  	<dependency>
+	  <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-lang3</artifactId>
+	  <version>3.4</version>
+	</dependency>
   </dependencies>
 </project>

@@ -4,11 +4,13 @@ import javafx.beans.binding.DoubleExpression;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 
 import com.clearlyspam23.jangle.entity.gui.EntityHandler;
 import com.clearlyspam23.jangle.entity.gui.EntityNode;
+import com.clearlyspam23.jangle.util.XFormNode;
 
 public class EntityResizeHandler implements EntityHandler {
 
@@ -33,12 +35,13 @@ public class EntityResizeHandler implements EntityHandler {
             if (!event.isPrimaryButtonDown()) {
                 return;
             }
+            event.consume();
             if (MouseEvent.MOUSE_PRESSED.equals(event.getEventType())) {
-                startX = event.getSceneX();
+                startX = event.getX();
                 originalX = entityRectangle.getX();
                 originalWidth = entityRectangle.getWidth();
             } else if (MouseEvent.MOUSE_DRAGGED.equals(event.getEventType())) {
-                double delta = startX - event.getSceneX();
+                double delta = startX - event.getX();
                 double newWidth = originalWidth + delta;
                 if (newWidth < 0) {
                     entityRectangle.setX(originalX + originalWidth);
@@ -68,12 +71,13 @@ public class EntityResizeHandler implements EntityHandler {
             if (!event.isPrimaryButtonDown()) {
                 return;
             }
+            event.consume();
             if (MouseEvent.MOUSE_PRESSED.equals(event.getEventType())) {
-                startY = event.getSceneY();
+                startY = event.getY();
                 originalY = entityRectangle.getY();
                 originalHeight = entityRectangle.getHeight();
             } else if (MouseEvent.MOUSE_DRAGGED.equals(event.getEventType())) {
-                double delta = startY - event.getSceneY();
+                double delta = startY - event.getY();
                 double newHeight = originalHeight + delta;
                 if (newHeight < 0) {
                     entityRectangle.setY(originalY + originalHeight);
@@ -99,14 +103,15 @@ public class EntityResizeHandler implements EntityHandler {
 
         @Override
         public void handle(MouseEvent event) {
-            if (!event.isPrimaryButtonDown()) {
+            if (!MouseButton.PRIMARY.equals(event.getButton())) {
                 return;
             }
+            event.consume();
             if (MouseEvent.MOUSE_PRESSED.equals(event.getEventType())) {
-                startX = event.getSceneX();
+                startX = event.getX();
                 originalWidth = entityRectangle.getWidth();
             } else if (MouseEvent.MOUSE_DRAGGED.equals(event.getEventType())) {
-                double delta = startX - event.getSceneX();
+                double delta = startX - event.getX();
                 double newWidth = originalWidth - delta;
                 if (newWidth < 0) {
                     entityRectangle.setWidth(0);
@@ -133,11 +138,12 @@ public class EntityResizeHandler implements EntityHandler {
             if (!event.isPrimaryButtonDown()) {
                 return;
             }
+            event.consume();
             if (MouseEvent.MOUSE_PRESSED.equals(event.getEventType())) {
-                startY = event.getSceneY();
+                startY = event.getY();
                 originalHeight = entityRectangle.getHeight();
             } else if (MouseEvent.MOUSE_DRAGGED.equals(event.getEventType())) {
-                double delta = startY - event.getSceneY();
+                double delta = startY - event.getY();
                 double newHeight = originalHeight - delta;
                 if (newHeight < 0) {
                     entityRectangle.setHeight(0);
@@ -158,7 +164,7 @@ public class EntityResizeHandler implements EntityHandler {
     private Rectangle bottomLeftRect;
 
     @Override
-    public void registerToEntityNode(EntityNode node) {
+    public void register(EntityNode node, XFormNode xformNode) {
         Rectangle entityRect = node.getEntityRectangle();
         Group group = new Group();
         topRect =

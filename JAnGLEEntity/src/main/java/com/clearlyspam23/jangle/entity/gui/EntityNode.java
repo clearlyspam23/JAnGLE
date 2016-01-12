@@ -47,8 +47,4 @@ public class EntityNode extends Group {
         return entityRect;
     }
 
-    public void addEntityHandler(EntityHandler handler) {
-        handler.registerToEntityNode(this);
-    }
-
 }
