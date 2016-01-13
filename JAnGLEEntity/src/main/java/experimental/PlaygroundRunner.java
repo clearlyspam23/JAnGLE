@@ -47,8 +47,6 @@ public class PlaygroundRunner extends Application {
 
     }
 
-    private static final double SCROLL_FACTOR = 1.1;
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         Image image = new Image("example.png");
@@ -59,7 +57,7 @@ public class PlaygroundRunner extends Application {
         LayerNode sceneRoot = new LayerNode();
         OverlayNode overlay = new OverlayNode(sceneRoot);
         new MouseMoveHandler().register(sceneRoot, overlay);
-        new MouseZoomHandler(SCROLL_FACTOR).register(sceneRoot, overlay);
+        new MouseZoomHandler().register(sceneRoot, overlay);
 
         SubScene subscene = new SubScene(sceneRoot, 0, 0);
         subscene.heightProperty().bind(scene.heightProperty());
