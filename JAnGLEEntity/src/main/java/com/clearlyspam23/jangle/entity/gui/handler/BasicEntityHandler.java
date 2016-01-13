@@ -4,33 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.clearlyspam23.jangle.entity.gui.EntityHandler;
-import com.clearlyspam23.jangle.entity.gui.EntityNode;
-import com.clearlyspam23.jangle.util.XFormNode;
-
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
-import javafx.scene.input.MouseEvent;
 
-public abstract class BasicEntityHandler implements EventHandler<MouseEvent>, EntityHandler {
+import com.clearlyspam23.jangle.entity.gui.EntityHandler;
+import com.clearlyspam23.jangle.entity.gui.EntityNode;
+import com.clearlyspam23.jangle.layer.gui.LayerNode;
+import com.clearlyspam23.jangle.layer.gui.OverlayNode;
 
-    private List<EventType<MouseEvent>> mouseEvents = new ArrayList<>();
+public abstract class BasicEntityHandler<T extends Event> implements EventHandler<T>, EntityHandler {
+
+    private List<EventType<T>> events = new ArrayList<>();
 
     @SafeVarargs
-    public final void registerForEvents(EventType<MouseEvent>... events) {
-        mouseEvents = Arrays.asList(events);
+    public BasicEntityHandler(EventType<T>... events) {
+        this.events = Arrays.asList(events);
     }
 
     @Override
-    public void register(EntityNode node, XFormNode overlay) {
-        for (EventType<MouseEvent> me : mouseEvents) {
+    public void register(EntityNode node, LayerNode layer, OverlayNode overlay) {
+        for (EventType<T> me : events) {
             node.addEventHandler(me, this);
         }
     }
-
-    public void handle(MouseEvent arg0) {
-        handleMouseEvent(arg0);
-    }
-
-    public abstract void handleMouseEvent(MouseEvent arg0);
 }

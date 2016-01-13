@@ -6,17 +6,16 @@ import javafx.scene.input.MouseEvent;
 
 import com.clearlyspam23.jangle.entity.gui.EntityNode;
 
-public class EntityMoveHandler extends BasicEntityHandler {
+public class EntityMoveHandler extends BasicEntityHandler<MouseEvent> {
 
     private double relativeX;
     private double relativeY;
 
     public EntityMoveHandler() {
-        this.registerForEvents(MouseEvent.MOUSE_PRESSED, MouseEvent.MOUSE_DRAGGED,
-                MouseEvent.MOUSE_RELEASED);
+        super(MouseEvent.MOUSE_PRESSED, MouseEvent.MOUSE_DRAGGED, MouseEvent.MOUSE_RELEASED);
     }
 
-    public void handleMouseEvent(MouseEvent event) {
+    public void handle(MouseEvent event) {
         if (!MouseButton.PRIMARY.equals(event.getButton())) {
             return;
         }

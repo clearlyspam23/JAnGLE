@@ -10,7 +10,8 @@ import javafx.scene.shape.Rectangle;
 
 import com.clearlyspam23.jangle.entity.gui.EntityHandler;
 import com.clearlyspam23.jangle.entity.gui.EntityNode;
-import com.clearlyspam23.jangle.util.XFormNode;
+import com.clearlyspam23.jangle.layer.gui.LayerNode;
+import com.clearlyspam23.jangle.layer.gui.OverlayNode;
 
 public class EntityResizeHandler implements EntityHandler {
 
@@ -164,7 +165,7 @@ public class EntityResizeHandler implements EntityHandler {
     private Rectangle bottomLeftRect;
 
     @Override
-    public void register(EntityNode node, XFormNode xformNode) {
+    public void register(EntityNode node, LayerNode layer, OverlayNode overlay) {
         Rectangle entityRect = node.getEntityRectangle();
         Group group = new Group();
         topRect =

@@ -66,19 +66,20 @@ public class PlaygroundRunner extends Application {
 
         EntityNode entity = new EntityNode(200, 200, 260, 180, image);
         entity.setCursor(Cursor.OPEN_HAND);
-        new EntityMoveHandler().register(entity, sceneRoot);
-        new EntityResizeHandler().register(entity, sceneRoot);
+        new EntityMoveHandler().register(entity, sceneRoot, overlay);
+        new EntityResizeHandler().register(entity, sceneRoot, overlay);
         sceneRoot.getChildren().add(entity);
 
         EntityNode entity2 = new EntityNode(400, 400, 260, 180, image);
         entity2.setCursor(Cursor.OPEN_HAND);
-        new EntityMoveHandler().register(entity2, sceneRoot);
-        new EntityResizeHandler().register(entity2, sceneRoot);
+        new EntityMoveHandler().register(entity2, sceneRoot, overlay);
+        new EntityResizeHandler().register(entity2, sceneRoot, overlay);
         sceneRoot.getChildren().add(entity2);
         sceneRoot.addEventHandler(KeyEvent.KEY_TYPED, new EventHandler<KeyEvent>() {
 
             @Override
             public void handle(KeyEvent arg0) {
+                entity.setRotate(entity.getRotate() + 9);
                 System.out.println("e1 = " + entity.getX() + ", " + entity.getY());
                 System.out.println("e1t = " + entity.getEntityRectangle().getTranslateX() + ", "
                         + entity.getEntityRectangle().getTranslateY());
