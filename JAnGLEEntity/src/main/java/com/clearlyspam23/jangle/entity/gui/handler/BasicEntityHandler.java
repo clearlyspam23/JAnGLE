@@ -9,8 +9,8 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 
 import com.clearlyspam23.jangle.entity.gui.EntityHandler;
+import com.clearlyspam23.jangle.entity.gui.EntityLayerNode;
 import com.clearlyspam23.jangle.entity.gui.EntityNode;
-import com.clearlyspam23.jangle.layer.gui.LayerNode;
 import com.clearlyspam23.jangle.layer.gui.OverlayNode;
 
 public abstract class BasicEntityHandler<T extends Event> implements EventHandler<T>, EntityHandler {
@@ -23,9 +23,20 @@ public abstract class BasicEntityHandler<T extends Event> implements EventHandle
     }
 
     @Override
-    public void register(EntityNode node, LayerNode layer, OverlayNode overlay) {
+    public void register(EntityNode node, EntityLayerNode layer, OverlayNode overlay) {
         for (EventType<T> me : events) {
             node.addEventHandler(me, this);
         }
+        registerLayer(layer);
+        registerOverlay(overlay);
     }
+
+    protected void registerLayer(EntityLayerNode layer) {
+
+    }
+
+    protected void registerOverlay(OverlayNode overlay) {
+
+    }
+
 }
